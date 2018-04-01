@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="#Cygwin安装教程">
+<meta name="description" content="问题描述在编译项目的时候报错，无法安装测试程序：Error:(2) No resource identifier found for attribute ‘layout_behavior’ in package “com.example.hopefulnick.myfirstapp”。">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cygwin Installation">
-<meta property="og:url" content="https://hopefulnick.github.io/2016/03/21/Cygwin-Installation/index.html">
+<meta property="og:title" content="Android编译问题">
+<meta property="og:url" content="https://hopefulnick.github.io/2016/07/05/160705Android编译问题/index.html">
 <meta property="og:site_name" content="Hopeful Nick">
-<meta property="og:description" content="#Cygwin安装教程">
+<meta property="og:description" content="问题描述在编译项目的时候报错，无法安装测试程序：Error:(2) No resource identifier found for attribute ‘layout_behavior’ in package “com.example.hopefulnick.myfirstapp”。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-03T02:36:46.935Z">
+<meta property="og:updated_time" content="2018-04-01T08:04:16.821Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cygwin Installation">
-<meta name="twitter:description" content="#Cygwin安装教程">
+<meta name="twitter:title" content="Android编译问题">
+<meta name="twitter:description" content="问题描述在编译项目的时候报错，无法安装测试程序：Error:(2) No resource identifier found for attribute ‘layout_behavior’ in package “com.example.hopefulnick.myfirstapp”。">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://hopefulnick.github.io/2016/03/21/Cygwin-Installation/"/>
+  <link rel="canonical" href="https://hopefulnick.github.io/2016/07/05/160705Android编译问题/"/>
 
 
 
 
 
-  <title>Cygwin Installation | Hopeful Nick</title>
+  <title>Android编译问题 | Hopeful Nick</title>
   
 
 
@@ -252,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2016/03/21/Cygwin-Installation/">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2016/07/05/160705Android编译问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hopeful Nick">
@@ -269,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Cygwin Installation</h1>
+          <h1 class="post-title" itemprop="name headline">Android编译问题</h1>
         
 
         <div class="post-meta">
@@ -281,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-21T11:00:47+08:00">
-                2016-03-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-05T15:26:48+08:00">
+                2016-07-05
               </time>
             
 
@@ -291,6 +292,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -319,9 +342,10 @@
       
 
       
-        <p>#Cygwin安装教程</p>
-<a id="more"></a>
-<p>1、下载Cygwin，下载地址是：<a href="http://www.cygwin.com/setup.exe" target="_blank" rel="noopener">http://www.cygwin.com/setup.exe</a><br>2、右键点击setup.exe，选择“以管理员的身份运行”，这样可以省去配置ssh很多不必要的麻烦！在打开的安装页面中点击“下一步”。<br>3、“Choose a Download Source”里选择默认的”Install from internet”就行了，点击“下一步”<br>4、“Select Root Install Directory”里选择你要将cygwin安装到哪个目录下，其他的建议默认的就行，点击“下一步”。<br>5、“Select Local Package Directory”里指定软件安装包的本地存放路径，点击“下一步”<br>6、选择网络连接方式，默认第一个“Direct Connection”即可。<br>7、选择下载Cygwin的网站，点击“下一步”<br>8、选择要下载安装的软件包，软件包选项有几种情况，<br>（1）对未安装的软件包有两种选择<br>&emsp;&emsp;1）Skip：跳过该软件的安装<br>&emsp;&emsp;2）软件号：确定安装该软件<br>（2）对已安装的软件包有三种选择<br>&emsp;&emsp;1）Keep：保持现状<br>&emsp;&emsp;2）Reinstall：重新安装<br>&emsp;&emsp;3）Uninstall：卸载<br>这里默认不是全选的。有几个需要注意的：<br>（1）ssh默认是不装的，想使用ssh命令需要将“openssh”和“openssl”选上,cygrunsrv——cygwin的服务包<br>（2）打算在eclipse下编译Hadoop，比如要将“Base Category”下的“sed”选上<br>（3）推荐安装“Editor Category”下的“vim”和“Devel Category”下的“subversion”<br>（4）没有装上某些软件包没关系，可以再次打开setup.exe，然后把要用的选上。不要第一安装就把所有包都选上。<br>实际安装中，没有使用管理员身份运行，安装在c:/cygwin64，安装包目录为E:/CygwinPackage，软件包全部为默认。</p>
+        <p><strong>问题描述</strong><br>在编译项目的时候报错，无法安装测试程序：Error:(2) No resource identifier found for attribute ‘layout_behavior’ in package “com.example.hopefulnick.myfirstapp”。<br><a id="more"></a></p>
+<p><strong>排错思路</strong><br>按照提示将tools:showIn和app:layout_behavior属性删除后问题仍旧存在；<br>将之前运行测试安装的安卓程序卸载后，报错仍旧存在；<br>通过查阅网上资料，将LinearLayout改为RelativeLayout后，报错依旧存在，并且预览图发生改变，文本框消失；<br>按照报错提示，在layout_behavior属性的值中@后添加+号注册识别器，报错依旧存在。</p>
+<p><strong>解决方案</strong><br>按照网络上的在E:\Android\MyFirstApp2\app目录下的build.gradle中的依赖下添加如下文字：<br>compile ‘com.android.support:design:23.1.0’<br>详见<a href="http://stackoverflow.com/questions/32832717/no-resource-identifier-found-for-attribute-layout-behavior-in-package" target="_blank" rel="noopener">参考链接</a><br>重启Studio后，按照提示，在预览界面内逐个Clear Cache后运行。报错解决。 </p>
+<p><strong>问题缘由</strong><br>导致问题的原因可能是程序运行过程中，异常退出（如直接关机），导致程序缓存没有及时清除，影响再次编译。</p>
 
       
     </div>
@@ -337,6 +361,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
 
       
       
@@ -346,14 +376,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/07/04/160704Android开发常见坑/" rel="next" title="Android开发常见坑">
+                <i class="fa fa-chevron-left"></i> Android开发常见坑
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/02/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
+              <a href="/2017/01/05/170105Shadowsocks部分网站无法访问/" rel="prev" title="Shadowsocks部分网站无法访问">
+                Shadowsocks部分网站无法访问 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -426,7 +460,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -437,7 +471,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -448,7 +482,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
