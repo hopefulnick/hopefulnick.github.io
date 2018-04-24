@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1、面向对象的特征">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java面试总结">
+<meta property="og:url" content="https://hopefulnick.github.io/2018/03/10/180310Java面试总结/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1、面向对象的特征">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-24T02:03:24.100Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java面试总结">
+<meta name="twitter:description" content="1、面向对象的特征">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2018/03/10/180310Java面试总结/"/>
+
+
+
+
+
+  <title>Java面试总结 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2018/03/10/180310Java面试总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java面试总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-10T09:58:36+08:00">
+                2018-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>1、面向对象的特征</strong><br><a id="more"></a></p>
+<blockquote>
+<ul>
+<li>抽象<br>  将一类对象的共同特征总结出来构造类的过程。<ul>
+<li style="list-style: none"><input type="checkbox"> 数据抽象</li>
+<li style="list-style: none"><input type="checkbox"> 行为抽象</li>
+</ul>
+</li>
+<li>继承<br>  从已有类得到继承信息创建新类的过程。</li>
+<li>封装<br>  把数据和操作数据的方法绑定起来，对数据的访问只能通过已定义的接口。</li>
+<li>多态<br>  允许不同子类型的对象对同一消息作出不同的响应。<ul>
+<li style="list-style: none"><input type="checkbox"> 编译时多态——方法重载（前绑定）</li>
+<li style="list-style: none"><input type="checkbox"> 运行时多态——方法重写（后绑定）</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p><strong>2、访问修饰符</strong><br>外部类            ——public或default<br>类成员（含内部类）——均可</p>
+<p><strong>3、short s1 = 1; s1 = s1 + 1;有错吗?short s1 = 1; s1 += 1;有错吗？</strong><br>前者需要显式强制类型转换，后者隐含类型转换。</p>
+<p><strong>4、equal与==</strong><br>equals方法最初是在所有类的基类Object中进行定义的，源码是<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出这里定义的equals与==是等效的，但怎么还会不一样呢？<br>原因就是<code>String类对equals进行了重写</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object anObject)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> == anObject) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">        String anotherString = (String)anObject;</span><br><span class="line">        <span class="keyword">int</span> n = count;</span><br><span class="line">        <span class="keyword">if</span> (n == anotherString.count) &#123;</span><br><span class="line">        <span class="keyword">char</span> v1[] = value;</span><br><span class="line">        <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line">        <span class="keyword">int</span> i = offset;</span><br><span class="line">        <span class="keyword">int</span> j = anotherString.offset;</span><br><span class="line">        <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (v1[i++] != v2[j++])</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>对equals重写需要注意5点：</p>
+<blockquote>
+<p>1&emsp;自反性：对任意引用值X，x.equals(x)的返回值一定为true.<br>2&emsp;对称性：对于任何引用值x,y,当且仅当y.equals(x)返回值为true时，x.equals(y)的返回值一定为true;<br>3&emsp;传递性：如果x.equals(y)=true, y.equals(z)=true,则x.equals(z)=true<br>4&emsp;一致性：如果参与比较的对象没任何改变，则对象比较的结果也不应该有任何改变<br>5&emsp;非空性：任何非空的引用值X，x.equals(null)的返回值一定为false </p>
+</blockquote>
+<p>经过重写后就跟==有本质的区别了：<br><code>equal:比较两个对象内部的内容是否相等的</code><br>一般会对equal()方法重写，否则因为所有的类都是Object的子类，而Object类的equal()等效于==。</p>
+<p><code>==：是用来判断两个对象的地址是否相同，即是否是指相同一个对象。</code><br>比较的是真正意义上的指针操作。</p>
+<blockquote>
+<p>实现高质量的equals方法的诀窍包括<br>1&emsp;使用==操作符检查”参数是否为这个对象的引用”；<br>2&emsp;使用instanceof操作符检查”参数是否为正确的类型”；<br>3&emsp;对于类中的关键属性，检查参数传入对象的属性是否与之相匹配；<br>4&emsp;编写完equals方法后，问自己它是否满足对称性、传递性、一致性；<br>5&emsp;重写equals时总是要重写hashCode；<br>6&emsp;不要将equals方法参数中的Object对象替换为其他的类型，在重写时不要忘掉@Override注解。</p>
+</blockquote>
+<p><strong>5、int和Integer区别</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer a = <span class="keyword">new</span> Integer(<span class="number">3</span>);</span><br><span class="line">Integer b = <span class="number">3</span>;  <span class="comment">// 将3自动装箱成Integer类型</span></span><br><span class="line">System.out.println(a == b);     <span class="comment">// false 两个引用没有引用同一对象</span></span><br></pre></td></tr></table></figure></p>
+<p><code>new操作另起炉灶</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test03</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer f1 = <span class="number">100</span>, f2 = <span class="number">100</span>, f3 = <span class="number">150</span>, f4 = <span class="number">150</span>;</span><br><span class="line">        System.out.println(f1 == f2);</span><br><span class="line">        System.out.println(f3 == f4);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>整型字面量的值在-128到127之间，不会new新的Integer对象，直接引用常量池中的Integer对象</code><br>所以，f1==f2的结果是true，而f3==f4的结果是false。</p>
+<p><strong>6、解释内存中的栈(stack)、堆(heap)和方法区(method area)的用法。</strong> </p>
+<ul>
+<li><p>[ ] 存放内容</p>
+<blockquote>
+<p>堆——new关键字和构造器创建的对象——堆空间；<br>栈——基本数据类型的变量，对象引用，函数调用的现场保存；<br>方法区——已经被JVM加载的类信息、常量、静态变量、JIT编译器编译后的代码等数据；</p>
+</blockquote>
+</li>
+<li><p>[ ] 堆</p>
+<blockquote>
+<p>堆是垃圾收集器管理的主要区域，可以细分为新生代和老生代;<br>堆和常量池空间不足——OutOfMemoryError</p>
+</blockquote>
+</li>
+<li><p>[ ] 栈</p>
+<blockquote>
+<p>栈空间操作最快但是栈很小，通常大量的对象都是放在堆空间。<br>栈和堆的大小都可以通过JVM的启动参数来进行调整。<br>栈空间不足——StackOverflowError。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>7、String类</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>变量str放在栈上<br>用new创建出来的字符串对象放在堆上<br>“hello”字面量是放在方法区的。</p>
+</blockquote>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 补充1</li>
+<li>从Java6的某个更新开始，由于JIT编译器的发展和”逃逸分析”技术的逐渐成熟，栈上分配、标量替换等优化技术使得对象不一定分配在堆上。</li>
+<li style="list-style: none"><input type="checkbox"> 补充2</li>
+<li>运行时常量池相当于Class文件常量池，具有动态性，Java语言并不要求常量一定只有编译期间才能产生，运行期间也可以将新的常量放入池中，如String类的intern()方法。</li>
+</ul>
+<p>看看下面代码的执行结果是什么并且比较一下Java 7以前和以后的运行结果是否一致。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> StringBuilder(<span class="string">"go"</span>).append(<span class="string">"od"</span>).toString();</span><br><span class="line">System.out.println(s1.intern() == s1);</span><br><span class="line"></span><br><span class="line">String s2 = <span class="keyword">new</span> StringBuilder(<span class="string">"ja"</span>).append(<span class="string">"va"</span>).toString();</span><br><span class="line">System.out.println(s2.intern() == s2);</span><br></pre></td></tr></table></figure></p>
+<p><code>调用intern()方法之后把字符串对象加入常量池中</code><br>JDK8下运行结果为<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure></p>
+<p><strong>8、switch语句</strong><br>JDK5之前 byte、short、char、int<br>JDK5 加入enum<br>JDK7 加入String<br>不能使用long等其他类型</p>
+<p><strong>9、用最有效率的方法计算2乘以8</strong><br>答： 2 &lt;&lt; 3（左移3位相当于乘以2的3次方，右移3位相当于除以2的3次方）。</p>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 补充</li>
+<li>为编写的类重写hashCode方法时，为什么通常选择31这个数？</li>
+<li>选择31是因为可以用移位和减法运算来代替乘法，从而得到更好的性能。31 * num 等价于(num &lt;&lt; 5) -num，左移5位相当于乘以2的5次方再减去自身就相当于乘以31。</li>
+</ul>
+<p><strong>10、构造器（Constructor）是否可被重写（Override）</strong><br>构造器不能被继承，因此不能被重写，但可以被重载。<br>Constructor是在一个类创建的时候，用户创建类实例的时候被调用的特殊函数.<br>它不是一个类的成员函数，它只能代表这个类本身。</p>
+<p><strong>11、两个对象值相同(x.equals(y) == true)，但却可有不同的hashcode，这句话对不对</strong><br>不对<br> equal()遵循以下原则：</p>
+<blockquote>
+<ul>
+<li>对象相同，哈希值必同；</li>
+<li>哈希值相同，对象不必相同。</li>
+</ul>
+</blockquote>
+<p><strong>12、当一个对象被当作参数传递到一个方法后，此方法可改变这个对象的属性，并可返回变化后的结果，那么这里到底是值传递还是引用传递</strong><br><code>Java语言只支持参数的值传递。</code><br>当一个对象实例作为一个参数被传递到方法中时，参数的值就是对该对象的引用。对象的属性可以在被调用过程中被改变，但对对象引用的改变是不会影响到调用者的。</p>
+<p><strong>13、String和StringBuilder、StringBuffer的区别</strong><br>String：不可变，线程安全<br>StringBuilder：可变，高效（没有synchronized）<br>StringBuffer:可变，线程安全</p>
+<p>示例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String s1=<span class="string">"Programming"</span>;</span><br><span class="line">String s2=<span class="keyword">new</span> String(<span class="string">"Programming"</span>);<span class="comment">//字面量在常量池，new对象在堆区，s2在栈上</span></span><br><span class="line">String s3=<span class="string">"Program"</span>;</span><br><span class="line">String s4=<span class="string">"ming"</span>;</span><br><span class="line">String s5=<span class="string">"Program"</span>+<span class="string">"ming"</span>;</span><br><span class="line">String s6=s3+s4;</span><br><span class="line">System.out.println(s1==s2);</span><br><span class="line">System.out.println(s1==s5);</span><br><span class="line">System.out.println(s1==s6);</span><br><span class="line">System.out.println(s1==s6.intern());</span><br><span class="line">System.out.println(s2==s2.intern());</span><br></pre></td></tr></table></figure></p>
+<p>JDK8下运行结果<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">false //字面量在方法区，new对象在堆区，不是同一个对象</span><br><span class="line">ture //字面量都在方法区的常量池中，且字面相同</span><br><span class="line">false //String对象引用</span><br><span class="line">ture //intern方法会引用或添加其到常量池</span><br><span class="line">false //前者在堆区，后者在常量值</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>String对象的intern()方法<br>常量池中存在字面量相同的字符串时，得到字符串对象在常量池中对应的版本的引用；<br>不存在对应的字符串时，则该字符串将被添加到常量池中，然后返回常量池中字符串的引用；</li>
+<li>字符串的+操作<br>本质是创建了StringBuilder对象进行append操作，然后将拼接后的StringBuilder对象用toString方法处理成String对象<br>可以用javap -c StringEqualTest.class命令获得class文件对应的JVM字节码指令就可以看出来。</li>
+</ul>
+</blockquote>
+<p><strong>14、重载（Overload）和重写（Override）的区别。重载的方法能否根据返回类型进行区分</strong><br>都是多态的实现方式<br>重载——编译时多态，同一个类中同名方法的不同参数列表形式（参数类型、数量、顺序）<br>重写——运行时多态，父子类间同名方法的不同参数列表类型（方法名、参数类型相同；返回类型、异常小于父类；访问权限不小于父类）</p>
+<p>若允许根据返回类型重载，则没有使用返回值时难以推断，如int i= test();和test()</p>
+<p><strong>15、描述JVM加载class文件的原理机制</strong> </p>
+<blockquote>
+<ul>
+<li>类的装载是由类加载器（ClassLoader）和它的子类来实现的</li>
+<li>类加载器是一个Java运行时系统组件，它负责在运行时查找和装入类文件中的类。 </li>
+<li>由于Java的跨平台性，经过编译的Java源程序并不是一个可执行程序，而是一个或多个类文件。</li>
+<li>当Java程序需要使用某个类时，JVM会确保这个类已经被加载、链接（验证、准备和解析）和初始化。</li>
+<li>类的加载是指把类的.class文件中的数据读入到内存中，通常是创建一个字节数组读入.class文件，然后产生与所加载类对应的Class对象。加载完成后，Class对象还不完整，所以此时的类还不可用。</li>
+<li>当类被加载后就进入连接阶段，这一阶段包括验证、准备（为静态变量分配内存并设置默认的初始值）和解析（将符号引用替换为直接引用）三个步骤。</li>
+<li>最后，JVM对类进行初始化，包括：1)如果父类还没有被初始化，先初始化父类；2)中存在初始化语句，依次执行初始化语句。 </li>
+</ul>
+</blockquote>
+<p>类加载器包括：</p>
+<blockquote>
+<ul>
+<li>根加载器（BootStrap）：一般用本地代码实现，负责加载JVM基础核心类库（rt.jar）；</li>
+<li>扩展加载器（Extension）：从java.ext.dirs系统属性所指定的目录中加载类库，它的父加载器是Bootstrap</li>
+<li>系统加载器（System）：又叫应用类加载器，其父类是Extension。它是应用最广泛的类加载器。它从环境变量classpath或者系统属性java.class.path所指定的目录中加载类，是用户自定义加载器的默认父加载器。</li>
+<li>用户自定义类加载器（java.lang.ClassLoader的子类）。</li>
+</ul>
+</blockquote>
+<p>从Java 2（JDK 1.2）开始，类加载过程采取了父亲委托机制（PDM）。<br>PDM更好的保证了Java平台的安全性，在该机制中，JVM自带的Bootstrap是根加载器，其他的加载器都有且仅有一个父类加载器。类的加载首先请求父类加载器加载，父类加载器无能为力时才由其子类加载器自行加载。JVM不会向Java程序提供对Bootstrap的引用。</p>
+<p><strong><em>16、char 型变量中能不能存贮一个中文汉字</em></strong><br>可以，因为Java中使用的编码是Unicode（不选择任何特定的编码，直接使用字符在字符集中的编号，这是统一的唯一方法），一个char类型占2个字节（16比特），所以放一个中文是没问题的。</p>
+<p>补充：字节流和字符流<br>使用Unicode意味着字符在JVM内部和外部有不同的表现形式，在JVM内部都是Unicode，当这个字符被从JVM内部转移到外部时（例如存入文件系统中），需要进行编码转换。所以Java中有字节流和字符流，以及在字符流和字节流之间进行转换的转换流，如InputStreamReader和OutputStreamReader，这两个类是字节流和字符流之间的适配器类，承担了编码转换的任务；对于C程序员来说，要完成这样的编码转换恐怕要依赖于union（联合体/共用体）共享内存的特征来实现了。</p>
+<p><strong><em>17、抽象类和接口有什么异同</em></strong></p>
+<blockquote>
+<ul>
+<li>都不能实例化，都可以定义引用。</li>
+<li>必须实现其中所有的方法，否则为抽象类。</li>
+<li>抽象类中的方法不一定是抽象的，而接口中必须是；</li>
+<li>抽象类成员访问控制符可以任意，而接口只能是public</li>
+<li>抽象类可以有构造器，而接口不能；</li>
+<li>抽象类可以定义成员变量，而接口只能是常量；</li>
+</ul>
+</blockquote>
+<p><strong><em>18、静态嵌套类和其他内部类的不同</em></strong><br>静态内部类不依赖于外部类实例被实例化，而通常的内部类需要在外部类实例化后才能实例化。主要的区别是没有对外部类引用的特权。</p>
+<p><strong><em>19、Java 中会存在内存泄漏，请简单描述</em></strong><br>理论上因为垃圾回收机制不存在，但是在实际开发中可能存在无用且可达的内存对象。极端情况下可能引起物理内存与虚拟内存交换，甚至OutOfMemoryError。</p>
+<p><strong><em>20、抽象的方法是否可同时是静态的,是否可同时是本地方法，是否可同时被synchronized修饰</em></strong><br>都不能。<br>抽象方法需要子类重写，而静态的方法是无法被重写的，因此二者是矛盾的。<br>本地方法是由本地代码（如C代码）实现的方法，而抽象方法是没有实现的，也是矛盾的。<br>synchronized和方法的实现细节有关，抽象方法不涉及实现细节，因此也是相互矛盾的。</p>
+<p><strong><em>21、阐述静态变量和实例变量的区别</em></strong></p>
+<blockquote>
+<ul>
+<li>静态变量是被static修饰符修饰的变量，也称为类变量。它属于类，不属于类的任何一个对象，即一个类不管创建多少个对象，静态变量在内存中有且仅有一个拷贝；静态变量可以实现让多个对象共享内存。</li>
+<li>实例变量必须依存于类的某一实例，需要先创建对象，然后才能通过对象访问到它。</li>
+</ul>
+</blockquote>
+<p>补充：在Java开发中，上下文类和工具类中通常会有大量的静态成员。</p>
+<p><strong><em>22、是否可以从一个静态方法内部发出对非静态方法的调用</em></strong><br>不可以<br>静态方法只能访问静态成员，因为非静态方法的调用要先创建对象，在调用静态方法时对象并不一定被初始化了。</p>
+<p><strong><em>23、如何实现对象克隆</em></strong></p>
+<blockquote>
+<ul>
+<li>实现Cloneable接口，并重写Object类中的clone()方法； </li>
+<li>实现Serializable接口，通过对象的序列化和反序列化实现克隆，可以实现真正的深度克隆，代码如下。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyUtil</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">MyUtil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Serializable&gt; <span class="function">T <span class="title">clone</span><span class="params">(T obj)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ByteArrayOutputStream bout = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(bout);</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">        ByteArrayInputStream bin = <span class="keyword">new</span> ByteArrayInputStream(bout.toByteArray());</span><br><span class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(bin);</span><br><span class="line">        <span class="keyword">return</span> (T) ois.readObject();</span><br><span class="line">        <span class="comment">// 说明：调用ByteArrayInputStream或ByteArrayOutputStream对象的close方法没有任何意义</span></span><br><span class="line">        <span class="comment">// 这两个基于内存的流只要垃圾回收器清理对象就能够释放资源，这一点不同于对外部资源（如文件流）的释放</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>注意：基于序列化和反序列化实现的克隆不仅仅是深度克隆，更重要的是通过泛型限定，可以检查出要克隆的对象是否支持序列化，这项检查是编译器完成的，不是在运行时抛出异常，这种是方案明显优于使用Object类的clone方法克隆对象。让问题在编译的时候暴露出来总是好过把问题留到运行时。</p>
+<p><strong><em>24、垃圾回收相关参数</em></strong><br>与垃圾回收相关的JVM参数：<br>-Xms / -Xmx — 堆的初始大小 / 堆的最大大小<br>-Xmn — 堆中年轻代的大小<br>-XX:-DisableExplicitGC — 让System.gc()不产生任何作用<br>-XX:+PrintGCDetails — 打印GC的细节<br>-XX:+PrintGCDateStamps — 打印GC操作的时间戳<br>-XX:NewSize / XX:MaxNewSize — 设置新生代大小/新生代最大大小<br>-XX:NewRatio — 可以设置老生代和新生代的比例<br>-XX:PrintTenuringDistribution — 设置每次新生代GC后输出幸存者乐园中对象年龄的分布<br>-XX:InitialTenuringThreshold / -XX:MaxTenuringThreshold：设置老年代阀值的初始值和最大值<br>-XX:TargetSurvivorRatio：设置幸存区的目标使用率</p>
+<p><strong><em>25、String s = new String(“xyz”);创建了几个字符串对象</em></strong><br>两个对象<br>一个是静态区的”xyz”，一个是用new创建在堆上的对象</p>
+<p><strong><em>26、一个Java源文件中是否可以包含多个类（不是内部类），有什么限制</em></strong><br>可以<br>一个源文件中最多只能有一个public,并且文件名必须和public类的类名完全保持一致</p>
+<p><strong><em>27、内部类可以引用它的包含类（外部类）的成员吗，有没有什么限制</em></strong><br>除静态内部类外，一个内部类对象可以访问创建它的外部类对象的成员，包括私有成员。</p>
+<p><em>*</em>28、数据类型之间的转换： </p>
+<ul>
+<li>如何将字符串转换为基本数据类型</li>
+<li><p>如何将基本数据类型转换为字符串<em>*</em></p>
+</li>
+<li><p>调用基本数据类型对应的包装类中的方法parseXXX(String)或valueOf(String)即可返回相应基本类型； </p>
+</li>
+<li>一种方法是将基本数据类型与空字符串（””）连接（+）即可获得其所对应的字符串；另一种方法是调用String 类中的valueOf()方法返回相应字符串</li>
+</ul>
+<p><strong><em>29、如何实现字符串的反转及替换</em></strong><br>方法很多，可以自定义实现,也可以使用String、StringBuffer或StringBuilder中的方法。<br>有一道很常见的面试题是用递归实现字符串反转，代码如下所示：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">reverse</span><span class="params">(String originStr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(originStr == <span class="keyword">null</span> || originStr.length() &lt;= <span class="number">1</span>) </span><br><span class="line">        <span class="keyword">return</span> originStr;</span><br><span class="line">    <span class="keyword">return</span> reverse(originStr.substring(<span class="number">1</span>)) + originStr.charAt(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//将字符串的首字母连接到末尾</span></span><br></pre></td></tr></table></figure></p>
+<p><strong><em>30、怎样将GB2312编码的字符串转换为ISO-8859-1编码的字符串</em></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"你好"</span>;</span><br><span class="line">String s2 = <span class="keyword">new</span> String(s1.getBytes(<span class="string">"GB2312"</span>), <span class="string">"ISO-8859-1"</span>);</span><br></pre></td></tr></table></figure></p>
+<p><em>*</em>31、日期和时间： </p>
+<ul>
+<li>如何获取当前准确时间？ </li>
+<li>如何获取Unix时间戳？ </li>
+<li>如何获取某月的最后一天？ </li>
+<li><p>如何格式化日期？<em>*</em></p>
+</li>
+<li><p>当前准确时间</p>
+<blockquote>
+<ul>
+<li>创建java.util.Calendar 实例，调用其get()方法传入不同的参数即可获得参数所对应的值。</li>
+<li>Java 8中可以使用java.time.LocalDateTime来获取，代码如下所示。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Java 8以前</span></span><br><span class="line">Calendar cal = Calendar.getInstance();</span><br><span class="line">System.out.println(cal.get(Calendar.YEAR));</span><br><span class="line">               </span><br><span class="line"><span class="comment">// Java 8</span></span><br><span class="line">LocalDateTime dt = LocalDateTime.now();</span><br><span class="line">System.out.println(dt.getYear());</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>Unix时间戳</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Java 8以前</span></span><br><span class="line">Calendar.getInstance().getTimeInMillis();</span><br><span class="line">System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Java 8</span></span><br><span class="line">Clock.systemDefaultZone().millis();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>月末日期</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Calendar time = Calendar.getInstance();</span><br><span class="line">time.getActualMaximum(Calendar.DAY_OF_MONTH);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>日期格式化</p>
+<blockquote>
+<ul>
+<li>java.text.DataFormat的子类（如SimpleDateFormat类）中的format(Date)方法可将日期格式化。</li>
+<li>Java 8中可以用java.time.format.DateTimeFormatter来格式化时间日期。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Java 8以前</span></span><br><span class="line">SimpleDateFormat oldFormatter = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy/MM/dd"</span>);</span><br><span class="line">Date date1 = <span class="keyword">new</span> Date();</span><br><span class="line">System.out.println(oldFormatter.format(date1));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Java 8</span></span><br><span class="line">DateTimeFormatter newFormatter = DateTimeFormatter.ofPattern(<span class="string">"yyyy/MM/dd"</span>);</span><br><span class="line">LocalDate date2 = LocalDate.now();</span><br><span class="line">System.out.println(date2.format(newFormatter));</span><br></pre></td></tr></table></figure>
+<p>补充：<br>Java 8中引入了新的时间日期API，其中包括LocalDate、LocalTime、LocalDateTime、Clock、Instant等类，这些的类的设计都使用了不变模式，是线程安全的。</p>
+<p><strong>参考资料</strong><br><a href="http://blog.csdn.net/jackfrued/article/details/44921941" target="_blank" rel="noopener">Java面试题全集（上）</a><br><a href="https://www.cnblogs.com/dreamroute/p/3650399.html" target="_blank" rel="noopener">Java String类中的intern()方法</a><br><a href="https://blog.csdn.net/jackfrued/article/details/44499227" target="_blank" rel="noopener">关于Java并发编程的总结和思考</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/04/180304Hexo标签计数问题/" rel="next" title="Hexo标签计数问题">
+                <i class="fa fa-chevron-left"></i> Hexo标签计数问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/19/180319打印机连接问题/" rel="prev" title="打印机连接问题">
+                打印机连接问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
