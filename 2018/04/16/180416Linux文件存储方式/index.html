@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="文件以数据块的形式存储到磁盘中，不足一块，按一块存储。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-24T02:10:30.813Z">
+<meta property="og:updated_time" content="2018-04-24T02:27:25.899Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文件存储方式">
 <meta name="twitter:description" content="文件以数据块的形式存储到磁盘中，不足一块，按一块存储。">
@@ -346,18 +346,11 @@
 <ul>
 <li style="list-style: none"><input type="checkbox"> 1、连续分配<br>寻找磁盘上的一段连续的物理空间，在其上连续划分出足够的物理块，与数据块号作映射。</li>
 <li>优点<br>通过将数据块首地址进行计算，支持随机访问；</li>
-<li><p>缺点<br>需要确定数据块的大小，需要查找连续的物理空间，会生成空间碎片。</p>
-</li>
-<li><p>[ ] 2、链接表法<br>采用类似链表的方法，在数据块中保存下一数据块的物理地址。</p>
-</li>
-<li><ul>
+<li>缺点<br>需要确定数据块的大小，需要查找连续的物理空间，会生成空间碎片。</li>
+<li style="list-style: none"><input type="checkbox"> 2、链接表法<br>采用类似链表的方法，在数据块中保存下一数据块的物理地址。</li>
 <li>优点<br>不用提前确定文件的大小，减少了磁盘碎片的生成，有效利用了磁盘空间。</li>
-</ul>
-</li>
-<li><p>缺点<br>不支持随机访问，需要遍历查找;<br>添加下一数据块地址产生的额外的存储空间开销。</p>
-</li>
-<li><p>[ ] 3、索引链表法<br>借鉴数据库索引的思想，将索引（下一数据块地址）和数据块分开存放，直接将索引表存储在内存中</p>
-</li>
+<li>缺点<br>不支持随机访问，需要遍历查找;<br>添加下一数据块地址产生的额外的存储空间开销。</li>
+<li style="list-style: none"><input type="checkbox"> 3、索引链表法<br>借鉴数据库索引的思想，将索引（下一数据块地址）和数据块分开存放，直接将索引表存储在内存中</li>
 <li>优点<br>内存中存储索引表，避免了查找数据块引起的频繁的磁盘IO，提高了数据块查找的开销</li>
 <li>缺点<br>依旧存在着额外的存储开销</li>
 </ul>
