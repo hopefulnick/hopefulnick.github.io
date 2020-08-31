@@ -87,23 +87,23 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="适用于版本2.3.0">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200706112327573.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200708172238345.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200708173123271.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200709112824948.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200709114550299.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200709115759302.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200710112439772.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200710112544835.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200706112327573.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200708172238345.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200708173123271.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200709112824948.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200709114550299.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200709115759302.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200710112439772.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200710112544835.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200710115708664.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200710115929340.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200710120047554.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200710120107513.png">
-<meta property="og:updated_time" content="2020-08-30T15:54:52.415Z">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200710120047554.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200710120107513.png">
+<meta property="og:updated_time" content="2020-08-31T17:25:46.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark SQL">
 <meta name="twitter:description" content="适用于版本2.3.0">
-<meta name="twitter:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200706112327573.png">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200706112327573.png">
 
 
 
@@ -426,7 +426,7 @@
 <h4 id="3-保存模式"><a href="#3-保存模式" class="headerlink" title="3) 保存模式"></a>3) 保存模式</h4><p>指定数据存在时的行为。</p>
 <p>以下行为不是原子的，也没有使用锁。</p>
 <p>覆盖时，先删除再写入。</p>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200706112327573.png" alt="image-20200706112327573"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200706112327573.png" alt="image-20200706112327573"></p>
 <h4 id="4-保存到持久化表中"><a href="#4-保存到持久化表中" class="headerlink" title="4) 保存到持久化表中"></a>4) 保存到持久化表中</h4><p>持久化表在Spark程序重启后依旧可用，不同于临时视图。</p>
 <p>DataFrame可以使用saveAsTable方法持久化到Hive Metastore中。</p>
 <p>通过SparkSession的table方法按名称调用持久化表。</p>
@@ -484,7 +484,7 @@
 <li>使用SparkSession的setConf</li>
 <li>在SQL脚本中，使用SET key=value</li>
 </ul>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200708172238345.png" alt="image-20200708172238345"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200708172238345.png" alt="image-20200708172238345"></p>
 <h3 id="3-ORC文件"><a href="#3-ORC文件" class="headerlink" title="(3) ORC文件"></a>(3) ORC文件</h3><p>版本&gt;=2.3,支持一种矢量化的ORC读取器，用于读取ORC文件。</p>
 <ul>
 <li><p>本地ORC表(如使用USING ORC创建的)</p>
@@ -495,7 +495,7 @@
 <p>spark.sql.hive.convertMetastoreOrc-&gt;true</p>
 </li>
 </ul>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200708173123271.png" alt="image-20200708173123271"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200708173123271.png" alt="image-20200708173123271"></p>
 <h3 id="4-JSON数据集"><a href="#4-JSON数据集" class="headerlink" title="(4) JSON数据集"></a>(4) JSON数据集</h3><p>Spark使用的JSON格式与典型格式有所区别，详见<a href="http://jsonlines.org/" target="_blank" rel="noopener">JSON Lines text format, also called newline-delimited JSON</a>.</p>
 <p>其采用UTF-8编码，要求每一行采用\n分隔，并且每一行都是合法的JSON值。</p>
 <p>使用多行JSON，需要设置multiLine为true.</p>
@@ -510,10 +510,10 @@
 <h4 id="1-指定存储格式"><a href="#1-指定存储格式" class="headerlink" title="1) 指定存储格式"></a>1) 指定存储格式</h4><p>创建Hive表时，需要指定存储格式和序列化方式，如 <code>CREATE TABLE src(id int) USING hive OPTIONS(fileFormat &#39;parquet&#39;)</code></p>
 <p>读取默认按照文本格式。</p>
 <p>当前不直接支持Hive storage handler。可以向在Hive端创建表，Spark SQL再读取</p>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200709112824948.png" alt="image-20200709112824948"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200709112824948.png" alt="image-20200709112824948"></p>
 <h4 id="2-与不同版本Hive-Metastore交互"><a href="#2-与不同版本Hive-Metastore交互" class="headerlink" title="2) 与不同版本Hive Metastore交互"></a>2) 与不同版本Hive Metastore交互</h4><p>Spark可以通过配置与不同的Hive Metastore交互。</p>
 <p>在内部，Spark基于Hive1.2.1编译，使用其内部执行，如serdes、UDF和UDAF</p>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200709114550299.png" alt="image-20200709114550299"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200709114550299.png" alt="image-20200709114550299"></p>
 <p>注意：Spark 3.0提供了对Hive3.0的支持。</p>
 <h3 id="6-JDBC连接其他数据库"><a href="#6-JDBC连接其他数据库" class="headerlink" title="(6) JDBC连接其他数据库"></a>(6) JDBC连接其他数据库</h3><p>Spark可以使用JDBC连接数据库。尤其是使用<a href="https://spark.apache.org/docs/2.3.0/api/scala/index.html#org.apache.spark.rdd.JdbcRDD" target="_blank" rel="noopener">JdbcRDD</a>时。</p>
 <p>不同于Spark SQL JDBC Server(用于向外提供Spark SQL查询能力)，不用提供ClassTag。</p>
@@ -522,7 +522,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-shell --driver-class-path postgresql-9.4.1207.jar --jars postgresql-9.4.1207.jar</span><br></pre></td></tr></table></figure>
 <p>连接时，需要提供用户名和密码。</p>
 <p>根据需要进行以下配置： 大小写敏感</p>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200709115759302.png" alt="image-20200709115759302"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200709115759302.png" alt="image-20200709115759302"></p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Note: JDBC loading and saving can be achieved via either the load/save or jdbc methods</span></span><br><span class="line"><span class="comment">// Loading data from a JDBC source</span></span><br><span class="line"><span class="comment">// 方法一：使用option</span></span><br><span class="line"><span class="keyword">val</span> jdbcDF = spark.read</span><br><span class="line">  .format(<span class="string">"jdbc"</span>)</span><br><span class="line">  .option(<span class="string">"url"</span>, <span class="string">"jdbc:postgresql:dbserver"</span>)</span><br><span class="line">  .option(<span class="string">"dbtable"</span>, <span class="string">"schema.tablename"</span>)</span><br><span class="line">  .option(<span class="string">"user"</span>, <span class="string">"username"</span>)</span><br><span class="line">  .option(<span class="string">"password"</span>, <span class="string">"password"</span>)</span><br><span class="line">  .load()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法二：通过jdbc</span></span><br><span class="line"><span class="keyword">val</span> connectionProperties = <span class="keyword">new</span> <span class="type">Properties</span>()</span><br><span class="line">connectionProperties.put(<span class="string">"user"</span>, <span class="string">"username"</span>)</span><br><span class="line">connectionProperties.put(<span class="string">"password"</span>, <span class="string">"password"</span>)</span><br><span class="line"><span class="keyword">val</span> jdbcDF2 = spark.read</span><br><span class="line">  .jdbc(<span class="string">"jdbc:postgresql:dbserver"</span>, <span class="string">"schema.tablename"</span>, connectionProperties)</span><br><span class="line"><span class="comment">// Specifying the custom data types of the read schema</span></span><br><span class="line">connectionProperties.put(<span class="string">"customSchema"</span>, <span class="string">"id DECIMAL(38, 0), name STRING"</span>)</span><br><span class="line"><span class="keyword">val</span> jdbcDF3 = spark.read</span><br><span class="line">  .jdbc(<span class="string">"jdbc:postgresql:dbserver"</span>, <span class="string">"schema.tablename"</span>, connectionProperties)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Saving data to a JDBC source</span></span><br><span class="line">jdbcDF.write</span><br><span class="line">  .format(<span class="string">"jdbc"</span>)</span><br><span class="line">  .option(<span class="string">"url"</span>, <span class="string">"jdbc:postgresql:dbserver"</span>)</span><br><span class="line">  .option(<span class="string">"dbtable"</span>, <span class="string">"schema.tablename"</span>)</span><br><span class="line">  .option(<span class="string">"user"</span>, <span class="string">"username"</span>)</span><br><span class="line">  .option(<span class="string">"password"</span>, <span class="string">"password"</span>)</span><br><span class="line">  .save()</span><br><span class="line"></span><br><span class="line">jdbcDF2.write</span><br><span class="line">  .jdbc(<span class="string">"jdbc:postgresql:dbserver"</span>, <span class="string">"schema.tablename"</span>, connectionProperties)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Specifying create table column data types on write</span></span><br><span class="line">jdbcDF.write</span><br><span class="line">  .option(<span class="string">"createTableColumnTypes"</span>, <span class="string">"name CHAR(64), comments VARCHAR(1024)"</span>)</span><br><span class="line">  .jdbc(<span class="string">"jdbc:postgresql:dbserver"</span>, <span class="string">"schema.tablename"</span>, connectionProperties)</span><br></pre></td></tr></table></figure>
 <h3 id="7-故障排除"><a href="#7-故障排除" class="headerlink" title="(7) 故障排除"></a>(7) 故障排除</h3><ul>
 <li><p>在所有节点的compute_classpath.sh包含驱动程序</p>
@@ -535,9 +535,9 @@
 <p>spark.catalog.uncacheTable(“tableName”)释放缓存。</p>
 <p>Spark只扫描需要的列并自动压缩，以减少内存占用和GC压力。</p>
 <p>可以使用setConf或SQL的SET key=value配置。</p>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200710112439772.png" alt="image-20200710112439772"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200710112439772.png" alt="image-20200710112439772"></p>
 <h3 id="2-其他配置选项"><a href="#2-其他配置选项" class="headerlink" title="(2) 其他配置选项"></a>(2) 其他配置选项</h3><p>以下优化选项可能在后续版本中移除：</p>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200710112544835.png" alt="image-20200710112544835"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200710112544835.png" alt="image-20200710112544835"></p>
 <h3 id="3-SQL查询的广播提示"><a href="#3-SQL查询的广播提示" class="headerlink" title="(3) SQL查询的广播提示"></a>(3) SQL查询的广播提示</h3><p>Spark广播可用于表或视图间的join操作。</p>
 <p>即使广播数据量超过spark.sql.autoBroadcastJoinThreshold配置，Spark还是会使用broadcast hash join（BHJ）。</p>
 <p>当两张表都广播时，Spark会广播统计只较小的一个。</p>
@@ -573,8 +573,8 @@
 <h4 id="1-在已有Hive仓库中部署"><a href="#1-在已有Hive仓库中部署" class="headerlink" title="1) 在已有Hive仓库中部署"></a>1) 在已有Hive仓库中部署</h4><p>不用更改Hive配置</p>
 <h4 id="2-支持的Hive特性"><a href="#2-支持的Hive特性" class="headerlink" title="2) 支持的Hive特性"></a>2) 支持的Hive特性</h4><p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200710115708664.png" alt="image-20200710115708664" style="zoom:50%;"></p>
 <h4 id="3-不支持的Hive特性"><a href="#3-不支持的Hive特性" class="headerlink" title="3) 不支持的Hive特性"></a>3) 不支持的Hive特性</h4><p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200710115929340.png" alt="image-20200710115929340" style="zoom:50%;"></p>
-<h2 id="8-参考"><a href="#8-参考" class="headerlink" title="8 参考"></a>8 参考</h2><h3 id="1-数据类型"><a href="#1-数据类型" class="headerlink" title="(1) 数据类型"></a>(1) 数据类型</h3><p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200710120047554.png" alt="image-20200710120047554"></p>
-<p><img src="/2020/07/02/200702Spark SQL/200702Spark%20SQL/image-20200710120107513.png" alt="image-20200710120107513"></p>
+<h2 id="8-参考"><a href="#8-参考" class="headerlink" title="8 参考"></a>8 参考</h2><h3 id="1-数据类型"><a href="#1-数据类型" class="headerlink" title="(1) 数据类型"></a>(1) 数据类型</h3><p><img src="/2020/07/02/200702Spark SQL/image-20200710120047554.png" alt="image-20200710120047554"></p>
+<p><img src="/2020/07/02/200702Spark SQL/image-20200710120107513.png" alt="image-20200710120107513"></p>
 <h3 id="2-NaN语义"><a href="#2-NaN语义" class="headerlink" title="(2) NaN语义"></a>(2) NaN语义</h3><p>表示not a number，用于浮点型或双精度类型。</p>
 <ul>
 <li>NaN = NaN，结果为true</li>
@@ -720,7 +720,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

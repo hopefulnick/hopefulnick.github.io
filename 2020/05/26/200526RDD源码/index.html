@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="RDD 2.4.5">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD源码/200526RDD%E6%BA%90%E7%A0%81/RDD.png">
-<meta property="og:updated_time" content="2020-08-02T14:58:50.658Z">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD源码/RDD.png">
+<meta property="og:updated_time" content="2020-08-31T17:25:46.210Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RDD源码">
 <meta name="twitter:description" content="RDD 2.4.5">
-<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD源码/200526RDD%E6%BA%90%E7%A0%81/RDD.png">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD源码/RDD.png">
 
 
 
@@ -358,7 +358,7 @@
         <p>RDD 2.4.5</p>
 <a id="more"></a>
 <p>IDEA没有列出主构造函数中的参数，如<code>_sc: SparkContext和deps: Seq[Dependency[_]]</code></p>
-<p><img src="/2020/05/26/200526RDD源码/200526RDD%E6%BA%90%E7%A0%81/RDD.png" alt="RDD"></p>
+<p><img src="/2020/05/26/200526RDD源码/RDD.png" alt="RDD"></p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义通用操作，其他操作有专门的RDD或操作类实现，如PairRDDFunctions应用于键值对RDD</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">RDD</span>[<span class="type">T</span>: <span class="type">ClassTag</span>](<span class="params"></span></span></span><br><span class="line"><span class="class"><span class="params">    @transient private var _sc: <span class="type">SparkContext</span>,</span></span></span><br><span class="line"><span class="class"><span class="params">    @transient private var deps: <span class="type">Seq</span>[<span class="type">Dependency</span>[_]]</span></span></span><br><span class="line"><span class="class"><span class="params">  </span>) <span class="keyword">extends</span> <span class="title">Serializable</span> <span class="keyword">with</span> <span class="title">Logging</span></span></span><br></pre></td></tr></table></figure>
 <p>RDD主要由以下5个属性标识：</p>
 <ul>
@@ -537,7 +537,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

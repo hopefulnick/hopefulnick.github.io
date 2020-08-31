@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="1 概览Spark具有两大抽象： RDD和共享变量。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200530113809031.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200602175340948.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200602204104723.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200607152307918.png">
-<meta property="og:updated_time" content="2020-08-22T14:37:16.480Z">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/image-20200530113809031.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/image-20200602175340948.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/image-20200602204104723.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/image-20200607152307918.png">
+<meta property="og:updated_time" content="2020-08-31T17:25:46.209Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RDD入门">
 <meta name="twitter:description" content="1 概览Spark具有两大抽象： RDD和共享变量。">
-<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200530113809031.png">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD入门/image-20200530113809031.png">
 
 
 
@@ -371,7 +371,7 @@
 <p>SparkContext用于访问集群</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// appName 集群UI显示的应用名称</span></span><br><span class="line"><span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>().setAppName(appName).setMaster(master)</span><br><span class="line"><span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br></pre></td></tr></table></figure>
 <p>master:</p>
-<p><img src="/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200530113809031.png" alt="image-20200530113809031"></p>
+<p><img src="/2020/05/26/200526RDD入门/image-20200530113809031.png" alt="image-20200530113809031"></p>
 <p>如果不想硬编码master，可以使用spark-submit</p>
 <h3 id="2-交互命令行"><a href="#2-交互命令行" class="headerlink" title="(2) 交互命令行"></a>(2) 交互命令行</h3><p>spark-shell自动创建SparkContext，忽略用户创建的。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// --master 指定连接的主节点</span><br><span class="line">// --jars 添加逗号分隔的JAR</span><br><span class="line">// --packages 添加Maven依赖</span><br><span class="line">// --repositories 添加依赖仓库，如Sonatype</span><br><span class="line"><span class="meta">$</span> ./bin/spark-shell --master local[4] --jars code.jar</span><br><span class="line"><span class="meta">$</span> ./bin/spark-shell --master local[4] --packages "org.example:example:0.1"</span><br></pre></td></tr></table></figure>
@@ -414,9 +414,9 @@
 <h4 id="4-键值对"><a href="#4-键值对" class="headerlink" title="4) 键值对"></a>4) 键值对</h4><p>Scala中，使用<a href="https://www.scala-lang.org/api/2.12.10/scala/Tuple2.html" target="_blank" rel="noopener">Tuple2</a>实现，键值对操作在类 <a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.PairRDDFunctions" target="_blank" rel="noopener">PairRDDFunctions</a>中。</p>
 <p>注意：使用自定义对象，需要实现hashcode()和equals()。详见<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode--" target="_blank" rel="noopener">Object.hashCode() documentation</a>.</p>
 <h4 id="5-转换"><a href="#5-转换" class="headerlink" title="5) 转换"></a>5) 转换</h4><p>详见RDD API doc (<a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.RDD" target="_blank" rel="noopener">Scala</a>, <a href="http://spark.apache.org/docs/latest/api/java/index.html?org/apache/spark/api/java/JavaRDD.html" target="_blank" rel="noopener">Java</a>, <a href="http://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD" target="_blank" rel="noopener">Python</a>, <a href="http://spark.apache.org/docs/latest/api/R/index.html" target="_blank" rel="noopener">R</a>)和pair RDD functions doc (<a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.PairRDDFunctions" target="_blank" rel="noopener">Scala</a>, <a href="http://spark.apache.org/docs/latest/api/java/index.html?org/apache/spark/api/java/JavaPairRDD.html" target="_blank" rel="noopener">Java</a>)</p>
-<p><img src="/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200602175340948.png" alt="image-20200602175340948"></p>
+<p><img src="/2020/05/26/200526RDD入门/image-20200602175340948.png" alt="image-20200602175340948"></p>
 <h4 id="6-动作"><a href="#6-动作" class="headerlink" title="6) 动作"></a>6) 动作</h4><p>详见RDD API doc (<a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.RDD" target="_blank" rel="noopener">Scala</a>, <a href="http://spark.apache.org/docs/latest/api/java/index.html?org/apache/spark/api/java/JavaRDD.html" target="_blank" rel="noopener">Java</a>, <a href="http://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD" target="_blank" rel="noopener">Python</a>, <a href="http://spark.apache.org/docs/latest/api/R/index.html" target="_blank" rel="noopener">R</a>)和pair RDD functions doc (<a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.PairRDDFunctions" target="_blank" rel="noopener">Scala</a>, <a href="http://spark.apache.org/docs/latest/api/java/index.html?org/apache/spark/api/java/JavaPairRDD.html" target="_blank" rel="noopener">Java</a>)</p>
-<p><img src="/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200602204104723.png" alt="image-20200602204104723"></p>
+<p><img src="/2020/05/26/200526RDD入门/image-20200602204104723.png" alt="image-20200602204104723"></p>
 <p>Spark暴露了一些动作的异步形式，如foreach()对应的foreachAsync()。调用后立即返回FutureAction，而不是阻塞直到完成。</p>
 <h4 id="7-shuffle"><a href="#7-shuffle" class="headerlink" title="7) shuffle"></a>7) shuffle</h4><p>一种复杂且代价昂贵的操作，通常用于数据在节点间的再分区。</p>
 <h5 id="1‘-背景"><a href="#1‘-背景" class="headerlink" title="1‘ 背景"></a>1‘ 背景</h5><p>以reduceByKey为例，其将键名和所有具有相同键名的键值作为一个元组处理。但是这些键值通常分布在各个分区中。Spark中分区位置又与操作无关，因此需要读取所有分区的所有值，并将具有相同键名的键值汇聚到一起。</p>
@@ -435,7 +435,7 @@
 <h3 id="3-持久化"><a href="#3-持久化" class="headerlink" title="(3) 持久化"></a>(3) 持久化</h3><p>为了快速计算和避免重算，利于迭代和快速交互，可以缓存数据集。</p>
 <p>cache()仅存储到内存，persist()可以选择存储级别。</p>
 <p>为了避免shuffle时节点失效引起的重算，Spark自动将某些中间数据缓存。</p>
-<p><img src="/2020/05/26/200526RDD入门/200526RDD%E5%85%A5%E9%97%A8/image-20200607152307918.png" alt="image-20200607152307918"></p>
+<p><img src="/2020/05/26/200526RDD入门/image-20200607152307918.png" alt="image-20200607152307918"></p>
 <p>存储等级选择：</p>
 <ul>
 <li>优先仅内存，除非空间不足。</li>
@@ -607,7 +607,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

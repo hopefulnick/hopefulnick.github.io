@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="1 简介Flume是分布式、可靠和可用的，海量日志数据高效收集、聚合和移动系统，用于从多源系统到中心数据存储。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image00.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200529213739305.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200601174413041.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image01.png">
-<meta property="og:updated_time" content="2020-06-05T13:32:22.626Z">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/DevGuide_image00.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/image-20200529213739305.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/image-20200601174413041.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/DevGuide_image01.png">
+<meta property="og:updated_time" content="2020-08-31T17:25:46.214Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flume开发指南">
 <meta name="twitter:description" content="1 简介Flume是分布式、可靠和可用的，海量日志数据高效收集、聚合和移动系统，用于从多源系统到中心数据存储。">
-<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image00.png">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/DevGuide_image00.png">
 
 
 
@@ -361,7 +361,7 @@
         <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>Flume是分布式、可靠和可用的，海量日志数据高效收集、聚合和移动系统，用于从多源系统到中心数据存储。</p>
 <a id="more"></a>
 <p>目前有两个代码发布基线：0.9.x和1.x。0.9.x详见<a href="http://archive.cloudera.com/cdh/3/flume/DeveloperGuide/" target="_blank" rel="noopener">Flume 0.9.x Developer Guide</a></p>
-<h2 id="2-概览"><a href="#2-概览" class="headerlink" title="2 概览"></a>2 概览</h2><h3 id="1-数据流模型"><a href="#1-数据流模型" class="headerlink" title="(1) 数据流模型"></a>(1) 数据流模型</h3><p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image00.png" alt="DevGuide_image00"></p>
+<h2 id="2-概览"><a href="#2-概览" class="headerlink" title="2 概览"></a>2 概览</h2><h3 id="1-数据流模型"><a href="#1-数据流模型" class="headerlink" title="(1) 数据流模型"></a>(1) 数据流模型</h3><p><img src="/2020/05/27/200527Flume开发指南/DevGuide_image00.png" alt="DevGuide_image00"></p>
 <p>Agent: Jvm进程。其中的组件允许外部事件流流入，并留出到外部目的地。</p>
 <p>Event: 数据流单位。携带有字节数组的负载和字符串属性的头部，从Source流向Channel，再流向Sink。</p>
 <p>Source：从外部来源消费特定格式的Event，如AvroSource。保存接收到的事件到一个或多个Channel中。</p>
@@ -371,7 +371,7 @@
 <h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="(2) 可靠性"></a>(2) 可靠性</h3><p>只有在Event被下一Channel或外部保存后，Sink才会删除当前Channel中的Event。</p>
 <p>Flume使用事务保证Event的可靠传递。Channel提供给Source和Sink对于Event的事务处理。在multi-hop flow中，上一Sink和下一Source同时使用事务保证Event被存储到下一Channel中。</p>
 <h2 id="3-源码编译"><a href="#3-源码编译" class="headerlink" title="3 源码编译"></a>3 源码编译</h2><p><a href="https://developers.google.com/protocol-buffers" target="_blank" rel="noopener">Google Protocol Buffer</a>是一个语言中立、平台中立的用于序列化结构数据的扩展机制。</p>
-<p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200529213739305.png" alt="image-20200529213739305"></p>
+<p><img src="/2020/05/27/200527Flume开发指南/image-20200529213739305.png" alt="image-20200529213739305"></p>
 <h2 id="4-组件开发"><a href="#4-组件开发" class="headerlink" title="4 组件开发"></a>4 组件开发</h2><h3 id="1-客户端"><a href="#1-客户端" class="headerlink" title="(1) 客户端"></a>(1) 客户端</h3><p>客户端是Event的来源，并传递给Agent。</p>
 <p>当前Flume支持Avro, log4j, syslog,Http POST (with a JSON body)和本地进程输出(ExecSource)格式的外部Source。</p>
 <p>其他格式的输入可以通过自定义客户端实现：</p>
@@ -432,10 +432,10 @@
 <h3 id="2-内嵌Agent"><a href="#2-内嵌Agent" class="headerlink" title="(2) 内嵌Agent"></a>(2) 内嵌Agent</h3><p>Flume提供一种内嵌于应用的轻量Agent。仅支持部分组件，如Source、Channel（只有File和Memory）、Sink(仅Avro)和Interceptor。</p>
 <p>注意：内嵌Agent依赖于hadoop-core.jar</p>
 <p>必需的属性粗体标注：</p>
-<p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200601174413041.png" alt="image-20200601174413041"></p>
+<p><img src="/2020/05/27/200527Flume开发指南/image-20200601174413041.png" alt="image-20200601174413041"></p>
 <p>使用示例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; properties = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">properties.put(<span class="string">"channel.type"</span>, <span class="string">"memory"</span>);</span><br><span class="line">properties.put(<span class="string">"channel.capacity"</span>, <span class="string">"200"</span>);</span><br><span class="line">properties.put(<span class="string">"sinks"</span>, <span class="string">"sink1 sink2"</span>);</span><br><span class="line">properties.put(<span class="string">"sink1.type"</span>, <span class="string">"avro"</span>);</span><br><span class="line">properties.put(<span class="string">"sink2.type"</span>, <span class="string">"avro"</span>);</span><br><span class="line">properties.put(<span class="string">"sink1.hostname"</span>, <span class="string">"collector1.apache.org"</span>);</span><br><span class="line">properties.put(<span class="string">"sink1.port"</span>, <span class="string">"5564"</span>);</span><br><span class="line">properties.put(<span class="string">"sink2.hostname"</span>, <span class="string">"collector2.apache.org"</span>);</span><br><span class="line">properties.put(<span class="string">"sink2.port"</span>,  <span class="string">"5565"</span>);</span><br><span class="line">properties.put(<span class="string">"processor.type"</span>, <span class="string">"load_balance"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors"</span>, <span class="string">"i1"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors.i1.type"</span>, <span class="string">"static"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors.i1.key"</span>, <span class="string">"key1"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors.i1.value"</span>, <span class="string">"value1"</span>);</span><br><span class="line"></span><br><span class="line">EmbeddedAgent agent = <span class="keyword">new</span> EmbeddedAgent(<span class="string">"myagent"</span>);</span><br><span class="line"></span><br><span class="line">agent.configure(properties);</span><br><span class="line">agent.start();</span><br><span class="line"></span><br><span class="line">List&lt;Event&gt; events = Lists.newArrayList();</span><br><span class="line"></span><br><span class="line">events.add(event);</span><br><span class="line">events.add(event);</span><br><span class="line">events.add(event);</span><br><span class="line">events.add(event);</span><br><span class="line"></span><br><span class="line">agent.putAll(events);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">agent.stop();</span><br></pre></td></tr></table></figure>
-<h3 id="3-事务接口"><a href="#3-事务接口" class="headerlink" title="(3) 事务接口"></a>(3) 事务接口</h3><p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image01.png" alt="DevGuide_image01"></p>
+<h3 id="3-事务接口"><a href="#3-事务接口" class="headerlink" title="(3) 事务接口"></a>(3) 事务接口</h3><p><img src="/2020/05/27/200527Flume开发指南/DevGuide_image01.png" alt="DevGuide_image01"></p>
 <p>事务接口是Flume可靠性的基础。所有的主要组件必须使用事务。</p>
 <p>事务在Channel内部实现。与Channel连接的每个Source和Sink必须获取事务对象。Source使用ChannelProcessor管理，Sink显式通过Channel管理。保存Event到Channel或从Channel中获取都是在事务内部完成。示例如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Channel ch = <span class="keyword">new</span> MemoryChannel();</span><br><span class="line">Transaction txn = ch.getTransaction();</span><br><span class="line">txn.begin();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// This try clause includes whatever Channel operations you want to do</span></span><br><span class="line"></span><br><span class="line">  Event eventToStage = EventBuilder.withBody(<span class="string">"Hello Flume!"</span>,</span><br><span class="line">                       Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line">  ch.put(eventToStage);</span><br><span class="line">  <span class="comment">// Event takenEvent = ch.take();</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  txn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">  txn.rollback();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Log exception, handle individual exceptions as needed</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// re-throw all Errors</span></span><br><span class="line">  <span class="keyword">if</span> (t <span class="keyword">instanceof</span> Error) &#123;</span><br><span class="line">    <span class="keyword">throw</span> (Error)t;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  txn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -480,8 +480,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/26/200526HashMap/" rel="next" title="HashMap(JDK 14)">
-                <i class="fa fa-chevron-left"></i> HashMap(JDK 14)
+              <a href="/2020/05/27/200527Hive入门/" rel="next" title="Hive入门">
+                <i class="fa fa-chevron-left"></i> Hive入门
               </a>
             
           </div>
@@ -490,8 +490,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/05/27/200527Hive入门/" rel="prev" title="Hive入门">
-                Hive入门 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/06/01/200601SQL/" rel="prev" title="SQL">
+                SQL <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -583,7 +583,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="适用于版本&amp;gt;=3.0，其他版本详见Metastore Administration">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611220246842.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611222336112.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611222805785.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611224446177.png">
-<meta property="og:updated_time" content="2020-06-17T12:45:20.373Z">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/image-20200611220246842.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/image-20200611222336112.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/image-20200611222805785.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/image-20200611224446177.png">
+<meta property="og:updated_time" content="2020-08-31T17:25:46.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hive Metastore 3.0">
 <meta name="twitter:description" content="适用于版本&amp;gt;=3.0，其他版本详见Metastore Administration">
-<meta name="twitter:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611220246842.png">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/image-20200611220246842.png">
 
 
 
@@ -371,14 +371,14 @@
 <li>命令行</li>
 </ul>
 <p>以下为常用的配置，不常用的配置，详见 <a href="https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration" target="_blank" rel="noopener">Less Commonly Changed Configuration Parameters</a></p>
-<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611220246842.png" alt="image-20200611220246842"></p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/image-20200611220246842.png" alt="image-20200611220246842"></p>
 <h2 id="3-RDBMS"><a href="#3-RDBMS" class="headerlink" title="3 RDBMS"></a>3 RDBMS</h2><h3 id="1-内嵌Derby"><a href="#1-内嵌Derby" class="headerlink" title="(1) 内嵌Derby"></a>(1) 内嵌Derby</h3><p>默认配置，用于测试。每次只允许一个客户端。由于使用的是内存版本，客户端生命周期结束后不会持久化。</p>
 <h3 id="2-外部"><a href="#2-外部" class="headerlink" title="(2) 外部"></a>(2) 外部</h3><p>适用于持久化和多终端用途。Metastore通过JDBC与RDBMS连接。</p>
 <p>JDBC驱动需要放置在 METASTORE_HOME/lib下，或命令行显式传递。</p>
 <p>下表配置不区分版本：</p>
-<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611222336112.png" alt="image-20200611222336112"></p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/image-20200611222336112.png" alt="image-20200611222336112"></p>
 <h3 id="3-支持的RDBMS"><a href="#3-支持的RDBMS" class="headerlink" title="(3) 支持的RDBMS"></a>(3) 支持的RDBMS</h3><p>由于Hive使用DataNucleus与RDBMS通信。理论上，支持所有与DataNucleus兼容的RDBMS。以下为经过测试的：</p>
-<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611222805785.png" alt="image-20200611222805785"></p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/image-20200611222805785.png" alt="image-20200611222805785"></p>
 <p>注意：</p>
 <p>SCHEMA为Metastore存储表的数据库或schema。</p>
 <p>Oracle配置针对轻JDBC客户端，其他客户端有所区别。</p>
@@ -393,7 +393,7 @@
 <h2 id="4-运行Metastore"><a href="#4-运行Metastore" class="headerlink" title="4 运行Metastore"></a>4 运行Metastore</h2><h3 id="1-内嵌模式"><a href="#1-内嵌模式" class="headerlink" title="(1) 内嵌模式"></a>(1) 内嵌模式</h3><p>以库形式在内嵌到用户进程中。默认在没有配置metastore.uris使用，不建议在生产环境中使用。</p>
 <p>由于可能有多个客户端，大量的连接对DBMS是负担，并且多个客户端同时读写，难以保证数据安全。</p>
 <h3 id="2-服务模式"><a href="#2-服务模式" class="headerlink" title="(2) 服务模式"></a>(2) 服务模式</h3><p>单独运行前，需要配置以下URL：</p>
-<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611224446177.png" alt="image-20200611224446177"></p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/image-20200611224446177.png" alt="image-20200611224446177"></p>
 <p>注意：</p>
 <p>启动Metastore，使用start-metastore命令。</p>
 <p>停止则直接杀掉进程。</p>
@@ -568,7 +568,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

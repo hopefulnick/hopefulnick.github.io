@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="1 定义分布式流式平台。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/kafka-apis-1590569715470.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_anatomy.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_consumer.png">
-<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/consumer-groups.png">
-<meta property="og:updated_time" content="2020-06-12T10:14:55.135Z">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/kafka-apis-1590569715470.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/log_anatomy.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/log_consumer.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/consumer-groups.png">
+<meta property="og:updated_time" content="2020-08-31T17:25:46.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka入门">
 <meta name="twitter:description" content="1 定义分布式流式平台。">
-<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/kafka-apis-1590569715470.png">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/kafka-apis-1590569715470.png">
 
 
 
@@ -374,7 +374,7 @@
 <li>分类（主题）保存流式记录</li>
 <li>每条记录包括键名、键值和时间戳</li>
 </ul>
-<h3 id="4-五个核心API"><a href="#4-五个核心API" class="headerlink" title="(4) 五个核心API"></a>(4) 五个核心API</h3><p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/kafka-apis-1590569715470.png" alt="kafka-apis"></p>
+<h3 id="4-五个核心API"><a href="#4-五个核心API" class="headerlink" title="(4) 五个核心API"></a>(4) 五个核心API</h3><p><img src="/2020/05/27/200527Kafka入门/kafka-apis-1590569715470.png" alt="kafka-apis"></p>
 <ul>
 <li><a href="http://kafka.apache.org/documentation.html#producerapi" target="_blank" rel="noopener">Producer API</a></li>
 <li><a href="http://kafka.apache.org/documentation.html#consumerapi" target="_blank" rel="noopener">Consumer API</a></li>
@@ -385,10 +385,10 @@
 <h2 id="2-主题和日志"><a href="#2-主题和日志" class="headerlink" title="2 主题和日志"></a>2 主题和日志</h2><p>主题是Kafka对记录流的核心抽象，是记录发布的目录或者反馈。</p>
 <p>一个主题可以有0或多个订阅者。</p>
 <p>对于每一个主题，kafka集群维护如下的分区日志：</p>
-<p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_anatomy.png" alt="log_anatomy"></p>
+<p><img src="/2020/05/27/200527Kafka入门/log_anatomy.png" alt="log_anatomy"></p>
 <p>每个分区是一个有序的、不可变的记录序列。记录持续追加到序列后。分区为每条记录分配一个唯一的id，叫offset。</p>
 <p>无论是否被消费，kafka始终持久化发布的记录。可以使用可配置的保留时间，以删除超时的数据。Kafka性能与数据大小无关，因此可以长时间存储数据。</p>
-<p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_consumer.png" alt="log_consumer"></p>
+<p><img src="/2020/05/27/200527Kafka入门/log_consumer.png" alt="log_consumer"></p>
 <p>事实上，消费者保留的元数据只有offset。通常按照顺序逐一访问，但消费者可以自主决定访问的顺序等策略。</p>
 <p>由于不影响主题中的数据，消费者间互不影响。</p>
 <p>日志分区有以下作用：</p>
@@ -401,7 +401,7 @@
 <h2 id="6-Consumer"><a href="#6-Consumer" class="headerlink" title="6 Consumer"></a>6 Consumer</h2><p>Consumer可以划分为Consumer Group。每个Consumer Group可以包含若干个Consumer。Consumer可以在不同的进程或机器上运行。</p>
 <p>如果所有的Consumer在同一个Group中，记录将在Consumer间高效负载均衡。</p>
 <p>如果所有的Consumer在不同的Group中，消息将广播给所有的Group。</p>
-<p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/consumer-groups.png" alt="consumer-groups"></p>
+<p><img src="/2020/05/27/200527Kafka入门/consumer-groups.png" alt="consumer-groups"></p>
 <p>思考：单条消息每个Group发一次，Group内Consumer间消息负载均衡？</p>
 <p>Group中加入新实例，将分摊组内其他实例的分区；实例故障，将把自身的分区分摊给其他实例。</p>
 <p>Kafka只提供单个分区的顺序，不保证同一topic中分区间的顺序。可以设置主题只有一个分区来实现。尽管这意味着一个Group只有一个Consumer实例。</p>
@@ -464,8 +464,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/27/200527Hive入门/" rel="next" title="Hive入门">
-                <i class="fa fa-chevron-left"></i> Hive入门
+              <a href="/2020/05/26/200526HashMap/" rel="next" title="HashMap(JDK 14)">
+                <i class="fa fa-chevron-left"></i> HashMap(JDK 14)
               </a>
             
           </div>
@@ -474,8 +474,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/06/01/200601SQL/" rel="prev" title="SQL">
-                SQL <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/27/200527Hive入门/" rel="prev" title="Hive入门">
+                Hive入门 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -567,7 +567,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
