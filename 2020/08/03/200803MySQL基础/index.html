@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 基础&amp;lt;=&amp;gt;: 比较操作符（不同于 = 运算符），当比较的的两个值相等或都为 NULL 时返回 true。">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL基础">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 基础&amp;lt;=&amp;gt;: 比较操作符（不同于 = 运算符），当比较的的两个值相等或都为 NULL 时返回 true。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200812162003423.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813145804582.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150029756.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150101071.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150448426.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150503802.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200814144432821.png">
+<meta property="og:updated_time" content="2020-08-30T15:56:36.011Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL基础">
+<meta name="twitter:description" content="1 基础&amp;lt;=&amp;gt;: 比较操作符（不同于 = 运算符），当比较的的两个值相等或都为 NULL 时返回 true。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200812162003423.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/"/>
+
+
+
+
+
+  <title>MySQL基础 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/08/03/200803MySQL基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-03T11:00:47+08:00">
+                2020-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/03/200803MySQL基础/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/08/03/200803MySQL基础/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-基础"><a href="#1-基础" class="headerlink" title="1 基础"></a>1 基础</h2><p><strong>&lt;=&gt;:</strong> 比较操作符（不同于 = 运算符），当比较的的两个值<strong>相等或都为 NULL</strong> 时返回 true。</p>
+<a id="more"></a>
+<p>在 MySQL 中<strong>只有</strong>使用了 <strong>Innodb</strong> 数据库引擎的数据库或表才支持<strong>事务</strong>。</p>
+<p>修改表ALERT</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># NULL值缺省为允许NULL</span><br><span class="line"></span><br><span class="line"># 添加ADD或删除DROP字段。ADD或MODIFY中，可用FIRST或AFTER指定字段位置</span><br><span class="line">ALTER TABLE testalter_tbl DROP i;</span><br><span class="line">ALTER TABLE testalter_tbl ADD i INT FIRST;</span><br><span class="line">ALTER TABLE testalter_tbl DROP i;</span><br><span class="line">ALTER TABLE testalter_tbl ADD i INT AFTER c;</span><br><span class="line"></span><br><span class="line"># 修改字段名称或类型。MODIFY或CHANGE</span><br><span class="line">ALTER TABLE testalter_tbl MODIFY c CHAR(10);</span><br><span class="line"># CHANGE参数分别为旧字段名、新字段名和字段类型</span><br><span class="line">ALTER TABLE testalter_tbl CHANGE i j BIGINT;</span><br><span class="line"></span><br><span class="line"># 修改默认值，SET DEFAULT修改，DROP删除。</span><br><span class="line">ALTER TABLE testalter_tbl ALTER i SET DEFAULT 1000;</span><br><span class="line">ALTER TABLE testalter_tbl ALTER i DROP DEFAULT;</span><br><span class="line"></span><br><span class="line"># 修改表类型，使用ALERT或TYPE字句</span><br><span class="line">ALTER TABLE testalter_tbl ENGINE = MYISAM;</span><br><span class="line"></span><br><span class="line"># 修改表名，RENAME</span><br><span class="line">ALTER TABLE testalter_tbl RENAME TO alter_tbl;</span><br><span class="line"></span><br><span class="line"># 创建或删除索引</span><br><span class="line">ALERT TABLE tableName DROP FOREIGN KEY keyName;</span><br></pre></td></tr></table></figure>
+<h2 id="2-事务"><a href="#2-事务" class="headerlink" title="2 事务"></a>2 事务</h2><h3 id="事务控制语句："><a href="#事务控制语句：" class="headerlink" title="事务控制语句："></a>事务控制语句：</h3><ul>
+<li>BEGIN 或 START TRANSACTION： 显式开启一个事务；</li>
+<li>COMMIT 或COMMIT WORK：等价的。COMMIT 会提交事务，并将所有修改成为永久性的；</li>
+<li>ROLLBACK 或 ROLLBACK WORK：等价的。回滚会结束用户的事务，并撤销所有未提交的修改；</li>
+<li>SAVEPOINT identifier，SAVEPOINT 允许在事务中创建一个保存点，一个事务中可以有多个 SAVEPOINT；可用于标记当前事务状态，再嵌套事务过程。</li>
+<li>RELEASE SAVEPOINT identifier 删除一个事务的保存点，当没有指定的保存点时，执行该语句会抛出一个异常；</li>
+<li>ROLLBACK TO identifier 把事务回滚到标记点；</li>
+<li>SET TRANSACTION 用来设置事务的隔离级别。InnoDB 存储引擎提供事务的隔离级别有READ UNCOMMITTED、READ COMMITTED、REPEATABLE READ 和 SERIALIZABLE。</li>
+</ul>
+<h3 id="MYSQL-事务处理主要有两种方法："><a href="#MYSQL-事务处理主要有两种方法：" class="headerlink" title="MYSQL 事务处理主要有两种方法："></a>MYSQL 事务处理主要有两种方法：</h3><p>1、用 BEGIN, ROLLBACK, COMMIT来实现</p>
+<ul>
+<li><strong>BEGIN</strong> 开始一个事务</li>
+<li><strong>ROLLBACK</strong> 事务回滚</li>
+<li><strong>COMMIT</strong> 事务确认</li>
+</ul>
+<p>2、直接用 SET 来改变 MySQL 的自动提交模式:</p>
+<ul>
+<li><strong>SET AUTOCOMMIT=0</strong> 禁止自动提交</li>
+<li><strong>SET AUTOCOMMIT=1</strong> 开启自动提交</li>
+</ul>
+<h2 id="3-索引"><a href="#3-索引" class="headerlink" title="3 索引"></a>3 索引</h2><p>索引能提高查询速率，同时也降低了更新速率。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">#BLOB或TEXT必须指定length</span><br><span class="line"># 创建表时声明</span><br><span class="line">CREATE TABLE mytable(  </span><br><span class="line">ID INT NOT NULL,   </span><br><span class="line">username VARCHAR(16) NOT NULL,  </span><br><span class="line">INDEX [indexName] (username(length))  </span><br><span class="line">);</span><br><span class="line"># 单独创建创建</span><br><span class="line">CREATE INDEX indexName ON table_name (column_name);</span><br><span class="line"></span><br><span class="line"># 添加</span><br><span class="line">ALTER table tableName ADD INDEX indexName(columnName);</span><br><span class="line"></span><br><span class="line"># 删除</span><br><span class="line">DROP INDEX [indexName] ON mytable;</span><br><span class="line"></span><br><span class="line">#唯一索引UNIQUE</span><br><span class="line"># 创建</span><br><span class="line">CREATE UNIQUE INDEX indexName ON mytable(username(length));</span><br><span class="line"># 或</span><br><span class="line">CREATE TABLE mytable(  </span><br><span class="line">ID INT NOT NULL,   </span><br><span class="line">username VARCHAR(16) NOT NULL,  </span><br><span class="line">UNIQUE [indexName] (username(length))  </span><br><span class="line">);</span><br><span class="line"># 添加</span><br><span class="line">ALTER table mytable ADD UNIQUE [indexName] (username(length));</span><br><span class="line"></span><br><span class="line"># 主键PRIMARY,唯一且不能为NULL。删除时不用指定字段名</span><br><span class="line">ALTER TABLE tbl_name ADD PRIMARY KEY (column_list);</span><br><span class="line">ALTER TABLE testalter_tbl DROP PRIMARY KEY;</span><br><span class="line"></span><br><span class="line"># 全文索引</span><br><span class="line">ALTER TABLE tbl_name ADD FULLTEXT index_name (column_list);</span><br><span class="line"></span><br><span class="line"># 显示索引信息。\G用于格式化输出</span><br><span class="line">SHOW INDEX FROM table_name; \G</span><br></pre></td></tr></table></figure>
+<h2 id="4-临时表"><a href="#4-临时表" class="headerlink" title="4 临时表"></a>4 临时表</h2><p>仅在当前会话中可用的表。使用同普通表，但是不能使用SHOW TABLES查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 创建</span><br><span class="line">CREATE TEMPORARY TABLE SalesSummary (</span><br><span class="line">product_name VARCHAR(50) NOT NULL, </span><br><span class="line">total_sales DECIMAL(12,2) NOT NULL DEFAULT 0.00,</span><br><span class="line">avg_unit_price DECIMAL(7,2) NOT NULL DEFAULT 0.00, </span><br><span class="line">total_units_sold INT UNSIGNED NOT NULL DEFAULT 0</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 删除，DROP或关闭会话</span><br><span class="line">DROP TABLE SalesSummary;</span><br></pre></td></tr></table></figure>
+<h2 id="5-复制表"><a href="#5-复制表" class="headerlink" title="5 复制表"></a>5 复制表</h2><p>CREATE TABLE SELECT只能复制表结构和数据、NULL约束等，不能复制索引、默认值等其他约束和触发器，会提交当前未完成的事务，整个过程占用元数据锁，不被基于GTID的复制支持。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># 方法一</span><br><span class="line"># 1 获取原表建表语句</span><br><span class="line">SHOW CREATE TABLE runoob_tbl \G;</span><br><span class="line"></span><br><span class="line"># 2 编辑新表建表语句</span><br><span class="line">CREATE TABLE `clone_tbl` (</span><br><span class="line">`runoob_id` int(11) NOT NULL auto_increment,</span><br><span class="line">`runoob_title` varchar(100) NOT NULL default &apos;&apos;,</span><br><span class="line">`runoob_author` varchar(40) NOT NULL default &apos;&apos;,</span><br><span class="line">`submission_date` date default NULL,</span><br><span class="line">PRIMARY KEY  (`runoob_id`),</span><br><span class="line">UNIQUE KEY `AUTHOR_INDEX` (`runoob_author`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line"></span><br><span class="line"># 3 复制数据</span><br><span class="line">INSERT INTO clone_tbl (</span><br><span class="line">    runoob_id,</span><br><span class="line">	runoob_title,</span><br><span class="line">	runoob_author,</span><br><span class="line">	submission_date)</span><br><span class="line">SELECT runoob_id,runoob_title,</span><br><span class="line">	runoob_author,submission_date</span><br><span class="line">FROM runoob_tbl;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 方法二：LIKE</span><br><span class="line"># 1 完整复制表结构</span><br><span class="line">CREATE TABLE targetTable LIKE sourceTable;</span><br><span class="line"># 2 复制数据</span><br><span class="line">INSERT INTO targetTable SELECT * FROM sourceTable;</span><br></pre></td></tr></table></figure>
+<h2 id="6-元数据"><a href="#6-元数据" class="headerlink" title="6 元数据"></a>6 元数据</h2><p><img src="/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200812162003423.png" alt="image-20200812162003423"></p>
+<h2 id="7-序列"><a href="#7-序列" class="headerlink" title="7 序列"></a>7 序列</h2><p>即AUTO_INCREMENT</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># 使用</span><br><span class="line">CREATE TABLE insect</span><br><span class="line">(</span><br><span class="line">id INT UNSIGNED NOT NULL AUTO_INCREMENT,</span><br><span class="line">PRIMARY KEY (id),</span><br><span class="line">name VARCHAR(30) NOT NULL, # type of insect</span><br><span class="line">date DATE NOT NULL, # date collected</span><br><span class="line">origin VARCHAR(30) NOT NULL # where collected</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 重置，需要保证过程中没有插入</span><br><span class="line"># 先删除自增列，在重建自增列</span><br><span class="line">ALTER TABLE insect DROP id;</span><br><span class="line">ALTER TABLE insect</span><br><span class="line">ADD id INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,</span><br><span class="line">ADD PRIMARY KEY (id);</span><br><span class="line"></span><br><span class="line"># 指定起始值</span><br><span class="line"># 建表时指定</span><br><span class="line">CREATE TABLE insect</span><br><span class="line">(</span><br><span class="line">id INT UNSIGNED NOT NULL AUTO_INCREMENT,</span><br><span class="line">PRIMARY KEY (id),</span><br><span class="line">name VARCHAR(30) NOT NULL, </span><br><span class="line">date DATE NOT NULL,</span><br><span class="line">origin VARCHAR(30) NOT NULL</span><br><span class="line">)engine=innodb auto_increment=100 charset=utf8;</span><br><span class="line"># 修改表时指定</span><br><span class="line">ALTER TABLE t AUTO_INCREMENT = 100;</span><br></pre></td></tr></table></figure>
+<h2 id="8-重复数据"><a href="#8-重复数据" class="headerlink" title="8 重复数据"></a>8 重复数据</h2><h3 id="1-防止重复数据"><a href="#1-防止重复数据" class="headerlink" title="(1) 防止重复数据"></a>(1) 防止重复数据</h3><p>使用主键PRIMARY KEY或唯一索引UNIQUE</p>
+<h3 id="2-统计重复数据"><a href="#2-统计重复数据" class="headerlink" title="(2) 统计重复数据"></a>(2) 统计重复数据</h3><p>GROUP BY分组，COUNT计数，HAVING过滤出重复数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT COUNT(*) as repetitions, last_name, first_name</span><br><span class="line">FROM person_tbl</span><br><span class="line">GROUP BY last_name, first_name</span><br><span class="line">HAVING repetitions &gt; 1;</span><br></pre></td></tr></table></figure>
+<h3 id="3-过滤重复数据"><a href="#3-过滤重复数据" class="headerlink" title="(3) 过滤重复数据"></a>(3) 过滤重复数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># DISTINC</span><br><span class="line">SELECT DISTINCT last_name, first_name</span><br><span class="line">FROM person_tbl;</span><br><span class="line"></span><br><span class="line"># 将查询字段作为分组依据</span><br><span class="line">SELECT last_name, first_name</span><br><span class="line">FROM person_tbl</span><br><span class="line">GROUP BY (last_name, first_name);</span><br></pre></td></tr></table></figure>
+<h3 id="4-删除重复数据"><a href="#4-删除重复数据" class="headerlink" title="(4) 删除重复数据"></a>(4) 删除重复数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 方法一：将所有字段作为分组依据，过滤重复数据并新建表、删除原表</span><br><span class="line">CREATE TABLE tmp SELECT last_name, first_name, sex FROM person_tbl  GROUP BY (last_name, first_name, sex);</span><br><span class="line">DROP TABLE person_tbl;</span><br><span class="line">ALTER TABLE tmp RENAME TO person_tbl;</span><br><span class="line"></span><br><span class="line"># 方法二：添加主键</span><br><span class="line">ALTER IGNORE TABLE person_tbl</span><br><span class="line">ADD PRIMARY KEY (last_name, first_name);</span><br></pre></td></tr></table></figure>
+<h2 id="9-SQL-注入"><a href="#9-SQL-注入" class="headerlink" title="9 SQL 注入"></a>9 SQL 注入</h2><p>1.永远不要信任用户的输入。对用户的输入进行校验，可以通过正则表达式，或限制长度；对单引号和 双”-“进行转换等。</p>
+<p>2.永远不要使用动态拼装sql，可以使用参数化的sql或者直接使用存储过程进行数据查询存取。</p>
+<p>3.永远不要使用管理员权限的数据库连接，为每个应用使用单独的权限有限的数据库连接。</p>
+<p>4.不要把机密信息直接存放，加密或者hash掉密码和敏感的信息。</p>
+<p>5.应用的异常信息应该给出尽可能少的提示，最好使用自定义的错误信息对原始错误信息进行包装</p>
+<p>6.sql注入的检测方法一般采取辅助软件或网站平台来检测，软件一般采用sql注入检测工具jsky，网站平台就有亿思网站安全平台检测工具。MDCSOFT SCAN等。采用MDCSOFT-IPS可以有效的防御SQL注入，XSS攻击等。</p>
+<h2 id="10-数据导出"><a href="#10-数据导出" class="headerlink" title="10 数据导出"></a>10 数据导出</h2><h3 id="1-SELECT-…-INTO-OUTFILE"><a href="#1-SELECT-…-INTO-OUTFILE" class="headerlink" title="(1) SELECT … INTO OUTFILE"></a>(1) SELECT … INTO OUTFILE</h3><p>用户需要具有读取数据和文件写入的权限</p>
+<p>不能使用已有的文件，为了避免数据被修改。</p>
+<p>在Unix中，文件可读且所有者为MySQL所有者。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SELECT </span><br><span class="line">	* </span><br><span class="line">FROM </span><br><span class="line">	runoob_tbl </span><br><span class="line">INTO OUTFILE </span><br><span class="line">	&apos;/tmp/runoob.txt&apos;;</span><br><span class="line">	</span><br><span class="line"># CSV文件格式</span><br><span class="line">SELECT</span><br><span class="line">	* </span><br><span class="line">FROM </span><br><span class="line">	passwd </span><br><span class="line">INTO OUTFILE </span><br><span class="line">	&apos;/tmp/runoob.txt&apos;</span><br><span class="line">FIELDS TERMINATED BY &apos;,&apos; ENCLOSED BY &apos;&quot;&apos; LINES TERMINATED BY &apos;\r\n&apos;;</span><br></pre></td></tr></table></figure>
+<h3 id="2-mysqldump"><a href="#2-mysqldump" class="headerlink" title="(2) mysqldump"></a>(2) mysqldump</h3><p>生成建表脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --tab指定文件目录</span></span><br><span class="line">mysqldump -u root -p --no-create-info --tab=/tmp RUNOOB runoob_tbl</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为特定数据库的特定表指定文件</span></span><br><span class="line">mysqldump -u root -p RUNOOB runoob_tbl &gt; dump.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入数据</span></span><br><span class="line">mysql -u root -p database_name &lt; dump.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用管道导出并导入到远程主机，需要保证两台主机可以互相访问</span></span><br><span class="line">mysqldump -u root -p database_name | mysql -h other-host.com database_name</span><br></pre></td></tr></table></figure>
+<h2 id="11-数据导入"><a href="#11-数据导入" class="headerlink" title="11 数据导入"></a>11 数据导入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># 方法一: mysql命令</span><br><span class="line">mysql -u 用户名 -p 密码 &lt; 要导入的数据库数据</span><br><span class="line"></span><br><span class="line"># 方法二: source命令</span><br><span class="line">create database abc;      # 创建数据库</span><br><span class="line">use abc;                  # 使用已创建的数据库 </span><br><span class="line">set names utf8;           # 设置编码</span><br><span class="line">source /home/abc/abc.sql  # 导入备份数据库</span><br><span class="line"></span><br><span class="line"># 方法三: LOAD DATA命令</span><br><span class="line"># LOCAL指定文件在客户端所在主机</span><br><span class="line">LOAD DATA LOCAL INFILE &apos;dump.txt&apos; INTO TABLE mytbl;</span><br><span class="line"># 指定字段分隔符和行分隔符</span><br><span class="line">LOAD DATA LOCAL INFILE &apos;dump.txt&apos; INTO TABLE mytbl</span><br><span class="line">FIELDS TERMINATED BY &apos;:&apos;</span><br><span class="line">LINES TERMINATED BY &apos;\r\n&apos;;</span><br><span class="line"># 指定列顺序</span><br><span class="line">LOAD DATA LOCAL INFILE &apos;dump.txt&apos; </span><br><span class="line">INTO TABLE mytbl (b, c, a);</span><br><span class="line"></span><br><span class="line"># 方法四: mysqlimport命令</span><br><span class="line"># --local指定客户端文件</span><br><span class="line">mysqlimport -u root -p --local mytbl dump.txt</span><br><span class="line">#--fields-terminated-by指定字段分隔符，--lines-terminated-by指定行分隔符</span><br><span class="line">mysqlimport -u root -p --local --fields-terminated-by=&quot;:&quot; \</span><br><span class="line">   --lines-terminated-by=&quot;\r\n&quot;  mytbl dump.txt</span><br><span class="line"># --columns指定列顺序</span><br><span class="line">mysqlimport -u root -p --local --columns=b,c,a \</span><br><span class="line">    mytbl dump.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813145804582.png" alt="image-20200813145804582"></p>
+<h2 id="12-函数"><a href="#12-函数" class="headerlink" title="12 函数"></a>12 函数</h2><p><img src="/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150029756.png" alt="image-20200813150029756"></p>
+<p><img src="/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150101071.png" alt="image-20200813150101071"></p>
+<p><img src="/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150448426.png" alt="image-20200813150448426"></p>
+<p><img src="/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200813150503802.png" alt="image-20200813150503802"></p>
+<h2 id="13-运算符"><a href="#13-运算符" class="headerlink" title="13 运算符"></a>13 运算符</h2><p>安全等于<code>&lt;=&gt;</code>：严格比较两个值是都均为NULL，是则返回1，其中一个是返回0</p>
+<p>优先级：从上到下依次增重</p>
+<p><img src="/2020/08/03/200803MySQL基础/200803MySQL%E5%9F%BA%E7%A1%80/image-20200814144432821.png" alt="image-20200814144432821"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.runoob.com/mysql/mysql-tutorial.html" target="_blank" rel="noopener">MySQL 教程</a></p>
+<p><a href="https://blog.csdn.net/qq_36864672/article/details/83310276" target="_blank" rel="noopener">慎用create table as select,一定要注意默认值的问题</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/02/200802SparkContext源码/" rel="next" title="SparkContext源码">
+                <i class="fa fa-chevron-left"></i> SparkContext源码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/05/200805MySQL分组取前N名/" rel="prev" title="MySQL分组取前N名">
+                MySQL分组取前N名 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-基础"><span class="nav-number">1.</span> <span class="nav-text">1 基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-事务"><span class="nav-number">2.</span> <span class="nav-text">2 事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事务控制语句："><span class="nav-number">2.1.</span> <span class="nav-text">事务控制语句：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MYSQL-事务处理主要有两种方法："><span class="nav-number">2.2.</span> <span class="nav-text">MYSQL 事务处理主要有两种方法：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-索引"><span class="nav-number">3.</span> <span class="nav-text">3 索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-临时表"><span class="nav-number">4.</span> <span class="nav-text">4 临时表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-复制表"><span class="nav-number">5.</span> <span class="nav-text">5 复制表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-元数据"><span class="nav-number">6.</span> <span class="nav-text">6 元数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-序列"><span class="nav-number">7.</span> <span class="nav-text">7 序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-重复数据"><span class="nav-number">8.</span> <span class="nav-text">8 重复数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-防止重复数据"><span class="nav-number">8.1.</span> <span class="nav-text">(1) 防止重复数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-统计重复数据"><span class="nav-number">8.2.</span> <span class="nav-text">(2) 统计重复数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-过滤重复数据"><span class="nav-number">8.3.</span> <span class="nav-text">(3) 过滤重复数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-删除重复数据"><span class="nav-number">8.4.</span> <span class="nav-text">(4) 删除重复数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-SQL-注入"><span class="nav-number">9.</span> <span class="nav-text">9 SQL 注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-数据导出"><span class="nav-number">10.</span> <span class="nav-text">10 数据导出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-SELECT-…-INTO-OUTFILE"><span class="nav-number">10.1.</span> <span class="nav-text">(1) SELECT … INTO OUTFILE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-mysqldump"><span class="nav-number">10.2.</span> <span class="nav-text">(2) mysqldump</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-数据导入"><span class="nav-number">11.</span> <span class="nav-text">11 数据导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-函数"><span class="nav-number">12.</span> <span class="nav-text">12 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-运算符"><span class="nav-number">13.</span> <span class="nav-text">13 运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">14.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/08/03/200803MySQL基础/';
+          this.page.identifier = '2020/08/03/200803MySQL基础/';
+          this.page.title = 'MySQL基础';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

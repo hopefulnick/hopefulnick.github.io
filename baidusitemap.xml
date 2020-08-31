@@ -4,8 +4,1494 @@
 
     
   <url>
+    <loc>https://hopefulnick.github.io/2020/08/19/200819%E9%AB%98%E6%80%A7%E8%83%BD%E7%B4%A2%E5%BC%95/</loc>
+    <lastmod>2020-08-31T15:54:39.048Z</lastmod>
+    <data>
+        <display>
+        <title>高性能索引</title>
+        <pubTime>2020-08-19T07:00:47.000Z</pubTime>
+        
+        <tag>高性能MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="高性能MySQL" url="https://hopefulnick.github.io/categories/%E9%AB%98%E6%80%A7%E8%83%BDMySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/11/200811Kafka%E8%B8%A9%E5%9D%91/</loc>
+    <lastmod>2020-08-31T15:50:12.193Z</lastmod>
+    <data>
+        <display>
+        <title>Kafka踩坑</title>
+        <pubTime>2020-08-11T15:00:47.000Z</pubTime>
+        
+        <tag>Kafka</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kafka" url="https://hopefulnick.github.io/categories/Kafka/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/29/200829Spark%20Streaming%20+%20Kafka/</loc>
+    <lastmod>2020-08-31T15:45:34.254Z</lastmod>
+    <data>
+        <display>
+        <title>Spark Streaming + Kafka</title>
+        <pubTime>2020-08-29T13:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/14/200814Scala%E8%B8%A9%E5%9D%91/</loc>
+    <lastmod>2020-08-30T15:57:04.661Z</lastmod>
+    <data>
+        <display>
+        <title>Scala踩坑</title>
+        <pubTime>2020-08-14T13:00:47.000Z</pubTime>
+        
+        <tag>Scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="Scala" url="https://hopefulnick.github.io/categories/Scala/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/11/200811%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%B8%A9%E5%9D%91/</loc>
+    <lastmod>2020-08-30T15:56:50.748Z</lastmod>
+    <data>
+        <display>
+        <title>虚拟机踩坑</title>
+        <pubTime>2020-08-11T15:00:47.000Z</pubTime>
+        
+        <tag>虚拟机</tag>
+         
+         
+           
+             
+              <breadCrumb title="虚拟机" url="https://hopefulnick.github.io/categories/%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/05/200805MySQL%E5%88%86%E7%BB%84%E5%8F%96%E5%89%8DN%E5%90%8D/</loc>
+    <lastmod>2020-08-30T15:56:43.662Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL分组取前N名</title>
+        <pubTime>2020-08-05T11:00:47.000Z</pubTime>
+        
+        <tag>MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="MySQL" url="https://hopefulnick.github.io/categories/MySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/03/200803MySQL%E5%9F%BA%E7%A1%80/</loc>
+    <lastmod>2020-08-30T15:56:36.011Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL基础</title>
+        <pubTime>2020-08-03T03:00:47.000Z</pubTime>
+        
+        <tag>MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="MySQL" url="https://hopefulnick.github.io/categories/MySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/02/200802SparkContext%E6%BA%90%E7%A0%81/</loc>
+    <lastmod>2020-08-30T15:56:32.298Z</lastmod>
+    <data>
+        <display>
+        <title>SparkContext源码</title>
+        <pubTime>2020-08-02T14:00:47.000Z</pubTime>
+        
+        <tag>SparkContext</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/30/200730Schema%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2020-08-30T15:56:26.715Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL架构与历史</title>
+        <pubTime>2020-07-30T09:00:47.000Z</pubTime>
+        
+        <tag>高性能MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="高性能MySQL" url="https://hopefulnick.github.io/categories/%E9%AB%98%E6%80%A7%E8%83%BDMySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/28/200728Spark%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6/</loc>
+    <lastmod>2020-08-30T15:56:22.920Z</lastmod>
+    <data>
+        <display>
+        <title>Spark作业调度</title>
+        <pubTime>2020-07-28T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/27/200727Spark%E5%BA%94%E7%94%A8%E6%8F%90%E4%BA%A4/</loc>
+    <lastmod>2020-08-30T15:56:16.075Z</lastmod>
+    <data>
+        <display>
+        <title>Spark应用提交</title>
+        <pubTime>2020-07-27T13:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/25/200725%20Spark%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2020-08-30T15:56:09.677Z</lastmod>
+    <data>
+        <display>
+        <title>Spark集群模式</title>
+        <pubTime>2020-07-25T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/22/200722Spark%20on%20YARN/</loc>
+    <lastmod>2020-08-30T15:56:06.053Z</lastmod>
+    <data>
+        <display>
+        <title>Spark on YARN</title>
+        <pubTime>2020-07-22T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/19/200719MySQL%20on%20Windows/</loc>
+    <lastmod>2020-08-30T15:55:52.143Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL on Windows(二进制分发包)</title>
+        <pubTime>2020-07-19T03:00:47.000Z</pubTime>
+        
+        <tag>MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="MySQL" url="https://hopefulnick.github.io/categories/MySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/18/200718Spark%E8%B0%83%E4%BC%98/</loc>
+    <lastmod>2020-08-30T15:55:46.499Z</lastmod>
+    <data>
+        <display>
+        <title>Spark调优</title>
+        <pubTime>2020-07-18T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/14/200714%E8%8C%83%E5%BC%8F/</loc>
+    <lastmod>2020-08-30T15:55:41.757Z</lastmod>
+    <data>
+        <display>
+        <title>范式</title>
+        <pubTime>2020-07-14T03:00:47.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/</loc>
+    <lastmod>2020-08-30T15:55:35.761Z</lastmod>
+    <data>
+        <display>
+        <title>Structured Streaming</title>
+        <pubTime>2020-07-10T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/06/200706MySQL%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%8E%86%E5%8F%B2/</loc>
+    <lastmod>2020-08-30T15:55:31.022Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL架构与历史</title>
+        <pubTime>2020-07-06T03:00:47.000Z</pubTime>
+        
+        <tag>高性能MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="高性能MySQL" url="https://hopefulnick.github.io/categories/%E9%AB%98%E6%80%A7%E8%83%BDMySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/06/200706%E6%9C%80%E7%BB%88%E7%94%A8%E6%88%B7%E7%A4%BE%E5%8C%BA/</loc>
+    <lastmod>2020-08-30T15:55:22.282Z</lastmod>
+    <data>
+        <display>
+        <title>最终用户社区</title>
+        <pubTime>2020-07-06T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/06/200706%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%8B%BE%E8%B4%9D/</loc>
+    <lastmod>2020-08-30T15:55:11.130Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库拾贝</title>
+        <pubTime>2020-07-06T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/06/200706%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%A4%8D%E6%9F%A5%E8%A6%81%E7%9B%AE/</loc>
+    <lastmod>2020-08-30T15:55:04.142Z</lastmod>
+    <data>
+        <display>
+        <title>最终用户社区</title>
+        <pubTime>2020-07-06T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/04/200704MySQL%205.7vs8.0/</loc>
+    <lastmod>2020-08-30T15:54:59.287Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL 5.7vs8.0</title>
+        <pubTime>2020-07-04T03:00:47.000Z</pubTime>
+        
+        <tag>MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="MySQL" url="https://hopefulnick.github.io/categories/MySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/</loc>
+    <lastmod>2020-08-30T15:54:52.415Z</lastmod>
+    <data>
+        <display>
+        <title>Spark SQL</title>
+        <pubTime>2020-07-02T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/02/200702%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%92%8CODS/</loc>
+    <lastmod>2020-08-30T15:54:44.184Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库和ODS</title>
+        <pubTime>2020-07-02T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/07/01/200701%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%9A%84%E6%88%90%E6%9C%AC%E8%AE%BA%E8%AF%81%E5%92%8C%E6%8A%95%E8%B5%84%E5%9B%9E%E6%8A%A5/</loc>
+    <lastmod>2020-08-30T15:54:39.534Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库的成本论证和投资回报</title>
+        <pubTime>2020-07-01T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/30/200630%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E9%AB%98%E7%BA%A7%E8%AF%9D%E9%A2%98/</loc>
+    <lastmod>2020-08-30T15:54:34.755Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库高级话题</title>
+        <pubTime>2020-06-30T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/26/200626%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E5%92%8C%E5%A4%9A%E7%BB%B4%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2020-08-30T15:54:29.939Z</lastmod>
+    <data>
+        <display>
+        <title>关系模型和多维模型</title>
+        <pubTime>2020-06-26T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/25/200625%E5%A4%A7%E5%9E%8B%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</loc>
+    <lastmod>2020-08-30T15:54:23.601Z</lastmod>
+    <data>
+        <display>
+        <title>大型数据仓库</title>
+        <pubTime>2020-06-25T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/24/200624ScheduledExcutorService/</loc>
+    <lastmod>2020-08-30T15:54:17.572Z</lastmod>
+    <data>
+        <display>
+        <title>ScheduledExcutorService</title>
+        <pubTime>2020-06-24T03:00:47.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="https://hopefulnick.github.io/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/24/200624%E9%9D%9E%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</loc>
+    <lastmod>2020-08-30T15:54:07.948Z</lastmod>
+    <data>
+        <display>
+        <title>非结构化数据和数据仓库</title>
+        <pubTime>2020-06-24T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/23/200623Spark%20Streaming%20+%20Kafka%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/</loc>
+    <lastmod>2020-08-30T15:54:00.965Z</lastmod>
+    <data>
+        <display>
+        <title>Spark Streaming + Kafka踩坑指南</title>
+        <pubTime>2020-06-23T03:00:47.000Z</pubTime>
+        
+        <tag>Kafka</tag>
+         
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/22/200622%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%92%8CWeb/</loc>
+    <lastmod>2020-08-30T15:53:55.351Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库和Web</title>
+        <pubTime>2020-06-22T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/21/200621%E8%BF%81%E7%A7%BB%E5%88%B0%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%8C%96%E7%8E%AF%E5%A2%83/</loc>
+    <lastmod>2020-08-30T15:53:52.244Z</lastmod>
+    <data>
+        <display>
+        <title>迁移到体系结构化环境</title>
+        <pubTime>2020-06-21T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/20/200620%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</loc>
+    <lastmod>2020-08-30T15:53:40.408Z</lastmod>
+    <data>
+        <display>
+        <title>外部数据与数据仓库</title>
+        <pubTime>2020-06-20T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/19/200619%E4%B8%BB%E7%AE%A1%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</loc>
+    <lastmod>2020-08-30T15:53:36.410Z</lastmod>
+    <data>
+        <display>
+        <title>主管信息系统和数据仓库</title>
+        <pubTime>2020-06-19T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/18/200618%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</loc>
+    <lastmod>2020-08-30T15:53:31.371Z</lastmod>
+    <data>
+        <display>
+        <title>分布式数据仓库</title>
+        <pubTime>2020-06-18T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/16/200616JDK14vsJDK8/</loc>
+    <lastmod>2020-08-30T15:53:27.462Z</lastmod>
+    <data>
+        <display>
+        <title>JDK 14 vs JDK 8</title>
+        <pubTime>2020-06-16T03:00:47.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="https://hopefulnick.github.io/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/16/200616%20Hive%20DDL/</loc>
+    <lastmod>2020-08-30T15:53:20.862Z</lastmod>
+    <data>
+        <display>
+        <title>Hive DDL</title>
+        <pubTime>2020-06-16T03:00:47.000Z</pubTime>
+        
+        <tag>Hive</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hive" url="https://hopefulnick.github.io/categories/Hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/15/200615%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%92%8C%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2020-08-30T15:53:16.303Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库和技术</title>
+        <pubTime>2020-06-15T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/13/200613Hive%20Tutorial/</loc>
+    <lastmod>2020-08-30T15:53:09.679Z</lastmod>
+    <data>
+        <display>
+        <title>Hive Tutorial</title>
+        <pubTime>2020-06-13T03:00:47.000Z</pubTime>
+        
+        <tag>Hive</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hive" url="https://hopefulnick.github.io/categories/Hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/12/200612%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%B2%92%E5%BA%A6/</loc>
+    <lastmod>2020-08-30T15:53:04.109Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库粒度</title>
+        <pubTime>2020-06-12T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/11/200611Kafka%E8%AE%BE%E8%AE%A1/</loc>
+    <lastmod>2020-08-30T15:52:53.793Z</lastmod>
+    <data>
+        <display>
+        <title>kafka设计</title>
+        <pubTime>2020-06-11T03:00:47.000Z</pubTime>
+        
+        <tag>Kafka</tag>
+         
+         
+           
+             
+              <breadCrumb title="kafka" url="https://hopefulnick.github.io/categories/kafka/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/11/200611CentOS7%20+%20MySQL8/</loc>
+    <lastmod>2020-08-30T15:52:48.033Z</lastmod>
+    <data>
+        <display>
+        <title>CentOS7 + MySQL8</title>
+        <pubTime>2020-06-11T03:00:47.000Z</pubTime>
+        
+        <tag>MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="MySQL" url="https://hopefulnick.github.io/categories/MySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/09/200609Shell%E5%AE%9E%E6%88%98/</loc>
+    <lastmod>2020-08-30T15:52:41.476Z</lastmod>
+    <data>
+        <display>
+        <title>Shell实战</title>
+        <pubTime>2020-06-09T03:00:47.000Z</pubTime>
+        
+        <tag>Shell</tag>
+         
+         
+           
+             
+              <breadCrumb title="Shell" url="https://hopefulnick.github.io/categories/Shell/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/08/200608Log4j2%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2020-08-30T15:52:36.246Z</lastmod>
+    <data>
+        <display>
+        <title>Log4j2实践</title>
+        <pubTime>2020-06-08T03:00:47.000Z</pubTime>
+        
+        <tag>Log4j2</tag>
+         
+         
+           
+             
+              <breadCrumb title="Log4j2" url="https://hopefulnick.github.io/categories/Log4j2/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/03/200603Spark%E5%BC%80%E5%8F%91%E5%B0%8F%E7%BB%93/</loc>
+    <lastmod>2020-08-30T15:52:25.128Z</lastmod>
+    <data>
+        <display>
+        <title>Spark开发小结</title>
+        <pubTime>2020-06-03T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/01/200601SQL/</loc>
+    <lastmod>2020-08-30T15:52:14.450Z</lastmod>
+    <data>
+        <display>
+        <title>SQL</title>
+        <pubTime>2020-06-01T03:00:47.000Z</pubTime>
+        
+        <tag>SQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="SQL" url="https://hopefulnick.github.io/categories/SQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/01/200601Redis%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2020-08-30T15:52:10.764Z</lastmod>
+    <data>
+        <display>
+        <title>Redis入门</title>
+        <pubTime>2020-06-01T03:00:47.000Z</pubTime>
+        
+        <tag>Redis</tag>
+         
+         
+           
+             
+              <breadCrumb title="Redis" url="https://hopefulnick.github.io/categories/Redis/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/26/200526HashMap/</loc>
+    <lastmod>2020-08-30T15:51:58.169Z</lastmod>
+    <data>
+        <display>
+        <title>HashMap(JDK 14)</title>
+        <pubTime>2020-05-26T03:00:47.000Z</pubTime>
+        
+        <tag>Collection</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="https://hopefulnick.github.io/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/23/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2020-08-30T15:51:51.596Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库入门</title>
+        <pubTime>2020-05-23T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/13/200513%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2020-08-30T15:51:32.889Z</lastmod>
+    <data>
+        <display>
+        <title>设计模式</title>
+        <pubTime>2020-05-13T03:00:47.000Z</pubTime>
+        
+        <tag>设计模式</tag>
+         
+         
+           
+             
+              <breadCrumb title="设计模式" url="https://hopefulnick.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2016/03/21/160321Cygwin%E9%83%A8%E7%BD%B2/</loc>
+    <lastmod>2020-08-30T15:50:44.234Z</lastmod>
+    <data>
+        <display>
+        <title>Cygwin部署教程</title>
+        <pubTime>2016-03-21T03:00:47.000Z</pubTime>
+        
+        <tag>Cygwin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="https://hopefulnick.github.io/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/08/10/200810%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91%E9%9D%A2%E7%BB%8F/</loc>
+    <lastmod>2020-08-29T13:20:25.848Z</lastmod>
+    <data>
+        <display>
+        <title>大数据开发面经</title>
+        <pubTime>2020-08-10T14:00:47.000Z</pubTime>
+        
+        <tag>大数据</tag>
+         
+         
+           
+             
+              <breadCrumb title="大数据" url="https://hopefulnick.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/12/200612Spark%20Streaming/</loc>
+    <lastmod>2020-08-27T14:14:31.491Z</lastmod>
+    <data>
+        <display>
+        <title>Spark Streaming</title>
+        <pubTime>2020-06-12T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/26/200526RDD%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2020-08-22T14:37:16.480Z</lastmod>
+    <data>
+        <display>
+        <title>RDD入门</title>
+        <pubTime>2020-05-26T03:00:47.000Z</pubTime>
+        
+        <tag>RDD</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/26/200526RDD%E6%BA%90%E7%A0%81/</loc>
+    <lastmod>2020-08-02T14:58:50.658Z</lastmod>
+    <data>
+        <display>
+        <title>RDD源码</title>
+        <pubTime>2020-05-26T03:00:47.000Z</pubTime>
+        
+        <tag>RDD</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/12/200612Kafka%20Consumer%20API/</loc>
+    <lastmod>2020-06-22T15:46:40.104Z</lastmod>
+    <data>
+        <display>
+        <title>Kafka Consumer API</title>
+        <pubTime>2020-06-12T09:00:47.000Z</pubTime>
+        
+        <tag>Kafka</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kafka" url="https://hopefulnick.github.io/categories/Kafka/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/27/200527Hive%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2020-06-19T16:28:49.513Z</lastmod>
+    <data>
+        <display>
+        <title>Hive入门</title>
+        <pubTime>2020-05-27T03:00:47.000Z</pubTime>
+        
+        <tag>Hive</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hive" url="https://hopefulnick.github.io/categories/Hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/</loc>
+    <lastmod>2020-06-17T12:45:20.373Z</lastmod>
+    <data>
+        <display>
+        <title>Hive Metastore 3.0</title>
+        <pubTime>2020-06-11T03:00:47.000Z</pubTime>
+        
+        <tag>Hive</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hive" url="https://hopefulnick.github.io/categories/Hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/</loc>
+    <lastmod>2020-06-12T10:24:58.336Z</lastmod>
+    <data>
+        <display>
+        <title>ZooKeeper</title>
+        <pubTime>2020-05-09T03:00:47.000Z</pubTime>
+        
+        <tag>ZooKeeper</tag>
+         
+         
+           
+             
+              <breadCrumb title="ZooKeeper" url="https://hopefulnick.github.io/categories/ZooKeeper/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/07/200507Kafka/</loc>
+    <lastmod>2020-06-12T10:21:24.060Z</lastmod>
+    <data>
+        <display>
+        <title>Kafka</title>
+        <pubTime>2020-05-07T03:00:47.000Z</pubTime>
+        
+        <tag>Kafka</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kafka" url="https://hopefulnick.github.io/categories/Kafka/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/27/200527Kafka%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2020-06-12T10:14:55.135Z</lastmod>
+    <data>
+        <display>
+        <title>Kafka入门</title>
+        <pubTime>2020-05-27T03:00:47.000Z</pubTime>
+        
+        <tag>Kafka</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kafka" url="https://hopefulnick.github.io/categories/Kafka/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/06/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/</loc>
+    <lastmod>2020-06-11T02:45:28.467Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库环境</title>
+        <pubTime>2020-06-06T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库环境</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/10/200610%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</loc>
+    <lastmod>2020-06-10T09:23:48.588Z</lastmod>
+    <data>
+        <display>
+        <title>设计数据仓库</title>
+        <pubTime>2020-06-10T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/07/200607Kafka%20Producer%20API/</loc>
+    <lastmod>2020-06-08T12:27:19.286Z</lastmod>
+    <data>
+        <display>
+        <title>Kafka Producer API</title>
+        <pubTime>2020-06-07T03:00:47.000Z</pubTime>
+        
+        <tag>Kafka Producer</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kafka" url="https://hopefulnick.github.io/categories/Kafka/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/03/200603%E5%86%B3%E7%AD%96%E6%94%AF%E6%8C%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%8F%91%E5%B1%95/</loc>
+    <lastmod>2020-06-06T03:41:25.666Z</lastmod>
+    <data>
+        <display>
+        <title>决策支持系统的发展</title>
+        <pubTime>2020-06-03T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/27/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/</loc>
+    <lastmod>2020-06-05T13:32:22.626Z</lastmod>
+    <data>
+        <display>
+        <title>Flume开发指南</title>
+        <pubTime>2020-05-27T03:00:47.000Z</pubTime>
+        
+        <tag>Flume</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flume" url="https://hopefulnick.github.io/categories/Flume/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/06/04/200604%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
+    <lastmod>2020-06-04T15:02:54.991Z</lastmod>
+    <data>
+        <display>
+        <title>分布式锁</title>
+        <pubTime>2020-06-04T03:00:47.000Z</pubTime>
+        
+        <tag>分布式锁</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式系统" url="https://hopefulnick.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/22/200522Spark%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2020-05-26T08:35:31.821Z</lastmod>
+    <data>
+        <display>
+        <title>Spark入门</title>
+        <pubTime>2020-05-22T03:00:47.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://hopefulnick.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/15/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</loc>
+    <lastmod>2020-05-18T04:25:31.538Z</lastmod>
+    <data>
+        <display>
+        <title>数据仓库</title>
+        <pubTime>2020-05-15T03:00:47.000Z</pubTime>
+        
+        <tag>数据仓库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据仓库" url="https://hopefulnick.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/10/200510AbstractFactory&FactoryMethod/</loc>
+    <lastmod>2020-05-13T09:44:23.643Z</lastmod>
+    <data>
+        <display>
+        <title>Abstract Factory & Factory Method</title>
+        <pubTime>2020-05-10T03:00:47.000Z</pubTime>
+        
+        <tag>Abstract Factory</tag>
+         
+        <tag>Factory Method</tag>
+         
+         
+           
+             
+              <breadCrumb title="设计模式" url="https://hopefulnick.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/01/200501Flume/</loc>
+    <lastmod>2020-05-08T15:58:23.235Z</lastmod>
+    <data>
+        <display>
+        <title>Flume</title>
+        <pubTime>2020-05-01T03:00:47.000Z</pubTime>
+        
+        <tag>Flume</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flume" url="https://hopefulnick.github.io/categories/Flume/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/03/200503Spark+Flume/</loc>
+    <lastmod>2020-05-07T14:24:01.308Z</lastmod>
+    <data>
+        <display>
+        <title>Spark + Flume</title>
+        <pubTime>2020-05-03T03:00:47.000Z</pubTime>
+        
+        <tag>Flume</tag>
+         
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Flume" url="https://hopefulnick.github.io/categories/Flume/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://hopefulnick.github.io/2020/05/01/200501Markdown/</loc>
+    <lastmod>2020-05-01T14:42:35.182Z</lastmod>
+    <data>
+        <display>
+        <title>Markdown</title>
+        <pubTime>2020-05-01T03:00:47.000Z</pubTime>
+        
+        <tag>Markdown</tag>
+         
+         
+           
+             
+              <breadCrumb title="Language" url="https://hopefulnick.github.io/categories/Language/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://hopefulnick.github.io/2018/04/27/180427C-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</loc>
-    <lastmod>2018-05-02T01:24:14.001Z</lastmod>
+    <lastmod>2018-05-02T01:24:16.000Z</lastmod>
     <data>
         <display>
         <title>C++异常处理</title>
@@ -25,7 +1511,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/04/16/180416Linux%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/</loc>
-    <lastmod>2018-04-24T02:27:25.899Z</lastmod>
+    <lastmod>2018-04-24T02:27:26.000Z</lastmod>
     <data>
         <display>
         <title>Linux文件存储方式</title>
@@ -45,7 +1531,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/04/13/180413Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2018-04-24T02:06:44.231Z</lastmod>
+    <lastmod>2018-04-24T02:06:46.000Z</lastmod>
     <data>
         <display>
         <title>Java内存模型</title>
@@ -65,7 +1551,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/04/13/180413CAS/</loc>
-    <lastmod>2018-04-24T02:05:33.770Z</lastmod>
+    <lastmod>2018-04-24T02:05:34.000Z</lastmod>
     <data>
         <display>
         <title>CAS</title>
@@ -85,7 +1571,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/03/10/180310Java%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/</loc>
-    <lastmod>2018-04-24T02:03:24.100Z</lastmod>
+    <lastmod>2018-04-24T02:03:26.000Z</lastmod>
     <data>
         <display>
         <title>Java面试总结</title>
@@ -105,7 +1591,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/04/01/180401Hexo%E6%96%87%E7%AB%A0%E6%88%AA%E6%96%AD/</loc>
-    <lastmod>2018-04-08T08:12:01.298Z</lastmod>
+    <lastmod>2018-04-08T08:12:02.000Z</lastmod>
     <data>
         <display>
         <title>Hexo文章截断</title>
@@ -125,7 +1611,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/04/01/180401Hexo%E5%9B%BE%E7%89%87%E6%8F%92%E5%85%A5/</loc>
-    <lastmod>2018-04-08T07:51:44.137Z</lastmod>
+    <lastmod>2018-04-08T07:51:46.000Z</lastmod>
     <data>
         <display>
         <title>Hexo图片插入</title>
@@ -146,7 +1632,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/03/19/180319%E6%89%93%E5%8D%B0%E6%9C%BA%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/</loc>
-    <lastmod>2018-04-01T08:06:07.129Z</lastmod>
+    <lastmod>2018-04-01T08:06:08.000Z</lastmod>
     <data>
         <display>
         <title>打印机连接问题</title>
@@ -166,7 +1652,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2018/03/04/180304Hexo%E6%A0%87%E7%AD%BE%E8%AE%A1%E6%95%B0%E9%97%AE%E9%A2%98/</loc>
-    <lastmod>2018-04-01T08:05:43.248Z</lastmod>
+    <lastmod>2018-04-01T08:05:44.000Z</lastmod>
     <data>
         <display>
         <title>Hexo标签计数问题</title>
@@ -186,7 +1672,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2017/02/14/170214HDFS%E6%8B%92%E7%BB%9D%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/</loc>
-    <lastmod>2018-04-01T08:05:26.719Z</lastmod>
+    <lastmod>2018-04-01T08:05:28.000Z</lastmod>
     <data>
         <display>
         <title>HDFS拒绝连接问题</title>
@@ -206,7 +1692,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2017/01/05/170105Shadowsocks%E9%83%A8%E5%88%86%E7%BD%91%E7%AB%99%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE/</loc>
-    <lastmod>2018-04-01T08:04:45.000Z</lastmod>
+    <lastmod>2018-04-01T08:04:46.000Z</lastmod>
     <data>
         <display>
         <title>Shadowsocks部分网站无法访问</title>
@@ -226,7 +1712,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2016/07/05/160705Android%E7%BC%96%E8%AF%91%E9%97%AE%E9%A2%98/</loc>
-    <lastmod>2018-04-01T08:04:16.821Z</lastmod>
+    <lastmod>2018-04-01T08:04:18.000Z</lastmod>
     <data>
         <display>
         <title>Android编译问题</title>
@@ -246,7 +1732,7 @@
     
   <url>
     <loc>https://hopefulnick.github.io/2016/07/04/160704Android%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81%E5%9D%91/</loc>
-    <lastmod>2018-04-01T08:03:52.207Z</lastmod>
+    <lastmod>2018-04-01T08:03:54.000Z</lastmod>
     <data>
         <display>
         <title>Android开发常见坑</title>
@@ -258,26 +1744,6 @@
            
              
               <breadCrumb title="Android" url="https://hopefulnick.github.io/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://hopefulnick.github.io/2016/03/21/160321Cygwin%E9%83%A8%E7%BD%B2/</loc>
-    <lastmod>2018-04-01T08:03:33.947Z</lastmod>
-    <data>
-        <display>
-        <title>Cygwin部署教程</title>
-        <pubTime>2016-03-21T03:00:47.000Z</pubTime>
-        
-        <tag>Cygwin</tag>
-         
-         
-           
-             
-              <breadCrumb title="Linux" url="https://hopefulnick.github.io/categories/Linux/"/>
           
         </display>
     </data>

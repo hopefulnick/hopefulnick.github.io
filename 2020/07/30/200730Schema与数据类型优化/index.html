@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="高性能MySQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="注意逻辑设计、物理设计和查询执行，及其相互作用">
+<meta name="keywords" content="高性能MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL架构与历史">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/07/30/200730Schema与数据类型优化/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="注意逻辑设计、物理设计和查询执行，及其相互作用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-30T15:56:26.715Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL架构与历史">
+<meta name="twitter:description" content="注意逻辑设计、物理设计和查询执行，及其相互作用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/07/30/200730Schema与数据类型优化/"/>
+
+
+
+
+
+  <title>MySQL架构与历史 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/07/30/200730Schema与数据类型优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL架构与历史</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-30T17:00:47+08:00">
+                2020-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/高性能MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">高性能MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/30/200730Schema与数据类型优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/30/200730Schema与数据类型优化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>注意逻辑设计、物理设计和查询执行，及其相互作用</p>
+<a id="more"></a>
+<h2 id="1-选择优化的数据类型"><a href="#1-选择优化的数据类型" class="headerlink" title="1 选择优化的数据类型"></a>1 选择优化的数据类型</h2><h3 id="1-选择原则"><a href="#1-选择原则" class="headerlink" title="(1) 选择原则"></a>(1) 选择原则</h3><ul>
+<li><p>小</p>
+<p>操作更快、占用更少的磁盘、内存和缓存</p>
+</li>
+<li><p>简单</p>
+<p>尽量使用内建类型，如使用整型存储IP地址</p>
+</li>
+<li><p>非NULL</p>
+<p>默认的NULL属性更难优化</p>
+</li>
+</ul>
+<h3 id="2-选择顺序"><a href="#2-选择顺序" class="headerlink" title="(2) 选择顺序"></a>(2) 选择顺序</h3><ul>
+<li><p>类型</p>
+<p>数值、字符串、时间等</p>
+</li>
+<li><p>长度、范围、精度和空间</p>
+<p>如DATETIME和TIMESTAMP都能存储秒精度的时间和日期，但是TIMESTAMP允许的时间范围更小，存储空间只有前者一半，并且会根据时区变化</p>
+</li>
+</ul>
+<h3 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="(3) 数据类型"></a>(3) 数据类型</h3><h4 id="1-整数"><a href="#1-整数" class="headerlink" title="1) 整数"></a>1) 整数</h4><p>类别：TINYINT、SMALLINT、MEDIUMINT、INT和BIGINT</p>
+<p>空间：1B、2B、3B、4B、8B</p>
+<p>可以使用UNSIGNED标记仅允许非负值，正数上限增加一倍。</p>
+<p>指定宽度用于交互工具显式，不影响存储范围。</p>
+<h4 id="2-浮点数"><a href="#2-浮点数" class="headerlink" title="2) 浮点数"></a>2) 浮点数</h4><p>MySQL会自动选取精度，建议只指定类型，不指定精度</p>
+<ul>
+<li><p>FLOAT、DOUBLE（非精确）</p>
+<p>精度由实现平台决定，CPU直接支持，计算更快</p>
+<p>FLOAT 4字节, DOUBLE 8字节</p>
+<p>DOUBLE作为内部浮点计算类型</p>
+</li>
+<li><p>DECIMAL（精确）</p>
+<p>精度由MySQL实现控制，如DECIMAL(18,9)，小数点后9位数字，总共18位数字</p>
+<p>范围可以比BIGINT大，最多允许65个数字</p>
+<p>存储空间每4个字节存9个数字，小数点额外占用一个数字</p>
+<p>计算时转换为DOUBLE</p>
+</li>
+</ul>
+<p>注意：在范围允许、语义明确和精确计算的场景下，可以使用BIGINT代替DECIMAL，在计算时缩小相应倍数，可减少存储和计算代价。</p>
+<h4 id="3-字符串"><a href="#3-字符串" class="headerlink" title="3) 字符串"></a>3) 字符串</h4><p>可以定义字符集和排序规则，但会影响性能</p>
+<p>实现与存储引擎相关</p>
+<p>Memory引擎只支持定长字符串</p>
+<p>用于Mysql会分配定长内存来保存内部值，声明变长字符串时尽量少</p>
+<p>BINARY和VARBINARY存储二进制字符串，类似CHAR和VARCHAR。BINARY使用<code>\0</code>填充</p>
+<h5 id="1‘-VARCHAR"><a href="#1‘-VARCHAR" class="headerlink" title="1‘ VARCHAR"></a>1‘ VARCHAR</h5><p>变长字符串，适用于长度变化大、更新少(避免长度扩展引起跨页存储)或字符集复杂(可以用不同的字节数表示)的场景</p>
+<p>仅使用必要的空间，额外使用1-2字节存储长度</p>
+<p>更新时，由于页内没有空间，MyISAM会跨片段存储，InnoDB会分裂页</p>
+<p>版本&gt;=5.0，存储和检索时保留末尾空格</p>
+<p>InnoDB可以将过长的VARCHAR转换为BLOB</p>
+<h5 id="2’-CHAR"><a href="#2’-CHAR" class="headerlink" title="2’ CHAR"></a>2’ CHAR</h5><p>定长字符串，使用空格填充，适合长度短（不用存储长度）、更新多的场景</p>
+<p>存储和查询时忽略末尾空格</p>
+<h4 id="4-BLOB和TEXT"><a href="#4-BLOB和TEXT" class="headerlink" title="4) BLOB和TEXT"></a>4) BLOB和TEXT</h4><p>用于长度大的字符串存储</p>
+<p>分别有TINY-、SMALL-、MEDIUM-和LONG-等类型，默认为SMALL-</p>
+<p>与其他类型不同，MySQL将其作为独立对象处理。长度太大时，InnoDB会使用专门的存储区域存储，利用指针引用。</p>
+<p>区别是BLOB没有字符集和排序规则</p>
+<p>排序时，使用前max_sort_length字节排序，也可以使用ORDER BY SUSTRING(column, length)动态指定</p>
+<p>注意：</p>
+<ul>
+<li><p>使用Memory引擎（不支持该数据类型），或者使用隐式临时表，或者临时表长度超过max_heap_table_size或tmp_table_size时，临时表将转换为MyISAM临时表。建议避免使用该类型或截取部分字符串用于计算。</p>
+</li>
+<li><p>使用枚举代替字符串</p>
+<p>适合不断重复的有限的字符串集合</p>
+<p>内部存储为数值，为了避免混淆，建议避免存储数值字面量的字符串</p>
+<p>排序使用内部数值。可以使用FIELD()显式指定排序，但无法利用索引消除排序。</p>
+<p>优点：</p>
+<ul>
+<li>关联很快</li>
+<li>节约存储空间</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>元素固定，需要ALERT TABLE变更</li>
+<li>需要通过查找转换为字符串</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-DATETIME和TIMESTAMP"><a href="#5-DATETIME和TIMESTAMP" class="headerlink" title="5) DATETIME和TIMESTAMP"></a>5) DATETIME和TIMESTAMP</h4><p>MySQL支持的最小时间粒度为秒。更小粒度可以使用MariaDB(微秒)或使用数值存储。</p>
+<p>DATETIME用8字节存储范围1001年-9999年的时区无关的时间数据。</p>
+<p>TIMESTAMP使用4字节存储1970年-2038年的时区相关的时间数据，默认NOT NULL，采用当前时间。</p>
+<h4 id="6-位"><a href="#6-位" class="headerlink" title="6) 位"></a>6) 位</h4><p>BIT最多支持64位。</p>
+<p>行为因存储引擎而异。MariaDB按照长度分配空间，其他引擎就近使用整型空间。</p>
+<p>在数值上下文中，BIT将转换为数字。由于容易与ASCII码混淆，尽量使用替代方案。</p>
+<ul>
+<li><p>一位时，使用CHAR(0)</p>
+</li>
+<li><p>多位</p>
+<ul>
+<li><p>SET</p>
+<p>缺点：改变列定义需要修改表</p>
+</li>
+<li><p>整型</p>
+<p>缺点：难以操作和理解</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-标识符"><a href="#4-标识符" class="headerlink" title="(4) 标识符"></a>(4) 标识符</h3><h4 id="1-原则"><a href="#1-原则" class="headerlink" title="1) 原则"></a>1) 原则</h4><ul>
+<li>为了关联，需要表之间类型完全匹配</li>
+<li>在满足需求的前提下，尽量节省空间</li>
+</ul>
+<h4 id="2-选取方案"><a href="#2-选取方案" class="headerlink" title="2) 选取方案"></a>2) 选取方案</h4><ul>
+<li><p>整型</p>
+<p>最好的选择，可以自增</p>
+</li>
+<li><p>ENUM/SET</p>
+<p>不建议，形式固定</p>
+<p>MySQL内部使用整型存储，比较时转换为字符串。</p>
+</li>
+<li><p>字符串</p>
+<p>不建议，空间占用大且效率低</p>
+<p>MyISAM默认对字符串使用压缩索引</p>
+<p>随机字符效率低，因为页分裂和磁盘随机访问</p>
+<p>UUID虽然具有一定顺序性，但是效率不如整数。通常使用UNHEX()和HEX()在字符串和BINARY(16)间转换。</p>
+</li>
+</ul>
+<p>注意：自动生成或者对象关系映射系统(ORM)选择的 数据类型可能需要优化。</p>
+<h3 id="5-特殊类型数据"><a href="#5-特殊类型数据" class="headerlink" title="(5) 特殊类型数据"></a>(5) 特殊类型数据</h3><p>IP地址实际是32位无符号整数，可以使用INET_ATON()和INET_NTOA()相互转换。</p>
+<h2 id="2-Schema设计中的陷阱"><a href="#2-Schema设计中的陷阱" class="headerlink" title="2 Schema设计中的陷阱"></a>2 Schema设计中的陷阱</h2><h3 id="1-列太多"><a href="#1-列太多" class="headerlink" title="(1) 列太多"></a>(1) 列太多</h3><p>MYSQL使用行缓冲格式在服务器层和存储引擎层间拷贝数据。</p>
+<p>服务器层将行缓冲数据解码为数据列，代价高昂。</p>
+<p>MyISAM变长结构和InnoDB总是需要转换，代价与列数量相关。</p>
+<p>MyISAM定长结构与行缓冲格式兼容，不需要转换。</p>
+<h3 id="2-关联太多"><a href="#2-关联太多" class="headerlink" title="(2) 关联太多"></a>(2) 关联太多</h3><p>注意实体-属性-值（EAV）设计模式在MYSQL中不能稳定工作。</p>
+<p>MySQL限制最多关联61张表。</p>
+<p>建议在12个表内关联。</p>
+<h3 id="3-全能的枚举"><a href="#3-全能的枚举" class="headerlink" title="(3) 全能的枚举"></a>(3) 全能的枚举</h3><p>修改枚举定义需要修改表。</p>
+<p>防止过度使用枚举。</p>
+<h3 id="4-变相枚举"><a href="#4-变相枚举" class="headerlink" title="(4) 变相枚举"></a>(4) 变相枚举</h3><p>有限值、值互斥、值集合不变场景下使用枚举。</p>
+<p>列值间互相排斥时，使用枚举替代SET。</p>
+<h3 id="5-特殊的NULL表示"><a href="#5-特殊的NULL表示" class="headerlink" title="(5) 特殊的NULL表示"></a>(5) 特殊的NULL表示</h3><p>建议尽量避免使用NULL值。</p>
+<p>必要时，需要考量特殊值替换还是直接使用NULL。前者语义不明且容易隐藏问题，后者牺牲效率。</p>
+<p>注意：MySQL会在索引中缓存NULL值，而Oracle不会。</p>
+<h2 id="3-范式与反范式"><a href="#3-范式与反范式" class="headerlink" title="3 范式与反范式"></a>3 范式与反范式</h2><p>范式化数据库中，每个事实数据只出现一次。而反范式数据库中，数据是冗余的。</p>
+<h3 id="1-范式优缺点"><a href="#1-范式优缺点" class="headerlink" title="(1) 范式优缺点"></a>(1) 范式优缺点</h3><p>优点</p>
+<ul>
+<li>更新更快</li>
+<li>改动更少</li>
+<li>表更小，可内存执行</li>
+<li>更少使用DISTINCT或GROUPBY操作</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>需要关联</li>
+<li>可能导致索引策略无效</li>
+</ul>
+<h3 id="2-反范式优缺点"><a href="#2-反范式优缺点" class="headerlink" title="(2) 反范式优缺点"></a>(2) 反范式优缺点</h3><p>优点</p>
+<ul>
+<li>避免关联</li>
+<li>更有效额索引策略，因为数据集中在一张表中</li>
+</ul>
+<h3 id="3-混用范式和反范式"><a href="#3-混用范式和反范式" class="headerlink" title="(3) 混用范式和反范式"></a>(3) 混用范式和反范式</h3><p>针对不同的应用场景，可能需要混用范式和反范式。</p>
+<p>最常见反范式化数据的是复制和缓存。版本&gt;=5.0可以使用触发器更新缓存。</p>
+<h2 id="4-缓存表与汇总表"><a href="#4-缓存表与汇总表" class="headerlink" title="4 缓存表与汇总表"></a>4 缓存表与汇总表</h2><p>用于提升性能，适用于读多写少的场景。</p>
+<p>更快地读，更慢地写：使用额外索引或数据冗余提升数据读取性能，同时也增加了写入复杂性。</p>
+<p>缓存表时直接从其他表中抽取简单数据形成的表。汇总表时经过GROUPBY等数据处理后形成的表。</p>
+<p>技巧：</p>
+<ul>
+<li>为了加速查询，缓存表、汇总表可以使用不同于主表的存储引擎，以便使用不同的索引组合</li>
+<li>需要决定实时更新还是定期重建。实时更新反映的是最新状态，定期重建节省资源、减少表碎片、有完全顺序的索引组织</li>
+<li>表格重建时，可以先在影子表上操作，保证表内容可用</li>
+</ul>
+<h3 id="1-物化视图"><a href="#1-物化视图" class="headerlink" title="(1) 物化视图"></a>(1) 物化视图</h3><p>物化视图是预先计算的存储在磁盘中的表，通过策略更新。</p>
+<p>MySQL并不原生支持物化视图，可以使用Flexviewss工具或者自己实现。</p>
+<h3 id="2-计数器表"><a href="#2-计数器表" class="headerlink" title="(2) 计数器表"></a>(2) 计数器表</h3><p>用于计数，存在并发瓶颈</p>
+<p>将数据分散存储到多行中，每次随机更新一行，查询时使用聚合查询。</p>
+<p>可以使用周期任务周期性合并数据到一行中，减少数据行数。</p>
+<h2 id="5-ALERT-TABLE提速"><a href="#5-ALERT-TABLE提速" class="headerlink" title="5 ALERT TABLE提速"></a>5 ALERT TABLE提速</h2><p>通常MySQL修改表是，先创建一个新表，从旧表查询数据并写入到新表中，最后删除旧表。导致服务中断，内存占用大，且操作时间长。</p>
+<p>避免服务中断常用技巧：</p>
+<ul>
+<li><p>主备库切换</p>
+</li>
+<li><p>影子表拷贝</p>
+<p>如online schema change、openark toolkit和percona toolkit工具等。 </p>
+</li>
+<li><p>CDC工具实现无锁表结构变更</p>
+</li>
+</ul>
+<p>修改列默认值时，MODIFY COLUMN会引起重建。</p>
+<p>由于列默认值存储在.frm文件中，理论上可以只修改.frm文件以避免表重建。如ALTER COLUMN。</p>
+<h3 id="1-只修改-frm文件"><a href="#1-只修改-frm文件" class="headerlink" title="(1) 只修改.frm文件"></a>(1) 只修改.frm文件</h3><p>可以不需重建表的操作：</p>
+<ul>
+<li>移除列的自增属性</li>
+<li>增、删、改ENUM或SET</li>
+</ul>
+<p>[<strong>有风险</strong>]以下过程通过使用新的.frm替换旧的达到修改表的目的：</p>
+<p>1‘ 创建一张相同结构的空表，并应用修改</p>
+<p>2’ 执行FLUSH TABLES WITH READ LOCK，关闭所有正在使用的表并禁止打开</p>
+<p>3‘ 交换.frm文件</p>
+<p>4’ 执行UNLOCK TABLES释放读锁</p>
+<h3 id="2-快速创建MyISAM索引"><a href="#2-快速创建MyISAM索引" class="headerlink" title="(2) 快速创建MyISAM索引"></a>(2) 快速创建MyISAM索引</h3><h4 id="1-关闭非唯一索引"><a href="#1-关闭非唯一索引" class="headerlink" title="1) 关闭非唯一索引"></a>1) 关闭非唯一索引</h4><p>常用技巧：先禁用索引，再载入数据，最后重启索引</p>
+<p>在InnoDB中有类似技巧：依据快速在线索引创建功能，先删除所有非唯一索引，再增加新列，最后重新创建删除的索引。</p>
+<p>但是禁用索引对唯一索引无效。</p>
+<h4 id="2-替换-frm文件"><a href="#2-替换-frm文件" class="headerlink" title="2) 替换.frm文件"></a>2) 替换.frm文件</h4><p>有风险，需要备份</p>
+<p>1‘ 创建一张相同结构的表A，不包含索引</p>
+<p>2’ 加载数据到表A中</p>
+<p>3‘ 创建一张相同结构的表B，包含索引。(会创建.frm文件和.MYI文件)</p>
+<p>4’ 获取读锁并刷新表</p>
+<p>5‘ 替换.frm文件和.MYI文件</p>
+<p>6’ 使用REPAIR TABLE重建表索引。该操作通过排序创建包含唯一索引在内的所有索引。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《高性能MySQL》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/高性能MySQL/" rel="tag"># 高性能MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/28/200728Spark作业调度/" rel="next" title="Spark作业调度">
+                <i class="fa fa-chevron-left"></i> Spark作业调度
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/02/200802SparkContext源码/" rel="prev" title="SparkContext源码">
+                SparkContext源码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-选择优化的数据类型"><span class="nav-number">1.</span> <span class="nav-text">1 选择优化的数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-选择原则"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 选择原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-选择顺序"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 选择顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数据类型"><span class="nav-number">1.3.</span> <span class="nav-text">(3) 数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-整数"><span class="nav-number">1.3.1.</span> <span class="nav-text">1) 整数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-浮点数"><span class="nav-number">1.3.2.</span> <span class="nav-text">2) 浮点数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-字符串"><span class="nav-number">1.3.3.</span> <span class="nav-text">3) 字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1‘-VARCHAR"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">1‘ VARCHAR</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2’-CHAR"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">2’ CHAR</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-BLOB和TEXT"><span class="nav-number">1.3.4.</span> <span class="nav-text">4) BLOB和TEXT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-DATETIME和TIMESTAMP"><span class="nav-number">1.3.5.</span> <span class="nav-text">5) DATETIME和TIMESTAMP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-位"><span class="nav-number">1.3.6.</span> <span class="nav-text">6) 位</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-标识符"><span class="nav-number">1.4.</span> <span class="nav-text">(4) 标识符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-原则"><span class="nav-number">1.4.1.</span> <span class="nav-text">1) 原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-选取方案"><span class="nav-number">1.4.2.</span> <span class="nav-text">2) 选取方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-特殊类型数据"><span class="nav-number">1.5.</span> <span class="nav-text">(5) 特殊类型数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Schema设计中的陷阱"><span class="nav-number">2.</span> <span class="nav-text">2 Schema设计中的陷阱</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-列太多"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 列太多</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-关联太多"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 关联太多</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-全能的枚举"><span class="nav-number">2.3.</span> <span class="nav-text">(3) 全能的枚举</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-变相枚举"><span class="nav-number">2.4.</span> <span class="nav-text">(4) 变相枚举</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-特殊的NULL表示"><span class="nav-number">2.5.</span> <span class="nav-text">(5) 特殊的NULL表示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-范式与反范式"><span class="nav-number">3.</span> <span class="nav-text">3 范式与反范式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-范式优缺点"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 范式优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-反范式优缺点"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 反范式优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-混用范式和反范式"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 混用范式和反范式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-缓存表与汇总表"><span class="nav-number">4.</span> <span class="nav-text">4 缓存表与汇总表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-物化视图"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 物化视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-计数器表"><span class="nav-number">4.2.</span> <span class="nav-text">(2) 计数器表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-ALERT-TABLE提速"><span class="nav-number">5.</span> <span class="nav-text">5 ALERT TABLE提速</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-只修改-frm文件"><span class="nav-number">5.1.</span> <span class="nav-text">(1) 只修改.frm文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-快速创建MyISAM索引"><span class="nav-number">5.2.</span> <span class="nav-text">(2) 快速创建MyISAM索引</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-关闭非唯一索引"><span class="nav-number">5.2.1.</span> <span class="nav-text">1) 关闭非唯一索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-替换-frm文件"><span class="nav-number">5.2.2.</span> <span class="nav-text">2) 替换.frm文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/07/30/200730Schema与数据类型优化/';
+          this.page.identifier = '2020/07/30/200730Schema与数据类型优化/';
+          this.page.title = 'MySQL架构与历史';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="高性能MySQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 基础MySQL只能高效地使用索引的最左前缀列。 ORM生成的查询只是合法查询，需要检查是否适合索引查询。 MySQL索引是由存储引擎实现。">
+<meta name="keywords" content="高性能MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能索引">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/08/19/200819高性能索引/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 基础MySQL只能高效地使用索引的最左前缀列。 ORM生成的查询只是合法查询，需要检查是否适合索引查询。 MySQL索引是由存储引擎实现。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-31T15:54:39.048Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能索引">
+<meta name="twitter:description" content="1 基础MySQL只能高效地使用索引的最左前缀列。 ORM生成的查询只是合法查询，需要检查是否适合索引查询。 MySQL索引是由存储引擎实现。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/08/19/200819高性能索引/"/>
+
+
+
+
+
+  <title>高性能索引 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/08/19/200819高性能索引/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">高性能索引</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-19T15:00:47+08:00">
+                2020-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/高性能MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">高性能MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/19/200819高性能索引/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/08/19/200819高性能索引/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-基础"><a href="#1-基础" class="headerlink" title="1 基础"></a>1 基础</h2><p>MySQL只能高效地使用索引的最左前缀列。</p>
+<p>ORM生成的查询只是合法查询，需要检查是否适合索引查询。</p>
+<p>MySQL索引是由存储引擎实现。</p>
+<a id="more"></a>
+<h3 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h3><h4 id="1-B-Tree索引"><a href="#1-B-Tree索引" class="headerlink" title="1) B-Tree索引"></a>1) B-Tree索引</h4><p>实际上是B+树结构，顺序存储，适合范围查找。</p>
+<p>InnoDB、MyISAM、Memory等存储引擎支持。</p>
+<p>InnoDB使用原数据格式存储，根据主键引用被索引的行；MyISAM使用前缀压缩技术，使用物理地址引用被索引的行。</p>
+<p>NDB集群使用T-Tree结构（名为BTree）。</p>
+<p><strong>限制</strong>：</p>
+<ul>
+<li>只能最左匹配，不能跳过中间索引列</li>
+<li>范围索引右侧的列无法索引</li>
+</ul>
+<h4 id="2-哈希索引"><a href="#2-哈希索引" class="headerlink" title="2) 哈希索引"></a>2) 哈希索引</h4><p>只能精确匹配索引的所有列</p>
+<p>MySQL中，只有Memory存储引擎支持哈希索引（含非唯一哈希索引），NDB存储引擎有使用到唯一哈希索引。</p>
+<p><strong>限制</strong>：</p>
+<ul>
+<li>因为索引中不包含列值，不能避免读取行</li>
+<li>不能排序和范围查询</li>
+<li>不支持使用索引列的真子集</li>
+<li>为了避免大量哈希冲突，建议采用合适的哈希算法，应用到合适的列中。</li>
+</ul>
+<p><strong>自适应哈希索引</strong>：InnoDB自动在内部为频繁使用的索引值建立哈希索引。</p>
+<p><strong>自定义哈希索引</strong>：</p>
+<p>添加并在数据变化时维护哈希索引列。</p>
+<p>可以使用CRC32()或FNV64()作为哈希函数避免冲突。前者32位，存储空间需求小；后者64位，哈希冲突少。</p>
+<p>不建议使用SHA1()或MD5()作为哈希函数，因为其哈希值是非常长的字符串，存储空间需求过大。</p>
+<p>遇到哈希冲突时，可以使用字段值过滤。</p>
+<h4 id="3-空间数据索引"><a href="#3-空间数据索引" class="headerlink" title="3) 空间数据索引"></a>3) 空间数据索引</h4><p>R-Tree</p>
+<p>如MySQL的MBRCONTAINS()等GIS函数</p>
+<p>通常使用PostGIS解决方案</p>
+<h4 id="4-全文索引"><a href="#4-全文索引" class="headerlink" title="4) 全文索引"></a>4) 全文索引</h4><p>查找文本中的关键词</p>
+<p>与B-Tree索引不冲突</p>
+<p>使用MATCH AGAINST匹配，而不是WHERE</p>
+<h4 id="5-其他索引"><a href="#5-其他索引" class="headerlink" title="5) 其他索引"></a>5) 其他索引</h4><p>如TokuDB的分形树索引</p>
+<h2 id="2-优点和三星系统"><a href="#2-优点和三星系统" class="headerlink" title="2 优点和三星系统"></a>2 优点和三星系统</h2><h3 id="1-优点"><a href="#1-优点" class="headerlink" title="(1) 优点"></a>(1) 优点</h3><ul>
+<li>避免全表扫描</li>
+<li>避免排序和临时表</li>
+<li>将随机I/O转变为顺序I/O</li>
+</ul>
+<h3 id="2-三星系统"><a href="#2-三星系统" class="headerlink" title="(2) 三星系统"></a>(2) 三星系统</h3><ul>
+<li>索引将记录集中到一起</li>
+<li>数据顺序与查询中的排列顺序一致</li>
+<li>索引包含了查询需要的所有列-&gt; 覆盖索引</li>
+</ul>
+<h2 id="3-策略"><a href="#3-策略" class="headerlink" title="3 策略"></a>3 策略</h2><h3 id="1-独立的列"><a href="#1-独立的列" class="headerlink" title="(1) 独立的列"></a>(1) 独立的列</h3><p>索引列是直接值，不能是表达式或函数</p>
+<h3 id="2-前缀索引和索引选择性"><a href="#2-前缀索引和索引选择性" class="headerlink" title="(2) 前缀索引和索引选择性"></a>(2) 前缀索引和索引选择性</h3><h4 id="1-前缀索引"><a href="#1-前缀索引" class="headerlink" title="1) 前缀索引"></a>1) 前缀索引</h4><p>MySQL无法使用前缀索引ORDER BY或GROUP BY，无法覆盖扫描。即无法使用部分索引排序。</p>
+<p>MySQL不支持反向索引，需要单独建列。</p>
+<h4 id="2-索引选择性"><a href="#2-索引选择性" class="headerlink" title="2) 索引选择性"></a>2) 索引选择性</h4><p>选择性：索引值数量与记录数量的比值</p>
+<p>选择性不能只看平均情况，需要分析具体的索引分布情况。</p>
+<h3 id="3-多列索引"><a href="#3-多列索引" class="headerlink" title="(3) 多列索引"></a>(3) 多列索引</h3><p>包含多列的索引，用于多个列间相交或联合。</p>
+<p>版本&gt;=5.0，MySQL使用“索引合并”策略，将多个单列索引合并为多列索引。</p>
+<p>使用optimizer_switch关闭索引合并功能。</p>
+<p>使用IGNORE INDEX忽略某些索引。</p>
+<h3 id="4-索引顺序"><a href="#4-索引顺序" class="headerlink" title="(4) 索引顺序"></a>(4) 索引顺序</h3><p>适用于记录顺序的B树索引。</p>
+<p>通常，将选择性最高的索引放在前面。</p>
+<p>性能提升与查询条件和具体的值有关。可以使用pt-query-digest工具和EXPLAIN指令查找慢查询。</p>
+<h3 id="5-聚簇索引"><a href="#5-聚簇索引" class="headerlink" title="(5) 聚簇索引"></a>(5) 聚簇索引</h3><p>将数据行存储到索引叶子页中。</p>
+<p>部分存储引擎支持，如InnoDB。</p>
+<p>一张表只能有一个聚簇索引。</p>
+<p>InnoDB：</p>
+<ul>
+<li>没有主键时，选择一个非空唯一索引；没有非空唯一索引时，定义一个隐式的主键。</li>
+<li>只聚集同一页中的数据行，不同页中可能分离存储。</li>
+</ul>
+<p>聚簇索引优点：</p>
+<ul>
+<li>减少I/O，避免回表查询</li>
+<li>查询效率高</li>
+</ul>
+<p>聚簇索引缺点：</p>
+<ul>
+<li>同时加载索引和数据到内存中，资源占用大</li>
+<li>不按主键顺序时，插入效率低。建议使用OPTIMIZE TABLE重新组织表</li>
+<li>更新操作会强制移动数据行</li>
+<li>容易页分裂，额外占用磁盘空间。InnoDB页容量达到15/16时页分裂。</li>
+<li>页分裂导致数据存储不连续，全表扫描慢</li>
+<li>二级索引（即非聚簇索引）可能更大，因为二级索引叶子节点包含了应用行的主键列？</li>
+<li>二级索引需要两次索引查找。查找数据行的主键和根据主键查找数据行</li>
+</ul>
+<p>高并发场景下的顺序主键：</p>
+<p>可能造成间隙锁争用和AUTO_INCREMENT锁机制问题</p>
+<ul>
+<li>重新设计表或应用，如分库分表和分段自增等</li>
+<li>更改innodb_autoinc_lock_mode配置 </li>
+</ul>
+<h3 id="6-覆盖索引"><a href="#6-覆盖索引" class="headerlink" title="(6) 覆盖索引"></a>(6) 覆盖索引</h3><p>索引包含查询所需的所有字段。</p>
+<p>因为需要包含索引列的所有值，所以只能是B树索引。</p>
+<p>优点:</p>
+<ul>
+<li>减少访问数据量</li>
+<li>范围查询使用完全顺序的索引访问</li>
+<li>避免访问数据引起的系统调用，对于只缓存索引的存储引，如MyISAM</li>
+<li>避免对主键索引的二次查询，对于InnoDB聚簇索引的二级索引（其中包含了主键）</li>
+</ul>
+<p><strong>延迟关联</strong>：内层使用覆盖索引查询所需结果主键，外层与全表连接。</p>
+<h3 id="7-索引排序"><a href="#7-索引排序" class="headerlink" title="(7) 索引排序"></a>(7) 索引排序</h3><p>MySQL生成有序结果的方法：</p>
+<ul>
+<li>索引排序</li>
+<li>排序</li>
+</ul>
+<p>索引排序要求：ORDER BY列顺序与索引中列顺序一致，且排序方向一致。若排在前面的列为常量时，可以不遵守最左前缀限制。</p>
+<h3 id="8-前缀压缩"><a href="#8-前缀压缩" class="headerlink" title="(8) 前缀压缩"></a>(8) 前缀压缩</h3><p>默认值压缩字符串。</p>
+<p>完整保存第一个索引值，后续索引值保存为与前一索引值相同前缀的字节长度+不同的后缀。</p>
+<p>查找依赖前面的值，无法二分查找</p>
+<p>创建表时使用PACK KEYS设置压缩方式</p>
+<h3 id="9-冗余和重复索引"><a href="#9-冗余和重复索引" class="headerlink" title="(9) 冗余和重复索引"></a>(9) 冗余和重复索引</h3><p>重复索引：相同的列、顺序和类型的索引，应当避免</p>
+<p>冗余索引：已有索引的前缀列，处于性能考量，可能需要，如覆盖索引</p>
+<p>Sholmi Noach的common_schema和Percona Toolkit的pt-duplicate-key-checker可用于查找重复读音和冗余索引</p>
+<h3 id="10-未使用的索引"><a href="#10-未使用的索引" class="headerlink" title="(10) 未使用的索引"></a>(10) 未使用的索引</h3><p>不使用的索引，建议删除</p>
+<p>检测方式：</p>
+<ul>
+<li>Percona Server或MariaDB开启userstates服务器变量，运行一段时间后查询INFORMATION_SCHEMA.INDEX_STATISTICS查询索引使用频率</li>
+<li>Percona Toolkit的pt-index-usage查询索引使用频率</li>
+</ul>
+<h3 id="11-索引和锁"><a href="#11-索引和锁" class="headerlink" title="(11) 索引和锁"></a>(11) 索引和锁</h3><p>InnoDB只有在访问数据行时加锁。</p>
+<p>版本&gt;=5.1，服务器在条件过滤后会释放筛出数据的锁。</p>
+<p>InnoDB二级索引使用共享（读）锁，而主键索引使用排他（写）锁。这消除了使用覆盖索引的可能性，并且使SELECT FOR UPDATE比LOCK IN SHARE MODE或非锁定查询慢很多。</p>
+<h3 id="12-大型表"><a href="#12-大型表" class="headerlink" title="(12) 大型表"></a>(12) 大型表</h3><ul>
+<li><p>分区</p>
+</li>
+<li><p>元数据信息表</p>
+<p>使用块级别源数据技术替代索引</p>
+</li>
+</ul>
+<h2 id="4-案例"><a href="#4-案例" class="headerlink" title="4 案例"></a>4 案例</h2><h3 id="1-多种过滤条件支持"><a href="#1-多种过滤条件支持" class="headerlink" title="(1) 多种过滤条件支持"></a>(1) 多种过滤条件支持</h3><p>为了使用前缀索引，使用IN枚举前缀列值。</p>
+<p>由于MySQL无法使用范围列后的其他索引列，尽量将范围列滞后。</p>
+<h3 id="2-避免多个范围条件"><a href="#2-避免多个范围条件" class="headerlink" title="(2) 避免多个范围条件"></a>(2) 避免多个范围条件</h3><h3 id="2-避免多个范围查询"><a href="#2-避免多个范围查询" class="headerlink" title="(2) 避免多个范围查询"></a>(2) 避免多个范围查询</h3><p>为了使用索引，在考虑索引维护和空间占用平衡的前提下，尽量将范围查询转换为简单值比较。</p>
+<h3 id="3-优化排序"><a href="#3-优化排序" class="headerlink" title="(3) 优化排序"></a>(3) 优化排序</h3><p>针对选择性很低的列，可以使用以下方式优化：</p>
+<ul>
+<li>反范式化</li>
+<li>预先计算</li>
+<li>缓存</li>
+<li>限制用户翻页数量</li>
+<li>延迟关联：减少扫描需要丢弃的行</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 数据列sex选择性很低，数据总量上百万行</span><br><span class="line"># 以下使用限制用户翻页数量和延迟关联优化</span><br><span class="line">SELECT</span><br><span class="line">	&lt;cols&gt;</span><br><span class="line">FROM</span><br><span class="line">	 profiles</span><br><span class="line">INNER JOIN</span><br><span class="line">	(SELECT</span><br><span class="line">     	&lt;primary key cols&gt;</span><br><span class="line">     FROM</span><br><span class="line">     	profiles</span><br><span class="line">     WHERE</span><br><span class="line">     	x.sex=&apos;M&apos;</span><br><span class="line">     ORDER BY rating</span><br><span class="line">     LIMIT 100000, 10</span><br><span class="line">    ) AS x</span><br><span class="line">USING (&lt;primary key cols&gt;);</span><br></pre></td></tr></table></figure>
+<h2 id="5-维护"><a href="#5-维护" class="headerlink" title="5 维护"></a>5 维护</h2><h3 id="1-检查并修复"><a href="#1-检查并修复" class="headerlink" title="(1) 检查并修复"></a>(1) 检查并修复</h3><p>表损坏原因：硬件问题、系统崩溃和MySQL缺陷</p>
+<p>以下命令，部分存储引擎不支持：</p>
+<p>检查：CHECK TABLE</p>
+<p>修复：</p>
+<ul>
+<li>REPAIR TABLE</li>
+<li>不做操作的ALTER TABLE重建表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE innodb_tbl ENGINE=INNODB;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>离线工具</p>
+<p>myisamchk</p>
+</li>
+<li><p>导出并重新导入</p>
+</li>
+</ul>
+<p>数据恢复：</p>
+<ul>
+<li>设置innodb_force_recovery参数进入强制恢复模式</li>
+<li>开源InnoDB数据恢复工具箱InnoDB Data Recovery Toolkit</li>
+</ul>
+<h3 id="2-更新索引统计信息"><a href="#2-更新索引统计信息" class="headerlink" title="(2) 更新索引统计信息"></a>(2) 更新索引统计信息</h3><p>使用ANALYZE TABLE重新生成统计信息。</p>
+<p>MySQL查询优化器使用两个API了解索引值的分布信息：</p>
+<ul>
+<li><p>records_in_range()</p>
+<p>统计索引范围内记录数量。InnoDB返回估计值，MyISAM返回精确值。</p>
+</li>
+<li><p>info()</p>
+<p>索引基数（一个索引值对应的记录数量）等信息。</p>
+</li>
+</ul>
+<p>MySQL优化器使用基于成本的模型，衡量成本的主要指标是一次查询扫描的数据行数。</p>
+<p>不同存储引擎实现索引统计信息的方式不同：</p>
+<ul>
+<li><p>InnoDB</p>
+<p>通过随机索引访问（采样）评估，存储在内存中</p>
+</li>
+<li><p>MyISAM</p>
+<p>锁表+全索引扫描，存储在磁盘中</p>
+</li>
+<li><p>Memory</p>
+<p>不存储</p>
+</li>
+</ul>
+<p>查询索引基数等信息：</p>
+<ul>
+<li>SHOW INDEX FROM \<table\>中的Carfinality</table\></li>
+<li>INFORMATION_SCHEMA.STATISTICS表</li>
+</ul>
+<p>信息更新时机：</p>
+<ul>
+<li>首次打开表</li>
+<li>ANALYZE TABLE</li>
+<li>表大小变化超过1/16或新插入20亿行</li>
+<li>打开某些INFORMATION_SCHEMA表</li>
+<li>使用SHOW TABLE STATUS或SHOW INDEX</li>
+<li>客户端开启自动补全</li>
+</ul>
+<p>问题：当服务器有大量数据时，更新统计信息将造成较大的服务器压力，可以关闭innodb_status_on_metadata关闭。但之后只能 通过ANALYZE TABLE手动更新。</p>
+<h3 id="3-减少索引和数据碎片"><a href="#3-减少索引和数据碎片" class="headerlink" title="(3) 减少索引和数据碎片"></a>(3) 减少索引和数据碎片</h3><p>理论上，数据在叶子页上顺序且紧密地排列，查询性能更好。</p>
+<p>三种碎片：</p>
+<ul>
+<li><p>行碎片</p>
+<p>数据行被分散存储在不同位置的多个片段中。单行查询也受影响。</p>
+<p>InnoDB不存在这种问题，会将分散的行数据聚拢。</p>
+</li>
+<li><p>行间碎片</p>
+<p>逻辑上顺序的页或行，在物理上不是顺序存储的。影响全表扫描和聚簇索引等依赖行间顺序的功能。</p>
+</li>
+<li><p>剩余空间碎片</p>
+<p>数据页中有大量空闲空间。页分裂引起？</p>
+</li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li><p>OPTIMIZE TABLE</p>
+</li>
+<li><p>导出再导入</p>
+</li>
+<li><p>重建索引</p>
+<p>如InnoDB可以使用“在线”添加和删除索引重建，MyISAM使用排序算法重建</p>
+</li>
+<li><p>ALTER TABLE</p>
+<p>不支持OPTIMIZE TABLE的存储引擎可以使用不带操作的ALTER TABLE重建</p>
+</li>
+</ul>
+<p>碎片测量：</p>
+<p>Percona的XtraBackup的–status参数以非备份方式运行，只会打印索引和表的统计情况，其中包含页中的数据量和剩余空间。</p>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6 总结"></a>6 总结</h2><h3 id="1-索引选择、编写三原则："><a href="#1-索引选择、编写三原则：" class="headerlink" title="(1) 索引选择、编写三原则："></a>(1) 索引选择、编写三原则：</h3><ul>
+<li><p>单行读取很慢</p>
+<p>尽可能多地读取所需数据</p>
+<p>使用索引可以创建位置引用，提升效率</p>
+</li>
+<li><p>顺序访问很快</p>
+<p>无需多次磁盘寻道</p>
+<p>无需额外排序</p>
+</li>
+<li><p>覆盖查询很快</p>
+<p>无需回表查询</p>
+</li>
+</ul>
+<h3 id="2-慢查询处理"><a href="#2-慢查询处理" class="headerlink" title="(2) 慢查询处理"></a>(2) 慢查询处理</h3><ul>
+<li><p>找出消耗时间或资源最多的查询</p>
+</li>
+<li><p>检查schema、SQL和索引结构</p>
+</li>
+<li><p>判断是否扫描过多的行、额外的排序、临时表、随机I/O、过多回表查询等</p>
+</li>
+<li>pt-query-digest的查询审查功能review分析潜在问题索引</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《高性能MySQL》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/高性能MySQL/" rel="tag"># 高性能MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/14/200814Scala踩坑/" rel="next" title="Scala踩坑">
+                <i class="fa fa-chevron-left"></i> Scala踩坑
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/29/200829Spark Streaming + Kafka/" rel="prev" title="Spark Streaming + Kafka">
+                Spark Streaming + Kafka <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-基础"><span class="nav-number">1.</span> <span class="nav-text">1 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类型"><span class="nav-number">1.1.</span> <span class="nav-text">类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-B-Tree索引"><span class="nav-number">1.1.1.</span> <span class="nav-text">1) B-Tree索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-哈希索引"><span class="nav-number">1.1.2.</span> <span class="nav-text">2) 哈希索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-空间数据索引"><span class="nav-number">1.1.3.</span> <span class="nav-text">3) 空间数据索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-全文索引"><span class="nav-number">1.1.4.</span> <span class="nav-text">4) 全文索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-其他索引"><span class="nav-number">1.1.5.</span> <span class="nav-text">5) 其他索引</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-优点和三星系统"><span class="nav-number">2.</span> <span class="nav-text">2 优点和三星系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-优点"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-三星系统"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 三星系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-策略"><span class="nav-number">3.</span> <span class="nav-text">3 策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-独立的列"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 独立的列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-前缀索引和索引选择性"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 前缀索引和索引选择性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-前缀索引"><span class="nav-number">3.2.1.</span> <span class="nav-text">1) 前缀索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-索引选择性"><span class="nav-number">3.2.2.</span> <span class="nav-text">2) 索引选择性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-多列索引"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 多列索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-索引顺序"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 索引顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-聚簇索引"><span class="nav-number">3.5.</span> <span class="nav-text">(5) 聚簇索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-覆盖索引"><span class="nav-number">3.6.</span> <span class="nav-text">(6) 覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-索引排序"><span class="nav-number">3.7.</span> <span class="nav-text">(7) 索引排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-前缀压缩"><span class="nav-number">3.8.</span> <span class="nav-text">(8) 前缀压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-冗余和重复索引"><span class="nav-number">3.9.</span> <span class="nav-text">(9) 冗余和重复索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-未使用的索引"><span class="nav-number">3.10.</span> <span class="nav-text">(10) 未使用的索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-索引和锁"><span class="nav-number">3.11.</span> <span class="nav-text">(11) 索引和锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-大型表"><span class="nav-number">3.12.</span> <span class="nav-text">(12) 大型表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-案例"><span class="nav-number">4.</span> <span class="nav-text">4 案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-多种过滤条件支持"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 多种过滤条件支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-避免多个范围条件"><span class="nav-number">4.2.</span> <span class="nav-text">(2) 避免多个范围条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-避免多个范围查询"><span class="nav-number">4.3.</span> <span class="nav-text">(2) 避免多个范围查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-优化排序"><span class="nav-number">4.4.</span> <span class="nav-text">(3) 优化排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-维护"><span class="nav-number">5.</span> <span class="nav-text">5 维护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-检查并修复"><span class="nav-number">5.1.</span> <span class="nav-text">(1) 检查并修复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-更新索引统计信息"><span class="nav-number">5.2.</span> <span class="nav-text">(2) 更新索引统计信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-减少索引和数据碎片"><span class="nav-number">5.3.</span> <span class="nav-text">(3) 减少索引和数据碎片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-总结"><span class="nav-number">6.</span> <span class="nav-text">6 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-索引选择、编写三原则："><span class="nav-number">6.1.</span> <span class="nav-text">(1) 索引选择、编写三原则：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-慢查询处理"><span class="nav-number">6.2.</span> <span class="nav-text">(2) 慢查询处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/08/19/200819高性能索引/';
+          this.page.identifier = '2020/08/19/200819高性能索引/';
+          this.page.title = '高性能索引';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

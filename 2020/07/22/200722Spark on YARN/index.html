@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 运行(1) 准备 配置HADOOP_CONF_DIR和YARN_CONF_DIR指向Hadoop配置文件目录 用于写入HDFS和连接YARN资源管理器 配置将会在集群荣期间分发 需要确保其中涉及的系统属性在所有节点可用">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark on YARN">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/07/22/200722Spark on YARN/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 运行(1) 准备 配置HADOOP_CONF_DIR和YARN_CONF_DIR指向Hadoop配置文件目录 用于写入HDFS和连接YARN资源管理器 配置将会在集群荣期间分发 需要确保其中涉及的系统属性在所有节点可用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/22/200722Spark%20on%20YARN/200722Spark%20on%20YARN/image-20200723105246274.png">
+<meta property="og:updated_time" content="2020-08-30T15:56:06.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark on YARN">
+<meta name="twitter:description" content="1 运行(1) 准备 配置HADOOP_CONF_DIR和YARN_CONF_DIR指向Hadoop配置文件目录 用于写入HDFS和连接YARN资源管理器 配置将会在集群荣期间分发 需要确保其中涉及的系统属性在所有节点可用">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/07/22/200722Spark%20on%20YARN/200722Spark%20on%20YARN/image-20200723105246274.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/07/22/200722Spark on YARN/"/>
+
+
+
+
+
+  <title>Spark on YARN | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/07/22/200722Spark on YARN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark on YARN</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-22T11:00:47+08:00">
+                2020-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/22/200722Spark on YARN/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/22/200722Spark on YARN/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-运行"><a href="#1-运行" class="headerlink" title="1 运行"></a>1 运行</h2><h3 id="1-准备"><a href="#1-准备" class="headerlink" title="(1) 准备"></a>(1) 准备</h3><ul>
+<li><p>配置HADOOP_CONF_DIR和YARN_CONF_DIR指向Hadoop配置文件目录</p>
+<p>用于写入HDFS和连接YARN资源管理器</p>
+<p>配置将会在集群荣期间分发</p>
+<p>需要确保其中涉及的系统属性在所有节点可用</p>
+</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>通过spark.yarn.archive或spark.yarn.jars指定运行时库，否则Spark将会在$SPARK_HOME/jars打包所有库并上传至分布式缓存</li>
+</ul>
+<h3 id="2-运行模式"><a href="#2-运行模式" class="headerlink" title="(2) 运行模式"></a>(2) 运行模式</h3><ul>
+<li><p>cluster</p>
+<p>驱动程序在应用主进程中运行，客户端只负责应用初始化</p>
+</li>
+<li><p>client</p>
+<p>驱动程序在客户端中运行，主进程只用于请求资源</p>
+</li>
+</ul>
+<p>不同于其他调度框架，YARN总配置文件中获取资源管理器地址，不需显式声明，只需提供– master yarn</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// cluster模式</span><br><span class="line">$ ./bin/spark-submit --class path.to.your.Class --master yarn --deploy-mode cluster [options] &lt;app jar&gt; [app options]</span><br><span class="line"></span><br><span class="line">$ ./bin/spark-submit --class org.apache.spark.examples.SparkPi \</span><br><span class="line">    --master yarn \</span><br><span class="line">    --deploy-mode cluster \</span><br><span class="line">    --driver-memory 4g \</span><br><span class="line">    --executor-memory 2g \</span><br><span class="line">    --executor-cores 1 \</span><br><span class="line">    --queue thequeue \</span><br><span class="line">    examples/jars/spark-examples*.jar \</span><br><span class="line">    10</span><br><span class="line"></span><br><span class="line">// client模式，在spark-shell中运行</span><br><span class="line">$ ./bin/spark-shell --master yarn --deploy-mode client</span><br></pre></td></tr></table></figure>
+<h3 id="3-添加库"><a href="#3-添加库" class="headerlink" title="(3) 添加库"></a>(3) 添加库</h3><p>cluster模式中，驱动程序与客户端不在同一节点，无法使用SparkContext.addJar()。可以在运行参数中使用–jars提交</p>
+<h3 id="4-配置"><a href="#4-配置" class="headerlink" title="(4) 配置"></a>(4) 配置</h3><p>详见<a href="https://spark.apache.org/docs/2.3.0/configuration.html" target="_blank" rel="noopener">configuration page</a></p>
+<h2 id="2-调试"><a href="#2-调试" class="headerlink" title="2 调试"></a>2 调试</h2><h3 id="1-容器日志"><a href="#1-容器日志" class="headerlink" title="(1) 容器日志"></a>(1) 容器日志</h3><p>在YARN中，执行器和Application Master在容器中运行。容器日志有两种处理方式。</p>
+<h4 id="1-聚合后移至HDFS"><a href="#1-聚合后移至HDFS" class="headerlink" title="1) 聚合后移至HDFS"></a>1) 聚合后移至HDFS</h4><p>需要开启yarn.log-aggregation-enable</p>
+<ul>
+<li><p>命令行查看：</p>
+<p>使用<code>yarn logs -applicationId &lt;app ID&gt;</code>访问</p>
+</li>
+<li><p>文件查看：</p>
+<p>HDFS中存储路径由<code>yarn.nodemanager.remote-app-log-dir</code>和<code>yarn.nodemanager.remote-app-log-dir-suffix</code>控制</p>
+</li>
+<li><p>Web UI：</p>
+<p>需要同时配置并运行Spark和MapReduce历史服务</p>
+<p>配置yarn-site.xml中的yarn.log.server.url</p>
+</li>
+</ul>
+<h4 id="2-节点本地保存"><a href="#2-节点本地保存" class="headerlink" title="2) 节点本地保存"></a>2) 节点本地保存</h4><ul>
+<li><p>文件查看：</p>
+<p>文件路径在YARN_APP_LOGS_DIR</p>
+</li>
+<li><p>Web UI：</p>
+<p>只需配置并运行Spark历史记录。</p>
+</li>
+</ul>
+<h3 id="2-运行环境"><a href="#2-运行环境" class="headerlink" title="(2) 运行环境"></a>(2) 运行环境</h3><p>用于查看每个容器运行环境，诊断路径问题</p>
+<p>增加数据删除延迟 <code>yarn.nodemanager.delete.debug-delay-sec</code></p>
+<p>存储在yarn.nodemanager.local-dirs</p>
+<p>包含运行脚本、库、环境变量等</p>
+<p>注意：配置需要管理员权限并重启集群</p>
+<h3 id="3-日志框架"><a href="#3-日志框架" class="headerlink" title="(3) 日志框架"></a>(3) 日志框架</h3><p>可以使用以下3种方式提交自定义log4j配置：</p>
+<ul>
+<li>使用spark-submit的–files。驱动和执行器共享相同的配置，注意保持一致。</li>
+<li>添加 <code>-Dlog4j.configuration=&lt;location of configuration file&gt;</code> 到<code>spark.driver.extraJavaOptions</code> (驱动节点)和<code>spark.executor.extraJavaOptions</code> (执行器)。需要显式使用file:协议头。</li>
+<li>更新$SPARK_CONF_DIR/log4j.properties，运行前自动提交。优先级低于前两者</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li><p>容器路径引用可以使用spark.yarn.app.container.log.dir</p>
+<p>如log4j.appender.file_appender.File=${spark.yarn.app.container.log.dir}/spark.log</p>
+</li>
+<li><p>对于流式程序，使用RollingFileAppender和设置文件路径为YARN日志目录将避免磁盘溢出，并且可以通过YARN功能访问日志</p>
+</li>
+<li><p>自定义metrics.properties可以更新$SPARK_CONF_DIR/metrics.properties，运行前自动提交</p>
+</li>
+</ul>
+<h3 id="4-YARN相关配置"><a href="#4-YARN相关配置" class="headerlink" title="(4) YARN相关配置"></a>(4) YARN相关配置</h3><p><img src="/2020/07/22/200722Spark on YARN/200722Spark%20on%20YARN/image-20200723105246274.png" alt="image-20200723105246274"></p>
+<h2 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3 注意事项"></a>3 注意事项</h2><ul>
+<li><p>Whether core requests are honored in scheduling decisions depends on which scheduler is in use and how it is configured.</p>
+</li>
+<li><p>本地目录</p>
+<p>执行器始终使用yarn.nodemanager.local-dirs配置的本地目录</p>
+<p>驱动在不同模式，采用不同配置。在cluster模式下使用yarn.nodemanager.local-dirs。但在client模式时，由于驱动不再集群中运行，采用spark.local.dir</p>
+</li>
+<li><p><code>--files</code> 和<code>--archives</code>支持Hadoop文件别名</p>
+<p>如localtest.txt#appSees.txt，localtest.txt为上传的实际文件，appSees.txt为程序引用的文件名称</p>
+</li>
+<li><p>–jars 在集群模式时替代SparkContext.addJar。当对于网络文件路径不必使用。</p>
+</li>
+</ul>
+<h2 id="4-安全"><a href="#4-安全" class="headerlink" title="4 安全"></a>4 安全</h2><p>Kerberos用于对服务和客户端应用认证规则。</p>
+<p>Hadoop服务需要向获取用于访问服务和数据的token。集群运行时使用token认证。</p>
+<p>Spark将为数据存储自动获取令牌。</p>
+<p>对于类路径中的HBase，HBase需要声明安全认证框架 （hbase-site.xml中设置hbase.security.authentication为kerberos），并且不要关闭spark.security.credentials.hbase.enabled。</p>
+<p>对于类路径中的Hive，需要设置metastore uri(hive.metastore.uris),并且不要关闭spark.security.credentials.hive.enabled</p>
+<p>与Spark交互的其他安全Hadoop文件系统需要显式列出，通过spark.yarn.access.hadoopFileSystems列举：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark.yarn.access.hadoopFileSystems hdfs://ireland.example.org:8020/,webhdfs://frankfurt.example.org:50070/</span><br></pre></td></tr></table></figure>
+<p>Spark可以通过Java服务机制（详见java.util.ServiceLoader）与其他安全服务集成。</p>
+<p>需要在jar包的META-INF/services中列出org.apache.spark.deploy.yarn.security.ServiceCredentialProvider的实现类。</p>
+<p>可以设置spark.security.credentials.{service}.enabled为false关闭名为{service}的实现类。</p>
+<h2 id="5-配置外部数据交换服务"><a href="#5-配置外部数据交换服务" class="headerlink" title="5 配置外部数据交换服务"></a>5 配置外部数据交换服务</h2><p>按照以下步骤在每个NodeManager上启动Spark Shuffle Service：</p>
+<p>（1）源码编译时需要启用YARN配置</p>
+<p>（2）<code>spark-&lt;version&gt;-yarn-shuffle.jar</code>需要在源码编译的<code>$SPARK_HOME/common/network-yarn/target/scala-&lt;version&gt;</code>或二进制分发包的yarn路径。并且添加到每个NodeManager的类路径中</p>
+<p>（3）在yarn-site.xml中添加 <code>spark_shuffle</code>到 <code>yarn.nodemanager.aux-service</code>，设置<code>yarn.nodemanager.aux-services.spark_shuffle.class</code>为<code>org.apache.spark.network.yarn.YarnShuffleService</code></p>
+<p>（4）为了避免垃圾回收问题，在etc/hadoop/yarn-env.sh中设置NodeManager的堆容量YARN_HEAPSIZE（默认1000）</p>
+<p>（5）重启NodeManager</p>
+<h2 id="6-使用Apache-Oozie运行"><a href="#6-使用Apache-Oozie运行" class="headerlink" title="6 使用Apache Oozie运行"></a>6 使用Apache Oozie运行</h2><p>Apache Oozie可用于将Spark应用作为工作流的一部分。</p>
+<p>为了访问集群服务，需要获取响应的令牌。</p>
+<p>使用keytab的Spark将自动获取，没有使用的需要将安全设置转交给Oozie。</p>
+<p>需要获取令牌的有YARN资源管理器、交互的Hadoop文件系统，用到的Hive、HBase和YARN timeline server.</p>
+<p>为了避免Spark获取令牌失败，需要包含以下设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spark.security.credentials.hive.enabled   false</span><br><span class="line">spark.security.credentials.hbase.enabled  false</span><br><span class="line">spark.yarn.access.hadoopFileSystems 不能设置</span><br></pre></td></tr></table></figure>
+<h2 id="7-Kerberos故障排除"><a href="#7-Kerberos故障排除" class="headerlink" title="7 Kerberos故障排除"></a>7 Kerberos故障排除</h2><p>开启调试模式并输出额外日志：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启Kerberos的额外日志输出</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_JAAS_DEBUG=<span class="literal">true</span></span><br><span class="line"><span class="comment"># 在JDK参数中开启Kerberos和SPNEGO/REST认证额外日志输出</span></span><br><span class="line">-Dsun.security.krb5.debug=<span class="literal">true</span> -Dsun.security.spnego.debug=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以上选项也可以在AM配置中开启</span></span><br><span class="line">spark.yarn.appMasterEnv.HADOOP_JAAS_DEBUG <span class="literal">true</span></span><br><span class="line">spark.yarn.am.extraJavaOptions -Dsun.security.krb5.debug=<span class="literal">true</span> -Dsun.security.spnego.debug=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>最后，如果org.apache.spark.deploy.yarn.Client的日志等级是DEBUG，将输出令牌和过期时间</p>
+<h2 id="8-历史记录服务"><a href="#8-历史记录服务" class="headerlink" title="8 历史记录服务"></a>8 历史记录服务</h2><p>为了安全，或减少Spark驱动内存占用，或Web UI不可用时，可以使用历史记录服务作为运行中程序的跟踪URL。</p>
+<p>需要进行以下设置：</p>
+<ul>
+<li>应用程序设置spark.yarn.historyServer.allowTracking=true，以在UI不可用时作为跟踪URL</li>
+<li>历史记录服务添加org.apache.spark.deploy.yarn.YarnProxyRedirectFilter到spark.ui.filters配置中</li>
+</ul>
+<p>注意：历史记录服务可能显示的不是最新的应用状态</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://spark.apache.org/docs/2.3.0/running-on-yarn.html" target="_blank" rel="noopener">Running Spark on YARN</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/19/200719MySQL on Windows/" rel="next" title="MySQL on Windows(二进制分发包)">
+                <i class="fa fa-chevron-left"></i> MySQL on Windows(二进制分发包)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/25/200725 Spark集群模式/" rel="prev" title="Spark集群模式">
+                Spark集群模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-运行"><span class="nav-number">1.</span> <span class="nav-text">1 运行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-准备"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-运行模式"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 运行模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-添加库"><span class="nav-number">1.3.</span> <span class="nav-text">(3) 添加库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-配置"><span class="nav-number">1.4.</span> <span class="nav-text">(4) 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-调试"><span class="nav-number">2.</span> <span class="nav-text">2 调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-容器日志"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 容器日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-聚合后移至HDFS"><span class="nav-number">2.1.1.</span> <span class="nav-text">1) 聚合后移至HDFS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-节点本地保存"><span class="nav-number">2.1.2.</span> <span class="nav-text">2) 节点本地保存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-运行环境"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 运行环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-日志框架"><span class="nav-number">2.3.</span> <span class="nav-text">(3) 日志框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-YARN相关配置"><span class="nav-number">2.4.</span> <span class="nav-text">(4) YARN相关配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-注意事项"><span class="nav-number">3.</span> <span class="nav-text">3 注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-安全"><span class="nav-number">4.</span> <span class="nav-text">4 安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-配置外部数据交换服务"><span class="nav-number">5.</span> <span class="nav-text">5 配置外部数据交换服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-使用Apache-Oozie运行"><span class="nav-number">6.</span> <span class="nav-text">6 使用Apache Oozie运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Kerberos故障排除"><span class="nav-number">7.</span> <span class="nav-text">7 Kerberos故障排除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-历史记录服务"><span class="nav-number">8.</span> <span class="nav-text">8 历史记录服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">9.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/07/22/200722Spark on YARN/';
+          this.page.identifier = '2020/07/22/200722Spark on YARN/';
+          this.page.title = 'Spark on YARN';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

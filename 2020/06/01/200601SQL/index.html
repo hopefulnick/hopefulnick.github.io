@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 使用数据库use RUNOOB;命令用于选择数据库。 set names utf8;命令用于设置使用的字符集。">
+<meta name="keywords" content="SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/06/01/200601SQL/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 使用数据库use RUNOOB;命令用于选择数据库。 set names utf8;命令用于设置使用的字符集。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602161835589.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602164726661.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602162034482.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602162202396.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602162213548.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602162330665.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602164114694.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602164125507.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602164559590.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602164909514.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/sql-join.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200606222908238.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200606233216092.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200606233338097.png">
+<meta property="og:updated_time" content="2020-08-30T15:52:14.450Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL">
+<meta name="twitter:description" content="1 使用数据库use RUNOOB;命令用于选择数据库。 set names utf8;命令用于设置使用的字符集。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/06/01/200601SQL/image-20200602161835589.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/06/01/200601SQL/"/>
+
+
+
+
+
+  <title>SQL | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/06/01/200601SQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SQL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T11:00:47+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/01/200601SQL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/01/200601SQL/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-使用数据库"><a href="#1-使用数据库" class="headerlink" title="1 使用数据库"></a>1 使用数据库</h2><p>use RUNOOB;命令用于选择数据库。</p>
+<p>set names utf8;命令用于设置使用的字符集。</p>
+<a id="more"></a>
+<h2 id="2-SQL-对大小写不敏感"><a href="#2-SQL-对大小写不敏感" class="headerlink" title="2 SQL 对大小写不敏感"></a>2 SQL 对大小写不敏感</h2><h2 id="3-Like模糊查询"><a href="#3-Like模糊查询" class="headerlink" title="3 Like模糊查询"></a>3 Like模糊查询</h2><p><img src="/2020/06/01/200601SQL/image-20200602161835589.png" alt="image-20200602161835589"></p>
+<p><img src="/2020/06/01/200601SQL/image-20200602164726661.png" alt="image-20200602164726661"></p>
+<p>MySQL 中使用 <strong>REGEXP</strong> 或 <strong>NOT REGEXP</strong> 运算符 (或 RLIKE 和 NOT RLIKE) 来操作正则表达式。</p>
+<h2 id="4-ORDER-BY顺序表示"><a href="#4-ORDER-BY顺序表示" class="headerlink" title="4 ORDER BY顺序表示"></a>4 ORDER BY顺序表示</h2><p><img src="/2020/06/01/200601SQL/image-20200602162034482.png" alt="image-20200602162034482"></p>
+<h2 id="5-插入"><a href="#5-插入" class="headerlink" title="5 插入"></a>5 插入</h2><p><img src="/2020/06/01/200601SQL/image-20200602162202396.png" alt="image-20200602162202396"></p>
+<p><img src="/2020/06/01/200601SQL/image-20200602162213548.png" alt="image-20200602162213548"></p>
+<h2 id="6-更改"><a href="#6-更改" class="headerlink" title="6 更改"></a>6 更改</h2><p><img src="/2020/06/01/200601SQL/image-20200602162330665.png" alt="image-20200602162330665"></p>
+<h2 id="7-删除表"><a href="#7-删除表" class="headerlink" title="7 删除表"></a>7 删除表</h2><p><img src="/2020/06/01/200601SQL/image-20200602164114694.png" alt="image-20200602164114694"></p>
+<p><img src="/2020/06/01/200601SQL/image-20200602164125507.png" alt="image-20200602164125507"></p>
+<p>DROP 删除数据、释放空间、删除表定义</p>
+<p>TRUNCATE 删除数据、释放空间</p>
+<p>DELETE 删除数据</p>
+<h2 id="8-结果集前面部分数据"><a href="#8-结果集前面部分数据" class="headerlink" title="8 结果集前面部分数据"></a>8 结果集前面部分数据</h2><p>并不是所有数据库都支持，不同数据库可能有不同的表示方法</p>
+<p><img src="/2020/06/01/200601SQL/image-20200602164559590.png" alt="image-20200602164559590"></p>
+<h2 id="9-BETWEEN"><a href="#9-BETWEEN" class="headerlink" title="9 BETWEEN"></a>9 BETWEEN</h2><p>可以是数值、文本或者日期。</p>
+<p><img src="/2020/06/01/200601SQL/image-20200602164909514.png" alt="image-20200602164909514"></p>
+<h2 id="10-别名"><a href="#10-别名" class="headerlink" title="10 别名"></a>10 别名</h2><p>在下面的情况下，使用别名很有用：</p>
+<ul>
+<li>在查询中涉及超过一个表</li>
+<li>在查询中使用了函数</li>
+<li>列名称很长或者可读性差</li>
+<li>需要把两个列或者多个列结合在一起</li>
+</ul>
+<h2 id="11-JOIN"><a href="#11-JOIN" class="headerlink" title="11 JOIN"></a>11 JOIN</h2><p><img src="/2020/06/01/200601SQL/sql-join.png" alt="sql-join"></p>
+<p><strong>注释：</strong>INNER JOIN 与 JOIN 是相同的。</p>
+<p>MySQL中不支持 FULL OUTER JOIN。</p>
+<p>在使用 <strong>join</strong> 时，<strong>on</strong> 和 <strong>where</strong> 条件的区别如下：</p>
+<ul>
+<li>1、 <strong>on</strong> 条件是在生成临时表时使用的条件，它不管 <strong>on</strong> 中的条件是否为真，都会返回左边表(临时表？)中的记录。</li>
+<li>2、<strong>where</strong> 条件是在临时表生成好后，再对临时表进行过滤的条件。这时已经没有 <strong>left join</strong> 的含义（必须返回左边表的记录）了，条件不为真的就全部过滤掉。</li>
+</ul>
+<p>详细内容可以查看：<a href="https://www.runoob.com/w3cnote/sql-join-the-different-of-on-and-where.html" target="_blank" rel="noopener">SQL JOIN 中 on 与 where 的区别</a></p>
+<h2 id="12-UNION"><a href="#12-UNION" class="headerlink" title="12 UNION"></a>12 UNION</h2><p>UNION 内部的每个 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个 SELECT 语句中的列的顺序必须相同。</p>
+<p>默认地，UNION 操作符选取不同的值。如果允许重复的值，请使用 UNION ALL。</p>
+<h2 id="13-SELECT-INTO"><a href="#13-SELECT-INTO" class="headerlink" title="13 SELECT INTO"></a>13 SELECT INTO</h2><p>选择并复制到另一张表</p>
+<p><strong>注意：</strong></p>
+<p>MySQL 数据库不支持 SELECT … INTO 语句，但支持 <a href="https://www.runoob.com/sql/sql-insert-into-select.html" target="_blank" rel="noopener">INSERT INTO … SELECT</a> 。</p>
+<p>新表将会使用 SELECT 语句中定义的列名称和类型进行创建。您可以使用 AS 子句来应用新名称。</p>
+<p>SELECT INTO 语句可用于通过另一种模式创建一个新的空表。只需要添加促使查询没有数据返回的 WHERE 子句即可</p>
+<p>当然你可以使用以下语句来拷贝表结构及数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> 新表</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> 旧表</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/01/200601SQL/image-20200606222908238.png" alt="image-20200606222908238"></p>
+<h2 id="14-CREATE-DATABASE"><a href="#14-CREATE-DATABASE" class="headerlink" title="14 CREATE DATABASE"></a>14 CREATE DATABASE</h2><p>用于创建数据库</p>
+<h2 id="15-CREATE-TABLE"><a href="#15-CREATE-TABLE" class="headerlink" title="15 CREATE TABLE"></a>15 CREATE TABLE</h2><p>CREATE TABLE 语句用于创建数据库中的表。</p>
+<p>表由行和列组成，每个表都必须有个表名。</p>
+<h2 id="16-约束"><a href="#16-约束" class="headerlink" title="16 约束"></a>16 约束</h2><p>SQL 约束用于规定表中的数据规则。</p>
+<p>如果存在违反约束的数据行为，行为会被约束终止。</p>
+<p>约束可以在创建表时规定（通过 CREATE TABLE 语句），或者在表创建之后规定（通过 ALTER TABLE 语句）。</p>
+<ul>
+<li><strong>NOT NULL</strong> - 指示某列不能存储 NULL 值。</li>
+<li><strong>UNIQUE</strong> - 保证某列的每行必须有唯一的值。</li>
+<li><strong>PRIMARY KEY</strong> - NOT NULL 和 UNIQUE 的结合。确保某列（或两个列多个列的结合）有唯一标识，有助于更容易更快速地找到表中的一个特定的记录。</li>
+<li><strong>FOREIGN KEY</strong> - 保证一个表中的数据匹配另一个表中的值的参照完整性。</li>
+<li><strong>CHECK</strong> - 保证列中的值符合指定的条件。</li>
+<li><strong>DEFAULT</strong> - 规定没有给列赋值时的默认值。</li>
+</ul>
+<h3 id="1-NOT-NULL"><a href="#1-NOT-NULL" class="headerlink" title="(1) NOT NULL"></a>(1) NOT NULL</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 添加</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> Persons <span class="keyword">MODIFY</span> Age <span class="built_in">int</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>;</span><br><span class="line">// 删除</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> Persons <span class="keyword">MODIFY</span> Age <span class="built_in">int</span> <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="2-UNIQUE"><a href="#2-UNIQUE" class="headerlink" title="(2) UNIQUE"></a>(2) UNIQUE</h3><p>每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束。</p>
+<h3 id="3-PRIMARY-KEY"><a href="#3-PRIMARY-KEY" class="headerlink" title="(3) PRIMARY KEY"></a>(3) PRIMARY KEY</h3><p>每张表有且只有一个主键。</p>
+<h3 id="4-FOREIGN-KEY"><a href="#4-FOREIGN-KEY" class="headerlink" title="(4) FOREIGN KEY"></a>(4) FOREIGN KEY</h3><p>FOREIGN KEY 约束用于预防破坏表之间连接的行为。</p>
+<p>FOREIGN KEY 约束也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。</p>
+<h3 id="5-CHECK"><a href="#5-CHECK" class="headerlink" title="(5) CHECK"></a>(5) CHECK</h3><p>CHECK 约束用于限制列中的值的范围。</p>
+<p>如果对单个列定义 CHECK 约束，那么该列只允许特定的值。</p>
+<p>如果对一个表定义 CHECK 约束，那么此约束会基于行中其他列的值在特定的列中对值进行限制。</p>
+<h3 id="6-DEFAULT"><a href="#6-DEFAULT" class="headerlink" title="(6) DEFAULT"></a>(6) DEFAULT</h3><p>DEFAULT 约束用于向列中插入默认值。</p>
+<h2 id="17-CREATE-INDEX"><a href="#17-CREATE-INDEX" class="headerlink" title="17 CREATE INDEX"></a>17 CREATE INDEX</h2><p>创建索引，多列用逗号分隔</p>
+<p>SQL CREATE UNIQUE INDEX创建唯一索引</p>
+<h2 id="18-DROP"><a href="#18-DROP" class="headerlink" title="18 DROP"></a>18 DROP</h2><p>删除索引、表和数据库等</p>
+<p>TRUNCATE只删除数据</p>
+<h2 id="19-ALERT"><a href="#19-ALERT" class="headerlink" title="19 ALERT"></a>19 ALERT</h2><p>增、删、改(包括更改数据类型)表中已有的列</p>
+<h2 id="20-AUTO-INCREMENT"><a href="#20-AUTO-INCREMENT" class="headerlink" title="20 AUTO INCREMENT"></a>20 AUTO INCREMENT</h2><p>在新记录插入表中时生成一个唯一的数字，默认从1开始</p>
+<h2 id="21-视图"><a href="#21-视图" class="headerlink" title="21 视图"></a>21 视图</h2><p>可视化的表</p>
+<p>注意：</p>
+<p>视图总是显示最新的数据！每当用户查询视图时，数据库引擎通过使用视图的 SQL 语句重建数据。</p>
+<p><strong>视图的作用：</strong></p>
+<p>1、视图隐藏了底层的表结构，简化了数据访问操作，客户端不再需要知道底层表的结构及其之间的关系。</p>
+<p>2、视图提供了一个统一访问数据的接口。（即可以允许用户通过视图访问数据的安全机制，而不授予用户直接访问底层表的权限）</p>
+<p>3、从而加强了安全性，使用户只能看到视图所显示的数据。</p>
+<p>4、视图还可以被嵌套，一个视图中可以嵌套另一个视图。</p>
+<h2 id="22-日期"><a href="#22-日期" class="headerlink" title="22 日期"></a>22 日期</h2><p><strong>MySQL</strong> 使用下列数据类型在数据库中存储日期或日期/时间值：</p>
+<ul>
+<li>DATE - 格式：YYYY-MM-DD</li>
+<li>DATETIME - 格式：YYYY-MM-DD HH:MM:SS</li>
+<li>TIMESTAMP - 格式：YYYY-MM-DD HH:MM:SS</li>
+<li>YEAR - 格式：YYYY 或 YY</li>
+</ul>
+<p>注意：如果没有时间部分，默认时间为 00:00:00</p>
+<h2 id="23-NULL"><a href="#23-NULL" class="headerlink" title="23 NULL"></a>23 NULL</h2><p>无法比较 NULL 和 0；它们是不等价的</p>
+<h2 id="24-通用数据类型"><a href="#24-通用数据类型" class="headerlink" title="24 通用数据类型"></a>24 通用数据类型</h2><p><img src="/2020/06/01/200601SQL/image-20200606233216092.png" alt="image-20200606233216092"></p>
+<p><img src="/2020/06/01/200601SQL/image-20200606233338097.png" alt="image-20200606233338097"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.runoob.com/sql/sql-tutorial.html" target="_blank" rel="noopener">SQL 教程</a></p>
+<p><a href="https://blog.csdn.net/weixin_39703170/article/details/79011704" target="_blank" rel="noopener">SQL语言的分类（DQL、DML、DDL、DCL的概念与区别）</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/27/200527Kafka入门/" rel="next" title="Kafka入门">
+                <i class="fa fa-chevron-left"></i> Kafka入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/01/200601Redis入门/" rel="prev" title="Redis入门">
+                Redis入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-使用数据库"><span class="nav-number">1.</span> <span class="nav-text">1 使用数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-SQL-对大小写不敏感"><span class="nav-number">2.</span> <span class="nav-text">2 SQL 对大小写不敏感</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Like模糊查询"><span class="nav-number">3.</span> <span class="nav-text">3 Like模糊查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-ORDER-BY顺序表示"><span class="nav-number">4.</span> <span class="nav-text">4 ORDER BY顺序表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-插入"><span class="nav-number">5.</span> <span class="nav-text">5 插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-更改"><span class="nav-number">6.</span> <span class="nav-text">6 更改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-删除表"><span class="nav-number">7.</span> <span class="nav-text">7 删除表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-结果集前面部分数据"><span class="nav-number">8.</span> <span class="nav-text">8 结果集前面部分数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-BETWEEN"><span class="nav-number">9.</span> <span class="nav-text">9 BETWEEN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-别名"><span class="nav-number">10.</span> <span class="nav-text">10 别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-JOIN"><span class="nav-number">11.</span> <span class="nav-text">11 JOIN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-UNION"><span class="nav-number">12.</span> <span class="nav-text">12 UNION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-SELECT-INTO"><span class="nav-number">13.</span> <span class="nav-text">13 SELECT INTO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-CREATE-DATABASE"><span class="nav-number">14.</span> <span class="nav-text">14 CREATE DATABASE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-CREATE-TABLE"><span class="nav-number">15.</span> <span class="nav-text">15 CREATE TABLE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-约束"><span class="nav-number">16.</span> <span class="nav-text">16 约束</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-NOT-NULL"><span class="nav-number">16.1.</span> <span class="nav-text">(1) NOT NULL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-UNIQUE"><span class="nav-number">16.2.</span> <span class="nav-text">(2) UNIQUE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-PRIMARY-KEY"><span class="nav-number">16.3.</span> <span class="nav-text">(3) PRIMARY KEY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-FOREIGN-KEY"><span class="nav-number">16.4.</span> <span class="nav-text">(4) FOREIGN KEY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-CHECK"><span class="nav-number">16.5.</span> <span class="nav-text">(5) CHECK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-DEFAULT"><span class="nav-number">16.6.</span> <span class="nav-text">(6) DEFAULT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-CREATE-INDEX"><span class="nav-number">17.</span> <span class="nav-text">17 CREATE INDEX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18-DROP"><span class="nav-number">18.</span> <span class="nav-text">18 DROP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#19-ALERT"><span class="nav-number">19.</span> <span class="nav-text">19 ALERT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20-AUTO-INCREMENT"><span class="nav-number">20.</span> <span class="nav-text">20 AUTO INCREMENT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#21-视图"><span class="nav-number">21.</span> <span class="nav-text">21 视图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#22-日期"><span class="nav-number">22.</span> <span class="nav-text">22 日期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#23-NULL"><span class="nav-number">23.</span> <span class="nav-text">23 NULL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#24-通用数据类型"><span class="nav-number">24.</span> <span class="nav-text">24 通用数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">25.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/06/01/200601SQL/';
+          this.page.identifier = '2020/06/01/200601SQL/';
+          this.page.title = 'SQL';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

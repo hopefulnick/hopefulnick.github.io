@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 概览Structured Streaming提供快速、弹性、容错、端到端刚好一次保证的流式处理。 延迟可低至100ms 版本&amp;gt;=2.3, 引入持续处理，延迟低至1ms，提供至少一次语义。">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Structured Streaming">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/07/10/200710Structured Streaming/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 概览Structured Streaming提供快速、弹性、容错、端到端刚好一次保证的流式处理。 延迟可低至100ms 版本&amp;gt;=2.3, 引入持续处理，延迟低至1ms，提供至少一次语义。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/structured-streaming-stream-as-a-table.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/structured-streaming-model.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/image-20200713112813588.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/structured-streaming-window.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/structured-streaming-late-data.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/structured-streaming-watermark-update-mode.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/structured-streaming-watermark-append-mode.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/image-20200714160259115.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/image-20200715175057730.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/image-20200715175703060.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/image-20200716105731531.png">
+<meta property="og:updated_time" content="2020-08-30T15:55:35.761Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Structured Streaming">
+<meta name="twitter:description" content="1 概览Structured Streaming提供快速、弹性、容错、端到端刚好一次保证的流式处理。 延迟可低至100ms 版本&amp;gt;=2.3, 引入持续处理，延迟低至1ms，提供至少一次语义。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/200710Structured%20Streaming/structured-streaming-stream-as-a-table.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/07/10/200710Structured Streaming/"/>
+
+
+
+
+
+  <title>Structured Streaming | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/07/10/200710Structured Streaming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Structured Streaming</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-10T11:00:47+08:00">
+                2020-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/10/200710Structured Streaming/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/10/200710Structured Streaming/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-概览"><a href="#1-概览" class="headerlink" title="1 概览"></a>1 概览</h2><p>Structured Streaming提供快速、弹性、容错、端到端刚好一次保证的流式处理。</p>
+<p>延迟可低至100ms</p>
+<p>版本&gt;=2.3, 引入持续处理，延迟低至1ms，提供至少一次语义。</p>
+<a id="more"></a>
+<h2 id="2-示例"><a href="#2-示例" class="headerlink" title="2 示例"></a>2 示例</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SparkSession</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 与Spark SQL一致，需要先创建SparkSession</span></span><br><span class="line"><span class="keyword">val</span> spark = <span class="type">SparkSession</span></span><br><span class="line">  .builder</span><br><span class="line">  .appName(<span class="string">"StructuredNetworkWordCount"</span>)</span><br><span class="line">  .getOrCreate()</span><br><span class="line">  </span><br><span class="line"><span class="keyword">import</span> spark.implicits._</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create DataFrame representing the stream of input lines from connection to localhost:9999</span></span><br><span class="line"><span class="comment">// lines是一个无限的表</span></span><br><span class="line"><span class="keyword">val</span> lines = spark.readStream</span><br><span class="line">  .format(<span class="string">"socket"</span>)</span><br><span class="line">  .option(<span class="string">"host"</span>, <span class="string">"localhost"</span>)</span><br><span class="line">  .option(<span class="string">"port"</span>, <span class="number">9999</span>)</span><br><span class="line">  .load()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Split the lines into words</span></span><br><span class="line"><span class="comment">// DataFrame使用flatMap需要先转换为DataSet</span></span><br><span class="line"><span class="keyword">val</span> words = lines.as[<span class="type">String</span>].flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Generate running word count</span></span><br><span class="line"><span class="keyword">val</span> wordCounts = words.groupBy(<span class="string">"value"</span>).count()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实际启动</span></span><br><span class="line"><span class="comment">// outputMode("complete")完全输出</span></span><br><span class="line"><span class="comment">// query是流式处理的句柄</span></span><br><span class="line"><span class="comment">// Start running the query that prints the running counts to the console</span></span><br><span class="line"><span class="keyword">val</span> query = wordCounts.writeStream</span><br><span class="line">  .outputMode(<span class="string">"complete"</span>)</span><br><span class="line">  .format(<span class="string">"console"</span>)</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line">query.awaitTermination()</span><br></pre></td></tr></table></figure>
+<h2 id="3-编程模型"><a href="#3-编程模型" class="headerlink" title="3 编程模型"></a>3 编程模型</h2><p>Spark SQL可以理解为在一个静态数据集中执行批处理，而Structured Streaming是在一个无限表中增量查询。</p>
+<h3 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="(1) 基本概念"></a>(1) 基本概念</h3><p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/structured-streaming-stream-as-a-table.png" alt="structured-streaming-stream-as-a-table"></p>
+<p>数据流中的每条记录相当于添加到表的一个新行。</p>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/structured-streaming-model.png" alt="structured-streaming-model"></p>
+<p>每隔触发时间（1s）,新行被添加到输入表中。将被输出到外部存储中。</p>
+<p>输出有三种模式：</p>
+<ul>
+<li>完全：输出整个表</li>
+<li>追加：仅输出当前触发间隔新增的行，前提是之前的数据不会改变。</li>
+<li>更新：版本&gt;=2.1.1，仅处处更新的行。如果没有聚合操作，等价于追加模式。</li>
+</ul>
+<p>注意：Structured Streaming不会物化输入表。与其他流式处理程序不同，其只保留用于更新结果的最少的中间状态数据。</p>
+<h3 id="2-处理事件时间和晚到数据"><a href="#2-处理事件时间和晚到数据" class="headerlink" title="(2) 处理事件时间和晚到数据"></a>(2) 处理事件时间和晚到数据</h3><p>事件时间数据包含在流失记录中，可用于窗口操作。</p>
+<p>对于相比时间事件晚到的数据，Spark可以清楚之前的聚合状态，重新聚合。</p>
+<p>版本&gt;=2.1,Spark提供水印用于限制晚到数据的阈值。</p>
+<h3 id="3-容错语义"><a href="#3-容错语义" class="headerlink" title="(3) 容错语义"></a>(3) 容错语义</h3><p>Structured Streaming提供端到端刚好一次语义。</p>
+<p>通过使用类似Kafka偏移的机制跟踪数据流读取位置，使用检查点和预写日志记录每个触发的记录偏移范围。输出过程设计为幂等。</p>
+<h2 id="4-使用Dataset和DataFrame-API"><a href="#4-使用Dataset和DataFrame-API" class="headerlink" title="4 使用Dataset和DataFrame API"></a>4 使用Dataset和DataFrame API</h2><p>版本&gt;=2.0，可以直接通过SparkSession，使用流式数据源创建Dataset/DataFrame。</p>
+<h3 id="1-创建流式Dataset和流式DataFrame"><a href="#1-创建流式Dataset和流式DataFrame" class="headerlink" title="(1) 创建流式Dataset和流式DataFrame"></a>(1) 创建流式Dataset和流式DataFrame</h3><p>使用SparkSession.readStream()创建流式DataFrame。</p>
+<h4 id="1-输入源"><a href="#1-输入源" class="headerlink" title="1) 输入源"></a>1) 输入源</h4><p>内置数据源：</p>
+<ul>
+<li><p>文件</p>
+<p>将目录中的文件作为流式记录。</p>
+<p>支持text/csv/json/orc/parquet等格式，详见DataStreamReader接口</p>
+<p>注意文件必须原子性地放置在目录中</p>
+</li>
+<li><p>Kafka</p>
+<p>适用于Kafka版本&gt;=0.10</p>
+</li>
+<li><p>套接字</p>
+<p>测试用，监听驱动节点接口，接收UTF-8文本。不提供端到端容错。</p>
+</li>
+<li><p>频率</p>
+<p>测试用，按照指定的每秒行数更新数据，每个输出行中包含timestamp(时间戳类型，消息分发时间)和value（长整型，消息计数，从0开始）</p>
+</li>
+</ul>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/image-20200713112813588.png" alt="image-20200713112813588"></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> spark: <span class="type">SparkSession</span> = ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// Read text from socket</span></span><br><span class="line"><span class="keyword">val</span> socketDF = spark</span><br><span class="line">  .readStream</span><br><span class="line">  .format(<span class="string">"socket"</span>)</span><br><span class="line">  .option(<span class="string">"host"</span>, <span class="string">"localhost"</span>)</span><br><span class="line">  .option(<span class="string">"port"</span>, <span class="number">9999</span>)</span><br><span class="line">  .load()</span><br><span class="line"></span><br><span class="line">socketDF.isStreaming    <span class="comment">// Returns True for DataFrames that have streaming sources</span></span><br><span class="line"></span><br><span class="line">socketDF.printSchema</span><br><span class="line"></span><br><span class="line"><span class="comment">// Read all the csv files written atomically in a directory</span></span><br><span class="line"><span class="keyword">val</span> userSchema = <span class="keyword">new</span> <span class="type">StructType</span>().add(<span class="string">"name"</span>, <span class="string">"string"</span>).add(<span class="string">"age"</span>, <span class="string">"integer"</span>)</span><br><span class="line"><span class="keyword">val</span> csvDF = spark</span><br><span class="line">  .readStream</span><br><span class="line">  .option(<span class="string">"sep"</span>, <span class="string">";"</span>)</span><br><span class="line">  .schema(userSchema)      <span class="comment">// Specify schema of the csv files</span></span><br><span class="line">  .csv(<span class="string">"/path/to/directory"</span>)    <span class="comment">// Equivalent to format("csv").load("/path/to/directory")</span></span><br></pre></td></tr></table></figure>
+<p>以上更新的流式DataFrame是无类型的，即编译时不检查模式，只在提交提交查询时检查。</p>
+<p>map、flatmap的需要编译时检查模式，可以采用同静态DataFrame的方式。</p>
+<p>思考：有类型与无类型区别是类SQL和类RDD?</p>
+<h4 id="2-模式推断和分区发现"><a href="#2-模式推断和分区发现" class="headerlink" title="2) 模式推断和分区发现"></a>2) 模式推断和分区发现</h4><p>为了保证一致的模式，默认使用文件数据源时，需要指定模式。对于临时查询，可以启用， spark.sql.streaming.schemaInference-&gt;true</p>
+<p>分区发现自动检测命名类似/key=value/的子目录。查询开始后，需要保证相关的子目录不变。</p>
+<h3 id="2-操作流式Dataset和流式DataFrame"><a href="#2-操作流式Dataset和流式DataFrame" class="headerlink" title="(2) 操作流式Dataset和流式DataFrame"></a>(2) 操作流式Dataset和流式DataFrame</h3><p>可以使用流式Dataset/DataFrame的类SQL操作和有类型的类RDD操作，</p>
+<h4 id="1-基本操作：选择、投影和聚合"><a href="#1-基本操作：选择、投影和聚合" class="headerlink" title="1) 基本操作：选择、投影和聚合"></a>1) 基本操作：选择、投影和聚合</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">DeviceData</span>(<span class="params">device: <span class="type">String</span>, deviceType: <span class="type">String</span>, signal: <span class="type">Double</span>, time: <span class="type">DateTime</span></span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">df</span></span>: <span class="type">DataFrame</span> = ... <span class="comment">// streaming DataFrame with IOT device data with schema &#123; device: string, deviceType: string, signal: double, time: string &#125;</span></span><br><span class="line"><span class="keyword">val</span> ds: <span class="type">Dataset</span>[<span class="type">DeviceData</span>] = df.as[<span class="type">DeviceData</span>]    <span class="comment">// streaming Dataset with IOT device data</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Select the devices which have signal more than 10</span></span><br><span class="line">df.select(<span class="string">"device"</span>).where(<span class="string">"signal &gt; 10"</span>)      <span class="comment">// using untyped APIs   </span></span><br><span class="line">ds.filter(_.signal &gt; <span class="number">10</span>).map(_.device)         <span class="comment">// using typed APIs</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Running count of the number of updates for each device type</span></span><br><span class="line">df.groupBy(<span class="string">"deviceType"</span>).count()                          <span class="comment">// using untyped API</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Running average signal for each device type</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.expressions.scalalang.typed</span><br><span class="line">ds.groupByKey(_.deviceType).agg(typed.avg(_.signal))    <span class="comment">// using typed API</span></span><br><span class="line"></span><br><span class="line">df.createOrReplaceTempView(<span class="string">"updates"</span>)</span><br><span class="line">spark.sql(<span class="string">"select count(*) from updates"</span>)  <span class="comment">// returns another streaming DF</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-事件时间窗口操作"><a href="#2-事件时间窗口操作" class="headerlink" title="2) 事件时间窗口操作"></a>2) 事件时间窗口操作</h4><p>示例：以10分钟批处理时间和5分钟滑动间隔，计数接收的单词数量</p>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/structured-streaming-window.png" alt="structured-streaming-window"></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> spark.implicits._</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> words = ... <span class="comment">// streaming DataFrame of schema &#123; timestamp: Timestamp, word: String &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Group the data by window and word and compute the count of each group</span></span><br><span class="line"><span class="keyword">val</span> windowedCounts = words.groupBy(</span><br><span class="line">  window($<span class="string">"timestamp"</span>, <span class="string">"10 minutes"</span>, <span class="string">"5 minutes"</span>),</span><br><span class="line">  $<span class="string">"word"</span></span><br><span class="line">).count()</span><br></pre></td></tr></table></figure>
+<h5 id="1’-处理晚到数据和水印"><a href="#1’-处理晚到数据和水印" class="headerlink" title="1’ 处理晚到数据和水印"></a>1’ 处理晚到数据和水印</h5><p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/structured-streaming-late-data.png" alt="structured-streaming-late-data"></p>
+<p>Structured Streaming为部分聚合长时间维持中间状态，以处理晚到数据。</p>
+<p>版本&gt;=2.1，Spark使用watermark设置晚到数据的容纳时间间隔，超出则丢弃。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> words = ... <span class="comment">// streaming DataFrame of schema &#123; timestamp: Timestamp, word: String &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Group the data by window and word and compute the count of each group</span></span><br><span class="line"><span class="keyword">val</span> windowedCounts = words</span><br><span class="line">    .withWatermark(<span class="string">"timestamp"</span>, <span class="string">"10 minutes"</span>)</span><br><span class="line">    .groupBy(</span><br><span class="line">        window($<span class="string">"timestamp"</span>, <span class="string">"10 minutes"</span>, <span class="string">"5 minutes"</span>),</span><br><span class="line">        $<span class="string">"word"</span>)</span><br><span class="line">    .count()</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/structured-streaming-watermark-update-mode.png" alt="structured-streaming-watermark-update-mode"></p>
+<p>窗口中最大的事件时间，延后水印时间间隔，即为有效的数据更新范围。</p>
+<p>由于部分输出不支持细粒度（如文件），可使用追加模式将最终状态输出。</p>
+<p>withWatermark对非流式Dataset无意义。</p>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/structured-streaming-watermark-append-mode.png" alt="structured-streaming-watermark-append-mode"></p>
+<p>更新模式在超出水印时间后，才将最终结果输出到结果表中。</p>
+<p>水印清理聚合状态条件：(版本2.1.1，后续可能有更新)</p>
+<ul>
+<li>输出模式只能是追加或更新，因为完全模式不需要。</li>
+<li>聚合必须有事件时间列或者在事件时间列上窗口操作</li>
+<li>调用withWatermark和聚合操作的列必须是同一列。 如df.withWatermark(“time”, “1 min”).groupBy(“time2”).count()非法</li>
+<li>调用withWatermark在聚合操作之前，因为需要使用水印信息。</li>
+</ul>
+<p>使用水印的聚合操作的语义保证；</p>
+<ul>
+<li><p>两小时内保证处理</p>
+</li>
+<li><p>不保证删除延迟超过两小时的数据。</p>
+<p>However, the guarantee is strict only in one direction. Data delayed by more than 2 hours is not guaranteed to be dropped; it may or may not get aggregated. More delayed is the data, less likely is the engine going to process it.</p>
+</li>
+</ul>
+<h4 id="3-连接操作"><a href="#3-连接操作" class="headerlink" title="3) 连接操作"></a>3) 连接操作</h4><p>对于支持的连接类型，如同静态Dataset/DataFrame一样。</p>
+<h5 id="1‘-与静态连接"><a href="#1‘-与静态连接" class="headerlink" title="1‘ 与静态连接"></a>1‘ 与静态连接</h5><p>流式与静态连接。支持内连接和部分外连接。</p>
+<p>无状态，不需要状态管理</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> staticDf = spark.read. ...</span><br><span class="line"><span class="keyword">val</span> streamingDf = spark.readStream. ...</span><br><span class="line"></span><br><span class="line">streamingDf.join(staticDf, <span class="string">"type"</span>)          <span class="comment">// inner equi-join with a static DF</span></span><br><span class="line">streamingDf.join(staticDf, <span class="string">"type"</span>, <span class="string">"right_join"</span>)  <span class="comment">// right outer join with a static DF</span></span><br></pre></td></tr></table></figure>
+<h5 id="2’-与流式连接"><a href="#2’-与流式连接" class="headerlink" title="2’ 与流式连接"></a>2’ 与流式连接</h5><p>问题是如何处理晚到数据，满足未来数据的需求。</p>
+<p>Structured Streaming缓存过去输入数据作为流式状态，使用水印处理晚到数据。</p>
+<p><strong>1‘’ 使用可选水印内连接</strong></p>
+<p>支持使用任意列在任意条件下内连接。</p>
+<p>为了避免无限的中间状态，需要进行以下设置：</p>
+<ul>
+<li><p>水印</p>
+</li>
+<li><p>连接的时间范围</p>
+<ul>
+<li><p>时间范围</p>
+<p>如JOIN ON leftTime BETWEN rightTime AND rightTime + INTERVAL 1 HOUR</p>
+</li>
+<li><p>事件时间窗口</p>
+<p>如JOIN ON leftTimeWindow = rightTimeWindow</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.expr</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> impressions = spark.readStream. ...</span><br><span class="line"><span class="keyword">val</span> clicks = spark.readStream. ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// Apply watermarks on event-time columns</span></span><br><span class="line"><span class="keyword">val</span> impressionsWithWatermark = impressions.withWatermark(<span class="string">"impressionTime"</span>, <span class="string">"2 hours"</span>)</span><br><span class="line"><span class="keyword">val</span> clicksWithWatermark = clicks.withWatermark(<span class="string">"clickTime"</span>, <span class="string">"3 hours"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Join with event-time constraints</span></span><br><span class="line">impressionsWithWatermark.join(</span><br><span class="line">  clicksWithWatermark,</span><br><span class="line">  expr(<span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    clickAdId = impressionAdId AND</span></span><br><span class="line"><span class="string">    clickTime &gt;= impressionTime AND</span></span><br><span class="line"><span class="string">    clickTime &lt;= impressionTime + interval 1 hour</span></span><br><span class="line"><span class="string">    "</span><span class="string">""</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>语义保证</p>
+<p>同流式聚合，2h类保证处理，超过2h不保证</p>
+<p><strong>2‘’ 使用水印外连接</strong></p>
+<p>为了更新NULL结果，引擎必须知道用于匹配的输入数据范围，必须使用水印。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">impressionsWithWatermark.join(</span><br><span class="line">  clicksWithWatermark,</span><br><span class="line">  expr(<span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    clickAdId = impressionAdId AND</span></span><br><span class="line"><span class="string">    clickTime &gt;= impressionTime AND</span></span><br><span class="line"><span class="string">    clickTime &lt;= impressionTime + interval 1 hour</span></span><br><span class="line"><span class="string">    "</span><span class="string">""</span>),</span><br><span class="line">  joinType = <span class="string">"leftOuter"</span>      <span class="comment">// can be "inner", "leftOuter", "rightOuter"</span></span><br><span class="line">    <span class="comment">// 默认innner?</span></span><br><span class="line"> )</span><br></pre></td></tr></table></figure>
+<p>语义保证同内连接</p>
+<p>注意：</p>
+<ul>
+<li>更新时间取决于水印和时间条件</li>
+<li>在当前的微批处理中，水印在批处理最后更新。下一批处理使用更新后的水印清除状态和输出结果。当其中一个连接的流没有后续数据时，外连接输出可能延后。</li>
+</ul>
+<p><strong>3‘’ 连接支持</strong></p>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/image-20200714160259115.png" alt="image-20200714160259115"></p>
+<p>思考：</p>
+<ul>
+<li>有输入流场景下，均不支持全外连接</li>
+<li>流+ 静态，静态一侧不支持</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>连接可以层叠，如df1.join(df2, …).join(df3, …).join(df4, ….)</li>
+<li>对于2.3，连接操作只支持追加输出模式</li>
+<li>对于2.3，在连接前，不能使用非类似map操作，如流式聚合和状态转换（mapGroupsWithState和flatMapGroupsWithState）</li>
+</ul>
+<h4 id="4-去重"><a href="#4-去重" class="headerlink" title="4) 去重"></a>4) 去重</h4><p>通常使用唯一标识符去重，可以选择是否使用水印辅助去重：</p>
+<ul>
+<li><p>使用</p>
+<p>超过水印时间的过去状态被移除</p>
+</li>
+<li><p>不使用</p>
+<p>保存所有过去状态</p>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamingDf = spark.readStream. ...  <span class="comment">// columns: guid, eventTime, ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Without watermark using guid column</span></span><br><span class="line">streamingDf.dropDuplicates(<span class="string">"guid"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// With watermark using guid and eventTime columns</span></span><br><span class="line">streamingDf</span><br><span class="line">  .withWatermark(<span class="string">"eventTime"</span>, <span class="string">"10 seconds"</span>)</span><br><span class="line">  .dropDuplicates(<span class="string">"guid"</span>, <span class="string">"eventTime"</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="5-任意状态操作"><a href="#5-任意状态操作" class="headerlink" title="5) 任意状态操作"></a>5) 任意状态操作</h4><p>支持保存任意类型的数据作为状态，并在每个触发中使用事件作任意操作。</p>
+<p>使用mapGroupsWithState和flatMapGroupsWithState接口</p>
+<p>详见API documentation (<a href="https://spark.apache.org/docs/2.3.0/api/scala/index.html#org.apache.spark.sql.streaming.GroupState" target="_blank" rel="noopener">Scala</a>/<a href="https://spark.apache.org/docs/2.3.0/api/java/org/apache/spark/sql/streaming/GroupState.html" target="_blank" rel="noopener">Java</a>) 和examples (<a href="https://github.com/apache/spark/blob/v2.3.0/examples/src/main/scala/org/apache/spark/examples/sql/streaming/StructuredSessionization.scala" target="_blank" rel="noopener">Scala</a>/<a href="https://github.com/apache/spark/blob/v2.3.0/examples/src/main/java/org/apache/spark/examples/sql/streaming/JavaStructuredSessionization.java" target="_blank" rel="noopener">Java</a>)</p>
+<p>详见API documentation (<a href="https://spark.apache.org/docs/2.3.0/api/scala/index.html#org.apache.spark.sql.streaming.GroupState" target="_blank" rel="noopener">Scala</a>/<a href="https://spark.apache.org/docs/2.3.0/api/java/org/apache/spark/sql/streaming/GroupState.html" target="_blank" rel="noopener">Java</a>)和(<a href="https://github.com/apache/spark/blob/v2.3.0/examples/src/main/scala/org/apache/spark/examples/sql/streaming/StructuredSessionization.scala" target="_blank" rel="noopener">Scala</a>/<a href="https://github.com/apache/spark/blob/v2.3.0/examples/src/main/java/org/apache/spark/examples/sql/streaming/JavaStructuredSessionization.java" target="_blank" rel="noopener">Java</a>)</p>
+<h4 id="6-不支持操作"><a href="#6-不支持操作" class="headerlink" title="6) 不支持操作"></a>6) 不支持操作</h4><ul>
+<li>多个流聚合</li>
+<li>limit和前N条</li>
+<li>distinct</li>
+<li>排序只在聚合后的完全输出模式</li>
+<li>部分外连接</li>
+</ul>
+<p>由于部分静态操作立即查询并返回结果，因此不被支持，需要转换为流式操作：</p>
+<ul>
+<li>count()-&gt;ds.groupBy().count()</li>
+<li>foreach()-&gt;ds.writeStream.foreach(…)</li>
+<li>show()-&gt;使用命令行输出</li>
+</ul>
+<p>操作不被支持时，将会抛出AnalysisException异常。</p>
+<h3 id="3-流式查询"><a href="#3-流式查询" class="headerlink" title="(3) 流式查询"></a>(3) 流式查询</h3><p>使用Dataset.writeStream()返回的DataStreamWriter (<a href="https://spark.apache.org/docs/2.3.0/api/scala/index.html#org.apache.spark.sql.streaming.DataStreamWriter" target="_blank" rel="noopener">Scala</a>/<a href="https://spark.apache.org/docs/2.3.0/api/java/org/apache/spark/sql/streaming/DataStreamWriter.html" target="_blank" rel="noopener">Java</a>/<a href="https://spark.apache.org/docs/2.3.0/api/python/pyspark.sql.html#pyspark.sql.streaming.DataStreamWriter" target="_blank" rel="noopener">Python</a> docs) 启动计算。</p>
+<p>需要提供以下参数：</p>
+<ul>
+<li>输出：数据格式和位置等</li>
+<li>输出模式</li>
+<li>查询名称：可选，用于唯一标识</li>
+<li>触发时间：可选，默认或错过触发时间时，立即执行。</li>
+<li>检查点存储位置</li>
+</ul>
+<h4 id="1-输出模式"><a href="#1-输出模式" class="headerlink" title="1) 输出模式"></a>1) 输出模式</h4><p>输出模式：</p>
+<ul>
+<li><p>追加</p>
+<p>默认。适用于过去数据不再改变的场景。</p>
+</li>
+<li><p>完全</p>
+<p>每次触发输出整个结果表。</p>
+</li>
+<li><p>更新</p>
+<p>只保留当前更新的数据。</p>
+</li>
+</ul>
+<p>不同模式支持不同的查询。</p>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/image-20200715175057730.png" alt="image-20200715175057730"></p>
+<h4 id="2-输出Sink"><a href="#2-输出Sink" class="headerlink" title="2) 输出Sink"></a>2) 输出Sink</h4><p>内置输出：</p>
+<ul>
+<li><strong>File sink</strong> - Stores the output to a directory.</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">writeStream</span><br><span class="line">    .format(<span class="string">"parquet"</span>)        <span class="comment">// can be "orc", "json", "csv", etc.</span></span><br><span class="line">    .option(<span class="string">"path"</span>, <span class="string">"path/to/destination/dir"</span>)</span><br><span class="line">    .start()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Kafka sink</strong> - Stores the output to one or more topics in Kafka.</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">writeStream</span><br><span class="line">    .format(<span class="string">"kafka"</span>)</span><br><span class="line">    .option(<span class="string">"kafka.bootstrap.servers"</span>, <span class="string">"host1:port1,host2:port2"</span>)</span><br><span class="line">    .option(<span class="string">"topic"</span>, <span class="string">"updates"</span>)</span><br><span class="line">    .start()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Foreach sink</strong> - Runs arbitrary computation on the records in the output. See later in the section for more details.</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">writeStream</span><br><span class="line">    .foreach(...)</span><br><span class="line">    .start()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Console sink (for debugging)</strong> - Prints the output to the console/stdout every time there is a trigger. Both, Append and Complete output modes, are supported. This should be used for debugging purposes on low data volumes as the entire output is collected and stored in the driver’s memory after every trigger.</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">writeStream</span><br><span class="line">    .format(<span class="string">"console"</span>)</span><br><span class="line">    .start()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Memory sink (for debugging)</strong> - The output is stored in memory as an in-memory table. Both, Append and Complete output modes, are supported. This should be used for debugging purposes on low data volumes as the entire output is collected and stored in the driver’s memory. Hence, use it with caution.</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">writeStream</span><br><span class="line">    .format(<span class="string">"memory"</span>)</span><br><span class="line">    .queryName(<span class="string">"tableName"</span>)</span><br><span class="line">    .start()</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/image-20200715175703060.png" alt="image-20200715175703060"></p>
+<p>示例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ========== DF with no aggregations ==========</span></span><br><span class="line"><span class="keyword">val</span> noAggDF = deviceDataDf.select(<span class="string">"device"</span>).where(<span class="string">"signal &gt; 10"</span>)   </span><br><span class="line"></span><br><span class="line"><span class="comment">// Print new data to console</span></span><br><span class="line">noAggDF</span><br><span class="line">  .writeStream</span><br><span class="line">  .format(<span class="string">"console"</span>)</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Write new data to Parquet files</span></span><br><span class="line">noAggDF</span><br><span class="line">  .writeStream</span><br><span class="line">  .format(<span class="string">"parquet"</span>)</span><br><span class="line">  .option(<span class="string">"checkpointLocation"</span>, <span class="string">"path/to/checkpoint/dir"</span>)</span><br><span class="line">  .option(<span class="string">"path"</span>, <span class="string">"path/to/destination/dir"</span>)</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line"><span class="comment">// ========== DF with aggregation ==========</span></span><br><span class="line"><span class="keyword">val</span> aggDF = df.groupBy(<span class="string">"device"</span>).count()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Print updated aggregations to console</span></span><br><span class="line">aggDF</span><br><span class="line">  .writeStream</span><br><span class="line">  .outputMode(<span class="string">"complete"</span>)</span><br><span class="line">  .format(<span class="string">"console"</span>)</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Have all the aggregates in an in-memory table</span></span><br><span class="line">aggDF</span><br><span class="line">  .writeStream</span><br><span class="line">  .queryName(<span class="string">"aggregates"</span>)    <span class="comment">// this query name will be the table name</span></span><br><span class="line">  .outputMode(<span class="string">"complete"</span>)</span><br><span class="line">  .format(<span class="string">"memory"</span>)</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line">spark.sql(<span class="string">"select * from aggregates"</span>).show()   <span class="comment">// interactively query in-memory table</span></span><br></pre></td></tr></table></figure>
+<h5 id="1’-使用foreach"><a href="#1’-使用foreach" class="headerlink" title="1’ 使用foreach"></a>1’ 使用foreach</h5><p>foreach允许对输出数据执行任意操作。</p>
+<p>需要实现ForeachWriter接口，在触发后调用，详见<a href="https://spark.apache.org/docs/2.3.0/api/scala/index.html#org.apache.spark.sql.ForeachWriter" target="_blank" rel="noopener">Scala</a>/<a href="https://spark.apache.org/docs/2.3.0/api/java/org/apache/spark/sql/ForeachWriter.html" target="_blank" rel="noopener">Java</a></p>
+<p>注意：</p>
+<ul>
+<li>必须可序列化，因为需要发送到执行器</li>
+<li>open, process和close方法将在执行器调用</li>
+<li>必须在调用open()后执行初始化操作(如开启连接、开始事务等)，否则初始化在驱动节点执行。</li>
+<li>open()方法的两个参数version和partition代表需要输出的记录。version是在每次触发后单调递增的id。partition代表输出的分区，因为分区在执行器间分发。</li>
+<li>open()方法使用version和partition选择输出的记录。true表示输出，false表示忽略</li>
+<li>除非JVM异常，调用open后会调用close。需要自行清理状态，以避免资源泄漏。</li>
+</ul>
+<h4 id="3-触发"><a href="#3-触发" class="headerlink" title="3) 触发"></a>3) 触发</h4><p>触发用于定义处理的时机。以下为支持的触发类型：</p>
+<p><img src="/2020/07/10/200710Structured Streaming/200710Structured%20Streaming/image-20200716105731531.png" alt="image-20200716105731531"></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Default trigger (runs micro-batch as soon as it can)</span></span><br><span class="line">df.writeStream</span><br><span class="line">  .format(<span class="string">"console"</span>)</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line"><span class="comment">// ProcessingTime trigger with two-seconds micro-batch interval</span></span><br><span class="line">df.writeStream</span><br><span class="line">  .format(<span class="string">"console"</span>)</span><br><span class="line">  .trigger(<span class="type">Trigger</span>.<span class="type">ProcessingTime</span>(<span class="string">"2 seconds"</span>))</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line"><span class="comment">// One-time trigger</span></span><br><span class="line">df.writeStream</span><br><span class="line">  .format(<span class="string">"console"</span>)</span><br><span class="line">  .trigger(<span class="type">Trigger</span>.<span class="type">Once</span>())</span><br><span class="line">  .start()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Continuous trigger with one-second checkpointing interval</span></span><br><span class="line">df.writeStream</span><br><span class="line">  .format(<span class="string">"console"</span>)</span><br><span class="line">  .trigger(<span class="type">Trigger</span>.<span class="type">Continuous</span>(<span class="string">"1 second"</span>))</span><br><span class="line">  .start()</span><br></pre></td></tr></table></figure>
+<h3 id="4-管理查询"><a href="#4-管理查询" class="headerlink" title="(4) 管理查询"></a>(4) 管理查询</h3><p>StreamingQuery对象管理启动的查询。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> query = df.writeStream.format(<span class="string">"console"</span>).start()   <span class="comment">// get the query object</span></span><br><span class="line"></span><br><span class="line">query.id          <span class="comment">// get the unique identifier of the running query that persists across restarts from checkpoint data</span></span><br><span class="line"></span><br><span class="line">query.runId       <span class="comment">// get the unique id of this run of the query, which will be generated at every start/restart</span></span><br><span class="line"></span><br><span class="line">query.name        <span class="comment">// get the name of the auto-generated or user-specified name</span></span><br><span class="line"></span><br><span class="line">query.explain()   <span class="comment">// print detailed explanations of the query</span></span><br><span class="line"></span><br><span class="line">query.stop()      <span class="comment">// stop the query</span></span><br><span class="line"></span><br><span class="line">query.awaitTermination()   <span class="comment">// block until query is terminated, with stop() or with error</span></span><br><span class="line"></span><br><span class="line">query.exception       <span class="comment">// the exception if the query has been terminated with error</span></span><br><span class="line"></span><br><span class="line">query.recentProgress  <span class="comment">// an array of the most recent progress updates for this query</span></span><br><span class="line"></span><br><span class="line">query.lastProgress    <span class="comment">// the most recent progress update of this streaming query</span></span><br></pre></td></tr></table></figure>
+<p>可以在单个SparkSession中运行任意数量的查询，彼此并行运行并共享集群资源。</p>
+<p>使用sparkSession.streams()获取StreamingQueryManager`(<a href="https://spark.apache.org/docs/2.3.0/api/scala/index.html#org.apache.spark.sql.streaming.StreamingQueryManager" target="_blank" rel="noopener">Scala</a>/<a href="https://spark.apache.org/docs/2.3.0/api/java/org/apache/spark/sql/streaming/StreamingQueryManager.html" target="_blank" rel="noopener">Java</a>/<a href="https://spark.apache.org/docs/2.3.0/api/python/pyspark.sql.html#pyspark.sql.streaming.StreamingQueryManager" target="_blank" rel="noopener">Python</a> docs)，用于管理当前活动的查询。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spark.streams.active    <span class="comment">// get the list of currently active streaming queries</span></span><br><span class="line"></span><br><span class="line">spark.streams.get(id)   <span class="comment">// get a query object by its unique id</span></span><br><span class="line"></span><br><span class="line">spark.streams.awaitAnyTermination()   <span class="comment">// block until any one of them terminates</span></span><br></pre></td></tr></table></figure>
+<h3 id="5-监控查询"><a href="#5-监控查询" class="headerlink" title="(5) 监控查询"></a>(5) 监控查询</h3><p>可以使用以下两种方式监控活动的流式查询：</p>
+<ul>
+<li>Spark的Dropwizard Metrics</li>
+<li><p>API</p>
+<h4 id="1-交互读取Metrics"><a href="#1-交互读取Metrics" class="headerlink" title="1) 交互读取Metrics"></a>1) 交互读取Metrics</h4></li>
+</ul>
+<p>可以通过以下方法直接获取StreamingQueryProgress对象，包含数据、速率和延迟等：</p>
+<ul>
+<li>streamingQuery.lastProgress()上次触发信息</li>
+<li>streamingQuery.status(). lastProgress()当前触发信息</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> query: <span class="type">StreamingQuery</span> = ...</span><br><span class="line"></span><br><span class="line">println(query.lastProgress)</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Will print something like the following.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  "id" : "ce011fdc-8762-4dcb-84eb-a77333e28109",</span></span><br><span class="line"><span class="comment">  "runId" : "88e2ff94-ede0-45a8-b687-6316fbef529a",</span></span><br><span class="line"><span class="comment">  "name" : "MyQuery",</span></span><br><span class="line"><span class="comment">  "timestamp" : "2016-12-14T18:45:24.873Z",</span></span><br><span class="line"><span class="comment">  "numInputRows" : 10,</span></span><br><span class="line"><span class="comment">  "inputRowsPerSecond" : 120.0,</span></span><br><span class="line"><span class="comment">  "processedRowsPerSecond" : 200.0,</span></span><br><span class="line"><span class="comment">  "durationMs" : &#123;</span></span><br><span class="line"><span class="comment">    "triggerExecution" : 3,</span></span><br><span class="line"><span class="comment">    "getOffset" : 2</span></span><br><span class="line"><span class="comment">  &#125;,</span></span><br><span class="line"><span class="comment">  "eventTime" : &#123;</span></span><br><span class="line"><span class="comment">    "watermark" : "2016-12-14T18:45:24.873Z"</span></span><br><span class="line"><span class="comment">  &#125;,</span></span><br><span class="line"><span class="comment">  "stateOperators" : [ ],</span></span><br><span class="line"><span class="comment">  "sources" : [ &#123;</span></span><br><span class="line"><span class="comment">    "description" : "KafkaSource[Subscribe[topic-0]]",</span></span><br><span class="line"><span class="comment">    "startOffset" : &#123;</span></span><br><span class="line"><span class="comment">      "topic-0" : &#123;</span></span><br><span class="line"><span class="comment">        "2" : 0,</span></span><br><span class="line"><span class="comment">        "4" : 1,</span></span><br><span class="line"><span class="comment">        "1" : 1,</span></span><br><span class="line"><span class="comment">        "3" : 1,</span></span><br><span class="line"><span class="comment">        "0" : 1</span></span><br><span class="line"><span class="comment">      &#125;</span></span><br><span class="line"><span class="comment">    &#125;,</span></span><br><span class="line"><span class="comment">    "endOffset" : &#123;</span></span><br><span class="line"><span class="comment">      "topic-0" : &#123;</span></span><br><span class="line"><span class="comment">        "2" : 0,</span></span><br><span class="line"><span class="comment">        "4" : 115,</span></span><br><span class="line"><span class="comment">        "1" : 134,</span></span><br><span class="line"><span class="comment">        "3" : 21,</span></span><br><span class="line"><span class="comment">        "0" : 534</span></span><br><span class="line"><span class="comment">      &#125;</span></span><br><span class="line"><span class="comment">    &#125;,</span></span><br><span class="line"><span class="comment">    "numInputRows" : 10,</span></span><br><span class="line"><span class="comment">    "inputRowsPerSecond" : 120.0,</span></span><br><span class="line"><span class="comment">    "processedRowsPerSecond" : 200.0</span></span><br><span class="line"><span class="comment">  &#125; ],</span></span><br><span class="line"><span class="comment">  "sink" : &#123;</span></span><br><span class="line"><span class="comment">    "description" : "MemorySink"</span></span><br><span class="line"><span class="comment">  &#125;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">println(query.status)</span><br><span class="line"></span><br><span class="line"><span class="comment">/*  Will print something like the following.</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  "message" : "Waiting for data to arrive",</span></span><br><span class="line"><span class="comment">  "isDataAvailable" : false,</span></span><br><span class="line"><span class="comment">  "isTriggerActive" : false</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-使用异步API报告"><a href="#2-使用异步API报告" class="headerlink" title="2) 使用异步API报告"></a>2) 使用异步API报告</h4><p>使用sparkSession.streams.attachListener()绑定StreamingQueryListener对象(<a href="https://spark.apache.org/docs/2.3.0/api/scala/index.html#org.apache.spark.sql.streaming.StreamingQueryListener" target="_blank" rel="noopener">Scala</a>/<a href="https://spark.apache.org/docs/2.3.0/api/java/org/apache/spark/sql/streaming/StreamingQueryListener.html" target="_blank" rel="noopener">Java</a> docs)。可以在查询起止和运行中回调。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> spark: <span class="type">SparkSession</span> = ...</span><br><span class="line"></span><br><span class="line">spark.streams.addListener(<span class="keyword">new</span> <span class="type">StreamingQueryListener</span>() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">onQueryStarted</span></span>(queryStarted: <span class="type">QueryStartedEvent</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">        println(<span class="string">"Query started: "</span> + queryStarted.id)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">onQueryTerminated</span></span>(queryTerminated: <span class="type">QueryTerminatedEvent</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">        println(<span class="string">"Query terminated: "</span> + queryTerminated.id)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">onQueryProgress</span></span>(queryProgress: <span class="type">QueryProgressEvent</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">        println(<span class="string">"Query made progress: "</span> + queryProgress.progress)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="3-使用Dropwizard报告"><a href="#3-使用Dropwizard报告" class="headerlink" title="3) 使用Dropwizard报告"></a>3) 使用Dropwizard报告</h4><p>Spark支持<a href="https://spark.apache.org/docs/2.3.0/monitoring.html#metrics" target="_blank" rel="noopener">Dropwizard Library</a>库，需要先启用spark.sql.streaming.metricsEnabled。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spark.conf.set(<span class="string">"spark.sql.streaming.metricsEnabled"</span>, <span class="string">"true"</span>)</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line">spark.sql(<span class="string">"SET spark.sql.streaming.metricsEnabled=true"</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="6-检查点恢复"><a href="#6-检查点恢复" class="headerlink" title="(6) 检查点恢复"></a>(6) 检查点恢复</h3><p>使用检查点和预写日志容灾恢复，可以恢复之前的查询和状态，以及未完成的工作。需要在DataStreamWriter中设置检查点目录：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">aggDF</span><br><span class="line">  .writeStream</span><br><span class="line">  .outputMode(<span class="string">"complete"</span>)</span><br><span class="line">  .option(<span class="string">"checkpointLocation"</span>, <span class="string">"path/to/HDFS/dir"</span>)</span><br><span class="line">  .format(<span class="string">"memory"</span>)</span><br><span class="line">  .start()</span><br></pre></td></tr></table></figure>
+<h2 id="5-持续处理（试验）"><a href="#5-持续处理（试验）" class="headerlink" title="5 持续处理（试验）"></a>5 持续处理（试验）</h2><p>版本&gt;=2.3，Continuous processing是低延迟（约1ms）、至少一次语义和容错保证的流式处理模式。相比之下，默认的微批处理延迟约100ms，保证刚好一次语义。</p>
+<p>不需要修改应用逻辑（如DataFrame/Dataset配置），只在查询时改变触发参数，需要提供检查点间隔。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">spark</span><br><span class="line">  .readStream</span><br><span class="line">  .format(<span class="string">"rate"</span>)</span><br><span class="line">  .option(<span class="string">"rowsPerSecond"</span>, <span class="string">"10"</span>)</span><br><span class="line">  .option(<span class="string">""</span>)</span><br><span class="line"></span><br><span class="line">spark</span><br><span class="line">  .readStream</span><br><span class="line">  .format(<span class="string">"kafka"</span>)</span><br><span class="line">  .option(<span class="string">"kafka.bootstrap.servers"</span>, <span class="string">"host1:port1,host2:port2"</span>)</span><br><span class="line">  .option(<span class="string">"subscribe"</span>, <span class="string">"topic1"</span>)</span><br><span class="line">  .load()</span><br><span class="line">  .selectExpr(<span class="string">"CAST(key AS STRING)"</span>, <span class="string">"CAST(value AS STRING)"</span>)</span><br><span class="line">  .writeStream</span><br><span class="line">  .format(<span class="string">"kafka"</span>)</span><br><span class="line">  .option(<span class="string">"kafka.bootstrap.servers"</span>, <span class="string">"host1:port1,host2:port2"</span>)</span><br><span class="line">  .option(<span class="string">"topic"</span>, <span class="string">"topic1"</span>)</span><br><span class="line">  .trigger(<span class="type">Trigger</span>.<span class="type">Continuous</span>(<span class="string">"1 second"</span>))  <span class="comment">// only change in query</span></span><br><span class="line">  .start()</span><br></pre></td></tr></table></figure>
+<p>检查点数据在模式间兼容，每次执行可以选用不同的模式处理。</p>
+<h3 id="1-支持的查询"><a href="#1-支持的查询" class="headerlink" title="(1) 支持的查询"></a>(1) 支持的查询</h3><p>版本2.3只支持以下查询：</p>
+<ul>
+<li><p>操作：支持类map操作，即只有投射(select, map, flatMap, mapPartitions, etc.)和选择(where, filter, etc.)</p>
+<p>所有SQL函数，除聚(当前不支持)、使用时间的即时计算（current_timestamp()和current_date()）</p>
+</li>
+<li><p>数据源</p>
+<ul>
+<li>Kafka</li>
+<li>速率：选项只支持numPartitions和rowsPerSecond</li>
+</ul>
+</li>
+<li><p>数据输出</p>
+<ul>
+<li>Kafka</li>
+<li>Memory</li>
+<li>Console</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-注意事项"><a href="#2-注意事项" class="headerlink" title="(2) 注意事项"></a>(2) 注意事项</h3><ul>
+<li><p>足够的核心数</p>
+<p>持续处理运行多个长时间任务，用于持续读取、处理并输出数据。任务数取决于能够并行得去的分区数量。需要保证至少分区数量个核心可用于查询处理</p>
+</li>
+<li><p>可忽略的终止警告</p>
+<p>终止持续处理可能昌盛任务终断警告，可以忽略</p>
+</li>
+<li><p>手动重试</p>
+<p>当前没有自动化的失败任务重试，需要手动从检查点重启。</p>
+</li>
+</ul>
+<h2 id="6-附加信息"><a href="#6-附加信息" class="headerlink" title="6 附加信息"></a>6 附加信息</h2><p><strong>Further Reading</strong></p>
+<ul>
+<li>See and run the examples.<ul>
+<li><a href="https://spark.apache.org/docs/2.3.0/index.html#running-the-examples-and-shell" target="_blank" rel="noopener">Instructions</a> on how to run Spark examples</li>
+</ul>
+</li>
+<li>Read about integrating with Kafka in the <a href="https://spark.apache.org/docs/2.3.0/structured-streaming-kafka-integration.html" target="_blank" rel="noopener">Structured Streaming Kafka Integration Guide</a></li>
+<li>Read more details about using DataFrames/Datasets in the <a href="https://spark.apache.org/docs/2.3.0/sql-programming-guide.html" target="_blank" rel="noopener">Spark SQL Programming Guide</a></li>
+<li>Third-party Blog Posts<ul>
+<li><a href="https://databricks.com/blog/2017/01/19/real-time-streaming-etl-structured-streaming-apache-spark-2-1.html" target="_blank" rel="noopener">Real-time Streaming ETL with Structured Streaming in Apache Spark 2.1 (Databricks Blog)</a></li>
+<li><a href="https://databricks.com/blog/2017/04/04/real-time-end-to-end-integration-with-apache-kafka-in-apache-sparks-structured-streaming.html" target="_blank" rel="noopener">Real-Time End-to-End Integration with Apache Kafka in Apache Spark’s Structured Streaming (Databricks Blog)</a></li>
+<li><a href="https://databricks.com/blog/2017/05/08/event-time-aggregation-watermarking-apache-sparks-structured-streaming.html" target="_blank" rel="noopener">Event-time Aggregation and Watermarking in Apache Spark’s Structured Streaming (Databricks Blog)</a></li>
+</ul>
+</li>
+</ul>
+<p><strong>Talks</strong></p>
+<ul>
+<li>Spark Summit Europe 2017<ul>
+<li>Easy, Scalable, Fault-tolerant Stream Processing with Structured Streaming in Apache Spark - <a href="https://databricks.com/session/easy-scalable-fault-tolerant-stream-processing-with-structured-streaming-in-apache-spark" target="_blank" rel="noopener">Part 1 slides/video</a>, <a href="https://databricks.com/session/easy-scalable-fault-tolerant-stream-processing-with-structured-streaming-in-apache-spark-continues" target="_blank" rel="noopener">Part 2 slides/video</a></li>
+<li>Deep Dive into Stateful Stream Processing in Structured Streaming - <a href="https://databricks.com/session/deep-dive-into-stateful-stream-processing-in-structured-streaming" target="_blank" rel="noopener">slides/video</a></li>
+</ul>
+</li>
+<li>Spark Summit 2016<ul>
+<li>A Deep Dive into Structured Streaming - <a href="https://spark-summit.org/2016/events/a-deep-dive-into-structured-streaming/" target="_blank" rel="noopener">slides/video</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://spark.apache.org/docs/2.3.0/structured-streaming-programming-guide.html#structured-streaming-programming-guide" target="_blank" rel="noopener">Structured Streaming Programming Guide</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/06/200706数据仓库拾贝/" rel="next" title="数据仓库拾贝">
+                <i class="fa fa-chevron-left"></i> 数据仓库拾贝
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/14/200714范式/" rel="prev" title="范式">
+                范式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概览"><span class="nav-number">1.</span> <span class="nav-text">1 概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-示例"><span class="nav-number">2.</span> <span class="nav-text">2 示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-编程模型"><span class="nav-number">3.</span> <span class="nav-text">3 编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-基本概念"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-处理事件时间和晚到数据"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 处理事件时间和晚到数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-容错语义"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 容错语义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-使用Dataset和DataFrame-API"><span class="nav-number">4.</span> <span class="nav-text">4 使用Dataset和DataFrame API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建流式Dataset和流式DataFrame"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 创建流式Dataset和流式DataFrame</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-输入源"><span class="nav-number">4.1.1.</span> <span class="nav-text">1) 输入源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-模式推断和分区发现"><span class="nav-number">4.1.2.</span> <span class="nav-text">2) 模式推断和分区发现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-操作流式Dataset和流式DataFrame"><span class="nav-number">4.2.</span> <span class="nav-text">(2) 操作流式Dataset和流式DataFrame</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-基本操作：选择、投影和聚合"><span class="nav-number">4.2.1.</span> <span class="nav-text">1) 基本操作：选择、投影和聚合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-事件时间窗口操作"><span class="nav-number">4.2.2.</span> <span class="nav-text">2) 事件时间窗口操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1’-处理晚到数据和水印"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">1’ 处理晚到数据和水印</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-连接操作"><span class="nav-number">4.2.3.</span> <span class="nav-text">3) 连接操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1‘-与静态连接"><span class="nav-number">4.2.3.1.</span> <span class="nav-text">1‘ 与静态连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2’-与流式连接"><span class="nav-number">4.2.3.2.</span> <span class="nav-text">2’ 与流式连接</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-去重"><span class="nav-number">4.2.4.</span> <span class="nav-text">4) 去重</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-任意状态操作"><span class="nav-number">4.2.5.</span> <span class="nav-text">5) 任意状态操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-不支持操作"><span class="nav-number">4.2.6.</span> <span class="nav-text">6) 不支持操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-流式查询"><span class="nav-number">4.3.</span> <span class="nav-text">(3) 流式查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-输出模式"><span class="nav-number">4.3.1.</span> <span class="nav-text">1) 输出模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-输出Sink"><span class="nav-number">4.3.2.</span> <span class="nav-text">2) 输出Sink</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1’-使用foreach"><span class="nav-number">4.3.2.1.</span> <span class="nav-text">1’ 使用foreach</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-触发"><span class="nav-number">4.3.3.</span> <span class="nav-text">3) 触发</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-管理查询"><span class="nav-number">4.4.</span> <span class="nav-text">(4) 管理查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-监控查询"><span class="nav-number">4.5.</span> <span class="nav-text">(5) 监控查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-交互读取Metrics"><span class="nav-number">4.5.1.</span> <span class="nav-text">1) 交互读取Metrics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-使用异步API报告"><span class="nav-number">4.5.2.</span> <span class="nav-text">2) 使用异步API报告</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-使用Dropwizard报告"><span class="nav-number">4.5.3.</span> <span class="nav-text">3) 使用Dropwizard报告</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-检查点恢复"><span class="nav-number">4.6.</span> <span class="nav-text">(6) 检查点恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-持续处理（试验）"><span class="nav-number">5.</span> <span class="nav-text">5 持续处理（试验）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-支持的查询"><span class="nav-number">5.1.</span> <span class="nav-text">(1) 支持的查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-注意事项"><span class="nav-number">5.2.</span> <span class="nav-text">(2) 注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-附加信息"><span class="nav-number">6.</span> <span class="nav-text">6 附加信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/07/10/200710Structured Streaming/';
+          this.page.identifier = '2020/07/10/200710Structured Streaming/';
+          this.page.title = 'Structured Streaming';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

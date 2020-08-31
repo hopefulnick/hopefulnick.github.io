@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Kafka," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 定义分布式流式平台。">
+<meta name="keywords" content="Kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka入门">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 定义分布式流式平台。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/kafka-apis-1590569715470.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_anatomy.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_consumer.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/consumer-groups.png">
+<meta property="og:updated_time" content="2020-06-12T10:14:55.135Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka入门">
+<meta name="twitter:description" content="1 定义分布式流式平台。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/kafka-apis-1590569715470.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/"/>
+
+
+
+
+
+  <title>Kafka入门 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/05/27/200527Kafka入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kafka入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-27T11:00:47+08:00">
+                2020-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">Kafka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/27/200527Kafka入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/27/200527Kafka入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1 定义"></a>1 定义</h2><p>分布式流式平台。</p>
+<a id="more"></a>
+<h3 id="1-三大能力"><a href="#1-三大能力" class="headerlink" title="(1) 三大能力"></a>(1) 三大能力</h3><ul>
+<li>发布、订阅流式记录，类似消息队列和企业消息系统。</li>
+<li>容错且持久地保存流式记录。</li>
+<li>即时处理流式记录。</li>
+</ul>
+<h3 id="2-两大用途"><a href="#2-两大用途" class="headerlink" title="(2) 两大用途"></a>(2) 两大用途</h3><ul>
+<li>构建可靠的实时流式数据管道</li>
+<li>构建实时流式数据转换/响应应用</li>
+</ul>
+<h3 id="3-概念"><a href="#3-概念" class="headerlink" title="(3) 概念"></a>(3) 概念</h3><ul>
+<li>运行在可扩展的集群上</li>
+<li>分类（主题）保存流式记录</li>
+<li>每条记录包括键名、键值和时间戳</li>
+</ul>
+<h3 id="4-五个核心API"><a href="#4-五个核心API" class="headerlink" title="(4) 五个核心API"></a>(4) 五个核心API</h3><p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/kafka-apis-1590569715470.png" alt="kafka-apis"></p>
+<ul>
+<li><a href="http://kafka.apache.org/documentation.html#producerapi" target="_blank" rel="noopener">Producer API</a></li>
+<li><a href="http://kafka.apache.org/documentation.html#consumerapi" target="_blank" rel="noopener">Consumer API</a></li>
+<li><a href="http://kafka.apache.org/documentation/streams" target="_blank" rel="noopener">Streams API</a></li>
+<li><a href="http://kafka.apache.org/documentation.html#connect" target="_blank" rel="noopener">Connector API</a></li>
+<li><a href="http://kafka.apache.org/documentation.html#adminapi" target="_blank" rel="noopener">Admin API</a>:用于管理和查看Kafka</li>
+</ul>
+<h2 id="2-主题和日志"><a href="#2-主题和日志" class="headerlink" title="2 主题和日志"></a>2 主题和日志</h2><p>主题是Kafka对记录流的核心抽象，是记录发布的目录或者反馈。</p>
+<p>一个主题可以有0或多个订阅者。</p>
+<p>对于每一个主题，kafka集群维护如下的分区日志：</p>
+<p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_anatomy.png" alt="log_anatomy"></p>
+<p>每个分区是一个有序的、不可变的记录序列。记录持续追加到序列后。分区为每条记录分配一个唯一的id，叫offset。</p>
+<p>无论是否被消费，kafka始终持久化发布的记录。可以使用可配置的保留时间，以删除超时的数据。Kafka性能与数据大小无关，因此可以长时间存储数据。</p>
+<p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/log_consumer.png" alt="log_consumer"></p>
+<p>事实上，消费者保留的元数据只有offset。通常按照顺序逐一访问，但消费者可以自主决定访问的顺序等策略。</p>
+<p>由于不影响主题中的数据，消费者间互不影响。</p>
+<p>日志分区有以下作用：</p>
+<p>(1) 避免单台服务器磁盘容量限制</p>
+<p>(2) 作为并行的单位</p>
+<h2 id="3-分布"><a href="#3-分布" class="headerlink" title="3  分布"></a>3  分布</h2><p>分区在集群节点间分布，同时分区又在节点间重复。</p>
+<p>对于单个分区，有一个节点作为leader，其他作为follower；对于单个节点，可能是一些分区的leader，一些分区的follower。leader负责分区读写，follower被动复制分区。当一个分区的leader故障后，会有一个follower自动称为leader。这种机制保证了集群内的负载均衡和容错。</p>
+<h2 id="4-地理副本"><a href="#4-地理副本" class="headerlink" title="4 地理副本"></a>4 地理副本</h2><p>Kafka MirrorMaker提供集群的地理副本功能。消息在多个数据中心或云区域间复制。可以使用主动/被动场景用于备份和恢复，或使用主动/主动场景用于将数据靠近用户，或支持数据本地化需求。</p>
+<h2 id="5-Producer"><a href="#5-Producer" class="headerlink" title="5 Producer"></a>5 Producer</h2><p>Producer负责按照某种分区函数将数据发布到分区中，可以是循环(有利于负载均衡)或其他某种。</p>
+<h2 id="6-Consumer"><a href="#6-Consumer" class="headerlink" title="6 Consumer"></a>6 Consumer</h2><p>Consumer可以划分为Consumer Group。每个Consumer Group可以包含若干个Consumer。Consumer可以在不同的进程或机器上运行。</p>
+<p>如果所有的Consumer在同一个Group中，记录将在Consumer间高效负载均衡。</p>
+<p>如果所有的Consumer在不同的Group中，消息将广播给所有的Group。</p>
+<p><img src="/2020/05/27/200527Kafka入门/200527Kafka%E5%85%A5%E9%97%A8/consumer-groups.png" alt="consumer-groups"></p>
+<p>思考：单条消息每个Group发一次，Group内Consumer间消息负载均衡？</p>
+<p>Group中加入新实例，将分摊组内其他实例的分区；实例故障，将把自身的分区分摊给其他实例。</p>
+<p>Kafka只提供单个分区的顺序，不保证同一topic中分区间的顺序。可以设置主题只有一个分区来实现。尽管这意味着一个Group只有一个Consumer实例。</p>
+<p>思考：如果是多个实例，一个分区中的特定消息只会发给Group中的一个实例，其他实例接收不到，并且实例间难以知晓顺序。</p>
+<h2 id="7-多租期"><a href="#7-多租期" class="headerlink" title="7 多租期"></a>7 多租期</h2><p>可以将kafka用于多租期解决方案，通过配置能够生产或消费数据的主题。</p>
+<p>支持配额操作。管理员可以定义和加强请求的配额，以控制broker资源。</p>
+<p>详见<a href="https://kafka.apache.org/documentation/#security" target="_blank" rel="noopener">security documentation</a></p>
+<h2 id="8-保障"><a href="#8-保障" class="headerlink" title="8 保障"></a>8 保障</h2><ul>
+<li>同一生产者生产的消息，在同一分区中按照发送的先后追加。</li>
+<li>消费者所见的消息按照日志中的顺序排列。</li>
+<li>在不丢失记录的前提下，具有N个分区的主题允许有N-1台服务器失效。</li>
+</ul>
+<h2 id="9-消息系统"><a href="#9-消息系统" class="headerlink" title="9 消息系统"></a>9 消息系统</h2><p>消息系统通常有两种模型：队列和发布/订阅。</p>
+<h3 id="1-队列"><a href="#1-队列" class="headerlink" title="(1) 队列"></a>(1) 队列</h3><p>多个消费者从服务器读取，每条消息只到达其中一个消费者。</p>
+<p>优点：允许在多个消费者之间划分数据处理任务</p>
+<p>缺点：不能有多个订阅者。一旦消息被读取就消失了。</p>
+<h3 id="2-发布-订阅"><a href="#2-发布-订阅" class="headerlink" title="(2) 发布/订阅"></a>(2) 发布/订阅</h3><p>消息被广播给所有消费者。</p>
+<p>优点：允许广播给多个订阅者</p>
+<p>缺点：不能划分数据处理任务</p>
+<h3 id="3-消费组"><a href="#3-消费组" class="headerlink" title="(3) 消费组"></a>(3) 消费组</h3><p>Kafka使用消费组结合以上两种概念。</p>
+<p>Kafka允许在组内多个消费者间划分处理任务。</p>
+<p>Kafka允许在消费组间广播消息。</p>
+<h3 id="4-顺序保证"><a href="#4-顺序保证" class="headerlink" title="(4) 顺序保证"></a>(4) 顺序保证</h3><p>传统队列模式中，虽然按序分发消息，但是由于网络异步，无法保证到达多个消费者的先后顺序。通常限制只有为只有一个消费者，但是处理不再是并行的。</p>
+<p>kafka可以同时实现顺序保证和负载均衡。每个主题的一个分区只能被一个消费组中的一个消费者消费。</p>
+<h2 id="10-存储系统"><a href="#10-存储系统" class="headerlink" title="10 存储系统"></a>10 存储系统</h2><p>与消费解耦的，允许发布消息的任何消息队列可以视为一种空中消息的存储系统。</p>
+<p>写入Kafka的数据被存储并副本到磁盘。Kafka允许生产等待消息被确保副本并持久化后的通知。</p>
+<p>Kafka使用的磁盘结构可以应对不同的数据量。</p>
+<p>Kafka保存并允许客户端控制读取位置，因此可以被视为一种特殊用途的分布式文件系统。其致力于高性能、低延迟提交日志存储、副本、传播。</p>
+<p>详见<a href="https://kafka.apache.org/documentation/#design" target="_blank" rel="noopener">Kafka’s commit log storage and replication design</a></p>
+<h2 id="11-流式处理"><a href="#11-流式处理" class="headerlink" title="11 流式处理"></a>11 流式处理</h2><p>Kakfa通过<a href="http://kafka.apache.org/documentation/streams" target="_blank" rel="noopener">Streams API</a>提供记录流处理功能。其构建在Kafka核心概念之上，使用Producer和Consumer用于输入，使用Kafka用于状态存储，使用此昂通的组机制用于在不同实例间容错。</p>
+<h2 id="12-结合消息、存储和流式处理"><a href="#12-结合消息、存储和流式处理" class="headerlink" title="12 结合消息、存储和流式处理"></a>12 结合消息、存储和流式处理</h2><p>存储功能可以管理历史数据，消息功能可以管理未来数据，流式处理可以处理数据。三者结合可以处理过去与未来产生的数据。</p>
+<p>详见<a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">documentation</a>。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/27/200527Hive入门/" rel="next" title="Hive入门">
+                <i class="fa fa-chevron-left"></i> Hive入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/01/200601SQL/" rel="prev" title="SQL">
+                SQL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-定义"><span class="nav-number">1.</span> <span class="nav-text">1 定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-三大能力"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 三大能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-两大用途"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 两大用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-概念"><span class="nav-number">1.3.</span> <span class="nav-text">(3) 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-五个核心API"><span class="nav-number">1.4.</span> <span class="nav-text">(4) 五个核心API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-主题和日志"><span class="nav-number">2.</span> <span class="nav-text">2 主题和日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-分布"><span class="nav-number">3.</span> <span class="nav-text">3  分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-地理副本"><span class="nav-number">4.</span> <span class="nav-text">4 地理副本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Producer"><span class="nav-number">5.</span> <span class="nav-text">5 Producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Consumer"><span class="nav-number">6.</span> <span class="nav-text">6 Consumer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-多租期"><span class="nav-number">7.</span> <span class="nav-text">7 多租期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-保障"><span class="nav-number">8.</span> <span class="nav-text">8 保障</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-消息系统"><span class="nav-number">9.</span> <span class="nav-text">9 消息系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-队列"><span class="nav-number">9.1.</span> <span class="nav-text">(1) 队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-发布-订阅"><span class="nav-number">9.2.</span> <span class="nav-text">(2) 发布/订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-消费组"><span class="nav-number">9.3.</span> <span class="nav-text">(3) 消费组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-顺序保证"><span class="nav-number">9.4.</span> <span class="nav-text">(4) 顺序保证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-存储系统"><span class="nav-number">10.</span> <span class="nav-text">10 存储系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-流式处理"><span class="nav-number">11.</span> <span class="nav-text">11 流式处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-结合消息、存储和流式处理"><span class="nav-number">12.</span> <span class="nav-text">12 结合消息、存储和流式处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">13.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/05/27/200527Kafka入门/';
+          this.page.identifier = '2020/05/27/200527Kafka入门/';
+          this.page.title = 'Kafka入门';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hive," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 定义是构建于Hadoop上的数据仓库，用于查询和分析。为了避免底层Java API，使用类似SQL的HQL查询。HQL将查询转换为MapReduce、Apache Tez或Spark作业。">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive入门">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/05/27/200527Hive入门/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 定义是构建于Hadoop上的数据仓库，用于查询和分析。为了避免底层Java API，使用类似SQL的HQL查询。HQL将查询转换为MapReduce、Apache Tez或Spark作业。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-19T16:28:49.513Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive入门">
+<meta name="twitter:description" content="1 定义是构建于Hadoop上的数据仓库，用于查询和分析。为了避免底层Java API，使用类似SQL的HQL查询。HQL将查询转换为MapReduce、Apache Tez或Spark作业。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/05/27/200527Hive入门/"/>
+
+
+
+
+
+  <title>Hive入门 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/05/27/200527Hive入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hive入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-27T11:00:47+08:00">
+                2020-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hive/" itemprop="url" rel="index">
+                    <span itemprop="name">Hive</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/27/200527Hive入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/27/200527Hive入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1 定义"></a>1 定义</h2><p>是构建于Hadoop上的数据仓库，用于查询和分析。为了避免底层Java API，使用类似SQL的HQL查询。HQL将查询转换为MapReduce、Apache Tez或Spark作业。</p>
+<a id="more"></a>
+<h3 id="1-特性"><a href="#1-特性" class="headerlink" title="(1) 特性"></a>(1) 特性</h3><ul>
+<li>索引：包括压缩和bitmap索引</li>
+<li>多种存储类型，如文本、HBase等</li>
+<li>存储元数据到关系型数据库中，有效减少查询时的语义检查</li>
+<li>操作压缩的数据，如使用算法DEFALTE、snnapy等</li>
+<li>支持标准SQL, user defined functions (UDFs), user defined aggregates (UDAFs),和user defined table functions (UDTFs)</li>
+<li>使用HQL进行ETL、报表和分析，将HQL转换为作业</li>
+<li>通过 <a href="https://cwiki.apache.org/confluence/display/Hive/LLAP" target="_blank" rel="noopener">Hive LLAP</a>, <a href="https://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-site/YARN.html" target="_blank" rel="noopener">Apache YARN</a>和<a href="https://slider.incubator.apache.org/" target="_blank" rel="noopener">Apache Slider</a>实现亚秒级查询</li>
+</ul>
+<p>默认使用Derby数据库存储元数据。</p>
+<p>不是为OLTP设计的</p>
+<p>Hive最大化伸缩性、性能、扩展性、容错、输入格式松散耦合。</p>
+<h3 id="2-组件"><a href="#2-组件" class="headerlink" title="(2) 组件"></a>(2) 组件</h3><p>包括HCatalog和WebHcat。</p>
+<ul>
+<li><p>HCatalog</p>
+<p>用于Hadoop的表格和存储管理层，用于使用多种数据处理工具，如Pig和MapReduce。</p>
+</li>
+<li><p>WebHCat</p>
+<p>提供运行作业的服务，并且可以使用REST API操作元数据</p>
+</li>
+</ul>
+<h2 id="2-安装和配置"><a href="#2-安装和配置" class="headerlink" title="2  安装和配置"></a>2  安装和配置</h2><h3 id="1-要求"><a href="#1-要求" class="headerlink" title="(1) 要求"></a>(1) 要求</h3><ul>
+<li><p>Java 1.7（&gt;=1.2）</p>
+</li>
+<li><p>Hadoop 2.x (&gt;=2.0.0)</p>
+</li>
+<li>Linux/Windows（生产环境）、Mac(开发环境)</li>
+</ul>
+<p>需要配置环境变量HIVE_HOME</p>
+<h3 id="2-运行"><a href="#2-运行" class="headerlink" title="(2) 运行"></a>(2) 运行</h3><h4 id="1-前提"><a href="#1-前提" class="headerlink" title="1) 前提"></a>1) 前提</h4><ul>
+<li>配置HADOOP_HOME</li>
+<li>创建HDFS目录/tmp和/user/hive/warehouse（hive.metastore.warehouse.dir中定义），并赋予权限chmod g+w</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> $HADOOP_HOME/bin/hadoop fs -mkdir       /tmp</span><br><span class="line"><span class="meta">$</span> $HADOOP_HOME/bin/hadoop fs -mkdir       /user/hive/warehouse</span><br><span class="line"><span class="meta">$</span> $HADOOP_HOME/bin/hadoop fs -chmod g+w   /tmp</span><br><span class="line"><span class="meta">$</span> $HADOOP_HOME/bin/hadoop fs -chmod g+w   /user/hive/warehouse</span><br></pre></td></tr></table></figure>
+<h4 id="2-运行HiveServer2和Beeline"><a href="#2-运行HiveServer2和Beeline" class="headerlink" title="2) 运行HiveServer2和Beeline"></a>2) 运行HiveServer2和Beeline</h4><p>从版本2.1开始，需要使用schematool初始化数据库类型</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> $HIVE_HOME/bin/schematool -dbType &lt;db type&gt; -initSchema</span><br></pre></td></tr></table></figure>
+<p>启动HiveServer2和Beeline(HiveServer2自带CLI)。由于缺乏多用户和安全等能力，HiveCLI已标记弃用。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> $HIVE_HOME/bin/hiveserver2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span># 默认主机端口为localhost:10000</span><br><span class="line"><span class="meta">$</span> $HIVE_HOME/bin/beeline -u jdbc:hive2://$HS2_HOST:$HS2_PORT</span><br></pre></td></tr></table></figure>
+<h4 id="3-运行HCatalog"><a href="#3-运行HCatalog" class="headerlink" title="3) 运行HCatalog"></a>3) 运行HCatalog</h4><p>从版本0.11.0开始，详见<a href="https://cwiki.apache.org/confluence/display/Hive/HCatalog" target="_blank" rel="noopener">HCatalog manual</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 启动服务器端</span><br><span class="line"><span class="meta">$</span> $HIVE_HOME/hcatalog/sbin/hcat_server.sh start</span><br><span class="line">// 关闭</span><br><span class="line"><span class="meta">$</span> $HIVE_HOME/hcatalog/sbin/hcat_server.sh stop</span><br><span class="line"></span><br><span class="line">// 使用命令行</span><br><span class="line"><span class="meta">$</span> $HIVE_HOME/hcatalog/bin/hcat</span><br></pre></td></tr></table></figure>
+<h4 id="4-启动WebHCat"><a href="#4-启动WebHCat" class="headerlink" title="4) 启动WebHCat"></a>4) 启动WebHCat</h4><p>从版本0.11.0开始，详见<a href="https://cwiki.apache.org/confluence/display/Hive/WebHCat" target="_blank" rel="noopener">WebHCat Installation</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 启动</span><br><span class="line"><span class="meta">$</span> $HIVE_HOME/hcatalog/sbin/webhcat_server.sh start</span><br><span class="line"></span><br><span class="line">// 关闭</span><br><span class="line"><span class="meta">$</span> $HIVE_HOME/hcatalog/sbin/webhcat_server.sh stop</span><br></pre></td></tr></table></figure>
+<h2 id="3-配置管理概览"><a href="#3-配置管理概览" class="headerlink" title="3 配置管理概览"></a>3 配置管理概览</h2><p>默认配置位置： <code>&lt;install-dir&gt;/conf/hive-default.xml</code></p>
+<p>配置目录设置：HIVE_CONF_DIR</p>
+<p>配置变更：<code>&lt;install-dir&gt;/conf/hive-site.xml</code></p>
+<p>Log4J配置：<code>&lt;install-dir&gt;/conf/hive-log4j.properties</code></p>
+<p>Hive配置继承了Hadoop的配置，可以在Hive中设置Hadoop配置</p>
+<p>配置操作：</p>
+<ul>
+<li><p>编辑hive-site.xml，可设置Hadoop配置</p>
+</li>
+<li><p>使用set命令</p>
+</li>
+<li><p>调用Beeline或HiveServer2:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> bin/hiveserver2 --hiveconf x1=y1 --hiveconf x2=y2  //this sets server-side variables x1 and x2 to y1 and y2 respectively</span><br><span class="line"><span class="meta">$</span> bin/beeline --hiveconf x1=y1 --hiveconf x2=y2  //this sets client-side variables x1 and x2 to y1 and y2 respectively.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>设置HIVE_OPTS环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--hiveconf x1=y1 --hiveconf x2=y2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="4-运行时配置"><a href="#4-运行时配置" class="headerlink" title="4 运行时配置"></a>4 运行时配置</h2><p>由于Hive查询使用mapReduce执行，查询的行为可以有Hadoop配置</p>
+<p>Beeline的SET命令可以设置Hive或Hadoop配置变量。如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">beeline&gt;</span> SET mapred.job.tracker=myhost.mycompany.com:50030;</span><br><span class="line"></span><br><span class="line">// 展示当前配置</span><br><span class="line">// 不带-v将只展示与Hadoop不同的配置</span><br><span class="line"><span class="meta">beeline&gt;</span> SET -v;</span><br></pre></td></tr></table></figure>
+<h2 id="5-Hive、MapReduce和本地模式"><a href="#5-Hive、MapReduce和本地模式" class="headerlink" title="5 Hive、MapReduce和本地模式"></a>5 Hive、MapReduce和本地模式</h2><p>集群执行时，指定集群：cd </p>
+<p>对于小数据集，本地执行更加高效。</p>
+<p>版本&gt;=0.7，Hive完全支持本地执行。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 开启本地执行</span><br><span class="line"><span class="meta">hive&gt;</span> SET mapreduce.framework.name=local;</span><br></pre></td></tr></table></figure>
+<p>注意：<code>mapred.local.dir</code>需要在本地可用</p>
+<p>版本&gt;=0.7，Hive支持根据作业自动切换本地执行。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 自动切换本地执行，默认关闭</span><br><span class="line"><span class="meta">hive&gt;</span> SET hive.exec.mode.local.auto=false;</span><br></pre></td></tr></table></figure>
+<p>切换本地执行，需要满足以下条件：</p>
+<ul>
+<li>作业输入数据量小于<code>hive.exec.mode.local.auto.inputbytes.max</code>（默认128MB）</li>
+<li>map任务数小于<code>hive.exec.mode.local.auto.tasks.max</code>（默认4个）</li>
+<li>reduce任务数不大于1个</li>
+</ul>
+<p>注意：</p>
+<p>节点本地环境不同，可能导致出错。</p>
+<p>本地进程以Hive client子进程的形式进行，内存上限默认由Hadoop决定，可通过hive.mapred.local.mem修改。</p>
+<h2 id="6-日志"><a href="#6-日志" class="headerlink" title="6 日志"></a>6 日志</h2><p>Hive使用log4j记录日志。</p>
+<p>默认不在控制台输出。</p>
+<p>版本&gt;=0.13，默认的日志级别为INFO。默认的日志输出文件为<code>/tmp/&lt;user.name&gt;/hive.log</code>，可通过 $HIVE_HOME/conf/hive-log4j.properties中的hive.log.dir变量配置，需要设置权限<code>chmod 1777 &lt;dir&gt;</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 输出控制台</span><br><span class="line">bin/hiveserver2 --hiveconf hive.root.logger=INFO,console</span><br><span class="line"></span><br><span class="line">// 修改日志级别（only）</span><br><span class="line">bin/hiveserver2 --hiveconf hive.root.logger=INFO,DRFA</span><br><span class="line"></span><br><span class="line">// 版本&gt;= 1.1.0, 设置时间滚动策略</span><br><span class="line">bin/hiveserver2 --hiveconf hive.root.logger=INFO,DAILY</span><br></pre></td></tr></table></figure>
+<p>注意：hive.root.logger仅在初始化时生效，不影响配置文件</p>
+<p>Hive为每个会话存储查询日志到/tmp/<user.name>/，可通过<a href="https://cwiki.apache.org/confluence/display/Hive/AdminManual+Configuration" target="_blank" rel="noopener">hive-site.xml</a>的<a href="https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties#ConfigurationProperties-hive.querylog.location" target="_blank" rel="noopener">hive.querylog.location</a>配置。版本&gt;=1.1.0，<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Explain#LanguageManualExplain-EXPLAINSyntax" target="_blank" rel="noopener">EXPLAIN EXTENDED</a>可以通过设置<a href="https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties#ConfigurationProperties-hive.log.explain.output" target="_blank" rel="noopener">hive.log.explain.output</a>为true，更改为INFO级别。</user.name></p>
+<p>集群执行时，Hadoop为每个任务生成日志，可通过Web UI获取。</p>
+<p>本地执行时，Hive为每次查询生成一个日志文件，默认输出到/tmp/<user.name>/。版本&gt;=0.6，使用hive-exec-log4j.properties(前者不存在时，使用 hive-log4j.properties)设置输出目录。分离的配置允许使用网络存储设备，如NFS。</user.name></p>
+<p>WebHCat日志和错误，详见<a href="https://cwiki.apache.org/confluence/display/Hive/WebHCat+UsingWebHCat#WebHCatUsingWebHCat-ErrorCodesandResponses" target="_blank" rel="noopener">Error Codes and Responses</a>和<a href="https://cwiki.apache.org/confluence/display/Hive/WebHCat+UsingWebHCat#WebHCatUsingWebHCat-LogFiles" target="_blank" rel="noopener">Log Files</a></p>
+<p>版本&gt;= 2.1.0，Hive使用Log4j2的异步日志，其通过独立的日志线程，并且使用LMAX disruptor队列缓存，提高性能。可以通过<a href="https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties#ConfigurationProperties-hive.async.log.enabled" target="_blank" rel="noopener">hive.async.log.enabled</a>设置开关。</p>
+<h3 id="1-HiveServer2-日志"><a href="#1-HiveServer2-日志" class="headerlink" title="(1) HiveServer2 日志"></a>(1) HiveServer2 日志</h3><p>版本&gt;=0.14可用，详见<a href="https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-HiveServer2Logging" target="_blank" rel="noopener">HiveServer2 Logging</a></p>
+<h3 id="2-Audit日志"><a href="#2-Audit日志" class="headerlink" title="(2) Audit日志"></a>(2) Audit日志</h3><p>记录Hive元数据服务器中的每次元数据API调用。</p>
+<p>由于使用INFO级别，需要保证日志输出级别为INFO。</p>
+<p>日志入口为HiveMetaStore.audit</p>
+<p>版本&gt;=0.7提供安全客户端连接，版本&gt;=0.10提供非安全连接。</p>
+<h3 id="3-性能日志记录器"><a href="#3-性能日志记录器" class="headerlink" title="(3) 性能日志记录器"></a>(3) 性能日志记录器</h3><p>用于性能测量。</p>
+<p>若hive.root.logger不是DEBUG级别，需要设置PrefLogger为DEBUG级别：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log4j.logger.org.apache.hadoop.hive.ql.log.PerfLogger=DEBUG</span><br></pre></td></tr></table></figure>
+<h2 id="7-DDL操作"><a href="#7-DDL操作" class="headerlink" title="7 DDL操作"></a>7 DDL操作</h2><p>详见<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL" target="_blank" rel="noopener">Hive Data Definition Language</a></p>
+<h3 id="1-创建表"><a href="#1-创建表" class="headerlink" title="(1) 创建表"></a>(1) 创建表</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span> CREATE TABLE pokes (foo INT, bar STRING);</span><br><span class="line"></span><br><span class="line">// 创建名为invites的表。具有两列(整型foo和字符串bar)。</span><br><span class="line">// 分区列是从数据中提取的虚拟列</span><br><span class="line"><span class="meta">hive&gt;</span> CREATE TABLE invites (foo INT, bar STRING) PARTITIONED BY (ds STRING);</span><br></pre></td></tr></table></figure>
+<p>默认，数据以文本格式录入表，使用^A(ctrl-a)分隔。</p>
+<h3 id="2-检索表"><a href="#2-检索表" class="headerlink" title="(2) 检索表"></a>(2) 检索表</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 列举所有表</span><br><span class="line"><span class="meta">hive&gt;</span> SHOW TABLES;</span><br><span class="line"></span><br><span class="line">// 列举匹配正则表达式的表</span><br><span class="line"><span class="meta">hive&gt;</span> SHOW TABLES '.*s';</span><br><span class="line"></span><br><span class="line">// 列举表格所有列</span><br><span class="line"><span class="meta">hive&gt;</span> DESCRIBE invites;</span><br></pre></td></tr></table></figure>
+<p>正则语法详见<a href="http://java.sun.com/javase/6/docs/api/java/util/regex/Pattern.html" target="_blank" rel="noopener">Java regular expressions</a></p>
+<h3 id="3-修改、删除表"><a href="#3-修改、删除表" class="headerlink" title="(3) 修改、删除表"></a>(3) 修改、删除表</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 表更名</span><br><span class="line"><span class="meta">hive&gt;</span> ALTER TABLE events RENAME TO 3koobecaf;</span><br><span class="line"></span><br><span class="line">// 增加列</span><br><span class="line"><span class="meta">hive&gt;</span> ALTER TABLE pokes ADD COLUMNS (new_col INT);</span><br><span class="line"><span class="meta">hive&gt;</span> ALTER TABLE invites ADD COLUMNS (new_col2 INT COMMENT 'a comment');</span><br><span class="line"></span><br><span class="line">// 列更名,只是改动schema，不涉及数据</span><br><span class="line">// 表必须使用本地序列化与反序列化（简称，SerDe）</span><br><span class="line"><span class="meta">hive&gt;</span> ALTER TABLE invites REPLACE COLUMNS (foo INT, bar STRING, baz INT COMMENT 'baz replaces new_col2');</span><br><span class="line"></span><br><span class="line">// 列删除</span><br><span class="line">// 只保留第一列</span><br><span class="line"><span class="meta">hive&gt;</span> ALTER TABLE invites REPLACE COLUMNS (foo INT COMMENT 'only keep the first column');</span><br><span class="line"></span><br><span class="line">// 表删除</span><br><span class="line"><span class="meta">hive&gt;</span> DROP TABLE pokes;</span><br></pre></td></tr></table></figure>
+<h3 id="4-元数据存储"><a href="#4-元数据存储" class="headerlink" title="(4) 元数据存储"></a>(4) 元数据存储</h3><p>元数据保存在内嵌的Derby数据库中。</p>
+<p>元数据可以存储在支持JPOX的数据库中。通过变量javax.jdo.option.ConnectionURL和javax.jdo.option.ConnectionDriverName配置位置和类型。</p>
+<p>数据库Schema保存在src/contrib/hive/metastore/src/model/package.jdo的JDO元数据注解中。</p>
+<p>默认存储位置为./metastore_db (详见conf/hive-default.xml)，可通过javax.jdo.option.ConnectionURL变量修改。</p>
+<p>默认配置，同一时刻只对一个用户可见。</p>
+<p>以网络服务器形式运行元数据存储，详见<a href="https://cwiki.apache.org/confluence/display/Hive/HiveDerbyServerMode" target="_blank" rel="noopener">Hive Using Derby in Server Mode</a></p>
+<p>TODO， 元数据存储实现为standalone服务器。</p>
+<p>注释：JPOX是JDO（Java Data Object）的一个实现。提供Java对象透明的一致性，支持OLAP和RDBMS。</p>
+<h2 id="4-DML操作"><a href="#4-DML操作" class="headerlink" title="4 DML操作"></a>4 DML操作</h2><p>详见<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML" target="_blank" rel="noopener">Hive Data Manipulation Language</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 加载本地文件到表中</span><br><span class="line"><span class="meta">hive&gt;</span> LOAD DATA LOCAL INPATH './examples/files/kv1.txt' OVERWRITE INTO TABLE pokes;</span><br></pre></td></tr></table></figure>
+<p>LOCAL：本地文件。若缺省，为HDFS文件</p>
+<p>OVERWRITE：删除已有数据。若缺省，为追加</p>
+<p>注意：</p>
+<p>加载命令不检查数据schema</p>
+<p>加载HDFS文件，将移动文件或文件夹到Hive路径下。建议先创建路径。通过hive-default.xml中hive.metastore.warehouse.dir变量控制。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 只有定义了分区列的表才能使用分区</span><br><span class="line"><span class="meta">hive&gt;</span> LOAD DATA LOCAL INPATH './examples/files/kv2.txt' OVERWRITE INTO TABLE invites PARTITION (ds='2008-08-15');</span><br><span class="line">//移动HDFS文件几乎是瞬时的</span><br><span class="line"><span class="meta">hive&gt;</span> LOAD DATA INPATH '/user/myname/kv2.txt' OVERWRITE INTO TABLE invites PARTITION (ds='2008-08-15');</span><br></pre></td></tr></table></figure>
+<h2 id="5-SQL操作"><a href="#5-SQL操作" class="headerlink" title="5 SQL操作"></a>5 SQL操作</h2><p>详见<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Select" target="_blank" rel="noopener">Select</a></p>
+<p>示例详见build/dist/examples/queries和ql/src/test/queries/positive。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">// 查询，结果在控制台输出，不另存</span><br><span class="line"><span class="meta">hive&gt;</span> SELECT a.foo FROM invites a WHERE a.ds='2008-08-15';</span><br><span class="line"></span><br><span class="line">// 插入数据到HDFS中，结果存储在指定目录下的文件中(数量依据mapper数量)</span><br><span class="line">// 分区的表必须有分区条件限制，否则全部分区检索</span><br><span class="line"><span class="meta">hive&gt;</span> INSERT OVERWRITE DIRECTORY '/tmp/hdfs_out' SELECT a.* FROM invites a WHERE a.ds='2008-08-15';</span><br><span class="line"><span class="meta">hive&gt;</span> INSERT OVERWRITE LOCAL DIRECTORY '/tmp/local_out' SELECT a.* FROM pokes a;</span><br><span class="line"><span class="meta">hive&gt;</span> INSERT OVERWRITE TABLE events SELECT a.* FROM profiles a WHERE a.key &lt; 100;</span><br><span class="line"></span><br><span class="line">// GROUP BY</span><br><span class="line"><span class="meta">hive&gt;</span> FROM invites a INSERT OVERWRITE TABLE events SELECT a.bar, count(*) WHERE a.foo &gt; 0 GROUP BY a.bar;</span><br><span class="line"><span class="meta">hive&gt;</span> INSERT OVERWRITE TABLE events SELECT a.bar, count(*) FROM invites a WHERE a.foo &gt; 0 GROUP BY a.bar;</span><br><span class="line"></span><br><span class="line">// JOIN</span><br><span class="line"><span class="meta">hive&gt;</span> FROM pokes t1 JOIN invites t2 ON (t1.bar = t2.bar) INSERT OVERWRITE TABLE events SELECT t1.bar, t1.foo, t2.foo;</span><br><span class="line"></span><br><span class="line">// MultiTable Insert</span><br><span class="line">FROM src</span><br><span class="line">INSERT OVERWRITE TABLE dest1 SELECT src.* WHERE src.key &lt; 100</span><br><span class="line">INSERT OVERWRITE TABLE dest2 SELECT src.key, src.value WHERE src.key &gt;= 100 and src.key &lt; 200</span><br><span class="line">INSERT OVERWRITE TABLE dest3 PARTITION(ds='2008-04-08', hr='12') SELECT src.key WHERE src.key &gt;= 200 and src.key &lt; 300</span><br><span class="line">INSERT OVERWRITE LOCAL DIRECTORY '/tmp/dest4.out' SELECT src.value WHERE src.key &gt;= 300;</span><br><span class="line"></span><br><span class="line">// Streaming</span><br><span class="line">// 在map阶段通过/bin/cat脚本转换数据。也可以在reduce阶段</span><br><span class="line"><span class="meta">hive&gt;</span> FROM invites a INSERT OVERWRITE TABLE events SELECT TRANSFORM(a.foo, a.bar) AS (oof, rab) USING '/bin/cat' WHERE a.ds &gt; '2008-08-09';</span><br></pre></td></tr></table></figure>
+<p>注意： 版本&lt; 0.6(不包含<a href="https://issues.apache.org/jira/browse/HIVE-287" target="_blank" rel="noopener">HIVE-287</a>的版本)，使用count(1)代替count(*)</p>
+<p>Streaming详见<a href="https://cwiki.apache.org/confluence/display/Hive/Tutorial#Tutorial-Custommap%2Freducescripts" target="_blank" rel="noopener">Hive Tutorial</a></p>
+<h2 id="6-采坑指南"><a href="#6-采坑指南" class="headerlink" title="6 采坑指南"></a>6 采坑指南</h2><p>(1) 使用schematool初始化数据库类型时</p>
+<p>报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.NoSuchMethodError: com.google.common.base.Preconditions.checkArgument(ZLjava/lang/String;Ljava/lang/Object;)V</span><br></pre></td></tr></table></figure>
+<p>通过查阅资料，可能是Hadoop与Hive中Guava版本不一致引起，需要删除Hive中的jar包。同样对于log4j-slf4j-impl-2.10.0.jar。并从hadoop中拷贝。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd apache-hive-3.1.2-bin/lib/;rm guava-19.0.jar;rm log4j-slf4j-impl-2.10.0.jar</span><br><span class="line"></span><br><span class="line">cp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/guava-27.0-jre.jar /home/nick/apache-hive-3.1.2-bin/lib;scp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/guava-27.0-jre.jar nick@slave1:/home/nick/apache-hive-3.1.2-bin/lib;scp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/guava-27.0-jre.jar nick@slave2:/home/nick/apache-hive-3.1.2-bin/lib;scp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/guava-27.0-jre.jar nick@slave3:/home/nick/apache-hive-3.1.2-bin/lib;cp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/log4j-1.2.17.jar /home/nick/apache-hive-3.1.2-bin/lib;scp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/log4j-1.2.17.jar nick@slave1:/home/nick/apache-hive-3.1.2-bin/lib;scp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/log4j-1.2.17.jar nick@slave2:/home/nick/apache-hive-3.1.2-bin/lib;scp /home/nick/hadoop-3.2.1/share/hadoop/common/lib/log4j-1.2.17.jar nick@slave3:/home/nick/apache-hive-3.1.2-bin/lib;</span><br></pre></td></tr></table></figure>
+<p>启动HCatalog时，报错/home/nick/apache-hive-3.1.2-bin/hcatalog/sbin/hcat_server.sh:行91: /home/nick/apache-hive-3.1.2-bin/hcatalog/sbin/../var/log/hcat.out: 没有那个文件或目录；</p>
+<p>解决：创建该文件</p>
+<p>beeline中创建数据库时，报错Error: Error while processing statement: FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. MetaException(message:Got exception: org.apache.hadoop.security.AccessControlException Permission denied: user=anonymous, access=WRITE, inode=”/user/nick/warehouse”:nick:supergroup:drwxrwxr-x；</p>
+<p>解决：赋予写权限</p>
+<p>beeline查询表时，报错： Execution Error, return code 30041 from org.apache.hadoop.hive.ql.exec.spark.SparkTask. Failed to create Spark client for Spark session 1ee619c9-e587-4577-a03c-c9ef5f6eedb2 (state=42000,code=30041)</p>
+<p>解决： </p>
+<p>Spark 2.0.0已经标记弃用hive.metastore.warehouse.dir<code>property in</code>hive-site.xml，改为使用spark.sql.warehouse.dir指示数据仓库中默认数据库位置。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>spark.sql.warehouse.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/user/nick/warehouse<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>same with hive.metastore.warehouse.dir, which is deprecated in 2.0.0<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>复制<code>hive-site.xml</code>, <code>core-site.xml</code> (for security configuration), and <code>hdfs-site.xml</code> (for HDFS configuration) file in <code>conf/</code>，然后启动Spark集群。</p>
+<p>beeline查询表时，报错 Error while processing statement: FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.spark.SparkTask. Spark job failed during runtime. Please check stacktrace for the root cause. (state=42000,code=2)</p>
+<p>过程：需要日志查看细节hive –hiveconf hive.root.logger=DEBUG,console</p>
+<p>找到链接<a href="http://master:8088/cluster/app/application_1592471815985_0004" target="_blank" rel="noopener">http://master:8088/cluster/app/application_1592471815985_0004</a></p>
+<p>其中抛出异常：找不到或无法加载主类 org.apache.spark.deploy.yarn.ExecutorLauncher</p>
+<p>查阅资料，怀疑问题在没有让Spark访问到类，需要在spark-defaults.conf中设置spark.yarn.jars                  hdfs://master:8020/spark-jars/*</p>
+<p>原因：配置中HDFS路径问题导致jar没找到</p>
+<p>解决：不能使用beeline操作，待探究</p>
+<p>需要使用hive命令操作，可行</p>
+<p>启动spark history server时报错</p>
+<p>java.io.FileNotFoundException: Log directory specified does not exist: file:/tmp/spark-events Did you configure the correct one through spark.history.fs.logDirectory?</p>
+<p>在spark-env.sh中设置 spark.history.fs.logDirectory用于在应用执行后保存日志</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export SPARK_HISTORY_OPTS="-Dspark.history.ui.port=18080 -Dspark.history.retainedApplications=20 -Dspark.history.fs.logDirectory=hdfs://master:8020/spark-log"</span><br></pre></td></tr></table></figure>
+<p>启动spark history server时报错，目录找不到</p>
+<p>解决：HDFS目录中默认前缀为/user/nick，需要在配置中显式添加，否则不能找到。待探究去除的情况</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://en.wikipedia.org/wiki/Apache_Hive" target="_blank" rel="noopener">Apache Hive</a></p>
+<p><a href="https://cwiki.apache.org/confluence/display/Hive/Home" target="_blank" rel="noopener">Home</a></p>
+<p><a href="https://cwiki.apache.org/confluence/display/Hive/Tutorial" target="_blank" rel="noopener">Hive Tutorial</a></p>
+<p><a href="https://www.cnblogs.com/qingyunzong/p/8707885.html" target="_blank" rel="noopener">Hive学习之路 （一）Hive初识</a></p>
+<p><a href="https://cwiki.apache.org/confluence/display/Hive/GettingStarted" target="_blank" rel="noopener">GettingStarted</a></p>
+<p><a href="https://blog.csdn.net/sinat_34439107/article/details/103914449" target="_blank" rel="noopener">启动hive报错：java.lang.NoSuchMethodError: com.google.common.base.Preconditions.checkArgument(ZLjava/lang</a></p>
+<p><a href="https://www.cnblogs.com/royfans/p/7307493.html" target="_blank" rel="noopener">hive bin下的进入beeline 命令行和hive有什么不同？</a></p>
+<p><a href="https://blog.csdn.net/yunyexiangfeng/article/details/60867563" target="_blank" rel="noopener">hive启动beeline连接报错： User: xxx is not allowed to impersonate anonymous (state=08S01,code=0)</a></p>
+<p><a href="http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/Superusers.html" target="_blank" rel="noopener">Proxy user - Superusers Acting On Behalf Of Other Users</a></p>
+<p><a href="https://blog.csdn.net/xiaoqiu_cr/article/details/81627246" target="_blank" rel="noopener">beeline执行insert命令时报错Permission denied: user=anonymous, access=EXECUTE, inode=”/tmp/hadoop-yarn”:xiao</a></p>
+<p><a href="https://www.cnblogs.com/wqbin/p/10971212.html" target="_blank" rel="noopener">Hive中的日志</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hive/" rel="tag"># Hive</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/27/200527Flume开发指南/" rel="next" title="Flume开发指南">
+                <i class="fa fa-chevron-left"></i> Flume开发指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/27/200527Kafka入门/" rel="prev" title="Kafka入门">
+                Kafka入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-定义"><span class="nav-number">1.</span> <span class="nav-text">1 定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-特性"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-组件"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-安装和配置"><span class="nav-number">2.</span> <span class="nav-text">2  安装和配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-要求"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-运行"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 运行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-前提"><span class="nav-number">2.2.1.</span> <span class="nav-text">1) 前提</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-运行HiveServer2和Beeline"><span class="nav-number">2.2.2.</span> <span class="nav-text">2) 运行HiveServer2和Beeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-运行HCatalog"><span class="nav-number">2.2.3.</span> <span class="nav-text">3) 运行HCatalog</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-启动WebHCat"><span class="nav-number">2.2.4.</span> <span class="nav-text">4) 启动WebHCat</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置管理概览"><span class="nav-number">3.</span> <span class="nav-text">3 配置管理概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-运行时配置"><span class="nav-number">4.</span> <span class="nav-text">4 运行时配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Hive、MapReduce和本地模式"><span class="nav-number">5.</span> <span class="nav-text">5 Hive、MapReduce和本地模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-日志"><span class="nav-number">6.</span> <span class="nav-text">6 日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-HiveServer2-日志"><span class="nav-number">6.1.</span> <span class="nav-text">(1) HiveServer2 日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Audit日志"><span class="nav-number">6.2.</span> <span class="nav-text">(2) Audit日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-性能日志记录器"><span class="nav-number">6.3.</span> <span class="nav-text">(3) 性能日志记录器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-DDL操作"><span class="nav-number">7.</span> <span class="nav-text">7 DDL操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建表"><span class="nav-number">7.1.</span> <span class="nav-text">(1) 创建表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-检索表"><span class="nav-number">7.2.</span> <span class="nav-text">(2) 检索表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-修改、删除表"><span class="nav-number">7.3.</span> <span class="nav-text">(3) 修改、删除表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-元数据存储"><span class="nav-number">7.4.</span> <span class="nav-text">(4) 元数据存储</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-DML操作"><span class="nav-number">8.</span> <span class="nav-text">4 DML操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-SQL操作"><span class="nav-number">9.</span> <span class="nav-text">5 SQL操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-采坑指南"><span class="nav-number">10.</span> <span class="nav-text">6 采坑指南</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">11.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/05/27/200527Hive入门/';
+          this.page.identifier = '2020/05/27/200527Hive入门/';
+          this.page.title = 'Hive入门';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

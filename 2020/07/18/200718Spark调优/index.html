@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="调优主要面临的问题是网络和内存。">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark调优">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/07/18/200718Spark调优/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="调优主要面临的问题是网络和内存。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-30T15:55:46.499Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark调优">
+<meta name="twitter:description" content="调优主要面临的问题是网络和内存。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/07/18/200718Spark调优/"/>
+
+
+
+
+
+  <title>Spark调优 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/07/18/200718Spark调优/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark调优</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-18T11:00:47+08:00">
+                2020-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/18/200718Spark调优/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/18/200718Spark调优/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>调优主要面临的问题是网络和内存。</p>
+<a id="more"></a>
+<h2 id="1-序列化"><a href="#1-序列化" class="headerlink" title="1 序列化"></a>1 序列化</h2><h3 id="1-两种序列化库"><a href="#1-两种序列化库" class="headerlink" title="(1) 两种序列化库"></a>(1) 两种序列化库</h3><ul>
+<li><p>Java</p>
+<p>默认方式。</p>
+<p>支持所有实现了<a href="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html" target="_blank" rel="noopener">java.io.Serializable</a>接口的类。</p>
+<p>通常慢且压缩效率相对低。</p>
+</li>
+<li><p>Kryo</p>
+<p>快且效率较高。</p>
+<p>需要注册相应的类，不完全支持java.io.Serializable。</p>
+<p>Spark内部用于基本类型、基本类型数组和字符串序列化。</p>
+<p>推荐在带宽紧张的场景使用。</p>
+</li>
+</ul>
+<p>切换序列化库：调用 conf.set(“spark.serializer”, “org.apache.spark.serializer.KryoSerializer”)，将用于工作节点交换和序列化到磁盘中。</p>
+<p>注册类：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>().setMaster(...).setAppName(...)</span><br><span class="line">conf.registerKryoClasses(<span class="type">Array</span>(classOf[<span class="type">MyClass1</span>], classOf[<span class="type">MyClass2</span>]))</span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br></pre></td></tr></table></figure>
+<p>详见<a href="https://github.com/EsotericSoftware/kryo" target="_blank" rel="noopener">Kryo documentation</a></p>
+<p>注意：</p>
+<ul>
+<li>对象过大时，需要调整序列化上限 <a href="https://spark.apache.org/docs/2.3.0/configuration.html#compression-and-serialization" target="_blank" rel="noopener">spark.kryoserializer.buffer </a></li>
+<li>没有注册类也能正常工作，但是需要存储每个对象的完全类名称，浪费空间。</li>
+</ul>
+<h2 id="2-内存调优"><a href="#2-内存调优" class="headerlink" title="2 内存调优"></a>2 内存调优</h2><h3 id="1-内存调优考量"><a href="#1-内存调优考量" class="headerlink" title="(1) 内存调优考量"></a>(1) 内存调优考量</h3><ul>
+<li>对象存储消耗</li>
+<li>对象访问消耗</li>
+<li>垃圾回收周转</li>
+</ul>
+<h3 id="2-Java对象存储"><a href="#2-Java对象存储" class="headerlink" title="(2) Java对象存储"></a>(2) Java对象存储</h3><p>通常，Java访问较快，但空间占用可达有效数据的数倍。原因如下：</p>
+<ul>
+<li><p>对象头</p>
+<p>约16字节</p>
+</li>
+<li><p>指针和编码</p>
+<p>如字符串类使用约40字节额外数据组织字符，以及采用Unicode编码。通常10个字符长度占用约60字节数据。</p>
+</li>
+<li><p>集合与包装类</p>
+</li>
+</ul>
+<h3 id="3-内存管理概览"><a href="#3-内存管理概览" class="headerlink" title="(3) 内存管理概览"></a>(3) 内存管理概览</h3><p>Spark内存占用主要分为执行内存和存储内存。</p>
+<p>执行内存用于数据交换、连接和聚合过程中的计算。存储内存用于缓存、内部数据分发。</p>
+<p>执行内存和存储内存共享一个统一的内存区域M，两者可以根据需要分配。当内存使用量小于界限R时，执行内存不能驱离存储内存。</p>
+<p>Spark提供了调配内存比例的方法.</p>
+<ul>
+<li>spark.memory.fraction指定总内存M占虚拟机内存的比例，默认0.6，其余部分可用于保存用户数据、元数据和浮动等</li>
+<li>spark.memory.storageFraction界限R占M的比例，默认0.5.</li>
+</ul>
+<h3 id="4-内存消耗计算"><a href="#4-内存消耗计算" class="headerlink" title="(4) 内存消耗计算"></a>(4) 内存消耗计算</h3><p>有以下两种方法：</p>
+<ul>
+<li>缓存RDD，在Web UI中查看占用</li>
+<li>使用SizeEstimator.estimate()估计</li>
+</ul>
+<h3 id="5-数据结构调优"><a href="#5-数据结构调优" class="headerlink" title="(5) 数据结构调优"></a>(5) 数据结构调优</h3><p>通过以下方式避免增加负载的Java特性：</p>
+<ul>
+<li>使用基本类型和数组，而不是集合。可以使用<a href="http://fastutil.di.unimi.it/" target="_blank" rel="noopener">fastutil</a>选择替代方案</li>
+<li>尽量减少使用嵌套大量对象和指针的数据结构</li>
+<li>键值尽量使用数值或枚举类</li>
+<li>内存小于32GB时，使用-XX:+UseCompressedOops将指针类型从8字节转为4字节，可以在<a href="https://spark.apache.org/docs/2.3.0/configuration.html#environment-variables" target="_blank" rel="noopener">spark-env.sh</a>中配置</li>
+</ul>
+<h3 id="6-序列化RDD存储"><a href="#6-序列化RDD存储" class="headerlink" title="(6) 序列化RDD存储"></a>(6) 序列化RDD存储</h3><p>使用序列化减少内存使用，代价是减慢访问速率。</p>
+<p>推荐使用Kryo，压缩比更高</p>
+<h3 id="7-垃圾回收调优"><a href="#7-垃圾回收调优" class="headerlink" title="(7) 垃圾回收调优"></a>(7) 垃圾回收调优</h3><p>垃圾回收需要跟踪对象引用，对象数量影响该部分工作。为了减少对象数量，建议使用数组，而不是集合。</p>
+<p>针对垃圾回收问题，第一步是使用序列化，减少内存使用。</p>
+<h4 id="1-衡量影响"><a href="#1-衡量影响" class="headerlink" title="1) 衡量影响"></a>1) 衡量影响</h4><p>使用JVM参数-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps</p>
+<p>注意日志输出到各工作节点stout文件中</p>
+<h4 id="2-高级GC调优"><a href="#2-高级GC调优" class="headerlink" title="2) 高级GC调优"></a>2) 高级GC调优</h4><p>目的是保证只有长期活跃RDD保存在老年代，新生代有足够的空间保存短期对象。避免full GC清理任务执行时的临时对象。</p>
+<ul>
+<li><p>检查GC频率</p>
+<p>任务完成前多次full GC意味着内存不足</p>
+</li>
+<li><p>minor GC多而full GC不多</p>
+<p>给新生代分配更多的内存，如乘以系数4/3</p>
+</li>
+<li><p>老年代快满时，减少其他区域内存</p>
+<p>减少缓存对象的内存。</p>
+<p>或者减少新生代内存，通过-Xmn或NewRatio(老年代对新生代的倍数)参数</p>
+</li>
+<li><p>在垃圾回收成为瓶颈的场景中，使用G1垃圾回收</p>
+<p>对于较大的执行器堆内存，需要使用-XX:G1HeapRegionSize增加<a href="http://www.oracle.com/technetwork/articles/java/g1gc-1984535.html" target="_blank" rel="noopener">G1 region size</a> </p>
+</li>
+<li><p>HDFS数据占用估计</p>
+<p>数据块(128MB)*解压缩(通常增至2-3倍)*任务数</p>
+</li>
+<li><p>监控垃圾回收耗时和频率</p>
+</li>
+</ul>
+<p>注意：</p>
+<p>调优可通过spark.executor.extraJavaOptions为每个作业配置</p>
+<p>调优效果取决于应用程序和可用内存，更多方式详见 <a href="http://www.oracle.com/technetwork/java/javase/gc-tuning-6-140523.html" target="_blank" rel="noopener">many more tuning options</a></p>
+<h2 id="3-其他"><a href="#3-其他" class="headerlink" title="3 其他"></a>3 其他</h2><h3 id="1-并发数"><a href="#1-并发数" class="headerlink" title="(1) 并发数"></a>(1) 并发数</h3><p>设置足够高的并发数，以充分利用集群计算资源。</p>
+<p>建议并发数设置为可用CPU核心数的2-3倍</p>
+<h3 id="2-Reduce任务内存使用"><a href="#2-Reduce任务内存使用" class="headerlink" title="(2) Reduce任务内存使用"></a>(2) Reduce任务内存使用</h3><p>由于聚合阶段为每个任务使用映射表，可能导致内存溢出。</p>
+<p>建议通过增加并发数，来减少任务处理的数据量。</p>
+<h3 id="3-广播大变量"><a href="#3-广播大变量" class="headerlink" title="(3) 广播大变量"></a>(3) 广播大变量</h3><p>广播变量可以减少任务序列化数据量和降低集群作业消耗。</p>
+<p>建议广播容量大于20KB的数据。</p>
+<h3 id="4-数据本地化"><a href="#4-数据本地化" class="headerlink" title="(4) 数据本地化"></a>(4) 数据本地化</h3><p>数据和代码通常不再同一进程中。由于数据量的悬殊，通常将代码转移到靠近数据的节点执行。</p>
+<p>Spark数据本地化等级如下，从上到下相距越远，数据传输速率越低：</p>
+<ul>
+<li><code>PROCESS_LOCAL</code> 同一JVN进程中</li>
+<li><code>NODE_LOCAL</code> 同一节点，数据通常需要在进程间传递</li>
+<li><code>NO_PREF</code> 没有区分</li>
+<li><code>RACK_LOCAL</code> 同一机架，需要通过交换机网络传输</li>
+<li><code>ANY</code> 不同机架，需要网络传输</li>
+</ul>
+<p>任务执行时，Spark有以下两种选择：</p>
+<ul>
+<li>等待所需数据节点可用（默认）</li>
+<li>传输数据到空闲节点计算</li>
+</ul>
+<p>可通过spark.locality参数调整</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h2><p>更多调优方式详见<a href="https://spark.apache.org/community.html" target="_blank" rel="noopener">Spark mailing list</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://spark.apache.org/docs/2.3.0/tuning.html" target="_blank" rel="noopener">Tuning Spark</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/14/200714范式/" rel="next" title="范式">
+                <i class="fa fa-chevron-left"></i> 范式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/19/200719MySQL on Windows/" rel="prev" title="MySQL on Windows(二进制分发包)">
+                MySQL on Windows(二进制分发包) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-序列化"><span class="nav-number">1.</span> <span class="nav-text">1 序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-两种序列化库"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 两种序列化库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-内存调优"><span class="nav-number">2.</span> <span class="nav-text">2 内存调优</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内存调优考量"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 内存调优考量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Java对象存储"><span class="nav-number">2.2.</span> <span class="nav-text">(2) Java对象存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-内存管理概览"><span class="nav-number">2.3.</span> <span class="nav-text">(3) 内存管理概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-内存消耗计算"><span class="nav-number">2.4.</span> <span class="nav-text">(4) 内存消耗计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-数据结构调优"><span class="nav-number">2.5.</span> <span class="nav-text">(5) 数据结构调优</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-序列化RDD存储"><span class="nav-number">2.6.</span> <span class="nav-text">(6) 序列化RDD存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-垃圾回收调优"><span class="nav-number">2.7.</span> <span class="nav-text">(7) 垃圾回收调优</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-衡量影响"><span class="nav-number">2.7.1.</span> <span class="nav-text">1) 衡量影响</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-高级GC调优"><span class="nav-number">2.7.2.</span> <span class="nav-text">2) 高级GC调优</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-其他"><span class="nav-number">3.</span> <span class="nav-text">3 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-并发数"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 并发数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Reduce任务内存使用"><span class="nav-number">3.2.</span> <span class="nav-text">(2) Reduce任务内存使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-广播大变量"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 广播大变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数据本地化"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 数据本地化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/07/18/200718Spark调优/';
+          this.page.identifier = '2020/07/18/200718Spark调优/';
+          this.page.title = 'Spark调优';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

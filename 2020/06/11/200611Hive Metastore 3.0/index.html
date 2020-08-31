@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hive," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本&amp;gt;=3.0，其他版本详见Metastore Administration">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive Metastore 3.0">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/06/11/200611Hive Metastore 3.0/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本&amp;gt;=3.0，其他版本详见Metastore Administration">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611220246842.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611222336112.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611222805785.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611224446177.png">
+<meta property="og:updated_time" content="2020-06-17T12:45:20.373Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive Metastore 3.0">
+<meta name="twitter:description" content="适用于版本&amp;gt;=3.0，其他版本详见Metastore Administration">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/06/11/200611Hive%20Metastore%203.0/200611Hive%20Metastore%203.0/image-20200611220246842.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/06/11/200611Hive Metastore 3.0/"/>
+
+
+
+
+
+  <title>Hive Metastore 3.0 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/06/11/200611Hive Metastore 3.0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hive Metastore 3.0</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-11T11:00:47+08:00">
+                2020-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hive/" itemprop="url" rel="index">
+                    <span itemprop="name">Hive</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/11/200611Hive Metastore 3.0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/11/200611Hive Metastore 3.0/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本&gt;=3.0，其他版本详见<a href="https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+Administration" target="_blank" rel="noopener">Metastore Administration</a></p>
+<a id="more"></a>
+<p>Metastore保存有Hive对象定义（数据库、表和函数等），以及系统配置、统计和授权记录等。Hive和执行引擎在运行时访问这些数据，以决定解析、授权和查询的方式。</p>
+<p>Hive通过<a href="http://www.datanucleus.org/" target="_blank" rel="noopener">DataNucleus</a>（一种基于JDO的Java对象关系映射（ORM）层）持久化对象定义到关系型数据库中。</p>
+<p>Metastore可以使用内嵌的Derby或外部数据库。可整个内嵌到用户进程，或者作为服务运行。</p>
+<h2 id="1-Hive-2-与Hive-3变化"><a href="#1-Hive-2-与Hive-3变化" class="headerlink" title="1 Hive 2 与Hive 3变化"></a>1 Hive 2 与Hive 3变化</h2><p>Hive 3允许Metastore以独立的进程运行。为了保持兼容性，以前的配置依旧有效，并且新增了一些功能和配置。独立运行Metastore，详见<a href="https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration" target="_blank" rel="noopener">Running the Metastore Without Hive</a> </p>
+<h2 id="2-通用配置"><a href="#2-通用配置" class="headerlink" title="2 通用配置"></a>2 通用配置</h2><p>Metastore可以通过以下配置：</p>
+<ul>
+<li>$METASTORE_HOME/conf/metastore-site.xml（仅限Hive 3）</li>
+<li>HIVE_HOME/conf/hive-site.xml或hive-metastoresite.xml</li>
+<li>命令行</li>
+</ul>
+<p>以下为常用的配置，不常用的配置，详见 <a href="https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration" target="_blank" rel="noopener">Less Commonly Changed Configuration Parameters</a></p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611220246842.png" alt="image-20200611220246842"></p>
+<h2 id="3-RDBMS"><a href="#3-RDBMS" class="headerlink" title="3 RDBMS"></a>3 RDBMS</h2><h3 id="1-内嵌Derby"><a href="#1-内嵌Derby" class="headerlink" title="(1) 内嵌Derby"></a>(1) 内嵌Derby</h3><p>默认配置，用于测试。每次只允许一个客户端。由于使用的是内存版本，客户端生命周期结束后不会持久化。</p>
+<h3 id="2-外部"><a href="#2-外部" class="headerlink" title="(2) 外部"></a>(2) 外部</h3><p>适用于持久化和多终端用途。Metastore通过JDBC与RDBMS连接。</p>
+<p>JDBC驱动需要放置在 METASTORE_HOME/lib下，或命令行显式传递。</p>
+<p>下表配置不区分版本：</p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611222336112.png" alt="image-20200611222336112"></p>
+<h3 id="3-支持的RDBMS"><a href="#3-支持的RDBMS" class="headerlink" title="(3) 支持的RDBMS"></a>(3) 支持的RDBMS</h3><p>由于Hive使用DataNucleus与RDBMS通信。理论上，支持所有与DataNucleus兼容的RDBMS。以下为经过测试的：</p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611222805785.png" alt="image-20200611222805785"></p>
+<p>注意：</p>
+<p>SCHEMA为Metastore存储表的数据库或schema。</p>
+<p>Oracle配置针对轻JDBC客户端，其他客户端有所区别。</p>
+<p>Postgres需要关闭metastore.try.direct.sql.ddl (或之前的hive.metastore.try.direct.sql.ddl)</p>
+<h3 id="4-Schema安装和升级"><a href="#4-Schema安装和升级" class="headerlink" title="(4) Schema安装和升级"></a>(4) Schema安装和升级</h3><p>schematool用于管理schema，详见help选项。通常schematool从metastore-site.xml或命令行获取配置。</p>
+<ul>
+<li><code>-initSchema</code>: install a new schema. This should be used when first setting up a Metastore.</li>
+<li><code>-upgradeSchema</code>: upgrade to the newly installed version. For 3.0, upgrades can be done from 1.2, 2.0, 2.1, 2.2, and 2.3 to 3.0. If you need to upgrade from before 1.2, use an older version of Hive’s <code>schematool</code> to first upgrade your schema to 1.2, then use the current Metastore version to upgrade to 3.0.</li>
+<li><code>-createUser</code>: create the Metastore user and schema. This does not install the tables, it just creates the database user and schema. This likely will not work in a production environment because you likely will not have permissions to create users and schemas. You will likely need your DBA to do this for you. </li>
+<li><code>-validate</code>: check that your Metastore schema is correct for its recorded version</li>
+</ul>
+<h2 id="4-运行Metastore"><a href="#4-运行Metastore" class="headerlink" title="4 运行Metastore"></a>4 运行Metastore</h2><h3 id="1-内嵌模式"><a href="#1-内嵌模式" class="headerlink" title="(1) 内嵌模式"></a>(1) 内嵌模式</h3><p>以库形式在内嵌到用户进程中。默认在没有配置metastore.uris使用，不建议在生产环境中使用。</p>
+<p>由于可能有多个客户端，大量的连接对DBMS是负担，并且多个客户端同时读写，难以保证数据安全。</p>
+<h3 id="2-服务模式"><a href="#2-服务模式" class="headerlink" title="(2) 服务模式"></a>(2) 服务模式</h3><p>单独运行前，需要配置以下URL：</p>
+<p><img src="/2020/06/11/200611Hive Metastore 3.0/200611Hive%20Metastore%203.0/image-20200611224446177.png" alt="image-20200611224446177"></p>
+<p>注意：</p>
+<p>启动Metastore，使用start-metastore命令。</p>
+<p>停止则直接杀掉进程。</p>
+<h4 id="1）高可用"><a href="#1）高可用" class="headerlink" title="1）高可用"></a>1）高可用</h4><p>Metastore服务是无状态的。可以通过启用多个服务提供高可用特性，同时可以配置部分客户端使用内嵌的Metastore。</p>
+<p>在客户端上，配置metastore.thrift.uris(逗号分隔的列表)和metastore.thrift.uri.selection ((Hive 2) hive.metastore.uri.selection)为RANDOM或SEQUENTIAL。</p>
+<h4 id="2-安全"><a href="#2-安全" class="headerlink" title="2) 安全"></a>2) 安全</h4><p>TODO: Need to fill in details for setting up with Kerberos, SSL, etc.</p>
+<p>CLIENT_KERBEROS<em>PRINCIPAL, KERBEROS</em><em>, SSL</em>, USE_SSL, USE_THRIFT_SASL</p>
+<h2 id="5-不依靠Hive运行"><a href="#5-不依靠Hive运行" class="headerlink" title="5 不依靠Hive运行"></a>5 不依靠Hive运行</h2><p>版本&gt;=3.0</p>
+<p>需要修改为以下属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Configuration Parameter</th>
+<th style="text-align:left">Set to for Standalone Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">metastore.task.threads.always</td>
+<td style="text-align:left">org.apache.hadoop.hive.metastore.events.EventCleanerTask,org.apache.hadoop.hive.metastore.MaterializationsCacheCleanerTask</td>
+</tr>
+<tr>
+<td style="text-align:left">metastore.expression.proxy</td>
+<td style="text-align:left">org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy</td>
+</tr>
+</tbody>
+</table>
+<p>注意：此模式下</p>
+<p>ACID表不能压缩</p>
+<p>副本机制没有测试</p>
+<h2 id="6-性能优化"><a href="#6-性能优化" class="headerlink" title="6 性能优化"></a>6 性能优化</h2><h3 id="1-CacheStore"><a href="#1-CacheStore" class="headerlink" title="(1) CacheStore"></a>(1) CacheStore</h3><p>Hive 3之前只有一种API实现ObjectStore。<a href="https://issues.apache.org/jira/browse/HIVE-16520" target="_blank" rel="noopener">HIVE-16520</a>引入了缓存对象到内存中的实现。可以提高来回操作数据库的效率。通过配置metastore.rawstore.impl为ache.hadoop.hive.metastore.cache.CachedStore</p>
+<p>MetaStore导致数据变化时自动更新（默认频率1分钟），可以避免多个服务间的数据不一致。</p>
+<p>详见 <a href="https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties" target="_blank" rel="noopener">Configuration Properties</a> (Prefix: <code>metastore.cached</code>)</p>
+<h2 id="7-不常变化配置参数"><a href="#7-不常变化配置参数" class="headerlink" title="7 不常变化配置参数"></a>7 不常变化配置参数</h2><p>BATCHED<em>RETRIEVE</em><em>, CLIENT_CONNECT_RETRY_DELAY, FILTER_HOOK, SERDES_USING_METASTORE_FOR<em>SCHEMA, SERVER</em></em>_THREADS, </p>
+<p>THREAD_POOL_SIZE</p>
+<p>Security: EXECUTE_SET_UGI, metastore.authorization.storage.checks</p>
+<p>Setting up Caching: CACHED<em>, CATALOGS_TO_CACHE &amp; AGGREGATE_STATS_CACHE</em></p>
+<p>Transactions: MAX_OPEN<em>TXNS, TXNS</em>*</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration" target="_blank" rel="noopener">AdminManual Metastore 3.0 Administration</a></p>
+<p><a href="https://blog.csdn.net/qq_39315740/article/details/98626518" target="_blank" rel="noopener">CentOS7+ Hadoop3.2.0+MySQL5.7安装配置Hive3.1.1</a></p>
+<p><a href="https://blog.csdn.net/martinkeith/article/details/85700346" target="_blank" rel="noopener">XML中的&amp;使用</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hive/" rel="tag"># Hive</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/10/200610设计数据仓库/" rel="next" title="设计数据仓库">
+                <i class="fa fa-chevron-left"></i> 设计数据仓库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/11/200611CentOS7 + MySQL8/" rel="prev" title="CentOS7 + MySQL8">
+                CentOS7 + MySQL8 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Hive-2-与Hive-3变化"><span class="nav-number">1.</span> <span class="nav-text">1 Hive 2 与Hive 3变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-通用配置"><span class="nav-number">2.</span> <span class="nav-text">2 通用配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-RDBMS"><span class="nav-number">3.</span> <span class="nav-text">3 RDBMS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内嵌Derby"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 内嵌Derby</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-外部"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 外部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-支持的RDBMS"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 支持的RDBMS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Schema安装和升级"><span class="nav-number">3.4.</span> <span class="nav-text">(4) Schema安装和升级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-运行Metastore"><span class="nav-number">4.</span> <span class="nav-text">4 运行Metastore</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内嵌模式"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 内嵌模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-服务模式"><span class="nav-number">4.2.</span> <span class="nav-text">(2) 服务模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1）高可用"><span class="nav-number">4.2.1.</span> <span class="nav-text">1）高可用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-安全"><span class="nav-number">4.2.2.</span> <span class="nav-text">2) 安全</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-不依靠Hive运行"><span class="nav-number">5.</span> <span class="nav-text">5 不依靠Hive运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-性能优化"><span class="nav-number">6.</span> <span class="nav-text">6 性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-CacheStore"><span class="nav-number">6.1.</span> <span class="nav-text">(1) CacheStore</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-不常变化配置参数"><span class="nav-number">7.</span> <span class="nav-text">7 不常变化配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/06/11/200611Hive Metastore 3.0/';
+          this.page.identifier = '2020/06/11/200611Hive Metastore 3.0/';
+          this.page.title = 'Hive Metastore 3.0';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

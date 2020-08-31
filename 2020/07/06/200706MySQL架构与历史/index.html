@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="高性能MySQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 逻辑架构 连接/线程处理 类似网络C/S服务，提供连接处理、授权认证和安全等功能">
+<meta name="keywords" content="高性能MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL架构与历史">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/07/06/200706MySQL架构与历史/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 逻辑架构 连接/线程处理 类似网络C/S服务，提供连接处理、授权认证和安全等功能">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/06/200706MySQL架构与历史/200706MySQL%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%8E%86%E5%8F%B2/image-20200706204302530.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/06/200706MySQL架构与历史/200706MySQL%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%8E%86%E5%8F%B2/image-20200708210343299.png">
+<meta property="og:updated_time" content="2020-08-30T15:55:31.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL架构与历史">
+<meta name="twitter:description" content="1 逻辑架构 连接/线程处理 类似网络C/S服务，提供连接处理、授权认证和安全等功能">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/07/06/200706MySQL架构与历史/200706MySQL%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%8E%86%E5%8F%B2/image-20200706204302530.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/07/06/200706MySQL架构与历史/"/>
+
+
+
+
+
+  <title>MySQL架构与历史 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/07/06/200706MySQL架构与历史/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL架构与历史</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-06T11:00:47+08:00">
+                2020-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/高性能MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">高性能MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/06/200706MySQL架构与历史/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/06/200706MySQL架构与历史/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-逻辑架构"><a href="#1-逻辑架构" class="headerlink" title="1 逻辑架构"></a>1 逻辑架构</h2><ul>
+<li><p>连接/线程处理</p>
+<p>类似网络C/S服务，提供连接处理、授权认证和安全等功能</p>
+<a id="more"></a>
+</li>
+<li><p>核心服务</p>
+<p>MySQL的大部分核心服务</p>
+<p>包含下图的查询缓存、解析器和优化器</p>
+<p>提供查询解析、分析、优化、内置函数以及跨存储引擎功能（存储过程、触发器和视图等）</p>
+</li>
+<li><p>存储引擎</p>
+<p>负责数据的存取</p>
+</li>
+</ul>
+<p><img src="/2020/07/06/200706MySQL架构与历史/200706MySQL%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%8E%86%E5%8F%B2/image-20200706204302530.png" alt="image-20200706204302530"></p>
+<h3 id="1-连接管理与安全性"><a href="#1-连接管理与安全性" class="headerlink" title="(1) 连接管理与安全性"></a>(1) 连接管理与安全性</h3><p>每个客户端连接使用一个线程用于查询，服务器缓存线程用以复用。</p>
+<p>客户端连接时，服务器负责认证。</p>
+<h3 id="2-优化与执行"><a href="#2-优化与执行" class="headerlink" title="(2) 优化与执行"></a>(2) 优化与执行</h3><p>MySQL会解析查询，创建解析树，并优化（包括重写查询、决定表的读取顺序、选择合适索引等）。</p>
+<h2 id="2-并发控制"><a href="#2-并发控制" class="headerlink" title="2 并发控制"></a>2 并发控制</h2><h3 id="1-读写锁"><a href="#1-读写锁" class="headerlink" title="(1) 读写锁"></a>(1) 读写锁</h3><p>通过两种类型锁组成的锁系统并发控制。</p>
+<p>读锁和写锁，也叫共享锁和排他锁。</p>
+<h3 id="2-锁粒度"><a href="#2-锁粒度" class="headerlink" title="(2) 锁粒度"></a>(2) 锁粒度</h3><p>在开销和安全间平衡。</p>
+<ul>
+<li><p>表锁</p>
+<p>锁定整张表。开销最小</p>
+</li>
+<li><p>行锁</p>
+<p>开销最大，只在存储引擎层实现。</p>
+</li>
+</ul>
+<h2 id="3-事务"><a href="#3-事务" class="headerlink" title="3 事务"></a>3 事务</h2><p>一组原子性的SQL查询，要么全部成功，要么全部失败。</p>
+<h3 id="1-ACID"><a href="#1-ACID" class="headerlink" title="(1) ACID"></a>(1) ACID</h3><ul>
+<li><p>原子性</p>
+<p>最小工作单元，不可分割。要么成功，要么失败</p>
+</li>
+<li><p>一致性</p>
+<p>没有中间状态</p>
+</li>
+<li><p>隔离性</p>
+<p>对其他事务不可见</p>
+</li>
+<li><p>持久性</p>
+<p>一旦提交，永久保存</p>
+</li>
+</ul>
+<h3 id="2-隔离性"><a href="#2-隔离性" class="headerlink" title="(2) 隔离性"></a>(2) 隔离性</h3><p>四种隔离级别：</p>
+<ul>
+<li><p>未提交读</p>
+<p>没有提交的事务对其他事务可见。</p>
+<p>事务可以读取未提交的数据，称为“脏读”</p>
+<p>性能上没有明显优势，不推荐</p>
+</li>
+<li><p>提交读</p>
+<p>也叫不可重复读，是除MySQL外大多数数据库的默认隔离级别</p>
+<p>事务提交前，对其他事务不可见</p>
+<p>同样的查询可能产生不同的结果</p>
+</li>
+<li><p>可重复读</p>
+<p>保证一个事务内多次查询返回相同结果。</p>
+<p>MySQL默认隔离级别。</p>
+<p>当两个事务分别读写某个范围内数据时，前后两次读可能产生“幻读”问题。</p>
+<p>InnoDB和XtraDB采用多版本并发控制MVCC解决幻读问题。</p>
+</li>
+<li><p>可串行化</p>
+<p>强制事务串行执行</p>
+<p>导致大量超时和锁竞争问题</p>
+</li>
+</ul>
+<p><img src="/2020/07/06/200706MySQL架构与历史/200706MySQL%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%8E%86%E5%8F%B2/image-20200708210343299.png" alt="image-20200708210343299"></p>
+<h3 id="3-死锁"><a href="#3-死锁" class="headerlink" title="(3) 死锁"></a>(3) 死锁</h3><p>多个事务相互占用并请求对方的资源，导致恶性循环。</p>
+<p>锁的行为和顺序与存储引擎相关。</p>
+<p>解决方法：</p>
+<ul>
+<li><p>死锁时返回错误</p>
+<p>InnoDB将持有最少行级排他锁的事务回滚</p>
+</li>
+<li><p>占用超时后释放</p>
+</li>
+</ul>
+<h3 id="4-事务日志"><a href="#4-事务日志" class="headerlink" title="(4) 事务日志"></a>(4) 事务日志</h3><p>修改数据时仅修改其内存拷贝，将修改行为记录到持久化日志中。</p>
+<p>效率更高，因为日志是追加的，是顺序写入的。修改后的数据再慢慢写回磁盘。</p>
+<p><code>预写式日志</code>：修改数据需要两次磁盘写操作：事务日志+数据写回。</p>
+<h3 id="5-事务"><a href="#5-事务" class="headerlink" title="(5) 事务"></a>(5) 事务</h3><p>MySQL提供两种事务引擎：</p>
+<ul>
+<li>InnoDB</li>
+<li>NDB Cluster</li>
+</ul>
+<p>自动提交：默认每个查询都当做一个事务提交。</p>
+<p>事务由存储引擎实现。在同一事务混用存储引擎是不可靠的。</p>
+<p>同一事务中混用不同存储引擎的表，回滚时，非事务表变更无法撤销，将导致数据不一致。</p>
+<p>隐式锁定与显式锁定：</p>
+<ul>
+<li><p>隐式锁定</p>
+<p>InnoDB使用两阶段锁定。</p>
+<p>事务执行过程中随时能加锁，但锁释放只能在提交或回滚时且是同时释放。</p>
+</li>
+<li><p>显式锁定</p>
+<p>不属于SQL规范</p>
+<ul>
+<li>SELECT … LOCK IN SHARE MODE</li>
+<li>SELECT … FOR UPDATE</li>
+</ul>
+</li>
+</ul>
+<p>此外，服务器层提供LOCK TABLES 和 UNLOCK TABLES锁定。与存储引擎无关，除非事务中禁用了自动提交，否则会导致无法预料的结果且影响性能。</p>
+<h2 id="4-多版本并发控制"><a href="#4-多版本并发控制" class="headerlink" title="4 多版本并发控制"></a>4 多版本并发控制</h2><p>是行级锁的一个变种，用于避免加锁行为，降低开销。</p>
+<p>通过保存数据的快照实现。</p>
+<p>大多实现了非阻塞的读和写时只锁定必要的行。</p>
+<p>InnoDB实现：在记录后保存两个隐藏的列：创建时系统版本号和删除时系统版本号。</p>
+<p>只操作创建&lt;=当前或删除&gt;=当前的记录。更新时，先删除一行，再增加一行。</p>
+<p>MVCC只在提交读和可重复读隔离级别工作。因为未提交读只读取最新数据，串行化对所有行加锁，没有必要。</p>
+<h2 id="5-存储引擎"><a href="#5-存储引擎" class="headerlink" title="5 存储引擎"></a>5 存储引擎</h2><p>MySQL为每个数据库在数据目录下创建一个子目录，为每张表创建一个同名的.frm文件。</p>
+<p>不同存储引擎保存数据和索引的方式不同，当表的定义统一在服务层处理。</p>
+<h3 id="1-InnoDB"><a href="#1-InnoDB" class="headerlink" title="(1) InnoDB"></a>(1) InnoDB</h3><p>用于处理大量的短期事务，具有较高的性能和自动崩溃恢复特性。</p>
+<p>版本5.1支持排序创建索引、删除或增加索引不需要复制全表、支持压缩存储，支持大型列值和文件格式管理等。</p>
+<p>默认隔离级别时可重复读，使用间隙锁避免幻读。</p>
+<p>基于聚簇索引建立，对主键查询具有很高的性能。</p>
+<p>存储格式是平台独立的。</p>
+<h3 id="2-MyISAM"><a href="#2-MyISAM" class="headerlink" title="(2) MyISAM"></a>(2) MyISAM</h3><p>支持全文索引、压缩和空间函数等，不支持事务和行级锁，崩溃后无法完全恢复。</p>
+<h3 id="3-引擎选择"><a href="#3-引擎选择" class="headerlink" title="(3) 引擎选择"></a>(3) 引擎选择</h3><p>除非需要InnoDB不支持的特性，否则使用InnoDB。</p>
+<p>除非必需，否则不要混用引擎。</p>
+<h3 id="4-引擎转换"><a href="#4-引擎转换" class="headerlink" title="(4) 引擎转换"></a>(4) 引擎转换</h3><ul>
+<li><p>ALERT TABLE</p>
+<p>原表加锁，复制到新表，高效但执行时间长</p>
+</li>
+<li><p>导出+导入</p>
+<p>注意不能同时存在同名表，安全</p>
+</li>
+<li><p>查询+创建</p>
+<p>结合前两者优点，但易人为出错</p>
+</li>
+</ul>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6 总结"></a>6 总结</h2><p>核心基础架构的精髓：存储引擎与服务层交互</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《高性能MySQL》</p>
+<p>两阶段锁定：</p>
+<p>优点是高并发，缺点是没有解决死锁问题</p>
+<ul>
+<li>加锁阶段：只能加锁或处理数据，不能解锁</li>
+<li>解锁阶段：只能解锁或处理数据，不能加锁</li>
+</ul>
+<p>幻读：范围查询时，另一事务向其中插入数据，导致查询结果不一致的现象。</p>
+<p>间隙锁：在可重复读隔离级别上，针对非唯一索引，对索引间隙加锁，防止幻读现象。</p>
+<p>聚簇索引:表数据按照索引顺序存储，叶子节点存储有行数据。一张表只能有一个聚簇索引。</p>
+<p>非聚簇索引:表数据与索引数据无关，叶子节点只存储有指向行数据的指针。一张表可以有多个。</p>
+<p><a href="[https://liuhao163.github.io/mysql/mysql%E7%9A%84%E9%94%81/](https://liuhao163.github.io/mysql/mysql的锁/">mysql的锁-全局锁、表锁、行锁、间隙锁</a>)</p>
+<p><a href="https://zhuanlan.zhihu.com/p/48269420" target="_blank" rel="noopener">MySQL的锁机制 - 记录锁、间隙锁、临键锁</a></p>
+<p><a href="https://www.cnblogs.com/qlqwjy/p/7770580.html" target="_blank" rel="noopener">聚簇索引与非聚簇索引的区别</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/高性能MySQL/" rel="tag"># 高性能MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/06/200706最终用户社区/" rel="next" title="最终用户社区">
+                <i class="fa fa-chevron-left"></i> 最终用户社区
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/06/200706数据仓库拾贝/" rel="prev" title="数据仓库拾贝">
+                数据仓库拾贝 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-逻辑架构"><span class="nav-number">1.</span> <span class="nav-text">1 逻辑架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-连接管理与安全性"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 连接管理与安全性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-优化与执行"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 优化与执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-并发控制"><span class="nav-number">2.</span> <span class="nav-text">2 并发控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-读写锁"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 读写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-锁粒度"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 锁粒度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-事务"><span class="nav-number">3.</span> <span class="nav-text">3 事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-ACID"><span class="nav-number">3.1.</span> <span class="nav-text">(1) ACID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-隔离性"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 隔离性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-死锁"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-事务日志"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 事务日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-事务"><span class="nav-number">3.5.</span> <span class="nav-text">(5) 事务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-多版本并发控制"><span class="nav-number">4.</span> <span class="nav-text">4 多版本并发控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-存储引擎"><span class="nav-number">5.</span> <span class="nav-text">5 存储引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-InnoDB"><span class="nav-number">5.1.</span> <span class="nav-text">(1) InnoDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-MyISAM"><span class="nav-number">5.2.</span> <span class="nav-text">(2) MyISAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-引擎选择"><span class="nav-number">5.3.</span> <span class="nav-text">(3) 引擎选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-引擎转换"><span class="nav-number">5.4.</span> <span class="nav-text">(4) 引擎转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-总结"><span class="nav-number">6.</span> <span class="nav-text">6 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/07/06/200706MySQL架构与历史/';
+          this.page.identifier = '2020/07/06/200706MySQL架构与历史/';
+          this.page.title = 'MySQL架构与历史';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

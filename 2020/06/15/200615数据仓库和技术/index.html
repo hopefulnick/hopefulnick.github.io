@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据仓库," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据仓库没有联机数据更新，锁定和完整性需求非常少，只需要最基本的远程处理接口。 1 技术需求(1) 管理大量数据的能力能管理并管理好，综合考虑容量、效率和费用。">
+<meta name="keywords" content="数据仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据仓库和技术">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/06/15/200615数据仓库和技术/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="数据仓库没有联机数据更新，锁定和完整性需求非常少，只需要最基本的远程处理接口。 1 技术需求(1) 管理大量数据的能力能管理并管理好，综合考虑容量、效率和费用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/15/200615数据仓库和技术/Untitled/image-20200615115404709.png">
+<meta property="og:updated_time" content="2020-08-30T15:53:16.303Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据仓库和技术">
+<meta name="twitter:description" content="数据仓库没有联机数据更新，锁定和完整性需求非常少，只需要最基本的远程处理接口。 1 技术需求(1) 管理大量数据的能力能管理并管理好，综合考虑容量、效率和费用。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/06/15/200615数据仓库和技术/Untitled/image-20200615115404709.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/06/15/200615数据仓库和技术/"/>
+
+
+
+
+
+  <title>数据仓库和技术 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/06/15/200615数据仓库和技术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据仓库和技术</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-15T11:00:47+08:00">
+                2020-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据仓库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据仓库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/15/200615数据仓库和技术/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/15/200615数据仓库和技术/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>数据仓库没有联机数据更新，锁定和完整性需求非常少，只需要最基本的远程处理接口。</p>
+<h2 id="1-技术需求"><a href="#1-技术需求" class="headerlink" title="1 技术需求"></a>1 技术需求</h2><h3 id="1-管理大量数据的能力"><a href="#1-管理大量数据的能力" class="headerlink" title="(1) 管理大量数据的能力"></a>(1) 管理大量数据的能力</h3><p>能管理并管理好，综合考虑容量、效率和费用。</p>
+<a id="more"></a>
+<h3 id="2-管理多种介质的能力"><a href="#2-管理多种介质的能力" class="headerlink" title="(2) 管理多种介质的能力"></a>(2) 管理多种介质的能力</h3><p>使用多种存储介质有效且划算地管理大量数据</p>
+<h3 id="3-索引和监控"><a href="#3-索引和监控" class="headerlink" title="(3) 索引和监控"></a>(3) 索引和监控</h3><p>索引能对数据进行快速且方便地访问。</p>
+<p>高效访问索引方式：</p>
+<p>■ 用位图的方法。 </p>
+<p>■ 用多级索引。 </p>
+<p>■ 将部分或全部索引装入内存。 </p>
+<p>■ 当被索引的数据的次序允许压缩时对索引项进行压缩。 </p>
+<p>■ 创建选择索引或范围索引。</p>
+<p>能够随意监控，但过程不要太复杂，费用不要太高</p>
+<p>主要监控：</p>
+<p>■ 决定是否应数据重组。</p>
+<p>■ 决定索引是否建立得不恰当。</p>
+<p>■ 决定是否有太多数据溢出。 </p>
+<p>■ 决定数据的统计成份。 </p>
+<p>■ 决定剩余的可用空间</p>
+<h3 id="4-接收和传送技术"><a href="#4-接收和传送技术" class="headerlink" title="(4) 接收和传送技术"></a>(4) 接收和传送技术</h3><p>能够高效且方便地使用，并且能在批模式下运行</p>
+<h3 id="5-允许控制存储位置"><a href="#5-允许控制存储位置" class="headerlink" title="(5) 允许控制存储位置"></a>(5) 允许控制存储位置</h3><p>程序员或设计者能在需要时调整数据存储位置</p>
+<h3 id="6-并行存储和管理"><a href="#6-并行存储和管理" class="headerlink" title="(6) 并行存储和管理"></a>(6) 并行存储和管理</h3><p>用以提高性能，技术上没有限制，通常受经济限制</p>
+<h3 id="7-元数据管理"><a href="#7-元数据管理" class="headerlink" title="(7) 元数据管理"></a>(7) 元数据管理</h3><p>能够准确和实时地访问元数据</p>
+<p>业务元数据和技术元数据分别是对业务人员和技术人员有用的元数据。</p>
+<p>每一个业务智能环境都应该有自己的元数据，如报表作者、业务智能工具等。</p>
+<p>典型元数据包括：</p>
+<p>■ 数据仓库表的结构。 </p>
+<p>■ 数据仓库表的属性。 </p>
+<p>■ 数据仓库的源数据（记录系统)。 </p>
+<p>■ 从记录系统到数据仓库的映射。 </p>
+<p>■ 数据模型的规格说明。 </p>
+<p>■ 抽取日志。 </p>
+<p>■ 访问数据的公用例行程序</p>
+<h3 id="8-多种语言接口"><a href="#8-多种语言接口" class="headerlink" title="(8) 多种语言接口"></a>(8) 多种语言接口</h3><p>语言应该是易于操作、稳健和高效的</p>
+<p>典型语言接口需求：</p>
+<p>■ 能够一次访问一组数据。 </p>
+<p>■ 能够一次访问一条记录。 </p>
+<p>■ 特别要保证，为了满足某个访问要求能够支持一个或多个索引。 </p>
+<p>■ 有S Q L接口。 </p>
+<p>■ 能够插入、删除、更新数据。</p>
+<h3 id="9-高效加载"><a href="#9-高效加载" class="headerlink" title="(9) 高效加载"></a>(9) 高效加载</h3><p>两种基本方式：</p>
+<ul>
+<li>语言接口逐条或工具批量加载</li>
+<li>装载前先缓冲，仅当数据量大且处理复杂，或者需要合并多源数据时。</li>
+</ul>
+<h3 id="10-数据压缩"><a href="#10-数据压缩" class="headerlink" title="(10) 数据压缩"></a>(10) 数据压缩</h3><p>减少空间管理问题，充分使用IO资源。</p>
+<h3 id="11-支持复合主键"><a href="#11-支持复合主键" class="headerlink" title="(11) 支持复合主键"></a>(11) 支持复合主键</h3><p>因为数据仓库中数据的时变特性，以及原子数据中的主键/外键关系</p>
+<h3 id="12-变长数据"><a href="#12-变长数据" class="headerlink" title="(12) 变长数据"></a>(12) 变长数据</h3><p>由于数据仓库中数据的多样性，必须对变长结构支持。需要有效管理变长数据。</p>
+<h3 id="13-加锁管理"><a href="#13-加锁管理" class="headerlink" title="(13) 加锁管理"></a>(13) 加锁管理</h3><p>因为加锁程序消耗相当数量的资源，需要有选择地开关</p>
+<h3 id="14-支持只涉及索引的处理"><a href="#14-支持只涉及索引的处理" class="headerlink" title="(14) 支持只涉及索引的处理"></a>(14) 支持只涉及索引的处理</h3><p>允许仅通过索引满足需求</p>
+<h3 id="15-快速复原"><a href="#15-快速复原" class="headerlink" title="(15) 快速复原"></a>(15) 快速复原</h3><p>能够从大容量存储设备中快速复原一个数据仓库表。</p>
+<h3 id="16-其他技术"><a href="#16-其他技术" class="headerlink" title="(16) 其他技术"></a>(16) 其他技术</h3><p>以下特性在数据仓库环境中作用小，建议关闭。</p>
+<p>■ 事务集成性。 </p>
+<p>■ 高速缓存。 </p>
+<p>■ 行/页级的锁定。 </p>
+<p>■ 参照完整性。 </p>
+<p>■ 数据视图</p>
+<h2 id="2-DBMS类型和数据仓库"><a href="#2-DBMS类型和数据仓库" class="headerlink" title="2 DBMS类型和数据仓库"></a>2 DBMS类型和数据仓库</h2><p>传统事务处理数据库环境和数据仓库环境区别</p>
+<ul>
+<li><p>数据库环境通过事务处理数据更新，数据仓库环境通过快照加载处理数据更新。</p>
+</li>
+<li><p>数据仓库环境中数据量大于数据库环境，因为其含有综合数据和历史数据。</p>
+</li>
+</ul>
+<p>传统通用DBMS与数据仓库专用DBMS区别</p>
+<ul>
+<li><p>数据更新</p>
+<p>传统通用使用记录级的、基于事务的更新。即使不使用也要提供锁管理等开销。而数据仓库不用开销。</p>
+</li>
+<li><p>基本数据管理</p>
+<p>传统通用使用附加空间支持更新和插入操作时的块扩展。数据仓库因为不需要更新，不需要物理块扩展。</p>
+</li>
+<li><p>索引</p>
+<p>传统通用索引数量有限且需要空间和数据管理。数据仓库使用更加稳健和完善的索引结构。</p>
+</li>
+<li><p>数据管理能力和策略</p>
+<p>传统通用为了提高事务访问和处理效率而优化，数据仓库为了DSS访问和分析优化</p>
+</li>
+</ul>
+<h2 id="3-多维DBMS-数据集市-和数据仓库"><a href="#3-多维DBMS-数据集市-和数据仓库" class="headerlink" title="3 多维DBMS(数据集市)和数据仓库"></a>3 多维DBMS(数据集市)和数据仓库</h2><h3 id="1-区别"><a href="#1-区别" class="headerlink" title="(1) 区别"></a>(1) 区别</h3><ul>
+<li>数量级：数据仓库至少比多维DBMS大一个数量级</li>
+<li>数据访问：数据仓库适合少量，多维DBMS适合大量</li>
+<li>时间范围：数据仓库长时间，多维DBMS短时间</li>
+<li>用户对象：数据仓库只允许分析人员受限访问，多维DBMS自由</li>
+<li>关联：两者互补，但数据仓库不是建立在多维DBMS上？</li>
+</ul>
+<h3 id="2-数据模型"><a href="#2-数据模型" class="headerlink" title="(2) 数据模型"></a>(2) 数据模型</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">项目</th>
+<th style="text-align:center">关系型</th>
+<th style="text-align:center">立方体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">海量数据</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">相对少量</td>
+</tr>
+<tr>
+<td style="text-align:center">动态连接</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">有问题</td>
+</tr>
+<tr>
+<td style="text-align:center">通用数据更新</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">适合使用模式</td>
+<td style="text-align:center">未知使用模式</td>
+<td style="text-align:center">已知使用模式</td>
+</tr>
+<tr>
+<td style="text-align:center">性能</td>
+<td style="text-align:center">不是最佳</td>
+<td style="text-align:center">对DSS最优</td>
+</tr>
+<tr>
+<td style="text-align:center">访问优化</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-数据获取"><a href="#3-数据获取" class="headerlink" title="(3) 数据获取"></a>(3) 数据获取</h3><p>通常，先加载到数据仓库，再从数据仓库流向多维DBMS。</p>
+<p>如果多维DBMS直接获取数据，将面临以下问题：</p>
+<ul>
+<li><p>抽取程序开发量大</p>
+<p>每个部门的多维DBMS都需要一套定制的抽取程序</p>
+</li>
+<li><p>缺乏统一的、集成的和确定的数据源</p>
+</li>
+<li><p>维护开发量大</p>
+</li>
+<li><p>硬件资源消耗大</p>
+</li>
+<li><p>元数据无法有效管理和控制</p>
+</li>
+<li><p>缺乏数据一致性</p>
+</li>
+</ul>
+<h2 id="4-多种存储介质上构建数据仓库"><a href="#4-多种存储介质上构建数据仓库" class="headerlink" title="4 多种存储介质上构建数据仓库"></a>4 多种存储介质上构建数据仓库</h2><p>建议使用统一的存储环境底层技术。在双重环境中，通常使用混合技术。</p>
+<h2 id="5-元数据角色"><a href="#5-元数据角色" class="headerlink" title="5 元数据角色"></a>5 元数据角色</h2><p>在操作型环境中，元数据几乎是事后补记，与文档具有相同的重要性。但在数据仓库环境中，元数据更加重要。</p>
+<p>元数据重要作用</p>
+<ul>
+<li>帮助DSS分析者理解数据</li>
+<li>涉及操作型环境和数据仓库环境间的映射管理</li>
+<li>跟踪数据结构的变化</li>
+</ul>
+<h2 id="6-上下文"><a href="#6-上下文" class="headerlink" title="6 上下文"></a>6 上下文</h2><p>是内容的附加信息，便于解释数据</p>
+<h3 id="1-类型"><a href="#1-类型" class="headerlink" title="(1) 类型"></a>(1) 类型</h3><ul>
+<li>简单：与数据本身有关</li>
+<li>复杂：企业内部背景环境信息</li>
+<li>外部：企业外部背景环境信息</li>
+</ul>
+<p><img src="/2020/06/15/200615数据仓库和技术/Untitled/image-20200615115404709.png" alt="image-20200615115404709"></p>
+<h3 id="2-捕获和管理"><a href="#2-捕获和管理" class="headerlink" title="(2) 捕获和管理"></a>(2) 捕获和管理</h3><p>复杂和外部上下文不断变化和没有固定状态，难以捕获和确定。</p>
+<h3 id="3-上下文信息管理历史"><a href="#3-上下文信息管理历史" class="headerlink" title="(3) 上下文信息管理历史"></a>(3) 上下文信息管理历史</h3><p>缺点</p>
+<ul>
+<li>面向开发者，对用户缺乏可见性</li>
+<li>经常被回避，管理是被动的</li>
+<li>容易被忽视</li>
+<li>仅局限于简单上下文信息</li>
+</ul>
+<h2 id="7-数据仓库刷新"><a href="#7-数据仓库刷新" class="headerlink" title="7 数据仓库刷新"></a>7 数据仓库刷新</h2><p>根据历史数据定期刷新是数据仓库运作相关的最大和最不可预知的开销。</p>
+<h3 id="1-策略"><a href="#1-策略" class="headerlink" title="(1) 策略"></a>(1) 策略</h3><ul>
+<li><p>重复读取数据</p>
+<p>影响传统DBMS在线和活动</p>
+<p>读取重复数据</p>
+<p>开销非常大</p>
+</li>
+<li><p>在传统环境中捕获正在修改的数据</p>
+<p>不再影响传统DBMS</p>
+<p>不需全表扫描</p>
+</li>
+</ul>
+<h3 id="2-数据捕获方法"><a href="#2-数据捕获方法" class="headerlink" title="(2) 数据捕获方法"></a>(2) 数据捕获方法</h3><h4 id="1-数据复制"><a href="#1-数据复制" class="headerlink" title="1) 数据复制"></a>1) 数据复制</h4><p>数据修改前标识</p>
+<p>优点：</p>
+<ul>
+<li>有选择地控制捕获处理</li>
+<li>数据格式整洁、定义完善</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>额外的IO操作，且在系统高性能运行时进行</li>
+<li>需要不断注意控制捕获过程的参数和触发器的定义，因为数据仓库不稳定和总在变化</li>
+</ul>
+<h4 id="2-变化数据捕获"><a href="#2-变化数据捕获" class="headerlink" title="2) 变化数据捕获"></a>2) 变化数据捕获</h4><p>通过日志捕获和确定在线过程中的变化，或者在数据变化时从DBMS缓冲区读取已改变的数据。</p>
+<p>优点：</p>
+<ul>
+<li>高效率，不需要额外的IO操作</li>
+<li>能够捕获所有的额数据更新操作</li>
+<li>对缓冲区读取方法，不必读取日志，缩短变化到刷新的时间</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>读取和理解日志的障碍</li>
+<li>对缓冲区读取方法，需要更多的在线资源，影响性能</li>
+</ul>
+<h2 id="8-测试"><a href="#8-测试" class="headerlink" title="8 测试"></a>8 测试</h2><p>与传统环境中的生产+测试环境不同，数据仓库不需要测试环境。</p>
+<p>原因：</p>
+<ul>
+<li>数据仓库规模太大</li>
+<li>数据仓库本身就是迭代开发的，容易纠错</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《数据仓库》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据仓库/" rel="tag"># 数据仓库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/13/200613Hive Tutorial/" rel="next" title="Hive Tutorial">
+                <i class="fa fa-chevron-left"></i> Hive Tutorial
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/16/200616 Hive DDL/" rel="prev" title="Hive DDL">
+                Hive DDL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-技术需求"><span class="nav-number">1.</span> <span class="nav-text">1 技术需求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-管理大量数据的能力"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 管理大量数据的能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-管理多种介质的能力"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 管理多种介质的能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-索引和监控"><span class="nav-number">1.3.</span> <span class="nav-text">(3) 索引和监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-接收和传送技术"><span class="nav-number">1.4.</span> <span class="nav-text">(4) 接收和传送技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-允许控制存储位置"><span class="nav-number">1.5.</span> <span class="nav-text">(5) 允许控制存储位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-并行存储和管理"><span class="nav-number">1.6.</span> <span class="nav-text">(6) 并行存储和管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-元数据管理"><span class="nav-number">1.7.</span> <span class="nav-text">(7) 元数据管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-多种语言接口"><span class="nav-number">1.8.</span> <span class="nav-text">(8) 多种语言接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-高效加载"><span class="nav-number">1.9.</span> <span class="nav-text">(9) 高效加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-数据压缩"><span class="nav-number">1.10.</span> <span class="nav-text">(10) 数据压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-支持复合主键"><span class="nav-number">1.11.</span> <span class="nav-text">(11) 支持复合主键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-变长数据"><span class="nav-number">1.12.</span> <span class="nav-text">(12) 变长数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-加锁管理"><span class="nav-number">1.13.</span> <span class="nav-text">(13) 加锁管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-支持只涉及索引的处理"><span class="nav-number">1.14.</span> <span class="nav-text">(14) 支持只涉及索引的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-快速复原"><span class="nav-number">1.15.</span> <span class="nav-text">(15) 快速复原</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-其他技术"><span class="nav-number">1.16.</span> <span class="nav-text">(16) 其他技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-DBMS类型和数据仓库"><span class="nav-number">2.</span> <span class="nav-text">2 DBMS类型和数据仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-多维DBMS-数据集市-和数据仓库"><span class="nav-number">3.</span> <span class="nav-text">3 多维DBMS(数据集市)和数据仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-区别"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据模型"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数据获取"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 数据获取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-多种存储介质上构建数据仓库"><span class="nav-number">4.</span> <span class="nav-text">4 多种存储介质上构建数据仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-元数据角色"><span class="nav-number">5.</span> <span class="nav-text">5 元数据角色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-上下文"><span class="nav-number">6.</span> <span class="nav-text">6 上下文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-类型"><span class="nav-number">6.1.</span> <span class="nav-text">(1) 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-捕获和管理"><span class="nav-number">6.2.</span> <span class="nav-text">(2) 捕获和管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-上下文信息管理历史"><span class="nav-number">6.3.</span> <span class="nav-text">(3) 上下文信息管理历史</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-数据仓库刷新"><span class="nav-number">7.</span> <span class="nav-text">7 数据仓库刷新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-策略"><span class="nav-number">7.1.</span> <span class="nav-text">(1) 策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据捕获方法"><span class="nav-number">7.2.</span> <span class="nav-text">(2) 数据捕获方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-数据复制"><span class="nav-number">7.2.1.</span> <span class="nav-text">1) 数据复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-变化数据捕获"><span class="nav-number">7.2.2.</span> <span class="nav-text">2) 变化数据捕获</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-测试"><span class="nav-number">8.</span> <span class="nav-text">8 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">9.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/06/15/200615数据仓库和技术/';
+          this.page.identifier = '2020/06/15/200615数据仓库和技术/';
+          this.page.title = '数据仓库和技术';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

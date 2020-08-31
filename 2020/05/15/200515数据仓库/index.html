@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据仓库," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 定义数据仓库是一个用于报表和数据分析的系统，被认为是BI的核心组件。">
+<meta name="keywords" content="数据仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据仓库">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 定义数据仓库是一个用于报表和数据分析的系统，被认为是BI的核心组件。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/data_warehousing.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/Data_Warehouse_Feeding_Data_Mart.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/Data_warehouse_architecture.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/1280px-ELT_Diagram.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515145234169.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515153738613.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515154431123.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515154645543.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515184100056.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200516113020531.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200516113038290.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200516113116976.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200518114728518.png">
+<meta property="og:updated_time" content="2020-05-18T04:25:31.538Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据仓库">
+<meta name="twitter:description" content="1 定义数据仓库是一个用于报表和数据分析的系统，被认为是BI的核心组件。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/data_warehousing.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/05/15/200515数据仓库/"/>
+
+
+
+
+
+  <title>数据仓库 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/05/15/200515数据仓库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据仓库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-15T11:00:47+08:00">
+                2020-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据仓库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据仓库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/15/200515数据仓库/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/15/200515数据仓库/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1 定义"></a>1 定义</h2><p>数据仓库是一个用于报表和数据分析的系统，被认为是BI的核心组件。</p>
+<a id="more"></a>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/data_warehousing.png" alt="img"></p>
+<p>是从不同数据源整合的数据的中心仓库，存储有当前和历史数据。ETL和ELT是构建数据仓库的两种主要方式。</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/Data_Warehouse_Feeding_Data_Mart.jpg" alt="img"></p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/Data_warehouse_architecture.jpg" alt="img"></p>
+<h3 id="1-基于ETL的数据仓库"><a href="#1-基于ETL的数据仓库" class="headerlink" title="(1) 基于ETL的数据仓库"></a>(1) 基于ETL的数据仓库</h3><p>分为staging、data integration和access层。</p>
+<p>staging存储来自异构数据系统的原始数据。</p>
+<p>integration从staging中读取并转换多种数据集到操作数据存储(ODS)中。数据被分为层次组，称为维度。and into facts and aggregate facts？facts和维度的结合，有时称为星型结构。</p>
+<p>access帮助用户获取数据。</p>
+<p>广义的数据仓库包括获取分析数据、ETL、目录管理方法及其工具。</p>
+<p>示例工具：</p>
+<p><a href="https://en.wikipedia.org/wiki/IBM_InfoSphere_DataStage" target="_blank" rel="noopener">IBM InfoSphere DataStage</a>, <a href="https://en.wikipedia.org/wiki/Ab_Initio_Software" target="_blank" rel="noopener">Ab Initio Software</a>, <a href="https://en.wikipedia.org/wiki/Informatica" target="_blank" rel="noopener">Informatica – PowerCenter</a></p>
+<h3 id="2-基于ELT的数据仓库"><a href="#2-基于ELT的数据仓库" class="headerlink" title="(2) 基于ELT的数据仓库"></a>(2) 基于ELT的数据仓库</h3><p>ELT方式staging包含在数据仓库中。数据在转换前，直接从多种数据源加载数据到仓库。转换操作也在数据仓库中完成。</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/1280px-ELT_Diagram.png" alt="img"></p>
+<h2 id="2-特性"><a href="#2-特性" class="headerlink" title="2 特性"></a>2 特性</h2><h3 id="1-优势"><a href="#1-优势" class="headerlink" title="(1) 优势"></a>(1) 优势</h3><ul>
+<li>整合多源数据，赋能单一数据查询引擎在ODS中展现数据，减少周转时间。同时提供ad-hoc(点对点)报表和查询</li>
+<li>缓解事务处理系统中分离的数据库中的锁竞争问题，当尝试运行海量、长时间和分析查询时</li>
+<li>维护数据历史</li>
+<li>在企业间赋能中心视野，尤其是企业合并壮大后</li>
+<li>提高数据质量，通过一致的代码和描述、标记，甚至修复坏数据</li>
+<li>一致地展示组织信息</li>
+<li>提供感兴趣数据的简单统一模型，不论数据来源</li>
+<li>重构数据，以服务商业用户</li>
+<li>重构数据，以便高效查询，并且不影响操作系统</li>
+<li>增加操作性商业系统价值，尤其是客户关系系统CRM</li>
+<li>简化决策支持查询</li>
+<li>组织并消歧义重复数据</li>
+</ul>
+<h3 id="2-劣势"><a href="#2-劣势" class="headerlink" title="(2) 劣势"></a>(2) 劣势</h3><ul>
+<li>对非结构化数据不理想</li>
+<li>创建和实现耗时长</li>
+<li>过时相对快？</li>
+<li>难以变化数据类型和范围、数据源模式、索引和查询。</li>
+<li>对普通用户太复杂</li>
+<li>项目范围一致增长</li>
+<li>有时用户会产生不同的业务规则</li>
+<li>企业需要花费大量资源培训和实现目的</li>
+</ul>
+<h3 id="3-通用概念"><a href="#3-通用概念" class="headerlink" title="(3) 通用概念"></a>(3) 通用概念</h3><p>数据仓库包含以下组成:</p>
+<ul>
+<li>数据源系统，用于提供原始数据，通常是操作性数据库，如关系型数据库</li>
+<li>数据整合技术，用于数据ETL</li>
+<li>数据存储架构，用于存储数据</li>
+<li>数据访问工具和应用，用于用户访问数据</li>
+<li>元数据、数据质量和治理工艺(governance processes)</li>
+</ul>
+<h2 id="3-相关系统"><a href="#3-相关系统" class="headerlink" title="3 相关系统"></a>3 相关系统</h2><h3 id="1-数据集市"><a href="#1-数据集市" class="headerlink" title="(1) 数据集市"></a>(1) 数据集市</h3><p>数据集市是单一方面的数据仓库，如销售、经济或市场等，通常为部门所有。包含独立、非独立和混合型。</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515145234169.png" alt="image-20200515145234169"></p>
+<h3 id="2-OLAP"><a href="#2-OLAP" class="headerlink" title="(2) OLAP"></a>(2) OLAP</h3><p> 联机分析处理以多维形式（通常星型）存储集合的历史数据。具有相对低的容量，但是查询通常复杂且包含聚合。被广泛用于数据挖掘中。包含三个关键操作：Roll-up(Consolidation)、Drill-down和Slicing&amp;Dicing。</p>
+<p>思考：合并、下钻和切片&amp;切块？</p>
+<p>对于OLAP系统，响应时间是一个有效的度量。通常为数小时，与数据集市（通常一天）接近。</p>
+<h3 id="3-OLTP"><a href="#3-OLTP" class="headerlink" title="(3) OLTP"></a>(3) OLTP</h3><p>联机事务处理包含详细的当前数据，采用entity模型存储（通常为第三范式）。具有大量短时在线事务(增、改、删)，强调快速处理和维持并发访问的数据整体性。</p>
+<p>效率通过每秒处理事务数量衡量。</p>
+<h3 id="4-预测分析"><a href="#4-预测分析" class="headerlink" title="(4) 预测分析"></a>(4) 预测分析</h3><p>预测分析使用复杂的数学模型查找和量化数据中隐藏的模式。相比OLAP关注历史数据分析和响应性的，预测分析关注未来。</p>
+<h2 id="4-历史"><a href="#4-历史" class="headerlink" title="4 历史"></a>4 历史</h2><p>20世纪80年代，IBM研究者Barry Devlin和Paul Murphy提出数据仓库概念，用于解决从操作型系统到决策支持环境中数据流问题。在此之前，需要大量的数据副本用于支持决策。在大型企业中，又有多个独立的决策支持系统，服务不同的用户，消费大同小异的数据。当出现新的决策支持需求时，对数据收集、清洗和聚合产生新的要求，影响用户使用。</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515153738613.png" alt="image-20200515153738613"></p>
+<h2 id="5-信息存储"><a href="#5-信息存储" class="headerlink" title="5 信息存储"></a>5 信息存储</h2><h3 id="1-Facts"><a href="#1-Facts" class="headerlink" title="(1) Facts"></a>(1) Facts</h3><p>一个表示所管理实体或系统实际情况的数值或度量。</p>
+<p>反应实体情况时，又称在原始等级。如一个通信基站收到1000个请求，接收其中820个，其余丢弃。其可以反馈一下3个fact：</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515154431123.png" alt="image-20200515154431123"></p>
+<p>当被聚合到更高级别时，称为aggregates或summaries或aggregated facts。</p>
+<p>如城市中有3个基站，集合到城市层面为：</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515154645543.png" alt="image-20200515154645543"></p>
+<h3 id="2-数据存储：维度vs规格化"><a href="#2-数据存储：维度vs规格化" class="headerlink" title="(2) 数据存储：维度vs规格化"></a>(2) 数据存储：维度vs规格化</h3><p>数据仓库中数据存储最常用的两种方式：维度和规格化</p>
+<p>维度方式使用 Ralph Kimball的维度/星型模型。</p>
+<p>规格化方式（又称第三范式方式）使用Bill Inmon的E-R/规格化模型。</p>
+<h4 id="1-维度"><a href="#1-维度" class="headerlink" title="1) 维度"></a>1) 维度</h4><p>可以理解为数据立方体（data cube），维度是坐标，fact是值。</p>
+<p>事务数据被分为facts（通常为数值型事务数据）和维度（facts的上下文参考信息）。如销售事务，可以分解为facts(订购的产品产品数量和支付总价)，维度（订购日期、用户姓名、产品编号、收货方、开票方和销售人员）。</p>
+<p>优势：</p>
+<ul>
+<li>易于用户理解和使用，facts与业务流程、运营系统相关，维度提供了响应的上下文信息。</li>
+<li>数据获取快速</li>
+<li>不必每次查询涉及关系型数据库，便于用户使用。</li>
+</ul>
+<p>劣势：</p>
+<ul>
+<li>加载数据复杂，为了保持fact和维度的完整性</li>
+<li>结构难以修改</li>
+</ul>
+<h4 id="2-规格化"><a href="#2-规格化" class="headerlink" title="2) 规格化"></a>2) 规格化</h4><p>数据按照数据库规格化规则存储。表按照主题领域分组，反应一般数据类别（如关于客户、产品和财务的数据）。数据分为多个实体，在关系型数据库中创建多个表。当应用到大型企业时，表现为大量表的连接网络。</p>
+<p>优势：</p>
+<ul>
+<li>数据添加直接</li>
+</ul>
+<p>劣势：</p>
+<ul>
+<li>难以从多个数据源连接表格</li>
+<li>难以访问数据，在对数据源和数据结构不了解的情况下</li>
+</ul>
+<p>当包含连接的关系表时，规格化和维度模型都可以使用E-R图展示。两种方式的区别是规格化的程度。两者不是互不相容的，某种程度上，维度方式可以包含规格化数据。</p>
+<p>在信息驱动业务中，Robert Hillard提出了一种基于业务问题的信息需求的比较方式。表明规格化模型保存的信息远大于等效的维度模型(即使两者使用相同的字段)，但这是以可用性为代价的。</p>
+<h2 id="6-设计方法"><a href="#6-设计方法" class="headerlink" title="6 设计方法"></a>6 设计方法</h2><h3 id="1-自下而上"><a href="#1-自下而上" class="headerlink" title="(1) 自下而上"></a>(1) 自下而上</h3><p>首先，针对特定业务流程创建数据集市。其次，聚合数据集市为综合的数据仓库。</p>
+<p>数据仓库总线模型是一致的facts和一致的维度的集合。在多个数据集市中，facts通过特定的方式共享维度。</p>
+<h3 id="2-自上而下"><a href="#2-自上而下" class="headerlink" title="(2) 自上而下"></a>(2) 自上而下</h3><p>是一个规格化的数据模型。</p>
+<p>原子数据(即最详细的数据)存储在数据仓库中。从数据仓库创建包含特定业务流程或特定部门需要数据的维度数据集市。</p>
+<h3 id="3-混合"><a href="#3-混合" class="headerlink" title="(3) 混合"></a>(3) 混合</h3><p>数据仓库通常类似集线器与分支架构。用于数据仓库的传统系统通常包含用户关系管理、企业资源规划，其产生大量数据。为了合并这些数据模型，促进ETL过程，数据仓库通常使用可操作的数据存储，其信息被解释到实际的数据仓库。为了减少数据冗余，大型系统通常以规格化方式存储，并在数据仓库上构建用于特定用途的数据集市。</p>
+<p>混合模式数据仓库使用第三范式消除数据冗余。但是对于普遍维度建模的BI，普通关系型数据库效率不高。小型数据集市可以从合并的数据仓库中获取数据，并将过滤的特定数据用于所需的fact表和维度。假如有广泛的BI信息，数据仓库提供了数据集市可读的单一信息来源。混合结构允许数据仓库被替换为可操作性的、可保存非静态信息的主数据管理（master data management）。</p>
+<p>data vault模型遵循集线器和分支架构，结合第三范式和星型模式，结合自上而下和自下而上。模型被严格设计为数据仓库，但是没有设计为终端用户可用。因为需要使用数据集市或星型模式。</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200515184100056.png" alt="image-20200515184100056"></p>
+<h2 id="7-数据仓库特性"><a href="#7-数据仓库特性" class="headerlink" title="7 数据仓库特性"></a>7 数据仓库特性</h2><ul>
+<li><p>面向主题</p>
+<p>与操作型系统不同，数据围绕企业主题。</p>
+</li>
+<li><p>集成</p>
+<p>数据仓库中的数据是消除了不一致的。一致性包括命名约定、变量度量、编码结构和物理属性等</p>
+</li>
+<li><p>时间变化</p>
+<p>存储历史数据，可用于数据挖掘和预测。</p>
+</li>
+<li><p>非易失性</p>
+<p>数据只读，不可变更。</p>
+</li>
+<li><p>归纳</p>
+<p>数据在不同等级上归纳。</p>
+</li>
+</ul>
+<h2 id="8-数据仓库架构"><a href="#8-数据仓库架构" class="headerlink" title="8 数据仓库架构"></a>8 数据仓库架构</h2><p>架构主要组件包括硬件、软件和数据源。不同的需求有不同的模式。</p>
+<ul>
+<li><p>加载管理</p>
+<p>又叫前端组件，从操作型系统中提取并加载数据到仓库，包含入库前的数据转换。</p>
+</li>
+<li><p>仓库管理</p>
+<p>管理数据。包含数据一致性分析、索引和视图创建、反向规格化和聚合更新、转换和合并原始数据、归档和备份数据。</p>
+</li>
+<li><p>查询管理</p>
+<p>又叫后端组件。管理用户查询，直接访问表。</p>
+</li>
+<li><p>终端用户访问工具</p>
+<p>包含以下五种组件：</p>
+<ul>
+<li>报表</li>
+<li>查询工具</li>
+<li>应用开发工具</li>
+<li>EIS工具</li>
+<li>OLAP工具和数据挖掘工具</li>
+</ul>
+</li>
+</ul>
+<h2 id="9-对比操作型系统"><a href="#9-对比操作型系统" class="headerlink" title="9 对比操作型系统"></a>9 对比操作型系统</h2><p>操作型系统通过数据库规格化（<a href="https://en.wikipedia.org/wiki/Codd&#39;s_12_rules" target="_blank" rel="noopener">Codd’s 12 rules</a>）和E-R模型优化数据完整性保存和快速记录。完全规格化的数据库导致数据被存储在众多表中。关系型数据库擅长处理表之间的管理。由于影响范围下，能够快速增改数据。为了提高性能，旧版本的数据被删除。</p>
+<p>数据仓库优化了分析访问。分析访问通常包含选择特定的字段，几乎从不使用操作型数据库中的“select *”。由于访问模式的差异，操作型数据库（宽松地，OLTP）受益于基于行的DBMS，分析型数据库受益于基于列的DBMS。与维护业务快照的操作型数据库不同，数据仓库通常维护无限的历史数据，通过ETL过程周期性地从操作型系统迁移数据到数据仓库中。</p>
+<h2 id="10-变革"><a href="#10-变革" class="headerlink" title="10 变革"></a>10 变革</h2><p>数据仓库的复杂等级如下：</p>
+<ul>
+<li><p>离线操作型</p>
+<p>周期性(通常每天、每周或每月)从操作型系统更新数据，存储在面向报表的数据库中。</p>
+<p>仅从操作型系复制数据，数据处理不影响操作型系统。</p>
+</li>
+<li><p>离线</p>
+<p>数据基于常规基线（regular basis）从操作型系统更新，存储在利于报表的数据结构中。数据被映射转换为数据仓库所需。</p>
+</li>
+<li><p>实时</p>
+<p>在线继承数据仓库表示，对于来源数据的每次事务操作，更新数据仓库阶段数据。</p>
+</li>
+<li><p>集成</p>
+<p>收集不同业务领域的数据，用户可以在多个系统间查找数据。当操作型系统执行事务时，持续更新。</p>
+</li>
+</ul>
+<h2 id="11-概念对比"><a href="#11-概念对比" class="headerlink" title="11 概念对比"></a>11 概念对比</h2><p><a href="https://aws.amazon.com/cn/data-warehouse/" target="_blank" rel="noopener">数据仓库的概念</a></p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200516113020531.png" alt="image-20200516113020531"></p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200516113038290.png" alt="image-20200516113038290"></p>
+<p>数据仓库适合历史数据分析。</p>
+<p>数据湖适合低成本存储、非关系数据。</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200516113116976.png" alt="image-20200516113116976"></p>
+<h2 id="12-数据仓库类型"><a href="#12-数据仓库类型" class="headerlink" title="12 数据仓库类型"></a>12 数据仓库类型</h2><ul>
+<li><p>企业数据仓库</p>
+<p>中心化的仓库，提供决策支持，提供统一的数据分类、组织和展示方式。</p>
+</li>
+<li><p>ODS</p>
+<p>实时刷新，通常用于日常活动。</p>
+</li>
+<li><p>数据集市</p>
+<p>数据仓库在特定方面的子集。</p>
+</li>
+</ul>
+<h2 id="13-数据仓库实现步骤"><a href="#13-数据仓库实现步骤" class="headerlink" title="13 数据仓库实现步骤"></a>13 数据仓库实现步骤</h2><p>规避业务风险的三种策略：</p>
+<ul>
+<li><p>企业策略</p>
+<p>确定当前架构和工具。确定facts、维度、属性、数据映射和转换。</p>
+</li>
+<li><p>分阶段交付</p>
+<p>基于主题领域分阶段。先分领域实现，再集成。</p>
+</li>
+<li><p>迭代原型</p>
+<p>迭代开发和测试</p>
+<p><img src="/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200518114728518.png" alt="image-20200518114728518"></p>
+</li>
+</ul>
+<h2 id="14-数据仓库最佳实践"><a href="#14-数据仓库最佳实践" class="headerlink" title="14 数据仓库最佳实践"></a>14 数据仓库最佳实践</h2><ul>
+<li>制定计划以测试数据的一致性，准确性和完整性。</li>
+<li>数据仓库必须良好集成，良好定义并加盖时间戳。</li>
+<li>在设计Datawarehouse时，请确保使用正确的工具，忠于生命周期，注意数据冲突，并准备好学习自己的错误。</li>
+<li>切勿更换运营系统和报表</li>
+<li>不要在提取，清理和加载数据上花费太多时间。</li>
+<li>确保让所有利益相关者（包括业务人员）参与到Datawarehouse实施过程中。确定数据仓库是一个联合/团队项目，毕竟你不想创建对终端用户无用的数据仓库。</li>
+<li>为终端用户准备培训计划。</li>
+</ul>
+<h2 id="15-未来展望"><a href="#15-未来展望" class="headerlink" title="15 未来展望"></a>15 未来展望</h2><ul>
+<li>法规约束变化可能限制融合多源数据的能力</li>
+<li>规模不断增长，现有软硬件难以支持在线海量数据</li>
+<li>相比文本数据，多媒体数据难以操作。</li>
+</ul>
+<h2 id="16-数据仓库工具"><a href="#16-数据仓库工具" class="headerlink" title="16 数据仓库工具"></a>16 数据仓库工具</h2><p>(1) <a href="https://developer.marklogic.com/products/" target="_blank" rel="noopener">MarkLogic</a></p>
+<p>使用企业特性数组简化并加速数据集成。支持对文档、关系和元数据等的复杂查询操作。</p>
+<p>(2) <a href="https://www.oracle.com/index.html" target="_blank" rel="noopener">Oracle</a></p>
+<p>提供本地和云端部署，通过提升操作效率提升用户体验。</p>
+<p>(3) <a href="https://aws.amazon.com/redshift/?nc2=h_m1" target="_blank" rel="noopener">Amazon RedShift</a></p>
+<p>使用标准SQL和已有BI工具分析所有类型数据的简单经济的工具，允许对PB级别数据复杂查询。</p>
+<h2 id="17-总结"><a href="#17-总结" class="headerlink" title="17 总结"></a>17 总结</h2><ul>
+<li>数据仓库用作中央存储库，其信息来自一个或多个数据源。</li>
+<li>数据仓库的三种主要类型：企业数据仓库，运营数据存储和数据集市。</li>
+<li>数据仓库的一般状态是脱机操作数据库，脱机数据仓库，实时数据仓库和集成数据仓库。</li>
+<li>数据仓库的四个主要组件：加载管理，仓库管理，查询管理和终端用户访问工具</li>
+<li>实施Datawarehosue是3分策略，即：企业战略，分阶段交付和迭代原型设计。</li>
+<li>数据仓库使业务用户可以在一处快速地从多个来源快速访问关键数据。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://en.wikipedia.org/wiki/Data_warehouse" target="_blank" rel="noopener">Data warehouse</a></p>
+<p><a href="https://www.guru99.com/data-warehousing.html" target="_blank" rel="noopener">What is Data Warehouse? Types, Definition &amp; Example</a></p>
+<p><a href="https://www.guru99.com/top-20-etl-database-warehousing-tools.html" target="_blank" rel="noopener">20 Best ETL / Data Warehousing Tools in 2020</a></p>
+<p>第三范式：所有数据元素被主关键字唯一标识，且相互之间不存在函数关系。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据仓库/" rel="tag"># 数据仓库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/13/200513设计模式/" rel="next" title="设计模式">
+                <i class="fa fa-chevron-left"></i> 设计模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/22/200522Spark入门/" rel="prev" title="Spark入门">
+                Spark入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-定义"><span class="nav-number">1.</span> <span class="nav-text">1 定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-基于ETL的数据仓库"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 基于ETL的数据仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-基于ELT的数据仓库"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 基于ELT的数据仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-特性"><span class="nav-number">2.</span> <span class="nav-text">2 特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-优势"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-劣势"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 劣势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-通用概念"><span class="nav-number">2.3.</span> <span class="nav-text">(3) 通用概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-相关系统"><span class="nav-number">3.</span> <span class="nav-text">3 相关系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数据集市"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 数据集市</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-OLAP"><span class="nav-number">3.2.</span> <span class="nav-text">(2) OLAP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-OLTP"><span class="nav-number">3.3.</span> <span class="nav-text">(3) OLTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-预测分析"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 预测分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-历史"><span class="nav-number">4.</span> <span class="nav-text">4 历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-信息存储"><span class="nav-number">5.</span> <span class="nav-text">5 信息存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Facts"><span class="nav-number">5.1.</span> <span class="nav-text">(1) Facts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据存储：维度vs规格化"><span class="nav-number">5.2.</span> <span class="nav-text">(2) 数据存储：维度vs规格化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-维度"><span class="nav-number">5.2.1.</span> <span class="nav-text">1) 维度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-规格化"><span class="nav-number">5.2.2.</span> <span class="nav-text">2) 规格化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-设计方法"><span class="nav-number">6.</span> <span class="nav-text">6 设计方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-自下而上"><span class="nav-number">6.1.</span> <span class="nav-text">(1) 自下而上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自上而下"><span class="nav-number">6.2.</span> <span class="nav-text">(2) 自上而下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-混合"><span class="nav-number">6.3.</span> <span class="nav-text">(3) 混合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-数据仓库特性"><span class="nav-number">7.</span> <span class="nav-text">7 数据仓库特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-数据仓库架构"><span class="nav-number">8.</span> <span class="nav-text">8 数据仓库架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-对比操作型系统"><span class="nav-number">9.</span> <span class="nav-text">9 对比操作型系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-变革"><span class="nav-number">10.</span> <span class="nav-text">10 变革</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-概念对比"><span class="nav-number">11.</span> <span class="nav-text">11 概念对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-数据仓库类型"><span class="nav-number">12.</span> <span class="nav-text">12 数据仓库类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-数据仓库实现步骤"><span class="nav-number">13.</span> <span class="nav-text">13 数据仓库实现步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-数据仓库最佳实践"><span class="nav-number">14.</span> <span class="nav-text">14 数据仓库最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-未来展望"><span class="nav-number">15.</span> <span class="nav-text">15 未来展望</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-数据仓库工具"><span class="nav-number">16.</span> <span class="nav-text">16 数据仓库工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-总结"><span class="nav-number">17.</span> <span class="nav-text">17 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">18.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/05/15/200515数据仓库/';
+          this.page.identifier = '2020/05/15/200515数据仓库/';
+          this.page.title = '数据仓库';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

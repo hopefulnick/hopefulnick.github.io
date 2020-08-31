@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据仓库," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 概览(1) 理解 是与组织运营数据库隔离的数据库。  更新频率不高  处理聚合的历史数据，用于业务分析  帮助组织、理解和使用数据，以便策略决策  帮助聚合多种应用系统">
+<meta name="keywords" content="数据仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据仓库入门">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 概览(1) 理解 是与组织运营数据库隔离的数据库。  更新频率不高  处理聚合的历史数据，用于业务分析  帮助组织、理解和使用数据，以便策略决策  帮助聚合多种应用系统">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/image-20200523233925606.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_cube2d.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_cube3d.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_cube3d1.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_mart.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/delivery_method.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/process_flow.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/dwh_architecture.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/load_manager-1591361683532.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/warehouse_manager.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/query_manager.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/detailed_information.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/rollup.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/drill_down.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/slice.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/dice.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/pivot.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/rolap_architecture.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/molap_architecture.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/start_schema.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/snowflake.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/fact_constellation.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/partition.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/image-20200623224711981.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/metadata_categories.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/metadata_role.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/designing_datamart.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/image-20200626223436269.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/load_manager-1593182437308.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/warehouse_manager-1593183150138.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/query_manager-1593183289544.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/user_access_hierarchy.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/role_access_hierarchy.jpg">
+<meta property="og:updated_time" content="2020-08-30T15:51:51.596Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据仓库入门">
+<meta name="twitter:description" content="1 概览(1) 理解 是与组织运营数据库隔离的数据库。  更新频率不高  处理聚合的历史数据，用于业务分析  帮助组织、理解和使用数据，以便策略决策  帮助聚合多种应用系统">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/image-20200523233925606.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/"/>
+
+
+
+
+
+  <title>数据仓库入门 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据仓库入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-23T11:00:47+08:00">
+                2020-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据仓库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据仓库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/23/200523数据仓库入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/23/200523数据仓库入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-概览"><a href="#1-概览" class="headerlink" title="1 概览"></a>1 概览</h2><h3 id="1-理解"><a href="#1-理解" class="headerlink" title="(1) 理解"></a>(1) 理解</h3><ul>
+<li><p>是与组织运营数据库隔离的数据库。</p>
+</li>
+<li><p>更新频率不高</p>
+</li>
+<li><p>处理聚合的历史数据，用于业务分析</p>
+</li>
+<li><p>帮助组织、理解和使用数据，以便策略决策</p>
+</li>
+<li><p>帮助聚合多种应用系统</p>
+<a id="more"></a>
+</li>
+</ul>
+<h3 id="2-与运营数据库隔离"><a href="#2-与运营数据库隔离" class="headerlink" title="(2) 与运营数据库隔离"></a>(2) 与运营数据库隔离</h3><ul>
+<li><p>应用目的不同</p>
+<p>数据仓库用于执行复杂且通用格式的数据。运营数据库用于特定的任务和负载，如搜索特定记录和索引等。</p>
+</li>
+<li><p>性能要求不同</p>
+<p>运营数据库需要支持事务、并发和恢复，而数据仓库不需要。</p>
+</li>
+<li><p>数据操作不同</p>
+<p>数据仓库只能读，而运营数据库可以修改。</p>
+</li>
+<li><p>管理对象不同</p>
+<p>数据仓库管理历史数据，运营数据库管理当前数据。</p>
+</li>
+</ul>
+<h3 id="3-用途"><a href="#3-用途" class="headerlink" title="(3) 用途"></a>(3) 用途</h3><ul>
+<li><p>信息处理</p>
+<p>查询、简单统计和报表展示等</p>
+</li>
+<li><p>分析处理</p>
+<p>简单OLAP操作，如slice-and-dice、drill down、drill up和pivoting等</p>
+</li>
+<li><p>数据挖掘</p>
+<p>查找隐含模式和联系、构建分析模型、分类和预测等</p>
+</li>
+</ul>
+<h3 id="4-OLAP与OLTP"><a href="#4-OLAP与OLTP" class="headerlink" title="(4) OLAP与OLTP"></a>(4) OLAP与OLTP</h3><p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/image-20200523233925606.png" alt="image-20200523233925606"></p>
+<h2 id="2-概念"><a href="#2-概念" class="headerlink" title="2 概念"></a>2 概念</h2><h3 id="1-数据仓库技术"><a href="#1-数据仓库技术" class="headerlink" title="(1) 数据仓库技术"></a>(1) 数据仓库技术</h3><p>是构建和使用数据仓库的过程，包含数据清洗、数据整合和数据统一。整合多源异构数据，用于报表分析、结构和/或点对点查询，以及决策支持等。</p>
+<h3 id="2-整合异构数据库"><a href="#2-整合异构数据库" class="headerlink" title="(2) 整合异构数据库"></a>(2) 整合异构数据库</h3><h4 id="1-查询驱动方式"><a href="#1-查询驱动方式" class="headerlink" title="1) 查询驱动方式"></a>1) 查询驱动方式</h4><p>传统方式，在多源异构数据库上构建wrappers和integrators(mediators)。</p>
+<h5 id="1‘-过程"><a href="#1‘-过程" class="headerlink" title="1‘ 过程"></a>1‘ 过程</h5><ul>
+<li>客户端发起查询 -&gt; 元数据字典翻译查询到单独的节点</li>
+<li>查询被映射和发送到本地查询处理器</li>
+<li>查询结果整合到全局答案集中</li>
+</ul>
+<h5 id="2’-缺点"><a href="#2’-缺点" class="headerlink" title="2’ 缺点"></a>2’ 缺点</h5><ul>
+<li>整合和过滤过程复杂</li>
+<li>低效</li>
+<li>频繁查询或聚合查询代价高</li>
+</ul>
+<h4 id="2-更新驱动方式"><a href="#2-更新驱动方式" class="headerlink" title="2) 更新驱动方式"></a>2) 更新驱动方式</h4><p>当前数据仓库采用方式。提前整合数据并存储到仓库中，可以直接查询和分析。</p>
+<h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><ul>
+<li>不需要本地处理接口</li>
+<li>高效</li>
+<li>数据在语义数据存储中被提前拷贝、处理、整合、标记、概括和重构。</li>
+</ul>
+<h3 id="3-数据仓库功能"><a href="#3-数据仓库功能" class="headerlink" title="(3) 数据仓库功能"></a>(3) 数据仓库功能</h3><ul>
+<li><strong>数据提取</strong>：从多源异构数据源获取数据</li>
+<li><strong>数据清洗</strong>：查找并纠正数据中错误</li>
+<li><strong>数据转换</strong>：转化为仓库数据格式</li>
+<li><strong>数据加载</strong>：排序、概括、统一、检查完整性、构建索引和分区</li>
+<li><strong>刷新</strong>：从数据源更新</li>
+</ul>
+<p><strong>注意</strong>：数据清洗和数据转换是提高数据和挖掘结构质量的关键。</p>
+<h2 id="3-术语"><a href="#3-术语" class="headerlink" title="3 术语"></a>3 术语</h2><h3 id="1-元数据"><a href="#1-元数据" class="headerlink" title="(1) 元数据"></a>(1) 元数据</h3><p>关于数据的数据。是一种指向详细数据的概括数据。</p>
+<p>在数据仓库中，主要用于：</p>
+<ul>
+<li>路标（road-map）</li>
+<li>定义仓库对象</li>
+<li>作为目录，用于定位数据内容</li>
+</ul>
+<h3 id="2-元数据仓库"><a href="#2-元数据仓库" class="headerlink" title="(2) 元数据仓库"></a>(2) 元数据仓库</h3><p>是数据仓库系统的一部分，包括：</p>
+<ul>
+<li><p>业务元数据</p>
+<p>包括所有者、业务定义和变更策略。</p>
+</li>
+<li><p>操作元数据</p>
+<p>包括当前数据和数据血缘。当前数据是正在激活的、归档的或清理的。数据血缘是数据转移和转换的历史。</p>
+</li>
+<li><p>关于运营环境和数据仓库的映射数据</p>
+<p>包括源数据库及内容、数据提取、分区、清洗、转换规则、数据刷新和清理规则</p>
+</li>
+<li><p>概括算法</p>
+<p>包括维度算法、粒度、聚合和概括等</p>
+</li>
+</ul>
+<h3 id="3-数据立方体"><a href="#3-数据立方体" class="headerlink" title="(3) 数据立方体"></a>(3) 数据立方体</h3><p>数据立方体通过维度和事实帮助展现多维数据。维度作为保存记录的实体。</p>
+<p>示例：</p>
+<p>企业想跟踪关于时间、商品和位置的数据。</p>
+<p>2D表(只有时间和商品)</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_cube2d.jpg" alt="data_cube2d"></p>
+<p>3D表(添加位置)</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_cube3d.jpg" alt="data_cube3d"></p>
+<p>数据立方体展示：</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_cube3d1.jpg" alt="data_cube3d1"></p>
+<h3 id="4-数据集市"><a href="#4-数据集市" class="headerlink" title="(4) 数据集市"></a>(4) 数据集市</h3><p>限制在特定主题的数据仓库子集。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/data_mart.jpg" alt="data_mart"></p>
+<p>注意：</p>
+<ul>
+<li>实现周期短，如按周</li>
+<li>部门定制，容量较小</li>
+</ul>
+<h3 id="5-虚拟仓库"><a href="#5-虚拟仓库" class="headerlink" title="(5) 虚拟仓库"></a>(5) 虚拟仓库</h3><p>运营数据仓库的视图。易于构建，但需要运营仓库数据库额外空间。</p>
+<h2 id="4-交付过程"><a href="#4-交付过程" class="headerlink" title="4 交付过程"></a>4 交付过程</h2><p>数据仓库需求随着业务变化而变化。瀑布模型中严谨且有序的模式难以适应。多数情况下，需求并没有被完全理解，而架构、设计和构建组件只有在收集和理解了全部需求后才能完成。</p>
+<h3 id="交付方法"><a href="#交付方法" class="headerlink" title="交付方法"></a>交付方法</h3><p>交付方式是多种软件开发方法的协作。阶段划分减少了项目和交付的风险。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/delivery_method.jpg" alt="delivery_method"></p>
+<h4 id="1-IT策略"><a href="#1-IT策略" class="headerlink" title="1) IT策略"></a>1) IT策略</h4><p>数据仓库依赖于业务过程来产生收益，需要采购和保证项目资金。</p>
+<h4 id="2-业务用例"><a href="#2-业务用例" class="headerlink" title="2) 业务用例"></a>2) 业务用例</h4><p>用于评估数据仓库带来的业务收益。可以非量化，但需要明确。没有Business Case将导致可信性问题。</p>
+<h4 id="3-原型和培训"><a href="#3-原型和培训" class="headerlink" title="3) 原型和培训"></a>3) 原型和培训</h4><p>在着手之前，组织需要体验数据分析并自我宣导数据仓库收益。可以通过原型来理解可行性和收益。</p>
+<p>小范围原型系统需要满足：</p>
+<ul>
+<li>着重一个已定义的技术目标</li>
+<li>可行性展示后可丢弃</li>
+<li>着重最终数据内容的一个小子集</li>
+<li>时间周期不重要</li>
+</ul>
+<p>早期版本要点：</p>
+<ul>
+<li>架构能够应变</li>
+<li>着重业务需求和技术蓝图</li>
+<li>最小化第一个构建阶段范围</li>
+<li>理解短期和中期数据仓库需求</li>
+</ul>
+<h4 id="4-业务需求"><a href="#4-业务需求" class="headerlink" title="4) 业务需求"></a>4) 业务需求</h4><p>此阶段需要确定：</p>
+<ul>
+<li>应用于数据的业务规则</li>
+<li>数据仓库中信息的逻辑模型</li>
+<li>即时需求的查询配置文件</li>
+<li>提供数据的源系统</li>
+</ul>
+<h4 id="5-技术蓝图"><a href="#5-技术蓝图" class="headerlink" title="5) 技术蓝图"></a>5) 技术蓝图</h4><p>交付满足长期需求的总体架构，以及实现短期必备的组件。需要确定：</p>
+<ul>
+<li>总体架构</li>
+<li>数据保留策略</li>
+<li>备份和恢复策略</li>
+<li>服务器和数据集市架构</li>
+<li>硬件和基础设施容量计划</li>
+<li>数据库设计组件</li>
+</ul>
+<h4 id="6-建立版本"><a href="#6-建立版本" class="headerlink" title="6) 建立版本"></a>6) 建立版本</h4><p>在此阶段，生产第一个交付产品，是数据仓库的最小组件。</p>
+<h4 id="7-历史加载"><a href="#7-历史加载" class="headerlink" title="7) 历史加载"></a>7) 历史加载</h4><p>加载历史记录数据。在此阶段，不会添加新实体，但可能创建物理表来存储新加数据。</p>
+<h4 id="8-ad-hoc查询"><a href="#8-ad-hoc查询" class="headerlink" title="8) ad hoc查询"></a>8) ad hoc查询</h4><p>配置工具用于操作数据仓库。工具可更新数据库查询。</p>
+<p>建议不要在数据库大量改动时使用工具</p>
+<h4 id="9-自动化"><a href="#9-自动化" class="headerlink" title="9) 自动化"></a>9) 自动化</h4><p>在此阶段，自动化操作管理过程。</p>
+<ul>
+<li>转换数据为适宜分析的格式</li>
+<li>监控查询配置文件和决定适宜的聚合方式，以维护系统性能</li>
+<li>提取并加载数据</li>
+<li>根据数据仓库中预先定义更新聚合</li>
+<li>备份、还原和归档数据</li>
+</ul>
+<h4 id="10-扩展范围"><a href="#10-扩展范围" class="headerlink" title="10) 扩展范围"></a>10) 扩展范围</h4><p>新需求的扩展方式：</p>
+<ul>
+<li>加载额外的数据</li>
+<li>引入新的数据集市</li>
+</ul>
+<p>注意：此阶段由于包含大量工作和复杂度，需要单独执行</p>
+<h4 id="11-需求变更"><a href="#11-需求变更" class="headerlink" title="11) 需求变更"></a>11) 需求变更</h4><p>需求不断变更，交付过程必须对此提供支持，并允许这些更改反映在系统中。因此，设计数据仓库应该围绕业务数据的使用，与现有查询的数据需求相反。</p>
+<p>体系结构旨在更改和发展，这个过程作为伪程序开发过程运作。新需求不断反馈到开发活动中，产生部分可交付产品。部分可交付产品反馈给用户，经重新修改后确保整体系统满足业务需求并持续更新。</p>
+<h2 id="5-系统流程"><a href="#5-系统流程" class="headerlink" title="5 系统流程"></a>5 系统流程</h2><p>如何在开源技术上构建数据仓库。</p>
+<h3 id="1-处理流"><a href="#1-处理流" class="headerlink" title="(1) 处理流"></a>(1) 处理流</h3><p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/process_flow.jpg" alt="process_flow"></p>
+<p>构建数据仓库包含4个流程：</p>
+<ul>
+<li>提取、加载</li>
+<li>清洗、转换</li>
+<li>备份、归档</li>
+<li>管理查询并指向合适的数据来源</li>
+</ul>
+<h3 id="2-提取、加载"><a href="#2-提取、加载" class="headerlink" title="(2) 提取、加载"></a>(2) 提取、加载</h3><p>注意：加载数据前，外部数据需要重新组织结构。</p>
+<h4 id="1-控制流程"><a href="#1-控制流程" class="headerlink" title="1) 控制流程"></a>1) 控制流程</h4><p>包括决定加载时机和检查数据一致性。保证工具、逻辑模型和程序正确有序执行。</p>
+<h4 id="2-提取操作初始化时间"><a href="#2-提取操作初始化时间" class="headerlink" title="2) 提取操作初始化时间"></a>2) 提取操作初始化时间</h4><p>数据提取时需要保证一致性。</p>
+<h4 id="3-加载数据"><a href="#3-加载数据" class="headerlink" title="3) 加载数据"></a>3) 加载数据</h4><p>提取后，数据被加载到临时数据存储中进行清洗和一致性检查。</p>
+<p>注意：只有在所有数据都被加载后才进行一致性检查。</p>
+<h3 id="3-清洗、转换"><a href="#3-清洗、转换" class="headerlink" title="(3) 清洗、转换"></a>(3) 清洗、转换</h3><p>清洗和转换步骤：</p>
+<ul>
+<li>清洗并加载到结构数据中</li>
+<li>数据分区</li>
+<li>聚合</li>
+</ul>
+<h4 id="1-清洗并加载到结构数据中"><a href="#1-清洗并加载到结构数据中" class="headerlink" title="1) 清洗并加载到结构数据中"></a>1) 清洗并加载到结构数据中</h4><p>清洗和加载有助于提高查询效率。主要是保持数据一致性，可以依据：</p>
+<ul>
+<li>与自身</li>
+<li>与来源系统</li>
+<li>与其他来源</li>
+<li>与数据仓库</li>
+</ul>
+<p>转换还包括结构化数据，需要满足数据仓库的性能要求和控制操作代价。</p>
+<h4 id="2-数据分区"><a href="#2-数据分区" class="headerlink" title="2) 数据分区"></a>2) 数据分区</h4><p>将事实表划分为多个独立的分区，可以优化硬件性能，简化管理。</p>
+<h4 id="3-聚合"><a href="#3-聚合" class="headerlink" title="3) 聚合"></a>3) 聚合</h4><p>依赖于大多数查询依赖的事实子集，可以加速查询。</p>
+<h3 id="4-备份、归档"><a href="#4-备份、归档" class="headerlink" title="(4) 备份、归档"></a>(4) 备份、归档</h3><p>备份用于预防数据丢失和软硬件故障。</p>
+<p>归档从系统中移除数据，并以能够快速回复的数据格式保存。</p>
+<h3 id="5-查询管理过程"><a href="#5-查询管理过程" class="headerlink" title="(5) 查询管理过程"></a>(5) 查询管理过程</h3><p>提供以下功能：</p>
+<ul>
+<li>管理查询</li>
+<li>加速执行</li>
+<li>引导查询到最高效的数据源</li>
+<li>高效利用所有数据源</li>
+<li>监控实际查询配置文件，用于决定采用的聚合方式。</li>
+</ul>
+<p>通常普通数据加载时不执行。？</p>
+<h2 id="6-架构"><a href="#6-架构" class="headerlink" title="6 架构"></a>6 架构</h2><p>讨论商业分析框架的设计和架构。</p>
+<h3 id="1-商业分析框架"><a href="#1-商业分析框架" class="headerlink" title="(1) 商业分析框架"></a>(1) 商业分析框架</h3><p>具有数据仓库的优势：</p>
+<ul>
+<li>提高生产率，因为数据仓库能够快速高效收集信息</li>
+<li>提供一致性视图</li>
+<li>降低长时间跟踪趋势、模式的耗费</li>
+</ul>
+<p>构建数据仓库的观点：</p>
+<ul>
+<li>自上而下：允许选择相关信息</li>
+<li>数据源：展示操作型系统信息</li>
+<li>数据仓库：包含事实表和维度表</li>
+<li>业务查询：用户视角</li>
+</ul>
+<h3 id="2-三层架构"><a href="#2-三层架构" class="headerlink" title="(2) 三层架构"></a>(2) 三层架构</h3><p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/dwh_architecture.jpg" alt="dwh_architecture"></p>
+<ul>
+<li><p>底层(数据库层)</p>
+<p>由数据库组成，负责从外部导入数据，并进行提取、清洗、加载和刷新等。</p>
+</li>
+<li><p>中间层(OLAP层)</p>
+<p>由OLAP服务器组成，使用ROLAP(关系型数据库管理系统扩展，将多维数据操作转换为标准关系型操作)，或MOLAP（直接实现多维数据操作）。</p>
+</li>
+<li><p>顶层（用户层）：包含查询、报表、分析和挖掘工具。</p>
+</li>
+</ul>
+<h3 id="3-数据仓库模型"><a href="#3-数据仓库模型" class="headerlink" title="(3) 数据仓库模型"></a>(3) 数据仓库模型</h3><p>以下为数据仓库模型：虚拟仓库、数据集市和企业仓库</p>
+<h4 id="1-虚拟仓库"><a href="#1-虚拟仓库" class="headerlink" title="1) 虚拟仓库"></a>1) 虚拟仓库</h4><p>构建在操作型数据仓库上，简单，但需要操作型数据库服务器上的额外空间</p>
+<h4 id="2-数据集市"><a href="#2-数据集市" class="headerlink" title="2) 数据集市"></a>2) 数据集市</h4><p>企业仓库的子集，通常是部门自定义的，生命周期与主题相关。</p>
+<h4 id="3-企业仓库"><a href="#3-企业仓库" class="headerlink" title="3) 企业仓库"></a>3) 企业仓库</h4><p>数据仓库</p>
+<h3 id="4-加载管理"><a href="#4-加载管理" class="headerlink" title="(4) 加载管理"></a>(4) 加载管理</h3><p>负责数据提取和加载过程。</p>
+<h4 id="1-加载管理架构"><a href="#1-加载管理架构" class="headerlink" title="1) 加载管理架构"></a>1) 加载管理架构</h4><p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/load_manager-1591361683532.jpg" alt="load_manager"></p>
+<p>职责：</p>
+<ul>
+<li>从数据源提取数据</li>
+<li>快速加载到临时数据存储</li>
+<li>简单转换数据结构</li>
+</ul>
+<h4 id="2-数据提取"><a href="#2-数据提取" class="headerlink" title="2) 数据提取"></a>2) 数据提取</h4><p>由底层DBMS支持，并允许客户端生成并执行SQL。如ODBC和JDBC。</p>
+<h4 id="3-快速加载"><a href="#3-快速加载" class="headerlink" title="3) 快速加载"></a>3) 快速加载</h4><p>为了缩小数据加载时间窗口</p>
+<p>转换操作影响效率</p>
+<p>在转换和检查前，先加载进数据库更加高效</p>
+<p>通常ODBC、JDBC无法应对海量数据</p>
+<h4 id="4-简单转换"><a href="#4-简单转换" class="headerlink" title="4) 简单转换"></a>4) 简单转换</h4><p>数据加载时通常需要进行简单转换。如筛除不需要的数据和转换为所需的数据类型。</p>
+<h3 id="5-仓库管理"><a href="#5-仓库管理" class="headerlink" title="(5) 仓库管理"></a>(5) 仓库管理</h3><p>用于管理仓库，包含三方软件、程序和脚本等。</p>
+<h4 id="1-仓库管理结构"><a href="#1-仓库管理结构" class="headerlink" title="1) 仓库管理结构"></a>1) 仓库管理结构</h4><p>包含以下组成：</p>
+<ul>
+<li>控制进程</li>
+<li>存储过程</li>
+<li>备份、恢复工具</li>
+<li>SQL脚本</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/warehouse_manager.jpg" alt="warehouse_manager"></p>
+<h4 id="2-仓库管理操作"><a href="#2-仓库管理操作" class="headerlink" title="2) 仓库管理操作"></a>2) 仓库管理操作</h4><p>操作包括：</p>
+<ul>
+<li>数据检查：一致性和完整性</li>
+<li>辅助数据：创建索引、业务视图和分区视图等</li>
+<li>数据入库：转换和合并数据到数据仓库中</li>
+<li>数据备份：备份、归档</li>
+<li>性能监测：分析查询配置文件，调整索引和聚合方式</li>
+</ul>
+<h3 id="6-查询管理"><a href="#6-查询管理" class="headerlink" title="(6) 查询管理"></a>(6) 查询管理</h3><p>负责调度查询任务到特定表中，为了提高效率</p>
+<h4 id="查询管理架构"><a href="#查询管理架构" class="headerlink" title="查询管理架构"></a>查询管理架构</h4><p>架构包括：</p>
+<ul>
+<li>查询重定向</li>
+<li>存储过程</li>
+<li>查询管理工具</li>
+<li>查询调度</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/query_manager.jpg" alt="query_manager"></p>
+<h3 id="7-细节信息"><a href="#7-细节信息" class="headerlink" title="(7) 细节信息"></a>(7) 细节信息</h3><p>细节信息被综合后，归档到大容量存储中。细节信息被保持在星片模型（starflake schema）中，作为概括数据的补充，需要时再加载。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/detailed_information.jpg" alt="detailed_information"></p>
+<h3 id="8-概括信息"><a href="#8-概括信息" class="headerlink" title="(8) 概括信息"></a>(8) 概括信息</h3><p>是预定义聚合的数据，有仓库管理负责更新。随着查询配置文件的变化而不断变化。</p>
+<ul>
+<li>用于加速普通查询</li>
+<li>会增加操作型耗费</li>
+<li>数据加载时需要更新</li>
+<li>可能没有备份</li>
+</ul>
+<h2 id="7-OLAP"><a href="#7-OLAP" class="headerlink" title="7 OLAP"></a>7 OLAP</h2><h3 id="1-类型"><a href="#1-类型" class="headerlink" title="(1) 类型"></a>(1) 类型</h3><ul>
+<li>Relational OLAP (ROLAP): 使用或者扩展RDBMS</li>
+<li>Multidimensional OLAP (MOLAP)：使用基于数组的多维存储引擎。通常使用两种存储等级避免稀疏数据导致的空间利用率低。</li>
+<li>Hybrid OLAP (HOLAP)：结合ROLAP和MOLAP。提供ROLAP的高弹性和MOLAP的快速计算。</li>
+<li>Specialized SQL Servers：在只读环境中的星型或雪花模型上支持SQL查询。</li>
+</ul>
+<h3 id="2-操作"><a href="#2-操作" class="headerlink" title="(2) 操作"></a>(2) 操作</h3><ul>
+<li>Roll-up</li>
+<li>Drill-down</li>
+<li>Slice and dice</li>
+<li>Pivot (rotate)</li>
+</ul>
+<h4 id="1-上卷"><a href="#1-上卷" class="headerlink" title="1) 上卷"></a>1) 上卷</h4><p>通过以下方式：</p>
+<ul>
+<li>概念粗化（基于高层概念汇总？）</li>
+<li>降维</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/rollup.jpg" alt="rollup"></p>
+<p>原有数据是按照城市分组的，通过国家层次汇总，减少了位置的维度数量，细节更加模糊。</p>
+<h4 id="2-下钻"><a href="#2-下钻" class="headerlink" title="2) 下钻"></a>2) 下钻</h4><p>下钻是上卷的反向操作。通过以下方式实现：</p>
+<ul>
+<li>概念细化</li>
+<li>升维</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/drill_down.jpg" alt="drill_down"></p>
+<p>原有数据是按照季度分组，通过细化时间为月度，增加了时间上的维度数量，细节更加明显。</p>
+<h4 id="3-切片、切块"><a href="#3-切片、切块" class="headerlink" title="3) 切片、切块"></a>3) 切片、切块</h4><p>切片</p>
+<p>在一个维度上选择值的子集作为标准，获取符合标准的数据。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/slice.jpg" alt="slice"></p>
+<p>以上选取了第一季度的数据。</p>
+<p>切块</p>
+<p>在多个维度上选择值的子集作为标准，获取符合标准的数据。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/dice.jpg" alt="dice"></p>
+<p>以上在位置、时间和产品维度选择子集。</p>
+<h4 id="4-旋转"><a href="#4-旋转" class="headerlink" title="4) 旋转"></a>4) 旋转</h4><p>基于坐标轴旋转数据，为了提供另外的数据展示。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/pivot.jpg" alt="pivot"></p>
+<h3 id="3-OLAP-vs-OLTP"><a href="#3-OLAP-vs-OLTP" class="headerlink" title="(3) OLAP vs OLTP"></a>(3) OLAP vs OLTP</h3><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>数据仓库（OLAP）</th>
+<th>操作型数据库（OLTP）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>涉及信息的历史处理。</td>
+<td>涉及日常处理。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>OLAP系统由高管，经理和分析师等知识工作者使用。</td>
+<td>职员，DBA或数据库专业人员使用OLTP系统。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>在分析业务时很有用。</td>
+<td>在经营业务中很有用。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>它专注于信息输出。</td>
+<td>它专注于数据输入。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>基于星型模式，雪花模式和Schema and Fact Constellation Schema。</td>
+<td>基于实体关系模型。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>包含历史数据。</td>
+<td>包含当前数据。</td>
+</tr>
+<tr>
+<td>7</td>
+<td>提供汇总和合并的数据。</td>
+<td>提供原始和高度详细的数据。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>提供数据的摘要和多维视图。</td>
+<td>提供详细而平坦的数据关系视图。</td>
+</tr>
+<tr>
+<td>9</td>
+<td>人数或用户数以百计。</td>
+<td>用户数以千计。</td>
+</tr>
+<tr>
+<td>10</td>
+<td>访问的记录数以百万计。</td>
+<td>访问的记录数以十为单位。</td>
+</tr>
+<tr>
+<td>11</td>
+<td>数据库大小从100 GB到1 TB</td>
+<td>数据库大小从100 MB到1 GB。</td>
+</tr>
+<tr>
+<td>12</td>
+<td>高度灵活。</td>
+<td>提供高性能。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-ROLAP"><a href="#4-ROLAP" class="headerlink" title="(4) ROLAP"></a>(4) ROLAP</h3><p>ROLAP包括：</p>
+<ul>
+<li>聚合定位逻辑</li>
+<li>后端DBMS优化</li>
+<li>其他工具和服务</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>ROLAP是高度伸缩的</li>
+<li>ROLAP工具在多个维度间分析大量数据</li>
+<li>ROLAP工具存储和分析大量变化数据</li>
+</ul>
+<h4 id="1-架构"><a href="#1-架构" class="headerlink" title="1) 架构"></a>1) 架构</h4><p>组成：</p>
+<ul>
+<li>数据库</li>
+<li>ROLAP服务器</li>
+<li>前端工具</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/rolap_architecture.jpg" alt="rolap_architecture"></p>
+<h4 id="2）-优点"><a href="#2）-优点" class="headerlink" title="2） 优点"></a>2） 优点</h4><ul>
+<li>方便使用已有的DBMS</li>
+<li>高效存储，因为没有零事实？</li>
+<li>不使用预先计算的数据立方体</li>
+<li>能够适应DSS Server的micro-strategy</li>
+</ul>
+<h4 id="3-缺点"><a href="#3-缺点" class="headerlink" title="3) 缺点"></a>3) 缺点</h4><ul>
+<li>查询性能差</li>
+<li>技术架构限制了伸缩性</li>
+</ul>
+<h3 id="5-MOLAP"><a href="#5-MOLAP" class="headerlink" title="(5) MOLAP"></a>(5) MOLAP</h3><ul>
+<li>不论综合和计算等级，响应时间一致</li>
+<li>需要避免创建关系型数据库类存储分析数据的复杂性</li>
+<li>需要尽可能快的性能</li>
+<li>使用两次存储来处理密集和稀疏数据</li>
+<li>密集子立方体以数组结构识别和存储</li>
+<li>稀疏子立方体应用压缩技术</li>
+</ul>
+<h4 id="1-架构-1"><a href="#1-架构-1" class="headerlink" title="1) 架构"></a>1) 架构</h4><p>组成：</p>
+<ul>
+<li>数据库</li>
+<li>MOLAP服务器</li>
+<li>前端工具</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/molap_architecture.jpg" alt="molap_architecture"></p>
+<h4 id="2-优点"><a href="#2-优点" class="headerlink" title="2) 优点"></a>2) 优点</h4><ul>
+<li>可对预先计算的综合数据快速索引</li>
+<li>帮助需要分析大量缺乏定义数据的用户连接到网络</li>
+<li>易用，尤其对没有经验的用户</li>
+</ul>
+<h4 id="3-缺点-1"><a href="#3-缺点-1" class="headerlink" title="3) 缺点"></a>3) 缺点</h4><ul>
+<li>无法包含详细数据</li>
+<li>稀疏数据的存储空间利用不足</li>
+</ul>
+<h4 id="4-MOLAP-vs-ROLAP"><a href="#4-MOLAP-vs-ROLAP" class="headerlink" title="4) MOLAP vs ROLAP"></a>4) MOLAP vs ROLAP</h4><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>MOLAP</th>
+<th>ROLAP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>信息检索速度很快。</td>
+<td>信息检索相对较慢。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>使用稀疏数组存储数据集。</td>
+<td>使用关系表。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>MOLAP非常易于使用，因此最适合没有经验的用户。</td>
+<td>ROLAP最适合经验丰富的用户。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>为数据多维数据集维护一个单独的数据库。</td>
+<td>它可能不需要数据仓库中可用的空间。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>DBMS功能弱。</td>
+<td>DBMS功能强大。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-模式"><a href="#8-模式" class="headerlink" title="8 模式"></a>8 模式</h2><p>模式是整个数据库的逻辑描述。包括所有类型所有记录的名称和描述，以及相关的数据项和集合。数据库只用实体关系模型，而数据仓库使用星型、雪花和事实星座模式。</p>
+<h3 id="1-星型"><a href="#1-星型" class="headerlink" title="(1) 星型"></a>(1) 星型</h3><ul>
+<li>每个维度只用一个表表示。</li>
+<li>每个表包含一系列的属性。</li>
+<li>事实表在模型中间，包含了到维度的键和一些属性。</li>
+</ul>
+<p>注意：由于每个维度只有一张表，每个表都有一些属性。对于多条记录而言，某些属性会出现冗余。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/start_schema.jpg" alt="start_schema"></p>
+<h3 id="2-雪花"><a href="#2-雪花" class="headerlink" title="(2) 雪花"></a>(2) 雪花</h3><ul>
+<li>与星型不同的是，维度表被规范化。分离易变和不变的属性，将维度表查分为多个个维度表，item和supplier。</li>
+<li>item与supplier通过外键和主键连接。</li>
+</ul>
+<p>注意：由于进行了规范化，减少了星型模型的数据冗余。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/snowflake.jpg" alt="snowflake"></p>
+<h3 id="3-事实星座"><a href="#3-事实星座" class="headerlink" title="(3) 事实星座"></a>(3) 事实星座</h3><ul>
+<li>事实星座（也叫，银河）具有多个事实表。</li>
+<li>事实表间共享维度表。</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/fact_constellation.jpg" alt="fact_constellation"></p>
+<h3 id="4-模式定义"><a href="#4-模式定义" class="headerlink" title="(4) 模式定义"></a>(4) 模式定义</h3><p>使用DMQL定义模式。</p>
+<p>主要包括：立方体定义和维度定义</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 立方体定义</span><br><span class="line">define cube &lt; cube_name &gt; [ &lt; dimension-list &gt; &#125;: &lt; measure_list &gt;</span><br><span class="line"># 维度定义                          </span><br><span class="line">define dimension &lt; dimension_name &gt; as ( &lt; attribute_or_dimension_list &gt; )</span><br></pre></td></tr></table></figure>
+<p>星型模式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">define cube sales star [time, item, branch, location]:   </span><br><span class="line">    	   </span><br><span class="line">dollars sold = sum(sales in dollars), units sold = count(*)    	  </span><br><span class="line"></span><br><span class="line">define dimension time as (time key, day, day of week, month, quarter, year)</span><br><span class="line">define dimension item as (item key, item name, brand, type, supplier type)        	</span><br><span class="line">define dimension branch as (branch key, branch name, branch type)              	</span><br><span class="line">define dimension location as (location key, street, city, province or state, country)</span><br></pre></td></tr></table></figure>
+<p>雪花模式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">define cube sales snowflake [time, item, branch, location]:</span><br><span class="line"></span><br><span class="line">dollars sold = sum(sales in dollars), units sold = count(*)</span><br><span class="line"></span><br><span class="line">define dimension time as (time key, day, day of week, month, quarter, year)</span><br><span class="line">define dimension item as (item key, item name, brand, type, supplier (supplier key, supplier type))</span><br><span class="line">define dimension branch as (branch key, branch name, branch type)</span><br><span class="line">define dimension location as (location key, street, city (city key, city, province or state, country))</span><br></pre></td></tr></table></figure>
+<p>事实星座模式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">define cube sales [time, item, branch, location]:</span><br><span class="line"></span><br><span class="line">dollars sold = sum(sales in dollars), units sold = count(*)</span><br><span class="line"></span><br><span class="line">define dimension time as (time key, day, day of week, month, quarter, year)</span><br><span class="line">define dimension item as (item key, item name, brand, type, supplier type)</span><br><span class="line">define dimension branch as (branch key, branch name, branch type)</span><br><span class="line">define dimension location as (location key, street, city, province or state,country)</span><br><span class="line">define cube shipping [time, item, shipper, from location, to location]:</span><br><span class="line"></span><br><span class="line">dollars cost = sum(cost in dollars), units shipped = count(*)</span><br><span class="line"></span><br><span class="line">define dimension time as time in cube sales</span><br><span class="line">define dimension item as item in cube sales</span><br><span class="line">define dimension shipper as (shipper key, shipper name, location as location in cube sales, shipper type)</span><br><span class="line">define dimension from location as location in cube sales</span><br><span class="line">define dimension to location as location in cube sales</span><br></pre></td></tr></table></figure>
+<h2 id="9-分区策略"><a href="#9-分区策略" class="headerlink" title="9 分区策略"></a>9 分区策略</h2><h3 id="1-作用"><a href="#1-作用" class="headerlink" title="(1) 作用"></a>(1) 作用</h3><p>由于数据量巨大，分区有助于简化管理、帮助备份恢复，以及增强查询性能等。</p>
+<h3 id="2-水平分区"><a href="#2-水平分区" class="headerlink" title="(2) 水平分区"></a>(2) 水平分区</h3><h4 id="1-按时间"><a href="#1-按时间" class="headerlink" title="1) 按时间"></a>1) 按时间</h4><h5 id="1’-均分"><a href="#1’-均分" class="headerlink" title="1’ 均分"></a>1’ 均分</h5><p>根据业务情况，按照时间段均分为多个分区。</p>
+<h5 id="2‘-非均分"><a href="#2‘-非均分" class="headerlink" title="2‘ 非均分"></a>2‘ 非均分</h5><p>按照访问频率，分为多个不同长度的时间段。</p>
+<p>注意：</p>
+<ul>
+<li>细节数据需要线上可用</li>
+<li>物理表尽量小，以减少操作代价</li>
+<li>适合近期记录需要下钻，长期记录需要挖掘的场景</li>
+<li>不适合分区配置经常变的场景</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/partition.jpg" alt="partition"></p>
+<h4 id="2-按其他维度"><a href="#2-按其他维度" class="headerlink" title="2) 按其他维度"></a>2) 按其他维度</h4><p>需要保证依据的维度不会变动，否则将导致重新分区</p>
+<h4 id="3-按容量"><a href="#3-按容量" class="headerlink" title="3) 按容量"></a>3) 按容量</h4><p>需要设置阈值，超出则新建分区。</p>
+<p>注意：</p>
+<ul>
+<li>难以管理</li>
+<li>需要元数据标识所在的分区</li>
+</ul>
+<h4 id="4-拆分维度"><a href="#4-拆分维度" class="headerlink" title="4) 拆分维度"></a>4) 拆分维度</h4><p>当一个维度过大时，将影响响应时间。需要进行拆分</p>
+<h4 id="5-循环分区"><a href="#5-循环分区" class="headerlink" title="5) 循环分区"></a>5) 循环分区</h4><p>当需要新分区时，老分区被归档。允许使用元数据引用分区。</p>
+<p>思考：循环分区是一种技术，而不是分区标准？</p>
+<h3 id="3-垂直分区"><a href="#3-垂直分区" class="headerlink" title="(3) 垂直分区"></a>(3) 垂直分区</h3><p>需要确保不会在分区间连接。</p>
+<h4 id="1-规范化"><a href="#1-规范化" class="headerlink" title="1) 规范化"></a>1) 规范化</h4><p>根据属性将关系将行进行分组。</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/image-20200623224711981.png" alt="image-20200623224711981"></p>
+<h4 id="2-行拆分"><a href="#2-行拆分" class="headerlink" title="2) 行拆分"></a>2) 行拆分</h4><p>倾向于分区间一对一的映射，为了减少单个表大小。</p>
+<p>注意：根据业务情况，选择合适的分区关键字。</p>
+<h2 id="10-元数据概念"><a href="#10-元数据概念" class="headerlink" title="10 元数据概念"></a>10 元数据概念</h2><h3 id="1-定义"><a href="#1-定义" class="headerlink" title="(1) 定义"></a>(1) 定义</h3><p>关于数据的数据。是一种指向细节数据的已综合数据。</p>
+<p>定义了数据仓库中数据的名称和定义、时间戳、来源和处理过程等信息。</p>
+<h3 id="2-分类"><a href="#2-分类" class="headerlink" title="(2) 分类"></a>(2) 分类</h3><ul>
+<li><p>业务元数据</p>
+<p>包括数据归属、业务定义和变更策略等</p>
+</li>
+<li><p>技术元数据</p>
+<p>包含数据库名称、表名称和容量、数据类型和合法值、主键、外键和索引。</p>
+</li>
+<li><p>操作元数据</p>
+<p>数据当前状态（活跃、归档或清除）和数据血缘（来源和操作）</p>
+</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/metadata_categories.jpg" alt="metadata_categories"></p>
+<h3 id="3-角色"><a href="#3-角色" class="headerlink" title="(3) 角色"></a>(3) 角色</h3><ul>
+<li>目录作用</li>
+<li>定位数据仓库中数据</li>
+<li>数据血缘追溯</li>
+<li>用于数据提取、清洗、加载、转换、查询和报表过程。</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/metadata_role.jpg" alt="metadata_role"></p>
+<h3 id="4-元数据仓库"><a href="#4-元数据仓库" class="headerlink" title="(4) 元数据仓库"></a>(4) 元数据仓库</h3><p>包含：</p>
+<ul>
+<li><p>元数据</p>
+</li>
+<li><p>操作型环境与数据仓库映射</p>
+<p>来源数据库和内容，数据提取、分区、清洗、转换、刷新和清除规则</p>
+</li>
+<li><p>综合算法</p>
+<p>维度算法、粒度数据、聚合和综合</p>
+</li>
+</ul>
+<h3 id="5-元数据管理挑战"><a href="#5-元数据管理挑战" class="headerlink" title="(5) 元数据管理挑战"></a>(5) 元数据管理挑战</h3><ul>
+<li>大型组织元数据分散</li>
+<li>可能以文本或多媒体形式展现，需要正确定义</li>
+<li>行业内没有标准</li>
+<li>没有简单合适的传递方法</li>
+</ul>
+<h2 id="11-数据集市"><a href="#11-数据集市" class="headerlink" title="11 数据集市"></a>11 数据集市</h2><h3 id="1-目的"><a href="#1-目的" class="headerlink" title="(1) 目的"></a>(1) 目的</h3><ul>
+<li>应用不同的访问控制策略</li>
+<li>加速查询，因为避免了全部扫描</li>
+<li>分离到不同硬件平台</li>
+<li>重新组织数据，以适配用户访问工具</li>
+</ul>
+<p>注意：由于划分数据集市操作代价高，需要确保收益大于损耗。</p>
+<h3 id="2-高效划分数据集市"><a href="#2-高效划分数据集市" class="headerlink" title="(2) 高效划分数据集市"></a>(2) 高效划分数据集市</h3><h4 id="1-职能划分"><a href="#1-职能划分" class="headerlink" title="1) 职能划分"></a>1) 职能划分</h4><p>确定是否具有自然的职能部门，并确定部门间是都相互分离。需要根据业务收益和技术可行性决定。</p>
+<p>考虑因素：</p>
+<ul>
+<li>部门是否会变化</li>
+<li>职能是否会转移</li>
+<li>是否可以部门间协同</li>
+</ul>
+<h4 id="2-访问工具"><a href="#2-访问工具" class="headerlink" title="2) 访问工具"></a>2) 访问工具</h4><p>需要支持要求中间数据结构的访问工具。这种中间数据结构在数据仓库控制之外，需要定期填充和更新。</p>
+<p>注意：为了保证所有工具间的数据一致性，不应从数据仓库填充数据，而是每个工具具有自己的数据集市。</p>
+<h4 id="3-访问控制"><a href="#3-访问控制" class="headerlink" title="3) 访问控制"></a>3) 访问控制</h4><p>应该具有隐私规则。</p>
+<h3 id="3-设计数据集市"><a href="#3-设计数据集市" class="headerlink" title="(3) 设计数据集市"></a>(3) 设计数据集市</h3><p>数据集市应该是数据仓库中一个小型的星片模式（starflake）。雪花模式？</p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/designing_datamart.jpg" alt="designing_datamart"></p>
+<h3 id="4-数据集市耗费"><a href="#4-数据集市耗费" class="headerlink" title="(4) 数据集市耗费"></a>(4) 数据集市耗费</h3><ul>
+<li><p>软硬件</p>
+<p>数据冗余导致。</p>
+</li>
+<li><p>网络</p>
+<p>分布式数据集市数据加载导致。</p>
+</li>
+<li><p>时间窗口限制</p>
+<p>程度取决于转换复杂度和传输数据量。</p>
+</li>
+</ul>
+<h2 id="12-系统管理"><a href="#12-系统管理" class="headerlink" title="12 系统管理"></a>12 系统管理</h2><h3 id="1-配置"><a href="#1-配置" class="headerlink" title="(1) 配置"></a>(1) 配置</h3><ul>
+<li>因软硬件平台而异</li>
+<li>单一的用户接口</li>
+<li>控制系统的方方面面</li>
+<li>最重要的是IO配置</li>
+</ul>
+<h3 id="2-调度"><a href="#2-调度" class="headerlink" title="(2) 调度"></a>(2) 调度</h3><ul>
+<li>在集群或大规模并行处理内工作</li>
+<li>处理时区差异</li>
+<li>处理作业失败与重试</li>
+<li>处理多个查询</li>
+<li>处理作业优先级</li>
+<li>队列开关</li>
+<li>日志</li>
+<li>日常和临时查询</li>
+<li>日常报表需求</li>
+<li>数据加载、处理和转换</li>
+<li>索引创建</li>
+<li>恢复</li>
+<li>聚合</li>
+</ul>
+<h3 id="3-事件"><a href="#3-事件" class="headerlink" title="(3) 事件"></a>(3) 事件</h3><p>自动处理预先定义的事件。</p>
+<p>事件是预先定义的，由用户或系统产生的动作。</p>
+<p>以下为常见的事件：</p>
+<ul>
+<li><p>硬件</p>
+<p>硬件失效、CPU超载</p>
+</li>
+<li><p>磁盘</p>
+<p>缓存超出上限、内存交换频繁、临时空间超出上限</p>
+</li>
+<li><p>进程</p>
+<p>进程崩溃或返回错误</p>
+</li>
+<li><p>数据库</p>
+<p>序列化点的内部争夺、表容量达到最大、</p>
+</li>
+</ul>
+<h3 id="4-数据库"><a href="#4-数据库" class="headerlink" title="(4) 数据库"></a>(4) 数据库</h3><p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/image-20200626223436269.png" alt="image-20200626223436269"></p>
+<h3 id="5-恢复"><a href="#5-恢复" class="headerlink" title="(5) 恢复"></a>(5) 恢复</h3><ul>
+<li>了解何时何处数据被备份</li>
+<li>有客户端工具</li>
+<li>能感知数据库，以便备份</li>
+</ul>
+<h2 id="13-过程管理"><a href="#13-过程管理" class="headerlink" title="13 过程管理"></a>13 过程管理</h2><p>负责数据仓库数据流的进出，分为加载、数据仓库和查询管理。</p>
+<h3 id="1-加载"><a href="#1-加载" class="headerlink" title="(1) 加载"></a>(1) 加载</h3><p>主要功能：</p>
+<ul>
+<li>从源系统提取</li>
+<li>快速加载到临时存储</li>
+<li>简单转换</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/load_manager-1593182437308.jpg" alt="load_manager"></p>
+<h3 id="2-仓库"><a href="#2-仓库" class="headerlink" title="(2) 仓库"></a>(2) 仓库</h3><p>主要包括：</p>
+<ul>
+<li>控制进程</li>
+<li>存储流程</li>
+<li>备份、恢复</li>
+<li>SQL脚本</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/warehouse_manager-1593183150138.jpg" alt="warehouse_manager"></p>
+<p>功能包括：</p>
+<ul>
+<li>分析数据以执行一致性和参照完整性检查。</li>
+<li>根据基础数据创建索引，业务视图，分区视图。</li>
+<li>生成新的聚合并更新现有的聚合。</li>
+<li>生成规范化。</li>
+<li>将临时存储的源数据转换并合并到已发布的数据仓库中。</li>
+<li>备份数据仓库中的数据。</li>
+<li>存档已达到其使用期限的数据。</li>
+</ul>
+<h3 id="3-查询"><a href="#3-查询" class="headerlink" title="(3) 查询"></a>(3) 查询</h3><p>负责调度查询到响应的表。</p>
+<p>包括：</p>
+<ul>
+<li>查询重定向</li>
+<li>存储过程</li>
+<li>查询管理</li>
+<li>查询调度</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/query_manager-1593183289544.jpg" alt="query_manager"></p>
+<p>功能：</p>
+<ul>
+<li>返回用户理解的数据</li>
+<li>调度执行用户查询</li>
+<li>存储配置文件，用于判断索引和聚合是否合适</li>
+</ul>
+<h2 id="14-安全"><a href="#14-安全" class="headerlink" title="14 安全"></a>14 安全</h2><h3 id="1-安全需求"><a href="#1-安全需求" class="headerlink" title="(1) 安全需求"></a>(1) 安全需求</h3><p>在设计数据仓库时，应该考虑以下问题：</p>
+<ul>
+<li>新的数据源是否需要新建或更改限制</li>
+<li>新的用户是否需要对已有数据进行受限访问</li>
+</ul>
+<h3 id="2-用户访问"><a href="#2-用户访问" class="headerlink" title="(2) 用户访问"></a>(2) 用户访问</h3><ul>
+<li>对数据分类</li>
+<li>对用户分类<ul>
+<li>按照部门，适合独立的数据集市</li>
+<li>按照角色，适合共享数据</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/user_access_hierarchy.jpg" alt="user_access_hierarchy"></p>
+<p><img src="/2020/05/23/200523数据仓库入门/200523%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%85%A5%E9%97%A8/role_access_hierarchy.jpg" alt="role_access_hierarchy"></p>
+<h3 id="3-审计和网络需求"><a href="#3-审计和网络需求" class="headerlink" title="(3) 审计和网络需求"></a>(3) 审计和网络需求</h3><p>审计是安全的一部分，是一个高代价的行为。应该尽可能关闭。</p>
+<p>审计分类：</p>
+<ul>
+<li>连接</li>
+<li>断开连接</li>
+<li>数据访问</li>
+<li>数据更改</li>
+</ul>
+<p>网络需求需要考虑：</p>
+<ul>
+<li><p>是否传输前加密</p>
+<p>加密会增加硬件和时间消耗</p>
+<p>来自源系统加密的数据会增加已有系统的负担</p>
+</li>
+<li><p>是否网络路由限制</p>
+</li>
+</ul>
+<h3 id="4-数据转移"><a href="#4-数据转移" class="headerlink" title="(4) 数据转移"></a>(4) 数据转移</h3><p>需要考虑：</p>
+<ul>
+<li>数据来源</li>
+<li>授权用户</li>
+<li>是否加密</li>
+<li>存储位置</li>
+</ul>
+<h3 id="5-文档"><a href="#5-文档" class="headerlink" title="(5) 文档"></a>(5) 文档</h3><p>审计和安全需求需要文档记录。包括：</p>
+<ul>
+<li>数据分类</li>
+<li>用户分类</li>
+<li>网络需求</li>
+<li>数据转移和存储需求</li>
+<li>审计行为</li>
+</ul>
+<h3 id="6-安全影响"><a href="#6-安全影响" class="headerlink" title="(6) 安全影响"></a>(6) 安全影响</h3><ul>
+<li><p>应用开发</p>
+<p>增加合法性检查代码</p>
+</li>
+<li><p>数据库设计</p>
+<p>增加视图、表、备份和恢复工作</p>
+</li>
+<li><p>测试</p>
+<p>增加待测试的功能及时间</p>
+</li>
+</ul>
+<h2 id="15-备份"><a href="#15-备份" class="headerlink" title="15 备份"></a>15 备份</h2><h3 id="1-术语"><a href="#1-术语" class="headerlink" title="(1) 术语"></a>(1) 术语</h3><ul>
+<li><p>完全备份</p>
+<p>一次性备份整个数据库</p>
+</li>
+<li><p>部分备份</p>
+<p>通常采用循环方式逐步备份</p>
+</li>
+<li><p>冷备份</p>
+<p>备份时停止工作</p>
+</li>
+<li><p>热备份</p>
+</li>
+<li><p>在线备份</p>
+<p>类似于热备份</p>
+</li>
+</ul>
+<h3 id="2-硬件备份"><a href="#2-硬件备份" class="headerlink" title="(2) 硬件备份"></a>(2) 硬件备份</h3><p>备份恢复的速率取决于硬件。</p>
+<p>需要考虑：</p>
+<ul>
+<li>可靠性</li>
+<li>单位存储费用</li>
+<li>弹性</li>
+<li>升级费用</li>
+<li>使用寿命</li>
+</ul>
+<h3 id="3-软件备份"><a href="#3-软件备份" class="headerlink" title="(3) 软件备份"></a>(3) 软件备份</h3><p>考虑因素：</p>
+<ul>
+<li>弹性</li>
+<li>运行模式（Client/Server或ServerOnly）</li>
+<li>部署平台（含是否支持集群或大规模并行处理MPP）</li>
+<li>并行程度</li>
+<li>数据库感知</li>
+<li>数据访问是否方便</li>
+</ul>
+<h2 id="16-调优"><a href="#16-调优" class="headerlink" title="16 调优"></a>16 调优</h2><h3 id="1-难点"><a href="#1-难点" class="headerlink" title="(1) 难点"></a>(1) 难点</h3><p>数据仓库是动态的。业务希求、用户和配置、用户查询和数据加载都是动态变化的。</p>
+<p>需要对数据仓库有完全的认识。</p>
+<h3 id="2-性能评估"><a href="#2-性能评估" class="headerlink" title="(2) 性能评估"></a>(2) 性能评估</h3><p>项目：</p>
+<ul>
+<li>平均查询响应时间</li>
+<li>扫描速率</li>
+<li>每日查询时间</li>
+<li>过程内存占用</li>
+<li>IO吞吐速率</li>
+</ul>
+<h3 id="3-数据加载优化"><a href="#3-数据加载优化" class="headerlink" title="(3) 数据加载优化"></a>(3) 数据加载优化</h3><p>数据加载是快速处理的关键。</p>
+<p>常见方法：</p>
+<ul>
+<li><p>SQL层插入。</p>
+<p>需要执行常规检查和约束，耗时且占用CPU。</p>
+</li>
+<li><p>数据放入预先格式化块中，随后写入数据库</p>
+<p>避免常规检查和约束，但只能以块单位操作，浪费空间</p>
+</li>
+<li><p>数据加载到已包含数据的表，同时维护索引</p>
+<p>适合已经加载有大量数据的场景</p>
+</li>
+<li><p>数据加载到已包含数据的表，删除索引，加载完成后重新创建</p>
+<p>适合索引重建简便的场景</p>
+</li>
+</ul>
+<h3 id="4-一致性检查"><a href="#4-一致性检查" class="headerlink" title="(4) 一致性检查"></a>(4) 一致性检查</h3><p>一致性检查需要大量处理资源。</p>
+<ul>
+<li>限制一致性检查</li>
+<li>应用到数据源系统中，避免因数据加载导致性能降级</li>
+</ul>
+<h3 id="5-查询优化"><a href="#5-查询优化" class="headerlink" title="(5) 查询优化"></a>(5) 查询优化</h3><h4 id="1-固定查询"><a href="#1-固定查询" class="headerlink" title="1) 固定查询"></a>1) 固定查询</h4><p>包括日常报表和普通聚合等。</p>
+<p>类似于关系型数据库优化，区别是数据量不同。</p>
+<p>测试固定查询时保存最高效的执行计划，聚焦数据量变化和数据倾斜。</p>
+<h4 id="2-临时查询"><a href="#2-临时查询" class="headerlink" title="2) 临时查询"></a>2) 临时查询</h4><p>收集信息：</p>
+<ul>
+<li>用户数量</li>
+<li>临时查询频率、最大和平均数据量</li>
+<li>是否有下钻操作</li>
+<li>每日用户运行时间</li>
+<li>日常使用高峰时间和查询数量</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>跟踪用户配置和识别日常查询</li>
+<li>根据信息变更数据库和索引</li>
+</ul>
+<h2 id="17-测试"><a href="#17-测试" class="headerlink" title="17 测试"></a>17 测试</h2><h3 id="1-测试级别"><a href="#1-测试级别" class="headerlink" title="(1) 测试级别"></a>(1) 测试级别</h3><ul>
+<li><p>单元测试</p>
+<p>分别测试每个组件、模型，如过程、程序、脚本等</p>
+<p>由开发者执行</p>
+</li>
+<li><p>集成测试</p>
+<p>测试多个输入下组件协作能力</p>
+</li>
+<li><p>系统测试</p>
+<p>测试整个数据仓库系统是否运行正常</p>
+<p>由测试团队执行</p>
+<p>在制定测试计划前，通常尽可能最小化系统测试</p>
+</li>
+</ul>
+<h3 id="2-测试"><a href="#2-测试" class="headerlink" title="(2) 测试"></a>(2) 测试</h3><ul>
+<li><p>时间评估</p>
+<p>为了预防意料外和人为原因，建议设置为两倍测试时间。</p>
+</li>
+<li><p>备份恢复测试</p>
+<p>硬件或实例失效、数据文件或恢复文件丢失等</p>
+</li>
+<li><p>操作环境测试</p>
+<ul>
+<li><p>安全</p>
+<p>需要单独的文档</p>
+</li>
+<li><p>调度</p>
+</li>
+<li><p>磁盘配置</p>
+<p>用于检测瓶颈</p>
+</li>
+<li><p>管理工具</p>
+</li>
+</ul>
+</li>
+<li><p>数据库测试</p>
+<ul>
+<li>管理和监控工具</li>
+<li>数据库特性，如并行处理等</li>
+<li>性能测试</li>
+</ul>
+</li>
+<li><p>应用测试</p>
+<ul>
+<li>管理</li>
+<li>功能</li>
+<li>长时间运行</li>
+<li>定时任务</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-测试逻辑"><a href="#3-测试逻辑" class="headerlink" title="(3) 测试逻辑"></a>(3) 测试逻辑</h3><ul>
+<li>调度</li>
+<li>管理</li>
+<li>日常流程</li>
+<li>备份恢复</li>
+<li>长时间运行</li>
+<li>性能</li>
+<li>弹性</li>
+</ul>
+<h2 id="18-问答"><a href="#18-问答" class="headerlink" title="18 问答"></a>18 问答</h2><ul>
+<li><p>什么是虚拟仓库</p>
+<p>数据仓库上的视图。</p>
+<p>The view over an operational data warehouse is known as virtual warehouse.</p>
+</li>
+<li><p>数据仓库交付流程</p>
+<p>IT策略、培训、业务案例分析、技术蓝图、构建版本、历史数据加载、临时查询、变更需求、自动化和扩展范围。</p>
+</li>
+<li><p>多维OLAP比关系型OLAP快</p>
+</li>
+<li><p>Data Mining Query Language (DMQL)用于模式定义</p>
+</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.tutorialspoint.com/dwh/dwh_overview.htm" target="_blank" rel="noopener">Data Warehousing - Overview</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据仓库/" rel="tag"># 数据仓库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/22/200522Spark入门/" rel="next" title="Spark入门">
+                <i class="fa fa-chevron-left"></i> Spark入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/26/200526RDD源码/" rel="prev" title="RDD源码">
+                RDD源码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概览"><span class="nav-number">1.</span> <span class="nav-text">1 概览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-理解"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-与运营数据库隔离"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 与运营数据库隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-用途"><span class="nav-number">1.3.</span> <span class="nav-text">(3) 用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-OLAP与OLTP"><span class="nav-number">1.4.</span> <span class="nav-text">(4) OLAP与OLTP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-概念"><span class="nav-number">2.</span> <span class="nav-text">2 概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数据仓库技术"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 数据仓库技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-整合异构数据库"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 整合异构数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-查询驱动方式"><span class="nav-number">2.2.1.</span> <span class="nav-text">1) 查询驱动方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1‘-过程"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">1‘ 过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2’-缺点"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">2’ 缺点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-更新驱动方式"><span class="nav-number">2.2.2.</span> <span class="nav-text">2) 更新驱动方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">优点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数据仓库功能"><span class="nav-number">2.3.</span> <span class="nav-text">(3) 数据仓库功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-术语"><span class="nav-number">3.</span> <span class="nav-text">3 术语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-元数据"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 元数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-元数据仓库"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 元数据仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数据立方体"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 数据立方体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数据集市"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 数据集市</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-虚拟仓库"><span class="nav-number">3.5.</span> <span class="nav-text">(5) 虚拟仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-交付过程"><span class="nav-number">4.</span> <span class="nav-text">4 交付过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交付方法"><span class="nav-number">4.1.</span> <span class="nav-text">交付方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-IT策略"><span class="nav-number">4.1.1.</span> <span class="nav-text">1) IT策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-业务用例"><span class="nav-number">4.1.2.</span> <span class="nav-text">2) 业务用例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-原型和培训"><span class="nav-number">4.1.3.</span> <span class="nav-text">3) 原型和培训</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-业务需求"><span class="nav-number">4.1.4.</span> <span class="nav-text">4) 业务需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-技术蓝图"><span class="nav-number">4.1.5.</span> <span class="nav-text">5) 技术蓝图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-建立版本"><span class="nav-number">4.1.6.</span> <span class="nav-text">6) 建立版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-历史加载"><span class="nav-number">4.1.7.</span> <span class="nav-text">7) 历史加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-ad-hoc查询"><span class="nav-number">4.1.8.</span> <span class="nav-text">8) ad hoc查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-自动化"><span class="nav-number">4.1.9.</span> <span class="nav-text">9) 自动化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-扩展范围"><span class="nav-number">4.1.10.</span> <span class="nav-text">10) 扩展范围</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-需求变更"><span class="nav-number">4.1.11.</span> <span class="nav-text">11) 需求变更</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-系统流程"><span class="nav-number">5.</span> <span class="nav-text">5 系统流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-处理流"><span class="nav-number">5.1.</span> <span class="nav-text">(1) 处理流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-提取、加载"><span class="nav-number">5.2.</span> <span class="nav-text">(2) 提取、加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-控制流程"><span class="nav-number">5.2.1.</span> <span class="nav-text">1) 控制流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-提取操作初始化时间"><span class="nav-number">5.2.2.</span> <span class="nav-text">2) 提取操作初始化时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-加载数据"><span class="nav-number">5.2.3.</span> <span class="nav-text">3) 加载数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-清洗、转换"><span class="nav-number">5.3.</span> <span class="nav-text">(3) 清洗、转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-清洗并加载到结构数据中"><span class="nav-number">5.3.1.</span> <span class="nav-text">1) 清洗并加载到结构数据中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据分区"><span class="nav-number">5.3.2.</span> <span class="nav-text">2) 数据分区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-聚合"><span class="nav-number">5.3.3.</span> <span class="nav-text">3) 聚合</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-备份、归档"><span class="nav-number">5.4.</span> <span class="nav-text">(4) 备份、归档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-查询管理过程"><span class="nav-number">5.5.</span> <span class="nav-text">(5) 查询管理过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-架构"><span class="nav-number">6.</span> <span class="nav-text">6 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-商业分析框架"><span class="nav-number">6.1.</span> <span class="nav-text">(1) 商业分析框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-三层架构"><span class="nav-number">6.2.</span> <span class="nav-text">(2) 三层架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数据仓库模型"><span class="nav-number">6.3.</span> <span class="nav-text">(3) 数据仓库模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-虚拟仓库"><span class="nav-number">6.3.1.</span> <span class="nav-text">1) 虚拟仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据集市"><span class="nav-number">6.3.2.</span> <span class="nav-text">2) 数据集市</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-企业仓库"><span class="nav-number">6.3.3.</span> <span class="nav-text">3) 企业仓库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-加载管理"><span class="nav-number">6.4.</span> <span class="nav-text">(4) 加载管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-加载管理架构"><span class="nav-number">6.4.1.</span> <span class="nav-text">1) 加载管理架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据提取"><span class="nav-number">6.4.2.</span> <span class="nav-text">2) 数据提取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-快速加载"><span class="nav-number">6.4.3.</span> <span class="nav-text">3) 快速加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-简单转换"><span class="nav-number">6.4.4.</span> <span class="nav-text">4) 简单转换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-仓库管理"><span class="nav-number">6.5.</span> <span class="nav-text">(5) 仓库管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-仓库管理结构"><span class="nav-number">6.5.1.</span> <span class="nav-text">1) 仓库管理结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-仓库管理操作"><span class="nav-number">6.5.2.</span> <span class="nav-text">2) 仓库管理操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-查询管理"><span class="nav-number">6.6.</span> <span class="nav-text">(6) 查询管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查询管理架构"><span class="nav-number">6.6.1.</span> <span class="nav-text">查询管理架构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-细节信息"><span class="nav-number">6.7.</span> <span class="nav-text">(7) 细节信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-概括信息"><span class="nav-number">6.8.</span> <span class="nav-text">(8) 概括信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-OLAP"><span class="nav-number">7.</span> <span class="nav-text">7 OLAP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-类型"><span class="nav-number">7.1.</span> <span class="nav-text">(1) 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-操作"><span class="nav-number">7.2.</span> <span class="nav-text">(2) 操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-上卷"><span class="nav-number">7.2.1.</span> <span class="nav-text">1) 上卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-下钻"><span class="nav-number">7.2.2.</span> <span class="nav-text">2) 下钻</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-切片、切块"><span class="nav-number">7.2.3.</span> <span class="nav-text">3) 切片、切块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-旋转"><span class="nav-number">7.2.4.</span> <span class="nav-text">4) 旋转</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-OLAP-vs-OLTP"><span class="nav-number">7.3.</span> <span class="nav-text">(3) OLAP vs OLTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-ROLAP"><span class="nav-number">7.4.</span> <span class="nav-text">(4) ROLAP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-架构"><span class="nav-number">7.4.1.</span> <span class="nav-text">1) 架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2）-优点"><span class="nav-number">7.4.2.</span> <span class="nav-text">2） 优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-缺点"><span class="nav-number">7.4.3.</span> <span class="nav-text">3) 缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-MOLAP"><span class="nav-number">7.5.</span> <span class="nav-text">(5) MOLAP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-架构-1"><span class="nav-number">7.5.1.</span> <span class="nav-text">1) 架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-优点"><span class="nav-number">7.5.2.</span> <span class="nav-text">2) 优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-缺点-1"><span class="nav-number">7.5.3.</span> <span class="nav-text">3) 缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-MOLAP-vs-ROLAP"><span class="nav-number">7.5.4.</span> <span class="nav-text">4) MOLAP vs ROLAP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-模式"><span class="nav-number">8.</span> <span class="nav-text">8 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-星型"><span class="nav-number">8.1.</span> <span class="nav-text">(1) 星型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-雪花"><span class="nav-number">8.2.</span> <span class="nav-text">(2) 雪花</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-事实星座"><span class="nav-number">8.3.</span> <span class="nav-text">(3) 事实星座</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-模式定义"><span class="nav-number">8.4.</span> <span class="nav-text">(4) 模式定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-分区策略"><span class="nav-number">9.</span> <span class="nav-text">9 分区策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-作用"><span class="nav-number">9.1.</span> <span class="nav-text">(1) 作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-水平分区"><span class="nav-number">9.2.</span> <span class="nav-text">(2) 水平分区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-按时间"><span class="nav-number">9.2.1.</span> <span class="nav-text">1) 按时间</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1’-均分"><span class="nav-number">9.2.1.1.</span> <span class="nav-text">1’ 均分</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2‘-非均分"><span class="nav-number">9.2.1.2.</span> <span class="nav-text">2‘ 非均分</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-按其他维度"><span class="nav-number">9.2.2.</span> <span class="nav-text">2) 按其他维度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-按容量"><span class="nav-number">9.2.3.</span> <span class="nav-text">3) 按容量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-拆分维度"><span class="nav-number">9.2.4.</span> <span class="nav-text">4) 拆分维度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-循环分区"><span class="nav-number">9.2.5.</span> <span class="nav-text">5) 循环分区</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-垂直分区"><span class="nav-number">9.3.</span> <span class="nav-text">(3) 垂直分区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-规范化"><span class="nav-number">9.3.1.</span> <span class="nav-text">1) 规范化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-行拆分"><span class="nav-number">9.3.2.</span> <span class="nav-text">2) 行拆分</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-元数据概念"><span class="nav-number">10.</span> <span class="nav-text">10 元数据概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-定义"><span class="nav-number">10.1.</span> <span class="nav-text">(1) 定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-分类"><span class="nav-number">10.2.</span> <span class="nav-text">(2) 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-角色"><span class="nav-number">10.3.</span> <span class="nav-text">(3) 角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-元数据仓库"><span class="nav-number">10.4.</span> <span class="nav-text">(4) 元数据仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-元数据管理挑战"><span class="nav-number">10.5.</span> <span class="nav-text">(5) 元数据管理挑战</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-数据集市"><span class="nav-number">11.</span> <span class="nav-text">11 数据集市</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-目的"><span class="nav-number">11.1.</span> <span class="nav-text">(1) 目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-高效划分数据集市"><span class="nav-number">11.2.</span> <span class="nav-text">(2) 高效划分数据集市</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-职能划分"><span class="nav-number">11.2.1.</span> <span class="nav-text">1) 职能划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-访问工具"><span class="nav-number">11.2.2.</span> <span class="nav-text">2) 访问工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-访问控制"><span class="nav-number">11.2.3.</span> <span class="nav-text">3) 访问控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-设计数据集市"><span class="nav-number">11.3.</span> <span class="nav-text">(3) 设计数据集市</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数据集市耗费"><span class="nav-number">11.4.</span> <span class="nav-text">(4) 数据集市耗费</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-系统管理"><span class="nav-number">12.</span> <span class="nav-text">12 系统管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-配置"><span class="nav-number">12.1.</span> <span class="nav-text">(1) 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-调度"><span class="nav-number">12.2.</span> <span class="nav-text">(2) 调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-事件"><span class="nav-number">12.3.</span> <span class="nav-text">(3) 事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数据库"><span class="nav-number">12.4.</span> <span class="nav-text">(4) 数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-恢复"><span class="nav-number">12.5.</span> <span class="nav-text">(5) 恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-过程管理"><span class="nav-number">13.</span> <span class="nav-text">13 过程管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-加载"><span class="nav-number">13.1.</span> <span class="nav-text">(1) 加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-仓库"><span class="nav-number">13.2.</span> <span class="nav-text">(2) 仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-查询"><span class="nav-number">13.3.</span> <span class="nav-text">(3) 查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-安全"><span class="nav-number">14.</span> <span class="nav-text">14 安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安全需求"><span class="nav-number">14.1.</span> <span class="nav-text">(1) 安全需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-用户访问"><span class="nav-number">14.2.</span> <span class="nav-text">(2) 用户访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-审计和网络需求"><span class="nav-number">14.3.</span> <span class="nav-text">(3) 审计和网络需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数据转移"><span class="nav-number">14.4.</span> <span class="nav-text">(4) 数据转移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-文档"><span class="nav-number">14.5.</span> <span class="nav-text">(5) 文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-安全影响"><span class="nav-number">14.6.</span> <span class="nav-text">(6) 安全影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-备份"><span class="nav-number">15.</span> <span class="nav-text">15 备份</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-术语"><span class="nav-number">15.1.</span> <span class="nav-text">(1) 术语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-硬件备份"><span class="nav-number">15.2.</span> <span class="nav-text">(2) 硬件备份</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-软件备份"><span class="nav-number">15.3.</span> <span class="nav-text">(3) 软件备份</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-调优"><span class="nav-number">16.</span> <span class="nav-text">16 调优</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-难点"><span class="nav-number">16.1.</span> <span class="nav-text">(1) 难点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-性能评估"><span class="nav-number">16.2.</span> <span class="nav-text">(2) 性能评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数据加载优化"><span class="nav-number">16.3.</span> <span class="nav-text">(3) 数据加载优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-一致性检查"><span class="nav-number">16.4.</span> <span class="nav-text">(4) 一致性检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-查询优化"><span class="nav-number">16.5.</span> <span class="nav-text">(5) 查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-固定查询"><span class="nav-number">16.5.1.</span> <span class="nav-text">1) 固定查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-临时查询"><span class="nav-number">16.5.2.</span> <span class="nav-text">2) 临时查询</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-测试"><span class="nav-number">17.</span> <span class="nav-text">17 测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-测试级别"><span class="nav-number">17.1.</span> <span class="nav-text">(1) 测试级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-测试"><span class="nav-number">17.2.</span> <span class="nav-text">(2) 测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-测试逻辑"><span class="nav-number">17.3.</span> <span class="nav-text">(3) 测试逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18-问答"><span class="nav-number">18.</span> <span class="nav-text">18 问答</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">19.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/05/23/200523数据仓库入门/';
+          this.page.identifier = '2020/05/23/200523数据仓库入门/';
+          this.page.title = '数据仓库入门';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

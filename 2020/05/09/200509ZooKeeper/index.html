@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ZooKeeper," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="注意：适用于版本3.4.9 1 定义一种分布式协调服务。">
+<meta name="keywords" content="ZooKeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZooKeeper">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="注意：适用于版本3.4.9 1 定义一种分布式协调服务。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/image-20200509234605258.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/image-20200511234337838.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/image-20200512000417124.png">
+<meta property="og:updated_time" content="2020-06-12T10:24:58.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZooKeeper">
+<meta name="twitter:description" content="注意：适用于版本3.4.9 1 定义一种分布式协调服务。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/image-20200509234605258.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/"/>
+
+
+
+
+
+  <title>ZooKeeper | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ZooKeeper</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-09T11:00:47+08:00">
+                2020-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ZooKeeper/" itemprop="url" rel="index">
+                    <span itemprop="name">ZooKeeper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/09/200509ZooKeeper/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/09/200509ZooKeeper/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>注意：适用于版本3.4.9</p>
+<h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1 定义"></a>1 定义</h2><p>一种分布式协调服务。</p>
+<a id="more"></a>
+<p>实现了同步、配置维护、分组和命名服务，解决分布式应用的竞争和死锁问题。</p>
+<p>易于编程，数据模型类似文件系统树状结构。</p>
+<p>运行于Java平台并绑定在Java和C上。</p>
+<p>设计目标：</p>
+<ul>
+<li><p>简单</p>
+<p>允许分布式进程通过类似标准文件系统的共享继承命名空间进行协调。命名空间包含多个数据注册器(znode)，类似于目录与文件的关系。数据保存在内存中，可实现高吞吐量和低延迟。</p>
+</li>
+<li><p>重复</p>
+<p>ZooKeeper在一系列主机间重复。这些主机称为ensemble。</p>
+<p>组成ZooKeeper服务的服务器彼此知晓。共同维护内存中的状态印象和持久化存储中的事务日志、快照。只要大多数服务器可用，则ZooKeeper可用。</p>
+<p>客户端与单一服务器保持TCP连接。发送请求、心跳，接收响应和查看事件(watch event)。连接中断，客户端连向另一台服务器</p>
+</li>
+<li><p>有序</p>
+<p>每次事务都会被一个数字标记，可用于同步等的顺序判断。</p>
+</li>
+<li><p>快速</p>
+<p>尤其适用于读多的场景，最佳读写比为10:1</p>
+</li>
+</ul>
+<h2 id="2-快速入门"><a href="#2-快速入门" class="headerlink" title="2 快速入门"></a>2 快速入门</h2><h3 id="1-系统要求"><a href="#1-系统要求" class="headerlink" title="(1) 系统要求"></a>(1) 系统要求</h3><p>Client:  Java客户端库，应用程序用于连接ZooKeeper ensemble</p>
+<p>Server: 运行ZooKeeper ensemble的Java服务端</p>
+<p>Native Client: C语言实现的客户端，类似于Client</p>
+<p>Contrib: 多种可选的附加组件</p>
+<p><img src="/2020/05/09/200509ZooKeeper/image-20200509234605258.png" alt="image-20200509234605258"></p>
+<p>JDK 1.6及以上</p>
+<p>ensemble: 至少3个服务器</p>
+<h3 id="2-集群配置"><a href="#2-集群配置" class="headerlink" title="(2) 集群配置"></a>(2) 集群配置</h3><p>只要ensemble中大多数运行，服务即可用。推荐使用奇数个节点，如3-4个节点只能应对1个节点失效，而5个节点可以应用2个节点失效。此外需要注意外部资源引起的节点失效，如节点连接到同一个网络交换机等。</p>
+<p>以下配置需应用于每一个节点：</p>
+<p>1) 安装Java JDK。</p>
+<p>2) 设置Java堆大小。避免swapping，影响性能。通常4GB机器设置为3GB。</p>
+<p>3) 安装ZooKeeper。</p>
+<p>4) 创建配置文件。可以任意命名，如使用以下配置开头：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">dataDir=/var/lib/zookeeper/</span><br><span class="line">clientPort=2181</span><br><span class="line">initLimit=5</span><br><span class="line">syncLimit=2</span><br><span class="line">server.1=zoo1:2888:3888</span><br><span class="line">server.2=zoo2:2888:3888</span><br><span class="line">server.3=zoo3:2888:3888</span><br></pre></td></tr></table></figure>
+<p>参数含义详见<a href="https://zookeeper.apache.org/doc/r3.4.9/zookeeperAdmin.html#sc_configuration" target="_blank" rel="noopener">配置参数</a></p>
+<p>5) myid文件</p>
+<p>通过使用<code>server.id=host:port:port</code>配置使节点互相知晓。id通过<code>dataDir</code>目录下的<code>myid</code>文件定义。内容只包含1-255的一个数字。</p>
+<p>6) 启动ZooKeeper</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> java -cp zookeeper.jar:lib/slf4j-api-1.6.1.jar:lib/slf4j-log4j12-1.6.1.jar:lib/log4j-1.2.15.jar:conf \ org.apache.zookeeper.server.quorum.QuorumPeerMain zoo.cfg</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动</span><br><span class="line">bin/zkServer.sh start conf/zoo.cfg</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 关闭</span><br><span class="line">bin/zkServer.sh stop conf/zoo.cfg</span><br></pre></td></tr></table></figure>
+<p>QuorumPeerMain启动ZooKeeper，用于通过命令行管理的<a href="http://java.sun.com/javase/technologies/core/mntr-mgmt/javamanagement/" target="_blank" rel="noopener">JMX</a> management beans被注册。细节详见<a href="https://zookeeper.apache.org/doc/r3.4.9/zookeeperJMX.html" target="_blank" rel="noopener">ZooKeeper JMX document</a>。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">注意事项：</span><br><span class="line">1 不同的版本具有不同的jar版本，注意调整。尤其是zookeeper需要加上版本</span><br><span class="line">2 中间的斜杠是多余的。需要删除</span><br><span class="line">3 配置文件注意路径，如conf/zoo.cfg</span><br><span class="line">4 该启动指令需要在所有机器上执行</span><br><span class="line">5 lib目录需要赋予权限，如chmord -R 777 lib</span><br><span class="line">其中，三个数字分别代表User、Group和Other</span><br><span class="line">数值为读4、写2、执行1</span><br><span class="line"></span><br><span class="line">java -cp zookeeper-3.4.9.jar:lib/slf4j-api-1.6.1.jar:lib/slf4j-log4j12-1.6.1.jar:lib/log4j-1.2.16.jar:conf org.apache.zookeeper.server.quorum.QuorumPeerMain conf/zoo.cfg</span><br></pre></td></tr></table></figure>
+<p>查看<code>bin/zkServer.sh</code>脚本作为启动示例，其中有类似启动命令。</p>
+<p>7) 测试部署</p>
+<p>Java环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 注意将IP替换为实际节点</span><br><span class="line"><span class="meta">$</span> bin/zkCli.sh -server 127.0.0.1:2181</span><br></pre></td></tr></table></figure>
+<h2 id="3-配置参数"><a href="#3-配置参数" class="headerlink" title="3 配置参数"></a>3 配置参数</h2><p>Zookeeper假定所有的服务器使用相同文件系统路径下的相同配置文件。</p>
+<h3 id="1-最小配置"><a href="#1-最小配置" class="headerlink" title="(1) 最小配置"></a>(1) 最小配置</h3><p>clientPort：客户端连接端口。</p>
+<p>dataDir：内存数据库快照，及事务日志(默认)。注意事务日志关系性能，受存放磁盘性能影响。</p>
+<p>tickTime：ZooKeeper事件单位(毫秒)。用于约束心跳、超时等。如最小会话超时是两倍tickTime。</p>
+<h3 id="2-高级配置"><a href="#2-高级配置" class="headerlink" title="(2) 高级配置"></a>(2) 高级配置</h3><p>以下带括号的属性可以通过Java系统属性的方式配置：</p>
+<p>dataLogDir：单独指定事务日志目录，避免与快照竞争</p>
+<p>globalOutstandingLimit（zookeeper.globalOutstandingLimit）：限制客户端请求队列大小，避免内存溢出。默认1000</p>
+<p>preAllocSize（ zookeeper.preAllocSize）：分配的事务日志块大小，默认64MB。当快照频繁时，适当降低块大小。</p>
+<p>snapCount（zookeeper.snapCount）：单个事务日志文件容量上限，超出后新建一个文件。默认100,000</p>
+<p>maxClientCnxns：套接字层面上单个IP地址并发连接上限。默认60。0表示不限。</p>
+<p>clientPortAddress：接收客户端请求的主机接口。默认连接到服务器clientPort</p>
+<p>minSessionTimeout：最小会话超时。默认2倍tickTime</p>
+<p>maxSessionTimeout：最大会话超时。默认20倍tickTime</p>
+<p>fsync.warningthresholdms（zookeeper.fsync.warningthresholdms）：fsync告警时间，否则在事务日志中输出告警信息。默认1000ms，只能通过Java系统属性配置。</p>
+<p>autopurge.snapRetainCount：保留的最近的快照和事务日志数量，删除之前的。默认3，最小3。</p>
+<p>autopurge.purgeInterval：autopurge触发时间间隔，默认0， 单位小时。</p>
+<p>syncEnabled（zookeeper.observer.syncEnabled）：The observers now log transaction and write snapshot to disk by default like the participants. This reduces the recovery time of the observers on restart. 默认true</p>
+<h3 id="3-集群选项"><a href="#3-集群选项" class="headerlink" title="(3) 集群选项"></a>(3) 集群选项</h3><p>electionAlg：选举算法。默认3，其中0-2标记为弃用，3 统一称为FastLeaderElection</p>
+<ul>
+<li>0 ：原始基于UDP的版本</li>
+<li>1：非认证UDP版本</li>
+<li>2： 认证UDP版本</li>
+<li>3：TCP版本</li>
+</ul>
+<p>initLimit：follower与leader连接、同步的tickTime倍数。当数据量大时适当增加。</p>
+<p>leaderServes（zookeeper.leaderServes）：是否允许客户端连接leader，默认yes。当有三个以上服务器时，建议开启leader选举。</p>
+<p>server.x=[hostname]:nnnnn[:nnnnn]：集群成员。当服务器启动时通过myid文件判断自身身份。id在文件和配置中必须匹配。nnnnn代表端口，前者用于服务器与leader通信，后者用于在electionAlg为1-3时选举。</p>
+<p>syncLimit：允许follower与leader同步的tickTime倍数。长时间断开，将会下线。</p>
+<p>group.x=n[:n]：启用层次结构。x为小组识别号，右侧为冒号分隔的服务器id.详见<a href="https://zookeeper.apache.org/doc/r3.4.9/zookeeperHierarchicalQuorums.html" target="_blank" rel="noopener">hierarchical quorums</a></p>
+<p>weight.x=nn：与group合用。表示主机在选举和原子广播协议中的权重。默认1。</p>
+<p><img src="/2020/05/09/200509ZooKeeper/image-20200511234337838.png" alt="image-20200511234337838"></p>
+<p>cnxTimeout（zookeeper.cnxTimeout）：leader选举通知的开放连接超时。只对electionAlg为3时有效，默认为5s。</p>
+<h3 id="4-认证与授权选项"><a href="#4-认证与授权选项" class="headerlink" title="(4) 认证与授权选项"></a>(4) 认证与授权选项</h3><p>zookeeper.DigestAuthenticationProvider.superDigest（ zookeeper.DigestAuthenticationProvider.superDigest）：允许管理员以超级用户身份访问znode层次结构，不再进行ACL检查。<code>org.apache.zookeeper.server.auth.DigestAuthenticationProvider</code>可用于更新值，使用一个<code>super:&lt;password&gt;</code>参数调用。当服务器启动时，提供系统属性值<code>super:&lt;data&gt;</code>作为更新值。当从client认证时，传入一个模式<code>digest</code>和认证数据<code>super:&lt;password&gt;</code>。注意：由于明文传递，需要谨慎。</p>
+<p>isro：测试是否只读。ro表示只读，rw表示非只读。</p>
+<p>gtmk：以64位有符号十进制长整型格式返回当前trace mask。</p>
+<p>stmk：设置64位trace mask。每一位表示开启或关闭特定的目录。为了查看日志消息，Log4J必须启用TRACE等级。默认0b0100110010</p>
+<p><img src="/2020/05/09/200509ZooKeeper/image-20200512000417124.png" alt="image-20200512000417124"></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ perl -e <span class="string">"print 'stmk', pack('q&gt;', 0b0011111010)"</span> | nc localhost <span class="number">2181</span></span><br><span class="line"><span class="number">250</span></span><br></pre></td></tr></table></figure>
+<p>以上使用Perl的Pack功能生成大端表示的掩码，通过netcat发送给服务器。服务器返回十进制表示。</p>
+<h3 id="5-实验选项-特性"><a href="#5-实验选项-特性" class="headerlink" title="(5) 实验选项/特性"></a>(5) 实验选项/特性</h3><p>Read Only Mode Server（readonlymode.enabled）：客户端只读，不可写，不能看见其他客户端的变化。默认关闭。详见ZOOKEEPER-784 。</p>
+<h3 id="6-不安全选项"><a href="#6-不安全选项" class="headerlink" title="(6) 不安全选项"></a>(6) 不安全选项</h3><p>forceSync（zookeeper.forceSync）：关闭后不再请求同步更新到事务日志。</p>
+<p>jute.maxbuffer（jute.maxbuffer）：znode存储的数据量上限。单位KB,默认0xfffff,即1MB。只能设置为Java系统属性，要求所有服务端和客户端设置，否则报错。</p>
+<p>skipACL（zookeeper.skipACL）：跳过ACL检查。可增加吞吐量，但完全暴露了数据树。</p>
+<p>quorumListenOnAllIPs：接收所有合法IP的连接。影响ZAB协议和快速选举协议的连接。默认false。</p>
+<h3 id="7-使用Netty框架通信"><a href="#7-使用Netty框架通信" class="headerlink" title="(7) 使用Netty框架通信"></a>(7) 使用Netty框架通信</h3><p>Netty是基于NIO的客户端、服务器通信框架。相比直接使用NIO，其简化了网络层面的连接。此外，Netty支持加密(SSL)和身份认证(证书)。ZooKeeper默认直接使用NIO，从版本3.4开始可以选用Netty。通过设置<code>zookeeper.serverCnxnFactory</code>为<code>org.apache.zookeeper.server.NettyServerCnxnFactory</code>，可以对客户端和服务器分别设置。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://zookeeper.apache.org/doc/r3.4.9/zookeeperOver.html" target="_blank" rel="noopener">ZooKeeper</a></p>
+<p><a href="https://zookeeper.apache.org/doc/r3.4.9/zookeeperStarted.html" target="_blank" rel="noopener">ZooKeeper Getting Started Guide</a></p>
+<p><a href="https://zookeeper.apache.org/doc/r3.4.9/zookeeperAdmin.html#sc_systemReq" target="_blank" rel="noopener">ZooKeeper Administrator’s Guide</a></p>
+<p><a href="http://archive.apache.org/dist/zookeeper/" target="_blank" rel="noopener">ZooKeeper Releases</a></p>
+<p><a href="https://www.thegeekstuff.com/2016/10/zookeeper-cluster-install/" target="_blank" rel="noopener">Howto Setup Apache Zookeeper Cluster on Multiple Nodes in Linux</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ZooKeeper/" rel="tag"># ZooKeeper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/07/200507Kafka/" rel="next" title="Kafka">
+                <i class="fa fa-chevron-left"></i> Kafka
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/10/200510AbstractFactory&FactoryMethod/" rel="prev" title="Abstract Factory & Factory Method">
+                Abstract Factory & Factory Method <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-定义"><span class="nav-number">1.</span> <span class="nav-text">1 定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-快速入门"><span class="nav-number">2.</span> <span class="nav-text">2 快速入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-系统要求"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 系统要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-集群配置"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 集群配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置参数"><span class="nav-number">3.</span> <span class="nav-text">3 配置参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-最小配置"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 最小配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-高级配置"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 高级配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-集群选项"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 集群选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-认证与授权选项"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 认证与授权选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-实验选项-特性"><span class="nav-number">3.5.</span> <span class="nav-text">(5) 实验选项/特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-不安全选项"><span class="nav-number">3.6.</span> <span class="nav-text">(6) 不安全选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-使用Netty框架通信"><span class="nav-number">3.7.</span> <span class="nav-text">(7) 使用Netty框架通信</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/05/09/200509ZooKeeper/';
+          this.page.identifier = '2020/05/09/200509ZooKeeper/';
+          this.page.title = 'ZooKeeper';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

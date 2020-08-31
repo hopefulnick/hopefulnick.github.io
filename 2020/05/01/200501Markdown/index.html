@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Markdown," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 定义一种轻量级标记语言，允许编写易写易读的纯文本格式文档。">
+<meta name="keywords" content="Markdown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 定义一种轻量级标记语言，允许编写易写易读的纯文本格式文档。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501213925431.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501213812277.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/36A89BDA-A062-4D66-A41B-0EBEE7891AB9.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/3F254936-778E-417A-BEF2-467116A55D00.jpg">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501214912549.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501215223435.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501215337438.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501215454362.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501215753733.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501220229835.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501220240162.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501220250708.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501220550486.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501220856239.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501220909204.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501220925291.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501221809594.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501221901651.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501222159256.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501222216937.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501222408121.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501222724729.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223027665.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223038778.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223130569.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223347016.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223413303.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223432592.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223454231.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223509106.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223523141.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223537705.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501223554140.png">
+<meta property="og:updated_time" content="2020-05-01T14:42:35.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Markdown">
+<meta name="twitter:description" content="1 定义一种轻量级标记语言，允许编写易写易读的纯文本格式文档。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/01/200501Markdown/image-20200501213925431.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/05/01/200501Markdown/"/>
+
+
+
+
+
+  <title>Markdown | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/05/01/200501Markdown/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Markdown</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-01T11:00:47+08:00">
+                2020-05-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Language/" itemprop="url" rel="index">
+                    <span itemprop="name">Language</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/01/200501Markdown/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/01/200501Markdown/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1 定义"></a><strong>1 定义</strong></h2><p>一种轻量级标记语言，允许编写易写易读的纯文本格式文档。</p>
+<a id="more"></a>
+<p>2004年由John Gruber创建</p>
+<p>编辑器工具地址：<a href="https://typora.io/" target="_blank" rel="noopener">Typora</a></p>
+<h2 id="2-标题"><a href="#2-标题" class="headerlink" title="2 标题"></a>2 标题</h2><p>(1) 使用=和-分别表示一二级标题</p>
+<p>(2) 使用#表示1-6级标题，数量代表级数</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501213925431.png" alt="image-20200501213925431"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501213812277.png" alt=""></p>
+<h2 id="3-段落"><a href="#3-段落" class="headerlink" title="3 段落"></a>3 段落</h2><p>(1) 使用两个以上空格+回车</p>
+<p>(2) 空行</p>
+<p><img src="/2020/05/01/200501Markdown/36A89BDA-A062-4D66-A41B-0EBEE7891AB9.jpg" alt="img"></p>
+<p><img src="/2020/05/01/200501Markdown/3F254936-778E-417A-BEF2-467116A55D00.jpg" alt="img"></p>
+<h2 id="4-字体"><a href="#4-字体" class="headerlink" title="4 字体"></a>4 字体</h2><p>使用成对*或_表示，一个表示斜体，两个表示粗体，三个表示粗斜体</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501214912549.png" alt="image-20200501214912549"></p>
+<h2 id="5-分隔线"><a href="#5-分隔线" class="headerlink" title="5 分隔线"></a>5 分隔线</h2><p>使用三个以上的*、-或_表示，行内不能有除空格外的其他符号。</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501215223435.png" alt="image-20200501215223435"></p>
+<h2 id="6-删除线"><a href="#6-删除线" class="headerlink" title="6 删除线"></a>6 删除线</h2><p>使用成对的~~表示</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501215337438.png" alt="image-20200501215337438"></p>
+<h2 id="7-下划线"><a href="#7-下划线" class="headerlink" title="7 下划线"></a>7 下划线</h2><p>使用HTML标签<u></u>表示</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501215454362.png" alt="image-20200501215454362"></p>
+<h2 id="8-脚注"><a href="#8-脚注" class="headerlink" title="8 脚注"></a>8 脚注</h2><p>[^要注明的文本]</p>
+<p> <img src="/2020/05/01/200501Markdown/image-20200501215753733.png" alt="image-20200501215753733"></p>
+<h2 id="9-列表"><a href="#9-列表" class="headerlink" title="9 列表"></a>9 列表</h2><p>(1) 无序列表</p>
+<p>使用*、+或-标记列表项</p>
+<p>(2) 有序列表</p>
+<p>数字加<code>.</code></p>
+<p>(3) 列表嵌套</p>
+<p>次级表项前加4个空格</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501220229835.png" alt="image-20200501220229835"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501220240162.png" alt="image-20200501220240162"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501220250708.png" alt="image-20200501220250708"></p>
+<h2 id="10-区块"><a href="#10-区块" class="headerlink" title="10 区块"></a>10 区块</h2><p><code>&gt;</code>加空格表示，重复的数量表示嵌套的层数</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501220550486.png" alt="image-20200501220550486"></p>
+<h2 id="11-代码"><a href="#11-代码" class="headerlink" title="11 代码"></a>11 代码</h2><p>(1) 一对单反引号包含</p>
+<p>(2) 4个空格加一个制表符</p>
+<p>(3) 一对三反引号包含，可指定语言</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501220856239.png" alt="image-20200501220856239"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501220909204.png" alt="image-20200501220909204"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501220925291.png" alt="image-20200501220925291"></p>
+<h2 id="12-链接"><a href="#12-链接" class="headerlink" title="12 链接"></a>12 链接</h2><p>(1) 普通链接</p>
+<p><code>[链接名称](链接地址)或&lt;链接地址&gt;</code></p>
+<p>(2) 高级链接</p>
+<p><code>[链接名称][变量名称]</code>，文档末尾针对变量名称赋值</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501221809594.png" alt="image-20200501221809594"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501221901651.png" alt="image-20200501221901651"></p>
+<h2 id="13-图片"><a href="#13-图片" class="headerlink" title="13 图片"></a>13 图片</h2><p>(1) 普通图片</p>
+<p><code>![alt 属性文本](图片地址 &quot;可选标题&quot;)</code>或使用变量将链接放置文末</p>
+<p>(2) 自定义图片</p>
+<p>使用<code>&lt;img&gt;</code>标签，可指定图片高度和宽度等属性</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501222159256.png" alt="image-20200501222159256"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501222216937.png" alt="image-20200501222216937"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501222408121.png" alt="image-20200501222408121"></p>
+<h2 id="14-表格"><a href="#14-表格" class="headerlink" title="14 表格"></a>14 表格</h2><p>分隔符分隔表项，短横线分隔表头，回车分隔行</p>
+<p><code>:-</code>表示左对齐，<code>-:</code>表示右对齐，<code>:-:</code>表示居中对齐</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501222724729.png" alt="image-20200501222724729"></p>
+<h2 id="15-高级技巧"><a href="#15-高级技巧" class="headerlink" title="15 高级技巧"></a>15 高级技巧</h2><p>(1) HTML元素</p>
+<p>(2) 反斜杠转义</p>
+<p>(3) 公式</p>
+<p>使用两个美元符 $$ 包裹 TeX 或 LaTeX 格式的数学公式</p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223027665.png" alt="image-20200501223027665"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223038778.png" alt="image-20200501223038778"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223130569.png" alt="image-20200501223130569"></p>
+<h2 id="16-图表"><a href="#16-图表" class="headerlink" title="16 图表"></a>16 图表</h2><p><img src="/2020/05/01/200501Markdown/image-20200501223347016.png" alt=""></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223413303.png" alt="image-20200501223413303"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223432592.png" alt="image-20200501223432592"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223454231.png" alt="image-20200501223454231"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223509106.png" alt="image-20200501223509106"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223523141.png" alt="image-20200501223523141"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223537705.png" alt="image-20200501223537705"></p>
+<p><img src="/2020/05/01/200501Markdown/image-20200501223554140.png" alt="image-20200501223554140"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Markdown/" rel="tag"># Markdown</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/01/200501Flume/" rel="next" title="Flume">
+                <i class="fa fa-chevron-left"></i> Flume
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/03/200503Spark+Flume/" rel="prev" title="Spark + Flume">
+                Spark + Flume <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-定义"><span class="nav-number">1.</span> <span class="nav-text">1 定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-标题"><span class="nav-number">2.</span> <span class="nav-text">2 标题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-段落"><span class="nav-number">3.</span> <span class="nav-text">3 段落</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-字体"><span class="nav-number">4.</span> <span class="nav-text">4 字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-分隔线"><span class="nav-number">5.</span> <span class="nav-text">5 分隔线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-删除线"><span class="nav-number">6.</span> <span class="nav-text">6 删除线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-下划线"><span class="nav-number">7.</span> <span class="nav-text">7 下划线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-脚注"><span class="nav-number">8.</span> <span class="nav-text">8 脚注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-列表"><span class="nav-number">9.</span> <span class="nav-text">9 列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-区块"><span class="nav-number">10.</span> <span class="nav-text">10 区块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-代码"><span class="nav-number">11.</span> <span class="nav-text">11 代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-链接"><span class="nav-number">12.</span> <span class="nav-text">12 链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-图片"><span class="nav-number">13.</span> <span class="nav-text">13 图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-表格"><span class="nav-number">14.</span> <span class="nav-text">14 表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-高级技巧"><span class="nav-number">15.</span> <span class="nav-text">15 高级技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-图表"><span class="nav-number">16.</span> <span class="nav-text">16 图表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">17.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/05/01/200501Markdown/';
+          this.page.identifier = '2020/05/01/200501Markdown/';
+          this.page.title = 'Markdown';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

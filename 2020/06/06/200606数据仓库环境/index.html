@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据仓库环境," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据仓库是体系结构化环境的核心，是决策支持系统处理的基础。">
+<meta name="keywords" content="数据仓库环境">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据仓库环境">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="数据仓库是体系结构化环境的核心，是决策支持系统处理的基础。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606120925192.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606121316915.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606121353051.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606122820695.png">
+<meta property="og:updated_time" content="2020-06-11T02:45:28.467Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据仓库环境">
+<meta name="twitter:description" content="数据仓库是体系结构化环境的核心，是决策支持系统处理的基础。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606120925192.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/"/>
+
+
+
+
+
+  <title>数据仓库环境 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据仓库环境</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-06T11:00:47+08:00">
+                2020-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据仓库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据仓库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/06/200606数据仓库环境/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/06/200606数据仓库环境/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>数据仓库是体系结构化环境的核心，是决策支持系统处理的基础。</p>
+<a id="more"></a>
+<p>数据仓库应该进行一致性编码。</p>
+<p>数据加载时是以静态快照的格式进行。</p>
+<p>数据仓库中数据与当前值不同。</p>
+<h3 id="1-结构"><a href="#1-结构" class="headerlink" title="(1) 结构"></a>(1) 结构</h3><p>数据存在着不同的细节级：</p>
+<ul>
+<li><p>早期细节级</p>
+<p>数据过期后，由当前细节级转入。通常存储在备用海量存储器上。</p>
+</li>
+<li><p>当前细节级</p>
+<p>导入数据</p>
+</li>
+<li><p>轻度综合数据级（数据集市级）</p>
+</li>
+<li><p>高度综合数据级</p>
+</li>
+</ul>
+<p><img src="/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606120925192.png" alt="image-20200606120925192"></p>
+<h3 id="2-面向主题"><a href="#2-面向主题" class="headerlink" title="(2) 面向主题"></a>(2) 面向主题</h3><p>数据仓库面向高层企业数据模型中已定义好的企业主题域。</p>
+<p>每个主题域由多个相互关联的物理表组成。</p>
+<p>主题域中，所有物理表通过一个公共关键字联系。</p>
+<p>每条记录都有一个时间元素。其中以起止时间为基础组织的，称为数据的连续组织。</p>
+<p><img src="/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606121316915.png" alt="image-20200606121316915"></p>
+<p><img src="/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606121353051.png" alt="image-20200606121353051"></p>
+<h3 id="3-逐步构建"><a href="#3-逐步构建" class="headerlink" title="(3) 逐步构建"></a>(3) 逐步构建</h3><p>数据仓库是有序逐步构建的。</p>
+<ul>
+<li>熟悉操作型事务处理系统</li>
+<li>第一个主题域加载最初的表数据</li>
+<li>更多的数据加载到数据仓库</li>
+<li>数据集市兴起</li>
+<li>多维系统出现</li>
+<li>体系结构充分发展</li>
+</ul>
+<h3 id="4-粒度"><a href="#4-粒度" class="headerlink" title="(4) 粒度"></a>(4) 粒度</h3><p>粒度是设计数据仓库的最重要方面。</p>
+<p>粒度指数据单元的的细节程度或综合程度，影响数据量和数据仓库应答能力。</p>
+<h4 id="1-优势"><a href="#1-优势" class="headerlink" title="1) 优势"></a>1) 优势</h4><ul>
+<li>观察数据的不同角度。</li>
+<li>细粒度带来改变观察角度的灵活性，可以自由综合。</li>
+<li>包含企业活动和事件的历史。</li>
+<li>应对未知需求的能力。</li>
+</ul>
+<h4 id="2-劣势"><a href="#2-劣势" class="headerlink" title="2) 劣势"></a>2) 劣势</h4><p>细粒度数据量大，查询检索过程耗费大</p>
+<p>粗粒度综合程度高，细节丢失多</p>
+<p><img src="/2020/06/06/200606数据仓库环境/200606%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%8E%AF%E5%A2%83/image-20200606122820695.png" alt="image-20200606122820695"></p>
+<h4 id="3-双重粒度"><a href="#3-双重粒度" class="headerlink" title="3) 双重粒度"></a>3) 双重粒度</h4><p>适用于数据量大时，基于费用、效率、易用和应答能力的最佳选择。</p>
+<p>包含两种类型数据：轻度综合数据和“真实档案”数据</p>
+<p>轻度综合数据应对大部分处理，“真实档案”数据应对更大细节级分析处理。</p>
+<h3 id="5-活样本数据库"><a href="#5-活样本数据库" class="headerlink" title="(5) 活样本数据库"></a>(5) 活样本数据库</h3><p>是周期刷新的数据仓库的数据子集。</p>
+<p>不是通用的数据库，适用于统计分析和趋势观察，不适用于处理单条数据。</p>
+<p>使用选择函数(通常为随机)抽取数据仓库样本。</p>
+<p>优点是存取次效率高。</p>
+<p>可用于DSS分析员需求理解时的迭代处理。</p>
+<h3 id="6-分区"><a href="#6-分区" class="headerlink" title="(6) 分区"></a>(6) 分区</h3><p>分区是数据仓库设计中的第二个主要问题。</p>
+<p>目的是将数据划分为小的可管理的物理单元，以应对数据增长和管理。</p>
+<p>一个数据单元属于且仅属于一个分区。</p>
+<p>常见分区标准：</p>
+<ul>
+<li>时间</li>
+<li>业务范围</li>
+<li>地理位置</li>
+<li>组织单位</li>
+<li>以上所有</li>
+</ul>
+<p>分区方式：</p>
+<ul>
+<li><p>系统层</p>
+<p>依赖于DBMS和操作系统，不知道分区间的关系，通常只有一种数据定义</p>
+</li>
+<li><p>应用层</p>
+<p>由开发者控制，可以有不同的数据定义</p>
+</li>
+</ul>
+<h3 id="7-数据组织"><a href="#7-数据组织" class="headerlink" title="(7) 数据组织"></a>(7) 数据组织</h3><ul>
+<li><p>简单堆积</p>
+<p>以逐个记录为基础堆积数据，最简单和常用。细节丰富，但数据量大</p>
+</li>
+<li><p>轮转综合</p>
+<p>周期地按层次综合数据。相对紧凑，但有细节丢失。时间越久，细节丢失越多。</p>
+</li>
+<li><p>简单直接</p>
+<p>操作型数据间隔一定时间的快照。可以是时间窗口内简单直接文件的综合，也可以是当前快照与最近连续文件的追加。</p>
+</li>
+</ul>
+<h3 id="8-审计"><a href="#8-审计" class="headerlink" title="(8) 审计"></a>(8) 审计</h3><p>不应该在数据仓库中进行审计。</p>
+<p>主要原因：出现之前没有的数据、改变时间标定过程、改变备份和恢复机制、限制粒度为最细</p>
+<h3 id="9-异构"><a href="#9-异构" class="headerlink" title="(9) 异构"></a>(9) 异构</h3><p>数据仓库中的数据是异构的。主题域间不同，域内表间不同。</p>
+<h3 id="10-数据清理"><a href="#10-数据清理" class="headerlink" title="(10) 数据清理"></a>(10) 数据清理</h3><ul>
+<li>轮转综合</li>
+<li>移动到备份大容量存储中</li>
+<li>删除</li>
+<li>体系结构层次转移，如从操作层到数据仓库层</li>
+</ul>
+<h3 id="11-报表"><a href="#11-报表" class="headerlink" title="(11) 报表"></a>(11) 报表</h3><p>操作型系统和数据仓库都可以报表处理，但是面向对象和用户不同。</p>
+<ul>
+<li><p>操作型报表</p>
+<p>主要是行式项目，供基层人员使用</p>
+</li>
+<li><p>数据仓库报表</p>
+<p>主要是综合或其他计算，供管理层使用</p>
+</li>
+</ul>
+<h3 id="12-数据纠错"><a href="#12-数据纠错" class="headerlink" title="(12) 数据纠错"></a>(12) 数据纠错</h3><ul>
+<li><p>更改先前错误数据</p>
+<ul>
+<li><p>优点</p>
+<p>干净、彻底</p>
+</li>
+<li><p>缺点</p>
+<p>1 破坏集成性。利用错误数据生成的报表失去一致性</p>
+<p>2 在数据仓库环境中更新。</p>
+<p>3 需要修正的条目众多。由于其他数据对该数据的依赖？</p>
+</li>
+</ul>
+</li>
+<li><p>额外加入修正条目</p>
+<ul>
+<li><p>优点</p>
+<p>反应最新数据状态</p>
+</li>
+<li><p>缺点</p>
+<p>1 需要修正的条目众多。</p>
+<p>2 可能修正公式复杂。</p>
+</li>
+</ul>
+</li>
+<li><p>重置当前数据</p>
+<ul>
+<li><p>优点</p>
+<p>不用考虑之前的数据</p>
+</li>
+<li><p>缺点</p>
+<p>1 需要与应用、过程约定</p>
+<p>2 缺乏对错误数据的解释。错误数据在哪？</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《数据仓库》</p>
+<p>近线存储：磁带，自动控制的基于卡式磁带机的串行磁带。</p>
+<p>操作型窗口：操作型环境中档案数据的时间范围。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据仓库环境/" rel="tag"># 数据仓库环境</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/04/200604分布式锁/" rel="next" title="分布式锁">
+                <i class="fa fa-chevron-left"></i> 分布式锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/07/200607Kafka Producer API/" rel="prev" title="Kafka Producer API">
+                Kafka Producer API <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-结构"><span class="nav-number">1.</span> <span class="nav-text">(1) 结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-面向主题"><span class="nav-number">2.</span> <span class="nav-text">(2) 面向主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-逐步构建"><span class="nav-number">3.</span> <span class="nav-text">(3) 逐步构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-粒度"><span class="nav-number">4.</span> <span class="nav-text">(4) 粒度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-优势"><span class="nav-number">4.1.</span> <span class="nav-text">1) 优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-劣势"><span class="nav-number">4.2.</span> <span class="nav-text">2) 劣势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-双重粒度"><span class="nav-number">4.3.</span> <span class="nav-text">3) 双重粒度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-活样本数据库"><span class="nav-number">5.</span> <span class="nav-text">(5) 活样本数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-分区"><span class="nav-number">6.</span> <span class="nav-text">(6) 分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-数据组织"><span class="nav-number">7.</span> <span class="nav-text">(7) 数据组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-审计"><span class="nav-number">8.</span> <span class="nav-text">(8) 审计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-异构"><span class="nav-number">9.</span> <span class="nav-text">(9) 异构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-数据清理"><span class="nav-number">10.</span> <span class="nav-text">(10) 数据清理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-报表"><span class="nav-number">11.</span> <span class="nav-text">(11) 报表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-数据纠错"><span class="nav-number">12.</span> <span class="nav-text">(12) 数据纠错</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number"></span> <span class="nav-text">参考资料</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/06/06/200606数据仓库环境/';
+          this.page.identifier = '2020/06/06/200606数据仓库环境/';
+          this.page.title = '数据仓库环境';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

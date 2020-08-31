@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Flume," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 简介Flume是分布式、可靠和可用的，海量日志数据高效收集、聚合和移动系统，用于从多源系统到中心数据存储。">
+<meta name="keywords" content="Flume">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flume开发指南">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 简介Flume是分布式、可靠和可用的，海量日志数据高效收集、聚合和移动系统，用于从多源系统到中心数据存储。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image00.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200529213739305.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200601174413041.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image01.png">
+<meta property="og:updated_time" content="2020-06-05T13:32:22.626Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flume开发指南">
+<meta name="twitter:description" content="1 简介Flume是分布式、可靠和可用的，海量日志数据高效收集、聚合和移动系统，用于从多源系统到中心数据存储。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image00.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/"/>
+
+
+
+
+
+  <title>Flume开发指南 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Flume开发指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-27T11:00:47+08:00">
+                2020-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flume/" itemprop="url" rel="index">
+                    <span itemprop="name">Flume</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/27/200527Flume开发指南/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/27/200527Flume开发指南/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>Flume是分布式、可靠和可用的，海量日志数据高效收集、聚合和移动系统，用于从多源系统到中心数据存储。</p>
+<a id="more"></a>
+<p>目前有两个代码发布基线：0.9.x和1.x。0.9.x详见<a href="http://archive.cloudera.com/cdh/3/flume/DeveloperGuide/" target="_blank" rel="noopener">Flume 0.9.x Developer Guide</a></p>
+<h2 id="2-概览"><a href="#2-概览" class="headerlink" title="2 概览"></a>2 概览</h2><h3 id="1-数据流模型"><a href="#1-数据流模型" class="headerlink" title="(1) 数据流模型"></a>(1) 数据流模型</h3><p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image00.png" alt="DevGuide_image00"></p>
+<p>Agent: Jvm进程。其中的组件允许外部事件流流入，并留出到外部目的地。</p>
+<p>Event: 数据流单位。携带有字节数组的负载和字符串属性的头部，从Source流向Channel，再流向Sink。</p>
+<p>Source：从外部来源消费特定格式的Event，如AvroSource。保存接收到的事件到一个或多个Channel中。</p>
+<p>Channel：被动保存Event，直到有Sink消费。如FileChannel使用本地文件系统作为底部存储。</p>
+<p>Sink：从Channel中删除Event, 并推送到外部仓库或另一个Source，如HDFSEventSink。</p>
+<p>同一Agent中的Source和Sink异步运行。</p>
+<h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="(2) 可靠性"></a>(2) 可靠性</h3><p>只有在Event被下一Channel或外部保存后，Sink才会删除当前Channel中的Event。</p>
+<p>Flume使用事务保证Event的可靠传递。Channel提供给Source和Sink对于Event的事务处理。在multi-hop flow中，上一Sink和下一Source同时使用事务保证Event被存储到下一Channel中。</p>
+<h2 id="3-源码编译"><a href="#3-源码编译" class="headerlink" title="3 源码编译"></a>3 源码编译</h2><p><a href="https://developers.google.com/protocol-buffers" target="_blank" rel="noopener">Google Protocol Buffer</a>是一个语言中立、平台中立的用于序列化结构数据的扩展机制。</p>
+<p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200529213739305.png" alt="image-20200529213739305"></p>
+<h2 id="4-组件开发"><a href="#4-组件开发" class="headerlink" title="4 组件开发"></a>4 组件开发</h2><h3 id="1-客户端"><a href="#1-客户端" class="headerlink" title="(1) 客户端"></a>(1) 客户端</h3><p>客户端是Event的来源，并传递给Agent。</p>
+<p>当前Flume支持Avro, log4j, syslog,Http POST (with a JSON body)和本地进程输出(ExecSource)格式的外部Source。</p>
+<p>其他格式的输入可以通过自定义客户端实现：</p>
+<ul>
+<li><p>格式转换</p>
+<p>转换数据格式，在通过已有的Source导入</p>
+</li>
+<li><p>自定义Source</p>
+<p>使用IPC或RPC协议间客户端数据转换为Event。存储在Channel的数据必须是Event。</p>
+</li>
+</ul>
+<h4 id="1-客户端-SDK"><a href="#1-客户端-SDK" class="headerlink" title="1) 客户端 SDK"></a>1) 客户端 SDK</h4><p>Flume Client SDK允许使用RPC连接Flume并发送数据。</p>
+<h4 id="2-RPC客户端接口"><a href="#2-RPC客户端接口" class="headerlink" title="2)RPC客户端接口"></a>2)RPC客户端接口</h4><p>Event构造：</p>
+<ul>
+<li>直接实现Event接口</li>
+<li>使用简单实现类，如SimpleEvent.class</li>
+<li>使用EventBuilder.withbody()</li>
+</ul>
+<p>Event传递：简单调用Flume Client SDK的<code>append(Event)</code>或<code>appendBatch(List&lt;Event&gt;)</code>发送数据，不必关心传递细节。</p>
+<h4 id="3-RPC客户端-Avro和Thrift"><a href="#3-RPC客户端-Avro和Thrift" class="headerlink" title="3) RPC客户端(Avro和Thrift)"></a>3) RPC客户端(Avro和Thrift)</h4><p>版本1.4.0中，Avro是默认RPC协议。</p>
+<p>NettyAvroRpcClient和ThriftRpcClient都实现了RpcClient接口。客户端通过传递Agent的IP和port创建对象，并发布Event。</p>
+<p>示例：使用Flume Client SDK API更新数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.flume.Event;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.EventDeliveryException;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.api.RpcClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.api.RpcClientFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.event.EventBuilder;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.Charset;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    MyRpcClientFacade client = <span class="keyword">new</span> MyRpcClientFacade();</span><br><span class="line">    <span class="comment">// Initialize client with the remote Flume agent's host and port</span></span><br><span class="line">    client.init(<span class="string">"host.example.org"</span>, <span class="number">41414</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send 10 events to the remote Flume agent. That agent should be</span></span><br><span class="line">    <span class="comment">// configured to listen with an AvroSource.</span></span><br><span class="line">    String sampleData = <span class="string">"Hello Flume!"</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">      client.sendDataToFlume(sampleData);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    client.cleanUp();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRpcClientFacade</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> RpcClient client;</span><br><span class="line">  <span class="keyword">private</span> String hostname;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(String hostname, <span class="keyword">int</span> port)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Setup the RPC connection</span></span><br><span class="line">    <span class="keyword">this</span>.hostname = hostname;</span><br><span class="line">    <span class="keyword">this</span>.port = port;</span><br><span class="line">    <span class="keyword">this</span>.client = RpcClientFactory.getDefaultInstance(hostname, port);</span><br><span class="line">    <span class="comment">// Use the following method to create a thrift client (instead of the above line):</span></span><br><span class="line">    <span class="comment">// this.client = RpcClientFactory.getThriftInstance(hostname, port);</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendDataToFlume</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Create a Flume Event object that encapsulates the sample data</span></span><br><span class="line">    Event event = EventBuilder.withBody(data, Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send the event</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      client.append(event);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (EventDeliveryException e) &#123;</span><br><span class="line">      <span class="comment">// clean up and recreate the client</span></span><br><span class="line">      client.close();</span><br><span class="line">      client = <span class="keyword">null</span>;</span><br><span class="line">      client = RpcClientFactory.getDefaultInstance(hostname, port);</span><br><span class="line">      <span class="comment">// Use the following method to create a thrift client (instead of the above line):</span></span><br><span class="line">      <span class="comment">// this.client = RpcClientFactory.getThriftInstance(hostname, port);</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Close the RPC connection</span></span><br><span class="line">    client.close();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Agent配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">a1.channels = c1</span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line"></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line"></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sources.r1.type = avro</span><br><span class="line"><span class="meta">#</span> For using a thrift source set the following instead of the above line.</span><br><span class="line"><span class="meta">#</span> a1.source.r1.type = thrift</span><br><span class="line">a1.sources.r1.bind = 0.0.0.0</span><br><span class="line">a1.sources.r1.port = 41414</span><br><span class="line"></span><br><span class="line">a1.sinks.k1.channel = c1</span><br><span class="line">a1.sinks.k1.type = logger</span><br></pre></td></tr></table></figure>
+<p>为了灵活性，客户端实现可以采用以下配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">client.type = default (for avro) or thrift (for thrift)</span><br><span class="line"></span><br><span class="line">hosts = h1                           # default client accepts only 1 host</span><br><span class="line">                                     # (additional hosts will be ignored)</span><br><span class="line"></span><br><span class="line">hosts.h1 = host1.example.org:41414   # host and port must both be specified</span><br><span class="line">                                     # (neither has a default)</span><br><span class="line"></span><br><span class="line">batch-size = 100                     # Must be &gt;=1 (default: 100)</span><br><span class="line"></span><br><span class="line">connect-timeout = 20000              # Must be &gt;=1000 (default: 20000)</span><br><span class="line"></span><br><span class="line">request-timeout = 20000              # Must be &gt;=1000 (default: 20000)</span><br></pre></td></tr></table></figure>
+<h4 id="4-安全RPC客户端-Thrift"><a href="#4-安全RPC客户端-Thrift" class="headerlink" title="4) 安全RPC客户端(Thrift)"></a>4) 安全RPC客户端(Thrift)</h4><p>版本1.6.0，Thrift的Source和Sink提供基于keberos的身份认证。</p>
+<p>要求flume-ng-auth模块在类路径中，kerberos 在flume-ng-auth中</p>
+<p>SecureThriftRpcClient - &gt; ThriftRpcClient -&gt; RpcClient</p>
+<p>客户端通过SecureRpcClientFactory.getThriftInstance()获取SecureThriftRpcClient 。用于客户端认证的client-principal和client-keytab以属性方式传入。提供server-principal，用于目的ThriftSource认证。</p>
+<p>示例：使用SecureRpcClientFactory</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.flume.Event;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.EventDeliveryException;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.event.EventBuilder;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.api.SecureRpcClientFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.api.RpcClientConfigurationConstants;</span><br><span class="line"><span class="keyword">import</span> org.apache.flume.api.RpcClient;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.Charset;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    MySecureRpcClientFacade client = <span class="keyword">new</span> MySecureRpcClientFacade();</span><br><span class="line">    <span class="comment">// Initialize client with the remote Flume agent's host, port</span></span><br><span class="line">    Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">    props.setProperty(RpcClientConfigurationConstants.CONFIG_CLIENT_TYPE, <span class="string">"thrift"</span>);</span><br><span class="line">    props.setProperty(<span class="string">"hosts"</span>, <span class="string">"h1"</span>);</span><br><span class="line">    props.setProperty(<span class="string">"hosts.h1"</span>, <span class="string">"client.example.org"</span>+<span class="string">":"</span>+ String.valueOf(<span class="number">41414</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize client with the kerberos authentication related properties</span></span><br><span class="line">    props.setProperty(<span class="string">"kerberos"</span>, <span class="string">"true"</span>);</span><br><span class="line">    props.setProperty(<span class="string">"client-principal"</span>, <span class="string">"flumeclient/client.example.org@EXAMPLE.ORG"</span>);</span><br><span class="line">    props.setProperty(<span class="string">"client-keytab"</span>, <span class="string">"/tmp/flumeclient.keytab"</span>);</span><br><span class="line">    props.setProperty(<span class="string">"server-principal"</span>, <span class="string">"flume/server.example.org@EXAMPLE.ORG"</span>);</span><br><span class="line">    client.init(props);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send 10 events to the remote Flume agent. That agent should be</span></span><br><span class="line">    <span class="comment">// configured to listen with an AvroSource.</span></span><br><span class="line">    String sampleData = <span class="string">"Hello Flume!"</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">      client.sendDataToFlume(sampleData);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    client.cleanUp();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySecureRpcClientFacade</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> RpcClient client;</span><br><span class="line">  <span class="keyword">private</span> Properties properties;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Properties properties)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Setup the RPC connection</span></span><br><span class="line">    <span class="keyword">this</span>.properties = properties;</span><br><span class="line">    <span class="comment">// Create the ThriftSecureRpcClient instance by using SecureRpcClientFactory</span></span><br><span class="line">    <span class="keyword">this</span>.client = SecureRpcClientFactory.getThriftInstance(properties);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendDataToFlume</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Create a Flume Event object that encapsulates the sample data</span></span><br><span class="line">    Event event = EventBuilder.withBody(data, Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send the event</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      client.append(event);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (EventDeliveryException e) &#123;</span><br><span class="line">      <span class="comment">// clean up and recreate the client</span></span><br><span class="line">      client.close();</span><br><span class="line">      client = <span class="keyword">null</span>;</span><br><span class="line">      client = SecureRpcClientFactory.getThriftInstance(properties);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Close the RPC connection</span></span><br><span class="line">    client.close();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>远程ThriftSource配置中需要开启kerberos模式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">a1.channels = c1</span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line"></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line"></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sources.r1.type = thrift</span><br><span class="line">a1.sources.r1.bind = 0.0.0.0</span><br><span class="line">a1.sources.r1.port = 41414</span><br><span class="line">a1.sources.r1.kerberos = true</span><br><span class="line">a1.sources.r1.agent-principal = flume/server.example.org@EXAMPLE.ORG</span><br><span class="line">a1.sources.r1.agent-keytab = /tmp/flume.keytab</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a1.sinks.k1.channel = c1</span><br><span class="line">a1.sinks.k1.type = logger</span><br></pre></td></tr></table></figure>
+<h4 id="5-故障切换客户端"><a href="#5-故障切换客户端" class="headerlink" title="5) 故障切换客户端"></a>5) 故障切换客户端</h4><p>暂不支持Thrift。</p>
+<p>包装默认的Avro RPC Client处理故障切换，提供空格分隔的<code>&lt;host&gt;:&lt;port&gt;</code>列表作为切换组。当前选中的主机故障后，将自动切换到下一主机。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Setup properties for the failover</span></span><br><span class="line">Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">props.put(<span class="string">"client.type"</span>, <span class="string">"default_failover"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// List of hosts (space-separated list of user-chosen host aliases)</span></span><br><span class="line">props.put(<span class="string">"hosts"</span>, <span class="string">"h1 h2 h3"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// host/port pair for each host alias</span></span><br><span class="line">String host1 = <span class="string">"host1.example.org:41414"</span>;</span><br><span class="line">String host2 = <span class="string">"host2.example.org:41414"</span>;</span><br><span class="line">String host3 = <span class="string">"host3.example.org:41414"</span>;</span><br><span class="line">props.put(<span class="string">"hosts.h1"</span>, host1);</span><br><span class="line">props.put(<span class="string">"hosts.h2"</span>, host2);</span><br><span class="line">props.put(<span class="string">"hosts.h3"</span>, host3);</span><br><span class="line"></span><br><span class="line"><span class="comment">// create the client with failover properties</span></span><br><span class="line">RpcClient client = RpcClientFactory.getInstance(props);</span><br></pre></td></tr></table></figure>
+<p>FailoverRpcClient可使用以下属性配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">client.type = default_failover</span><br><span class="line"></span><br><span class="line">hosts = h1 h2 h3                     # at least one is required, but 2 or</span><br><span class="line">                                     # more makes better sense</span><br><span class="line"></span><br><span class="line">hosts.h1 = host1.example.org:41414</span><br><span class="line"></span><br><span class="line">hosts.h2 = host2.example.org:41414</span><br><span class="line"></span><br><span class="line">hosts.h3 = host3.example.org:41414</span><br><span class="line"></span><br><span class="line">max-attempts = 3                     # Must be &gt;=0 (default: number of hosts</span><br><span class="line">                                     # specified, 3 in this case). A '0'</span><br><span class="line">                                     # value doesn't make much sense because</span><br><span class="line">                                     # it will just cause an append call to</span><br><span class="line">                                     # immmediately fail. A '1' value means</span><br><span class="line">                                     # that the failover client will try only</span><br><span class="line">                                     # once to send the Event, and if it</span><br><span class="line">                                     # fails then there will be no failover</span><br><span class="line">                                     # to a second client, so this value</span><br><span class="line">                                     # causes the failover client to</span><br><span class="line">                                     # degenerate into just a default client.</span><br><span class="line">                                     # It makes sense to set this value to at</span><br><span class="line">                                     # least the number of hosts that you</span><br><span class="line">                                     # specified.</span><br><span class="line"></span><br><span class="line">batch-size = 100                     # Must be &gt;=1 (default: 100)</span><br><span class="line"></span><br><span class="line">connect-timeout = 20000              # Must be &gt;=1000 (default: 20000)</span><br><span class="line"></span><br><span class="line">request-timeout = 20000              # Must be &gt;=1000 (default: 20000)</span><br></pre></td></tr></table></figure>
+<h4 id="6-负载均衡RPC客户端"><a href="#6-负载均衡RPC客户端" class="headerlink" title="6) 负载均衡RPC客户端"></a>6) 负载均衡RPC客户端</h4><p>暂不支持Thirift</p>
+<p>通过空格分隔的<code>&lt;host&gt;:&lt;port&gt;</code>指定负载均衡组。</p>
+<p>负载均衡策略：</p>
+<ul>
+<li><p>随机选取</p>
+</li>
+<li><p>循环</p>
+</li>
+<li><p>自定义</p>
+<p>实现LoadBalancingRpcClient$HostSelector接口，需要指定host-selector</p>
+</li>
+</ul>
+<p>启用backoff，将在一定时间内拉黑故障主机。倒计时结束后，依旧无法响应的，倒计时成指数增长。(为了防止阻塞) </p>
+<p>默认maxBackoff为30000ms，由所有负责均衡策略的父类OrderSelector缺省实现。设置上限为65536000ms.(约18.2h)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Setup properties for the load balancing</span></span><br><span class="line">Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">props.put(<span class="string">"client.type"</span>, <span class="string">"default_loadbalance"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// List of hosts (space-separated list of user-chosen host aliases)</span></span><br><span class="line">props.put(<span class="string">"hosts"</span>, <span class="string">"h1 h2 h3"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// host/port pair for each host alias</span></span><br><span class="line">String host1 = <span class="string">"host1.example.org:41414"</span>;</span><br><span class="line">String host2 = <span class="string">"host2.example.org:41414"</span>;</span><br><span class="line">String host3 = <span class="string">"host3.example.org:41414"</span>;</span><br><span class="line">props.put(<span class="string">"hosts.h1"</span>, host1);</span><br><span class="line">props.put(<span class="string">"hosts.h2"</span>, host2);</span><br><span class="line">props.put(<span class="string">"hosts.h3"</span>, host3);</span><br><span class="line"></span><br><span class="line">props.put(<span class="string">"host-selector"</span>, <span class="string">"random"</span>); <span class="comment">// For random host selection</span></span><br><span class="line"><span class="comment">// props.put("host-selector", "round_robin"); // For round-robin host</span></span><br><span class="line"><span class="comment">//                                            // selection</span></span><br><span class="line">props.put(<span class="string">"backoff"</span>, <span class="string">"true"</span>); <span class="comment">// Disabled by default.</span></span><br><span class="line"></span><br><span class="line">props.put(<span class="string">"maxBackoff"</span>, <span class="string">"10000"</span>); <span class="comment">// Defaults 0, which effectively</span></span><br><span class="line">                                  <span class="comment">// becomes 30000 ms</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Create the client with load balancing properties</span></span><br><span class="line">RpcClient client = RpcClientFactory.getInstance(props);</span><br></pre></td></tr></table></figure>
+<p>LoadBalancingRpcClient可以使用以下属性：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">client.type = default_loadbalance</span><br><span class="line"></span><br><span class="line">hosts = h1 h2 h3                     # At least 2 hosts are required</span><br><span class="line"></span><br><span class="line">hosts.h1 = host1.example.org:41414</span><br><span class="line"></span><br><span class="line">hosts.h2 = host2.example.org:41414</span><br><span class="line"></span><br><span class="line">hosts.h3 = host3.example.org:41414</span><br><span class="line"></span><br><span class="line">backoff = false                      # Specifies whether the client should</span><br><span class="line">                                     # back-off from (i.e. temporarily</span><br><span class="line">                                     # blacklist) a failed host</span><br><span class="line">                                     # (default: false).</span><br><span class="line"></span><br><span class="line">maxBackoff = 0                       # Max timeout in millis that a will</span><br><span class="line">                                     # remain inactive due to a previous</span><br><span class="line">                                     # failure with that host (default: 0,</span><br><span class="line">                                     # which effectively becomes 30000)</span><br><span class="line"></span><br><span class="line">host-selector = round_robin          # The host selection strategy used</span><br><span class="line">                                     # when load-balancing among hosts</span><br><span class="line">                                     # (default: round_robin).</span><br><span class="line">                                     # Other values are include "random"</span><br><span class="line">                                     # or the FQCN of a custom class</span><br><span class="line">                                     # that implements</span><br><span class="line">                                     # LoadBalancingRpcClient$HostSelector</span><br><span class="line"></span><br><span class="line">batch-size = 100                     # Must be &gt;=1 (default: 100)</span><br><span class="line"></span><br><span class="line">connect-timeout = 20000              # Must be &gt;=1000 (default: 20000)</span><br><span class="line"></span><br><span class="line">request-timeout = 20000              # Must be &gt;=1000 (default: 20000)</span><br></pre></td></tr></table></figure>
+<h3 id="2-内嵌Agent"><a href="#2-内嵌Agent" class="headerlink" title="(2) 内嵌Agent"></a>(2) 内嵌Agent</h3><p>Flume提供一种内嵌于应用的轻量Agent。仅支持部分组件，如Source、Channel（只有File和Memory）、Sink(仅Avro)和Interceptor。</p>
+<p>注意：内嵌Agent依赖于hadoop-core.jar</p>
+<p>必需的属性粗体标注：</p>
+<p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/image-20200601174413041.png" alt="image-20200601174413041"></p>
+<p>使用示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; properties = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">properties.put(<span class="string">"channel.type"</span>, <span class="string">"memory"</span>);</span><br><span class="line">properties.put(<span class="string">"channel.capacity"</span>, <span class="string">"200"</span>);</span><br><span class="line">properties.put(<span class="string">"sinks"</span>, <span class="string">"sink1 sink2"</span>);</span><br><span class="line">properties.put(<span class="string">"sink1.type"</span>, <span class="string">"avro"</span>);</span><br><span class="line">properties.put(<span class="string">"sink2.type"</span>, <span class="string">"avro"</span>);</span><br><span class="line">properties.put(<span class="string">"sink1.hostname"</span>, <span class="string">"collector1.apache.org"</span>);</span><br><span class="line">properties.put(<span class="string">"sink1.port"</span>, <span class="string">"5564"</span>);</span><br><span class="line">properties.put(<span class="string">"sink2.hostname"</span>, <span class="string">"collector2.apache.org"</span>);</span><br><span class="line">properties.put(<span class="string">"sink2.port"</span>,  <span class="string">"5565"</span>);</span><br><span class="line">properties.put(<span class="string">"processor.type"</span>, <span class="string">"load_balance"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors"</span>, <span class="string">"i1"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors.i1.type"</span>, <span class="string">"static"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors.i1.key"</span>, <span class="string">"key1"</span>);</span><br><span class="line">properties.put(<span class="string">"source.interceptors.i1.value"</span>, <span class="string">"value1"</span>);</span><br><span class="line"></span><br><span class="line">EmbeddedAgent agent = <span class="keyword">new</span> EmbeddedAgent(<span class="string">"myagent"</span>);</span><br><span class="line"></span><br><span class="line">agent.configure(properties);</span><br><span class="line">agent.start();</span><br><span class="line"></span><br><span class="line">List&lt;Event&gt; events = Lists.newArrayList();</span><br><span class="line"></span><br><span class="line">events.add(event);</span><br><span class="line">events.add(event);</span><br><span class="line">events.add(event);</span><br><span class="line">events.add(event);</span><br><span class="line"></span><br><span class="line">agent.putAll(events);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">agent.stop();</span><br></pre></td></tr></table></figure>
+<h3 id="3-事务接口"><a href="#3-事务接口" class="headerlink" title="(3) 事务接口"></a>(3) 事务接口</h3><p><img src="/2020/05/27/200527Flume开发指南/200527Flume%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/DevGuide_image01.png" alt="DevGuide_image01"></p>
+<p>事务接口是Flume可靠性的基础。所有的主要组件必须使用事务。</p>
+<p>事务在Channel内部实现。与Channel连接的每个Source和Sink必须获取事务对象。Source使用ChannelProcessor管理，Sink显式通过Channel管理。保存Event到Channel或从Channel中获取都是在事务内部完成。示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Channel ch = <span class="keyword">new</span> MemoryChannel();</span><br><span class="line">Transaction txn = ch.getTransaction();</span><br><span class="line">txn.begin();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// This try clause includes whatever Channel operations you want to do</span></span><br><span class="line"></span><br><span class="line">  Event eventToStage = EventBuilder.withBody(<span class="string">"Hello Flume!"</span>,</span><br><span class="line">                       Charset.forName(<span class="string">"UTF-8"</span>));</span><br><span class="line">  ch.put(eventToStage);</span><br><span class="line">  <span class="comment">// Event takenEvent = ch.take();</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  txn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">  txn.rollback();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Log exception, handle individual exceptions as needed</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// re-throw all Errors</span></span><br><span class="line">  <span class="keyword">if</span> (t <span class="keyword">instanceof</span> Error) &#123;</span><br><span class="line">    <span class="keyword">throw</span> (Error)t;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  txn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-Sink"><a href="#4-Sink" class="headerlink" title="(4) Sink"></a>(4) Sink</h3><p>用于从Channel中获取Event，并传递给下一个Agent或外部仓库。</p>
+<p>一个Sink只与一个Channel相关。</p>
+<p>SinkRunnner示例与每一个配置好的Sink相关。当Flume框架调用SinkRunner.start()时，创建一个线程来驱动Sink(使用SinkRunner.PollingRunner()作为线程的Runnable)。该线程管理Sink的生命周期。Sink需要实现LifeCycleAware接口的start()和stop()接口。Sink.start()负责初始化，Sink.process()负责Event提取和推送的主要流程，Sink.stop()负责清理。Sink也需要实现Configurable接口以处理自身的配置设置。示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MySink</span> <span class="keyword">extends</span> <span class="title">AbstractSink</span> <span class="keyword">implements</span> <span class="title">Configurable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String myProp;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    String myProp = context.getString(<span class="string">"myProp"</span>, <span class="string">"defaultValue"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Process the myProp value (e.g. validation)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Store myProp for later retrieval by process() method</span></span><br><span class="line">    <span class="keyword">this</span>.myProp = myProp;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Initialize the connection to the external repository (e.g. HDFS) that</span></span><br><span class="line">    <span class="comment">// this Sink will forward Events to ..</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Disconnect from the external respository and do any</span></span><br><span class="line">    <span class="comment">// additional cleanup (e.g. releasing resources or nulling-out</span></span><br><span class="line">    <span class="comment">// field values) ..</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Status <span class="title">process</span><span class="params">()</span> <span class="keyword">throws</span> EventDeliveryException </span>&#123;</span><br><span class="line">    Status status = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start transaction</span></span><br><span class="line">    Channel ch = getChannel();</span><br><span class="line">    Transaction txn = ch.getTransaction();</span><br><span class="line">    txn.begin();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// This try clause includes whatever Channel operations you want to do</span></span><br><span class="line"></span><br><span class="line">      Event event = ch.take();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Send the Event to the external repository.</span></span><br><span class="line">      <span class="comment">// storeSomeData(e);</span></span><br><span class="line"></span><br><span class="line">      txn.commit();</span><br><span class="line">      status = Status.READY;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">      txn.rollback();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Log exception, handle individual exceptions as needed</span></span><br><span class="line"></span><br><span class="line">      status = Status.BACKOFF;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// re-throw all Errors</span></span><br><span class="line">      <span class="keyword">if</span> (t <span class="keyword">instanceof</span> Error) &#123;</span><br><span class="line">        <span class="keyword">throw</span> (Error)t;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> status;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-Source"><a href="#5-Source" class="headerlink" title="(5) Source"></a>(5) Source</h3><p>Source用于从外部接收数据，并保存到响应的Channel中。Source通过其ChannelProcessor串行处理Channel本地事务提交的Event。对于异常，Channel向外传递，所有的Channel回滚事务，除了已经处理完的。</p>
+<p>与自定义Sink类似，当Flume框架调用PollableSourceRunner.start()时，创建一个线程来驱动。该线程管理Source的生命周期。PollableSource需要实现LifeCycleAware接口的start()和stop()接口。Sink.start()负责初始化，PollableSource.process()负责检查数据和存储到Channel的Event中。</p>
+<p>注意：存在另一种Source类型——EventDrivenSource。与PollableSource不同的是，其必须具有获取数据和存储数据到Channel的Event中的回调机制。并且不是由新建的自身线程驱动。</p>
+<p>以下为PollableSource示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MySource</span> <span class="keyword">extends</span> <span class="title">AbstractSource</span> <span class="keyword">implements</span> <span class="title">Configurable</span>, <span class="title">PollableSource</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String myProp;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    String myProp = context.getString(<span class="string">"myProp"</span>, <span class="string">"defaultValue"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Process the myProp value (e.g. validation, convert to another type, ...)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Store myProp for later retrieval by process() method</span></span><br><span class="line">    <span class="keyword">this</span>.myProp = myProp;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Initialize the connection to the external client</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Disconnect from external client and do any additional cleanup</span></span><br><span class="line">    <span class="comment">// (e.g. releasing resources or nulling-out field values) ..</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Status <span class="title">process</span><span class="params">()</span> <span class="keyword">throws</span> EventDeliveryException </span>&#123;</span><br><span class="line">    Status status = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// This try clause includes whatever Channel/Event operations you want to do</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// Receive new data</span></span><br><span class="line">      Event e = getSomeData();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Store the Event into this Source's associated Channel(s)</span></span><br><span class="line">      getChannelProcessor().processEvent(e);</span><br><span class="line"></span><br><span class="line">      status = Status.READY;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">      <span class="comment">// Log exception, handle individual exceptions as needed</span></span><br><span class="line"></span><br><span class="line">      status = Status.BACKOFF;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// re-throw all Errors</span></span><br><span class="line">      <span class="keyword">if</span> (t <span class="keyword">instanceof</span> Error) &#123;</span><br><span class="line">        <span class="keyword">throw</span> (Error)t;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      txn.close();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> status;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-Channel"><a href="#6-Channel" class="headerlink" title="(6) Channel"></a>(6) Channel</h3><p>暂无</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://flume.apache.org/releases/content/1.9.0/FlumeDeveloperGuide.html" target="_blank" rel="noopener">Flume 1.9.0 Developer Guide</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Flume/" rel="tag"># Flume</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/26/200526HashMap/" rel="next" title="HashMap(JDK 14)">
+                <i class="fa fa-chevron-left"></i> HashMap(JDK 14)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/27/200527Hive入门/" rel="prev" title="Hive入门">
+                Hive入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-简介"><span class="nav-number">1.</span> <span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-概览"><span class="nav-number">2.</span> <span class="nav-text">2 概览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数据流模型"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 数据流模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-可靠性"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 可靠性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-源码编译"><span class="nav-number">3.</span> <span class="nav-text">3 源码编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-组件开发"><span class="nav-number">4.</span> <span class="nav-text">4 组件开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-客户端"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-客户端-SDK"><span class="nav-number">4.1.1.</span> <span class="nav-text">1) 客户端 SDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-RPC客户端接口"><span class="nav-number">4.1.2.</span> <span class="nav-text">2)RPC客户端接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-RPC客户端-Avro和Thrift"><span class="nav-number">4.1.3.</span> <span class="nav-text">3) RPC客户端(Avro和Thrift)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-安全RPC客户端-Thrift"><span class="nav-number">4.1.4.</span> <span class="nav-text">4) 安全RPC客户端(Thrift)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-故障切换客户端"><span class="nav-number">4.1.5.</span> <span class="nav-text">5) 故障切换客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-负载均衡RPC客户端"><span class="nav-number">4.1.6.</span> <span class="nav-text">6) 负载均衡RPC客户端</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-内嵌Agent"><span class="nav-number">4.2.</span> <span class="nav-text">(2) 内嵌Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-事务接口"><span class="nav-number">4.3.</span> <span class="nav-text">(3) 事务接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Sink"><span class="nav-number">4.4.</span> <span class="nav-text">(4) Sink</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Source"><span class="nav-number">4.5.</span> <span class="nav-text">(5) Source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Channel"><span class="nav-number">4.6.</span> <span class="nav-text">(6) Channel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/05/27/200527Flume开发指南/';
+          this.page.identifier = '2020/05/27/200527Flume开发指南/';
+          this.page.title = 'Flume开发指南';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

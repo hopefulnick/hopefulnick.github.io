@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 概念实体：数据描述的实际事物 字段：数据的一种属性，即：列 记录：实体的特定实例的字段集合，即：行">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="范式">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/07/14/200714范式/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 概念实体：数据描述的实际事物 字段：数据的一种属性，即：列 记录：实体的特定实例的字段集合，即：行">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/14/200714范式/200714%E8%8C%83%E5%BC%8F/image-20200716182212401.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/14/200714范式/200714%E8%8C%83%E5%BC%8F/image-20200716182342524.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/07/14/200714范式/200714%E8%8C%83%E5%BC%8F/image-20200716182603554.png">
+<meta property="og:updated_time" content="2020-08-30T15:55:41.757Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="范式">
+<meta name="twitter:description" content="1 概念实体：数据描述的实际事物 字段：数据的一种属性，即：列 记录：实体的特定实例的字段集合，即：行">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/07/14/200714范式/200714%E8%8C%83%E5%BC%8F/image-20200716182212401.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/07/14/200714范式/"/>
+
+
+
+
+
+  <title>范式 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/07/14/200714范式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">范式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-14T11:00:47+08:00">
+                2020-07-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/14/200714范式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/14/200714范式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1 概念"></a>1 概念</h2><p>实体：数据描述的实际事物</p>
+<p>字段：数据的一种属性，即：列</p>
+<p>记录：实体的特定实例的字段集合，即：行</p>
+<a id="more"></a>
+<p>键：唯一标识记录的字段或字段集合，也叫”码“。分为主键和候选键。候选键也能成为主键。主键或候选键的任意真子集都不能唯一确定一条记录。</p>
+<p>主键：唯一标识记录的键，具有以下特征：</p>
+<ul>
+<li>唯一</li>
+<li>包含最少字段</li>
+<li>非空</li>
+<li>不能随时更改</li>
+</ul>
+<p>外键：父表或子表的主键，用于连接父表和子表记录</p>
+<p>依赖表：需要用父表标识的子表，也叫“弱实体”</p>
+<p>关联表：多对多关系中，两个父表的子表</p>
+<p>实体完整性：每张表必须有一个有效的主键</p>
+<p>参照完整性：没有不匹配的外键值</p>
+<p>函数依赖：若X、Y存在关系，则对于相同的X，有相同的Y。称为Y函数依赖于X，或X函数确定Y。</p>
+<p>完全函数依赖：Y不函数依赖于X的真子集，否则Y对X部分函数依赖。</p>
+<p>候选键：若X完全函数确定Y，则X为候选键。</p>
+<p>主属性：候选键中包含的属性</p>
+<p>非主属性：候选键不包含的属性。也叫“非键属性”、“非关键字段”</p>
+<p>传递依赖：若a依赖于B，B依赖于C，则A传递依赖于C</p>
+<h2 id="2-定义"><a href="#2-定义" class="headerlink" title="2 定义"></a>2 定义</h2><p>符合某一级别关系模式的集合。</p>
+<h2 id="3-种类"><a href="#3-种类" class="headerlink" title="3 种类"></a>3 种类</h2><p>共有六种范式，逐个递进（除BC范式）。</p>
+<h3 id="1-第一范式"><a href="#1-第一范式" class="headerlink" title="(1) 第一范式"></a>(1) 第一范式</h3><p>没有重复的列。</p>
+<p>用于区分关系型与菲关系型。</p>
+<p>重复的列转换为一对多的实体关系</p>
+<h3 id="2-第二范式"><a href="#2-第二范式" class="headerlink" title="(2) 第二范式"></a>(2) 第二范式</h3><p>数据库表中不存在非主属性对任一候选键的部分函数依赖，也即所有非主属性完全依赖于任意一组候选键。</p>
+<p>思考：非主属性完全依赖于键</p>
+<p>非主属性转换为一对多的实体关系。</p>
+<p><img src="/2020/07/14/200714范式/200714%E8%8C%83%E5%BC%8F/image-20200716182212401.png" alt="image-20200716182212401"></p>
+<h3 id="3-第三范式"><a href="#3-第三范式" class="headerlink" title="(3) 第三范式"></a>(3) 第三范式</h3><p>不存在可以确定其他非主属性的非主属性。</p>
+<p><img src="/2020/07/14/200714范式/200714%E8%8C%83%E5%BC%8F/image-20200716182342524.png" alt="image-20200716182342524"></p>
+<h3 id="4-BC范式"><a href="#4-BC范式" class="headerlink" title="(4) BC范式"></a>(4) BC范式</h3><p>若属性或属性组合A能确定另一个属性B，则A的子集中必须有候选键。</p>
+<p>排除了属性对候选键的传递依赖和部分依赖</p>
+<p><img src="/2020/07/14/200714范式/200714%E8%8C%83%E5%BC%8F/image-20200716182603554.png" alt="image-20200716182603554"></p>
+<h3 id="5-第四范式"><a href="#5-第四范式" class="headerlink" title="(5) 第四范式"></a>(5) 第四范式</h3><p>基于BC范式，不包含多值依赖</p>
+<h3 id="6-第五范式"><a href="#6-第五范式" class="headerlink" title="(6) 第五范式"></a>(6) 第五范式</h3><p>处理无损连接问题。</p>
+<p>因为无损连接很少出现，基本没有实际意义。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://baike.baidu.com/item/范式/8438203" target="_blank" rel="noopener">范式</a></p>
+<p><a href="https://www.zhihu.com/question/24696366" target="_blank" rel="noopener">如何理解关系型数据库的常见设计范式？</a></p>
+<p><a href="https://blog.csdn.net/doncoder/article/details/92171159" target="_blank" rel="noopener">第二、三范式与BC范式的区别</a></p>
+<p><a href="https://www.cnblogs.com/studyzy/p/5823224.html" target="_blank" rel="noopener">数据库设计范式2——BC范式和第四范式</a></p>
+<p><a href="https://www.cnblogs.com/ybwang/archive/2010/06/04/1751279.html" target="_blank" rel="noopener"><strong>学习笔记]数据库设计三大范式与BCNF，学习笔记</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/10/200710Structured Streaming/" rel="next" title="Structured Streaming">
+                <i class="fa fa-chevron-left"></i> Structured Streaming
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/18/200718Spark调优/" rel="prev" title="Spark调优">
+                Spark调优 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概念"><span class="nav-number">1.</span> <span class="nav-text">1 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-定义"><span class="nav-number">2.</span> <span class="nav-text">2 定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-种类"><span class="nav-number">3.</span> <span class="nav-text">3 种类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-第一范式"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 第一范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-第二范式"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 第二范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-第三范式"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 第三范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-BC范式"><span class="nav-number">3.4.</span> <span class="nav-text">(4) BC范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-第四范式"><span class="nav-number">3.5.</span> <span class="nav-text">(5) 第四范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-第五范式"><span class="nav-number">3.6.</span> <span class="nav-text">(6) 第五范式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/07/14/200714范式/';
+          this.page.identifier = '2020/07/14/200714范式/';
+          this.page.title = '范式';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
