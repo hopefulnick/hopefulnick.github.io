@@ -88,7 +88,7 @@
 <meta property="og:description" content="RDD 2.4.5">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/05/26/200526RDD源码/RDD.png">
-<meta property="og:updated_time" content="2020-08-31T17:25:46.210Z">
+<meta property="og:updated_time" content="2020-09-27T14:34:12.476Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RDD源码">
 <meta name="twitter:description" content="RDD 2.4.5">
@@ -384,9 +384,11 @@
 <p>fold():给定一个初始值，累加RDD类元素</p>
 <p>aggregate聚合元素并可以返回一个不同于输入类型的返回类型</p>
 <p>treeAggregate在语义上与aggregate一致</p>
-<p>withScope是一个无参匿名函数，通过柯里化与当前函数结合负责将函数公共部分提取出。</p>
+<p>withScope用于跟踪RDD的操作记录，如Web UI中的DAG图。利用柯里化，withScope中实现跟踪的公共代码，通过body传入业务代码。</p>
 <p>要求不能使用return声明。使用最后一行返回机制？</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>[spark] <span class="function"><span class="keyword">def</span> <span class="title">withScope</span></span>[<span class="type">U</span>](body: =&gt; <span class="type">U</span>): <span class="type">U</span> = <span class="type">RDDOperationScope</span>.withScope[<span class="type">U</span>](sc)(body)</span><br></pre></td></tr></table></figure>
+<p><a href="https://zhuanlan.zhihu.com/p/24616237" target="_blank" rel="noopener">Spark源码分析（3） RDD 的转换</a></p>
+<p><a href="https://www.programmersought.com/article/40761340073/" target="_blank" rel="noopener">Spark source understanding withScope</a></p>
 <p>zipWithIndex会触发作业，而zipWithUniqueId不会</p>
 <p>take和top用于元素有限的集合，会将全部数据加载到驱动节点</p>
 <p>take与takeOrdered相反，前者逆序，后者顺序</p>
@@ -537,7 +539,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -548,7 +550,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -559,7 +561,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

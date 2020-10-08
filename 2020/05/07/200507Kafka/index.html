@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="1 定义一种分布式流式处理平台。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-08-31T17:25:46.185Z">
+<meta property="og:updated_time" content="2020-09-11T01:13:59.643Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka">
 <meta name="twitter:description" content="1 定义一种分布式流式处理平台。">
@@ -395,7 +395,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> bin/kafka-topics.sh --describe --bootstrap-server localhost:9092 --topic my-replicated-topic</span><br><span class="line">Topic:my-replicated-topic   PartitionCount:1    ReplicationFactor:3 Configs:</span><br><span class="line">    Topic: my-replicated-topic  Partition: 0    Leader: 1   Replicas: 1,2,0 Isr: 1,2,0</span><br><span class="line">    </span><br><span class="line"><span class="meta">#</span> 2.0.x</span><br><span class="line"><span class="meta">&gt;</span> bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic</span><br><span class="line">Topic:my-replicated-topic   PartitionCount:1    ReplicationFactor:3 Configs:</span><br><span class="line">    Topic: my-replicated-topic  Partition: 0    Leader: 1   Replicas: 1,2,0 Isr: 1,2,0</span><br></pre></td></tr></table></figure>
 <ul>
 <li>首行给出所有分区概览。一行表示一个分区。</li>
-<li>leader时负责特定分区所有读写的节点。每个节点会随机负责一个分区。</li>
+<li>leader是负责特定分区所有读写的节点。每个节点会随机负责一个分区。</li>
 <li>replicas是具有当前分区的节点列表，不管是否是leader或存活</li>
 <li>isr是当前能被leader捕获的活跃节点列表</li>
 </ul>
@@ -428,7 +428,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic connect-test --from-beginning</span><br><span class="line">&#123;"schema":&#123;"type":"string","optional":false&#125;,"payload":"foo"&#125;</span><br><span class="line">&#123;"schema":&#123;"type":"string","optional":false&#125;,"payload":"bar"&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>注意：此时向输入文件追加数据，将持续读入输出到主题和输出文件中。</p>
 <h3 id="8-使用Kafka-Stream处理数据"><a href="#8-使用Kafka-Stream处理数据" class="headerlink" title="(8) 使用Kafka Stream处理数据"></a>(8) 使用Kafka Stream处理数据</h3><p>Kafka Stream是用于构建关键任务实时应用和微服务的客户端库。</p>
-<p>结合客户端编写和部署标准Java/Scala应用的简单性，以及服务器端Kafka技术优势，是应用更加可扩展、可变、容错和分布式。</p>
+<p>结合客户端编写和部署标准Java/Scala应用的简单性，以及服务器端Kafka技术优势，使应用更加可扩展、可变、容错和分布式。</p>
 <p>详见<a href="https://kafka.apache.org/25/documentation/streams/quickstart" target="_blank" rel="noopener">入门示例</a></p>
 <p>注意：Kafka2.0.x对应的最高ZooKeeper版本是3.4.9.</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://kafka.apache.org/intro" target="_blank" rel="noopener">Introduction</a></p>
@@ -568,7 +568,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -579,7 +579,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -590,7 +590,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="以下适用于版本2.4.5 SparkContext是Spark的主入口，负责连接集群、创建RDD、累加器和广播变量等。 同一JVM中只能有一个活动的SparkContext。 SparkConf用于应用配置，会覆盖默认配置。">
+<meta name="description" content="以下适用于版本3.0.1 SparkContext是Spark的主入口，负责连接集群、创建RDD、累加器和广播变量等。 同一JVM中只能有一个活动的SparkContext。 SparkConf用于应用配置，会覆盖默认配置。">
 <meta name="keywords" content="SparkContext">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SparkContext源码">
 <meta property="og:url" content="https://hopefulnick.github.io/2020/08/02/200802SparkContext源码/index.html">
 <meta property="og:site_name" content="Hopeful Nick">
-<meta property="og:description" content="以下适用于版本2.4.5 SparkContext是Spark的主入口，负责连接集群、创建RDD、累加器和广播变量等。 同一JVM中只能有一个活动的SparkContext。 SparkConf用于应用配置，会覆盖默认配置。">
+<meta property="og:description" content="以下适用于版本3.0.1 SparkContext是Spark的主入口，负责连接集群、创建RDD、累加器和广播变量等。 同一JVM中只能有一个活动的SparkContext。 SparkConf用于应用配置，会覆盖默认配置。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-08-31T17:25:46.251Z">
+<meta property="og:updated_time" content="2020-09-27T14:41:27.466Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SparkContext源码">
-<meta name="twitter:description" content="以下适用于版本2.4.5 SparkContext是Spark的主入口，负责连接集群、创建RDD、累加器和广播变量等。 同一JVM中只能有一个活动的SparkContext。 SparkConf用于应用配置，会覆盖默认配置。">
+<meta name="twitter:description" content="以下适用于版本3.0.1 SparkContext是Spark的主入口，负责连接集群、创建RDD、累加器和广播变量等。 同一JVM中只能有一个活动的SparkContext。 SparkConf用于应用配置，会覆盖默认配置。">
 
 
 
@@ -353,14 +353,19 @@
       
 
       
-        <p>以下适用于版本2.4.5</p>
+        <p>以下适用于版本3.0.1</p>
 <p>SparkContext是Spark的主入口，负责连接集群、创建RDD、累加器和广播变量等。</p>
 <p>同一JVM中只能有一个活动的SparkContext。</p>
 <p>SparkConf用于应用配置，会覆盖默认配置。</p>
 <a id="more"></a>
 <p>private[spark]作用域保护，表示对方括号类指定的类或包中的类，及其伴生对象外，应用该访问修饰符。</p>
-<p>sparkUser</p>
+<p>传名调用 ：=&gt;</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用于返回调用的用户类和Spark API名称</span></span><br><span class="line"><span class="comment">// https://www.cnblogs.com/coldyan/p/10016007.html</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> creationSite: <span class="type">CallSite</span> = <span class="type">Utils</span>.getCallSite()</span><br></pre></td></tr></table></figure>
+<p>777</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.runoob.com/scala/scala-access-modifiers.html" target="_blank" rel="noopener">作用域保护</a></p>
+<p>TODO </p>
+<p>SparkConf</p>
+<p>StreamingContext</p>
 
       
     </div>
@@ -494,7 +499,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -505,7 +510,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -516,7 +521,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

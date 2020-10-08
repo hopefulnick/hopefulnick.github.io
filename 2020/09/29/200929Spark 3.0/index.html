@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 特性">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark 3.0">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/09/29/200929Spark 3.0/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 特性">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/09/29/200929Spark%203.0/blog-introducing-spark-8.png">
+<meta property="og:updated_time" content="2020-10-08T02:45:14.666Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark 3.0">
+<meta name="twitter:description" content="1 特性">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/09/29/200929Spark%203.0/blog-introducing-spark-8.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/09/29/200929Spark 3.0/"/>
+
+
+
+
+
+  <title>Spark 3.0 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/09/29/200929Spark 3.0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark 3.0</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-29T07:00:47+08:00">
+                2020-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/09/29/200929Spark 3.0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/09/29/200929Spark 3.0/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-特性"><a href="#1-特性" class="headerlink" title="1 特性"></a>1 特性</h2><a id="more"></a>
+<ul>
+<li><a href="https://databricks.com/blog/2020/05/29/adaptive-query-execution-speeding-up-spark-sql-at-runtime.html" target="_blank" rel="noopener">adaptive query execution</a>和<a href="https://databricks.com/session_eu19/dynamic-partition-pruning-in-apache-spark" target="_blank" rel="noopener">dynamic partition pruning</a>，实现在TPC-DS上相交2.4版本2倍性能</li>
+<li>兼容ANSI SQL标准</li>
+<li>Python类型提示和补充的pandas UDFs，详见<a href="https://databricks.com/blog/2020/05/20/new-pandas-udfs-and-python-type-hints-in-the-upcoming-release-of-apache-spark-3-0.html" target="_blank" rel="noopener">pandas APIs改进</a></li>
+<li>简化PySpark异常，提供更好的Python异常处理</li>
+<li>结构化流<a href="https://spark.apache.org/docs/3.0.0/web-ui.html#structured-streaming-tab" target="_blank" rel="noopener">新界面</a> </li>
+<li>R用户自定义函数调用<a href="https://databricks.com/blog/2020/06/01/vectorized-r-i-o-in-upcoming-apache-spark-3-0.html" target="_blank" rel="noopener">可达40倍效率提升</a></li>
+</ul>
+<h2 id="2-Spark-SQL改进"><a href="#2-Spark-SQL改进" class="headerlink" title="2 Spark SQL改进"></a>2 Spark SQL改进</h2><p>新的<a href="https://databricks.com/blog/2020/05/29/adaptive-query-execution-speeding-up-spark-sql-at-runtime.html" target="_blank" rel="noopener">Adaptive Query Execution</a> (AQE)提升了性能和简化了运行时执行计划调优。</p>
+<h3 id="1-动态Shuffle分区"><a href="#1-动态Shuffle分区" class="headerlink" title="(1) 动态Shuffle分区"></a>(1) 动态Shuffle分区</h3><p>用户可与设置较大的Shuffle分区数量，AQE在运行时核心相邻的小分区，简化甚至避免分区调优。</p>
+<h3 id="2-动态转换join策略"><a href="#2-动态转换join策略" class="headerlink" title="(2) 动态转换join策略"></a>(2) 动态转换join策略</h3><p>在运行时自动将sort-merge join转换为broadcast-hash join，避免因缺乏统计或错误估计规模导致执行不理想的计划。</p>
+<h3 id="3-动态优化倾斜join"><a href="#3-动态优化倾斜join" class="headerlink" title="(3) 动态优化倾斜join"></a>(3) 动态优化倾斜join</h3><p>自动检测并拆分倾斜分区，提升性能</p>
+<h2 id="3-动态分区修剪"><a href="#3-动态分区修剪" class="headerlink" title="3 动态分区修剪"></a>3 <a href="https://databricks.com/session_eu19/dynamic-partition-pruning-in-apache-spark#:~:text=Dynamic partition pruning occurs when,any number of dimension tables." target="_blank" rel="noopener">动态分区修剪</a></h2><p>优化编译时未能识别并跳过的分区。对于星型模型尤为常见。在事实表与维度表连接的场景中，通过识别维表过滤出的分区来修剪从事实表中读取的分区。</p>
+<h2 id="4-ANSI-SQL-兼容"><a href="#4-ANSI-SQL-兼容" class="headerlink" title="4 ANSI SQL 兼容"></a>4 <a href="https://spark.apache.org/docs/3.0.0/sql-ref-ansi-compliance.html" target="_blank" rel="noopener">ANSI SQL 兼容</a></h2><ul>
+<li>兼容性：使用阳历公历，禁止使用ANSI SQL保留字作为标识符</li>
+<li>正确性：数值操作的运行时溢出检查、预定义schema的表插入的编译时强制类型</li>
+</ul>
+<h2 id="5-Join提示"><a href="#5-Join提示" class="headerlink" title="5 Join提示"></a>5 <a href="https://spark.apache.org/docs/3.0.0/sql-ref-syntax-qry-select-hints.html#join-hints" target="_blank" rel="noopener">Join提示</a></h2><p>用户可设置join提示以帮助编译器做出最佳选择，并新增提示SHUFFLE_MERGE, SHUFFLE_HASH and SHUFFLE_REPLICATE_NL</p>
+<h2 id="6-Python-API增强"><a href="#6-Python-API增强" class="headerlink" title="6 Python API增强"></a>6 Python API增强</h2><p>pandas用于单节点数据组织和分析，<a href="https://koalas.readthedocs.io/en/latest/" target="_blank" rel="noopener">Koalas</a>用于分布式环境数据分析，移除了作图支持。</p>
+<p>PySpark API增强：</p>
+<ul>
+<li>使用类型提示的新Pandas API</li>
+<li>Pandas UDF和API的新类型，详见<a href="https://databricks.com/blog/2020/05/20/new-pandas-udfs-and-python-type-hints-in-the-upcoming-release-of-apache-spark-3-0.html" target="_blank" rel="noopener">blog post</a></li>
+<li>更好的异常处理，隐藏JVM栈跟踪信息</li>
+</ul>
+<h2 id="7-Hydron项目，流式和扩展性"><a href="#7-Hydron项目，流式和扩展性" class="headerlink" title="7 Hydron项目，流式和扩展性"></a>7 Hydron项目，流式和扩展性</h2><ul>
+<li><p>加速器感知调度</p>
+<p>Hydron用于在Spark上整合深度学习和数据处理。用户可以通过<a href="https://spark.apache.org/docs/3.0.0/configuration.html#custom-resource-scheduling-and-configuration-overview" target="_blank" rel="noopener">配置</a>使用加速器。</p>
+</li>
+<li><p>结构化流的<a href="https://spark.apache.org/docs/3.0.0/web-ui.html#structured-streaming-tab" target="_blank" rel="noopener">新界面</a></p>
+<p>增加已完成的流式查询作业的聚合信息、流式查询的详细统计信息</p>
+</li>
+<li><p>可观察的metrics</p>
+<p>是定义在查询上的随机聚合函数。当查询执行完成时，发出数据处理相关的命名事件。</p>
+</li>
+<li><p>新的catalog plug-in API</p>
+<p>用于访问和操作外部数据源元数据。</p>
+<p>可以直接访问和操作同时实现了data source V2 API和catalog plug-in API的外部数据源的数据和元数据。</p>
+</li>
+</ul>
+<h2 id="8-其他"><a href="#8-其他" class="headerlink" title="8 其他"></a>8 其他</h2><p>更多细节详见<a href="https://spark.apache.org/releases/spark-release-3-0-0.html" target="_blank" rel="noopener">release notes</a> </p>
+<p><img src="/2020/09/29/200929Spark 3.0/blog-introducing-spark-8.png" alt="blog-introducing-spark-8"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://databricks.com/blog/2020/06/18/introducing-apache-spark-3-0-now-available-in-databricks-runtime-7-0.html" target="_blank" rel="noopener">Introducing Apache Spark 3.0</a></p>
+<p><a href="https://databricks.com/p/ebook/learning-spark-from-oreilly" target="_blank" rel="noopener">O’Reilly’s New Learning Spark, 2nd Edition</a></p>
+<p><a href="https://databricks.com/blog/2020/05/29/adaptive-query-execution-speeding-up-spark-sql-at-runtime.html" target="_blank" rel="noopener">Adaptive Query Execution</a></p>
+<p><a href="https://databricks.com/blog/2020/05/20/new-pandas-udfs-and-python-type-hints-in-the-upcoming-release-of-apache-spark-3-0.html" target="_blank" rel="noopener">Pandas UDFs and Python Type Hints</a></p>
+<p><a href="https://databricks.com/p/webinar/apache-spark-3-0" target="_blank" rel="noopener">Spark 3.0 Preview</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/26/200926Spark SQL执行流程/" rel="next" title="Spark SQL执行流程">
+                <i class="fa fa-chevron-left"></i> Spark SQL执行流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-特性"><span class="nav-number">1.</span> <span class="nav-text">1 特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Spark-SQL改进"><span class="nav-number">2.</span> <span class="nav-text">2 Spark SQL改进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-动态Shuffle分区"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 动态Shuffle分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-动态转换join策略"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 动态转换join策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-动态优化倾斜join"><span class="nav-number">2.3.</span> <span class="nav-text">(3) 动态优化倾斜join</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-动态分区修剪"><span class="nav-number">3.</span> <span class="nav-text">3 动态分区修剪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-ANSI-SQL-兼容"><span class="nav-number">4.</span> <span class="nav-text">4 ANSI SQL 兼容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Join提示"><span class="nav-number">5.</span> <span class="nav-text">5 Join提示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Python-API增强"><span class="nav-number">6.</span> <span class="nav-text">6 Python API增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Hydron项目，流式和扩展性"><span class="nav-number">7.</span> <span class="nav-text">7 Hydron项目，流式和扩展性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-其他"><span class="nav-number">8.</span> <span class="nav-text">8 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">9.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/09/29/200929Spark 3.0/';
+          this.page.identifier = '2020/09/29/200929Spark 3.0/';
+          this.page.title = 'Spark 3.0';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Kafka," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 动机 大型企业处理所有实时数据的统一平台 海量 数据加载 低延迟消息传递 分区、分布式在线处理 容错">
+<meta name="keywords" content="Kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka设计">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 动机 大型企业处理所有实时数据的统一平台 海量 数据加载 低延迟消息传递 分区、分布式在线处理 容错">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/log_cleaner_anatomy.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/log_compaction.png">
+<meta property="og:updated_time" content="2020-09-28T02:21:57.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kafka设计">
+<meta name="twitter:description" content="1 动机 大型企业处理所有实时数据的统一平台 海量 数据加载 低延迟消息传递 分区、分布式在线处理 容错">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/log_cleaner_anatomy.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/"/>
+
+
+
+
+
+  <title>kafka设计 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">kafka设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-11T11:00:47+08:00">
+                2020-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">Kafka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/11/200611Kafka设计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/11/200611Kafka设计/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-动机"><a href="#1-动机" class="headerlink" title="1 动机"></a>1 动机</h2><ul>
+<li>大型企业处理所有实时数据的统一平台</li>
+<li>海量</li>
+<li>数据加载</li>
+<li>低延迟消息传递</li>
+<li>分区、分布式在线处理</li>
+<li>容错</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-持久化"><a href="#2-持久化" class="headerlink" title="2 持久化"></a>2 持久化</h2><h3 id="1-文件系统"><a href="#1-文件系统" class="headerlink" title="(1) 文件系统"></a>(1) 文件系统</h3><p>Kafka高度依赖存储、缓存消息的文件系统。</p>
+<p>合适的数据结构可以解决磁盘访问慢的问题。</p>
+<p>现代操作系统提供了预读和后写的特性，即预先从多次读取的数据块中提取数据，写入前合并小文件。</p>
+<p>顺序读写与随机速写效率相差可达6000倍，甚至磁盘顺序读写快于内存随机速写。详见 <a href="http://queue.acm.org/detail.cfm?id=1563874" target="_blank" rel="noopener">ACM Queue article</a>和<a href="http://deliveryimages.acm.org/10.1145/1570000/1563874/jacobs3.jpg" target="_blank" rel="noopener">sequential disk access can in some cases be faster than random memory access</a></p>
+<p>为了补偿预读、后写的性能损失，现代操作系统倾向于将所有的空闲内存用于磁盘缓存。所有的磁盘读写都通过这一缓存。这一特性不同意通过直接I/O以外的方式关闭。</p>
+<p>此外，Kafka构建于JVM之上。由于Java对象保存有额外信息，空间占用通常大于实际需求。且垃圾回收负载随着堆内对象的增加而增加。</p>
+<p>补充：对于内存存储具有断电易失的特性，通常需要重新加载或计算。</p>
+<p>因此，Kafka使用顺序读写的磁盘数据结构，利用操作系统的页缓存，避免额外信息存储、垃圾回收，使用磁盘持久保存的特性。</p>
+<p><a href="http://varnish-cache.org/wiki/ArchitectNotes" target="_blank" rel="noopener">基于页缓存的设计</a></p>
+<h3 id="2-数据结构"><a href="#2-数据结构" class="headerlink" title="(2) 数据结构"></a>(2) 数据结构</h3><p>通常，消息系统使用B树或其他随机访问数据结构。</p>
+<p>B树在内存查询中具有对数访问效率，由于磁盘的顺序读写和磁盘查找并发数为1，在磁盘中性能更差。</p>
+<p>Kafka根据磁盘顺序读写的特性，采用文件顺序读取和追加的方式，使用偏移能够实现常数复杂度数据访问，并且读写互不干扰。</p>
+<p>消费后的数据不是直接删除，而是保留一段时间，有利于消费者的灵活性。</p>
+<h2 id="3-效率"><a href="#3-效率" class="headerlink" title="3 效率"></a>3 效率</h2><p>目的是解决大量小I/O和字节复制引起的低效。</p>
+<p>Kafka协议基于”消息集“的抽象构建。允许合并消息，再发送、追加或获取。</p>
+<p>Kafka使用标准化的二进制消息格式，避免数据输出中的操作。</p>
+<p>broker维护的消息日志即一个目录下的文件。使用统一的格式，可以使用操作系统命令直接从页缓存发到套接字中，详见<a href="http://man7.org/linux/man-pages/man2/sendfile.2.html" target="_blank" rel="noopener">sendfile system call</a></p>
+<p>通常，发送文件到套接字，需要经历4次拷贝和2次系统调用：</p>
+<ul>
+<li>操作系统从磁盘读取文件到内核空间的页缓存中</li>
+<li>应用程序从页缓存读取数据到用户空间缓冲区中</li>
+<li>应用程序将用户空间缓冲写入内核空间的套接字缓冲中</li>
+<li>操作系统复制套接字缓冲到NIC缓冲，随后通过网络发出</li>
+</ul>
+<p>而使用sendfile系统调用，只需要1次拷贝，即第4步</p>
+<p>使用页缓存和sendfile(零拷贝)可以充分使用网络资源，避免重复从磁盘读取，甚至看不到磁盘活动。</p>
+<p>Java支持的sendfile和零拷贝，详见<a href="https://developer.ibm.com/articles/j-zerocopy/" target="_blank" rel="noopener">article</a></p>
+<h3 id="端到端批量压缩"><a href="#端到端批量压缩" class="headerlink" title="端到端批量压缩"></a>端到端批量压缩</h3><p>在Kafka中实现压缩，可以在压缩的同时，实现批量处理</p>
+<p>Kafka支持GZIP、Snappy、LZ4和ZStandard压缩协议</p>
+<p>压缩数据在传输和存储过程中保持不变，仅在消费时解压缩。</p>
+<h2 id="4-生产者"><a href="#4-生产者" class="headerlink" title="4 生产者"></a>4 生产者</h2><h3 id="1-负载均衡"><a href="#1-负载均衡" class="headerlink" title="(1) 负载均衡"></a>(1) 负载均衡</h3><p>生产者直接发送消息到作为对应分区leader的broker中。</p>
+<p>所有的节点都可以相应元数据查询请求，以告知发送的位置。</p>
+<p>客户端决定消息对应的分区。允许自定义分区函数，如随机算法用于负载均衡、指定分区用于本地化处理。</p>
+<h3 id="2-异步发送"><a href="#2-异步发送" class="headerlink" title="(2) 异步发送"></a>(2) 异步发送</h3><p>异步发送允许合并消息批量传输，可以控制合并的窗口大小和批量传输的数据量大小。</p>
+<p>详见<a href="http://kafka.apache.org/documentation/#producerconfigs" target="_blank" rel="noopener">configuration</a>和 <a href="http://kafka.apache.org/082/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html" target="_blank" rel="noopener">api</a></p>
+<h2 id="5-消费者"><a href="#5-消费者" class="headerlink" title="5 消费者"></a>5 消费者</h2><p>消费者每次消费时指定开始的位置，允许消费者控制消费行为。</p>
+<h3 id="1-推-vs-拉"><a href="#1-推-vs-拉" class="headerlink" title="(1) 推 vs 拉"></a>(1) 推 vs 拉</h3><p>面向日志的系统，如<a href="http://github.com/facebook/scribe" target="_blank" rel="noopener">Scribe</a>和<a href="http://flume.apache.org/" target="_blank" rel="noopener">Apache Flume</a>使用推送方式。推送方式可以充分利用消费系统资源。但是数据消费速率由broker控制，难以应对多个消费者。并且容易出现生产大于消费的情形。而拉取模式可以应对供需不平衡的问题。</p>
+<p>Kakfa采用推拉结合的方式，数据生产使用推送模式，数据消费采用拉取模式。</p>
+<p>消费者使用拉取模式，每次尽可能拉取配置的最大容量，避免了推送模式请求合并引起的延迟。</p>
+<p>拉取模式的一个缺点是当broker没有数据时，消费者陷入一个忙循环中。Kafka允许在数据量满足要求前阻塞消费者一段相对长的时间。</p>
+<p>对于数据缓存在生产者，全程采用拉取模式的方案。对于具有较多生产者的Kafka应用场景不合适。</p>
+<h3 id="2-消费位置"><a href="#2-消费位置" class="headerlink" title="(2) 消费位置"></a>(2) 消费位置</h3><p>跟踪消费位置是消息系统的一个关键性能点。</p>
+<p>如果由broker保存，在集群中需要统一维护各节点的消费位置，数据容易不一致。此外，没有确认消费机制容易丢失数据；具有确认机制，容易因消费者而造成多次消费。此外，还需要为每一条消息记录状态。</p>
+<p>Kafka通过控制一个分区中的记录只能由消费组中的一个消费者消费，将消费位置信息简化为每个分区的一个整型的偏移值，指示下一消费位置。同时可以自由定义消费的位置。</p>
+<h3 id="3-离线数据加载"><a href="#3-离线数据加载" class="headerlink" title="(3) 离线数据加载"></a>(3) 离线数据加载</h3><p>kafka支持批量加载数据到离线系统中。</p>
+<p>如Hadoop，为每个分区创建一个任务，然后并行加载。由Hadoop负责任务管理，失败后从原始位置重启。</p>
+<h3 id="4-静态成员"><a href="#4-静态成员" class="headerlink" title="(4) 静态成员"></a>(4) 静态成员</h3><p>用于提升流式程序、消费组和基于组内组内平衡协议的应用程序的可用性。</p>
+<p>平衡协议通过分配id给成员来协调。这些id是临时的，且会随着成员重启或合并改变。</p>
+<p>Kafka允许指定id防止改变引起的责任变化。</p>
+<p>配置：</p>
+<ul>
+<li>版本&gt;=2.3</li>
+<li>同一消费组内不同消费者设置不同的ConsumerConfig#GROUP_INSTANCE_ID_CONFIG</li>
+<li>对于Kafka流式应用，每个流设置一个唯一的ConsumerConfig#GROUP_INSTANCE_ID_CONFIG</li>
+</ul>
+<p>详见<a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-345%3A+Introduce+static+membership+protocol+to+reduce+consumer+rebalances" target="_blank" rel="noopener">KIP-345</a></p>
+<h2 id="6-消息传递语义"><a href="#6-消息传递语义" class="headerlink" title="6 消息传递语义"></a>6 消息传递语义</h2><p>消息传递的“刚好一次“语义保证可以分解为两个问题：发布的可靠性和消费保证。</p>
+<h3 id="1-发布可靠性"><a href="#1-发布可靠性" class="headerlink" title="(1) 发布可靠性"></a>(1) 发布可靠性</h3><p>broker为每个生产者分配一个ID，使用生产者ID和消息序列号去重。同时声称者使用类似事务的方式发送消息到多个主题的分区中。</p>
+<p>并非所有的用例都需要以上的强保证。对于延迟敏感的场景，生产者可以指定所需的持久性等级，如等待提交的超时、异步、或是仅等待leader收到消息。</p>
+<h3 id="2-消费保证"><a href="#2-消费保证" class="headerlink" title="(2) 消费保证"></a>(2) 消费保证</h3><p>消费者位置存储存储在主题中，可以使用上述事务性生产者实现。当下游主题接收到消息时，可以在同一个事务中写入消费者偏移。这与事务的隔离等级有关，在未提交读等级中，未提交事务的消息对于其他消费者可见，而在提交读隔离等级中不可见。</p>
+<p>当写入外部系统时，需要协调消费位置和实际输出的位置。可以在消费位置和输出存储间引入“两阶段提交”。但是可以通过将输出和偏移保存到同一位置，实现更简单、通用的方式，避免外部系统对两阶段提交的不兼容。</p>
+<p>Kafka默认保证最少一次，通过禁用重试实现最多一次，通过事务性生产者/消费者实现刚好一次。</p>
+<h2 id="7-副本"><a href="#7-副本" class="headerlink" title="7 副本"></a>7 副本</h2><p>Kafka可以分别对主题设置副本数。</p>
+<p>副本的单位是主题分区。副本由一个leader和0或多个follower组成。leader负责分区的所有读写操作，follower负责与leader保持一致的日志。follower像消费者一样获取leader的消息。</p>
+<p>Kafka节点存活的条件：</p>
+<ul>
+<li>通过心跳机制维持与ZooKeeper的会话</li>
+<li>follower紧跟leader消息</li>
+</ul>
+<p>Kafka通常使用”in sync”表示节点存活。节点阻塞或落后通过replica.lag.time.max.ms定义。</p>
+<p>Kafka不会处理“拜占庭式的失效”，即节点被判定失效后仍旧工作。</p>
+<p>更为准确的定义，消息提交成功，即所有的in sync节点记录了该消息。只有提交的消息才会分发给消费者。生产者可以通过acks控制消息提交的标准。</p>
+<p>Kafka保证只要有一个副本存活，提交的消息就不会丢失。</p>
+<h3 id="1-副本日志"><a href="#1-副本日志" class="headerlink" title="(1) 副本日志"></a>(1) 副本日志</h3><p>Kafka分区即副本化的日志。副本化日志通常是实现<a href="http://en.wikipedia.org/wiki/State_machine_replication" target="_blank" rel="noopener">state-machine style</a>的基本要素。</p>
+<p>副本化日志构建了达成一致性顺序的过程。最简单和高效的方法是，由leader决定值的顺序，follower仅仅拷贝。</p>
+<p>follower用于应对leader失效，但需要确保同步了所有提交的消息。同时也产生了一个问题：同步等待时间越长，可能选举出更多的leader。</p>
+<p>Quorum：通过确认数量和比较重叠的日志来选举</p>
+<p>多数选举：如果一条消息被超过半数的节点确认提交，则确认提交；从超过半数的follower中选择具有最完整日志的作为新的leader。</p>
+<p>常见的算法实现：</p>
+<ul>
+<li>ZooKeeper的 <a href="http://web.archive.org/web/20140602093727/http://www.stanford.edu/class/cs347/reading/zab.pdf" target="_blank" rel="noopener">Zab</a>，<a href="https://www.usenix.org/system/files/conference/atc14/atc14-paper-ongaro.pdf" target="_blank" rel="noopener">Raft</a>和<a href="http://pmg.csail.mit.edu/papers/vr-revisited.pdf" target="_blank" rel="noopener">Viewstamped Replication</a></li>
+<li>MicroSoft的<a href="http://research.microsoft.com/apps/pubs/default.aspx?id=66814" target="_blank" rel="noopener">PacificA</a>，Kafka的实现方式</li>
+</ul>
+<p>多数选举的缺点是需要使用数倍的空间，减低吞吐量。通常用于共享集群，为不适合数据存储。</p>
+<p>Kafka使用in sync replicas(ISR)记录被leader捕获的follower。只有当消息被所有ISR节点写入后才算提交成功。因此ISR中的节点都可以被选举，并且只有有一个活跃就不会丢失数据。</p>
+<p>通过允许客户端决定是否在提交时阻塞，抵消最慢节点同步的代价。并且还提高了吞吐量和磁盘利用率。</p>
+<p>Kakfa保证节点在加入ISR前完全同步了消息，因此不需要失效节点恢复数据。</p>
+<h3 id="2-节点全体失效"><a href="#2-节点全体失效" class="headerlink" title="(2) 节点全体失效"></a>(2) 节点全体失效</h3><p>如果所有节点失效，从一致性和可用性的角度，有两种leader选举方法：</p>
+<ul>
+<li>等待ISR中的节点恢复，并选举其为leader（一致性）</li>
+<li>等待首个恢复的节点，并选举其为leader（可用性）</li>
+</ul>
+<p>前者可能永久失效，后者可能丢失提交的消息。</p>
+<p>Kafka默认选择一致性，可以通过unclean.leader.election.enable配置。</p>
+<h3 id="3-可用性和持久性保证"><a href="#3-可用性和持久性保证" class="headerlink" title="(3) 可用性和持久性保证"></a>(3) 可用性和持久性保证</h3><p>Kafka提供了三种可用性和持久性保证，通过acks参数设置：</p>
+<ul>
+<li>0：发出即确认</li>
+<li>1：leader接收即确认</li>
+<li>-1：所有in sync接收才确认</li>
+</ul>
+<p>如-1允许in sync中仅有一个节点也可以确认成功。为了提高持久性：</p>
+<ul>
+<li>关闭unclean leader election。避免数据丢失。</li>
+<li>设置最小ISR数量。只有不小于数量的节点接收后，才确认。避免但副本失效引起的数据丢失。</li>
+</ul>
+<p><a href="https://medium.com/better-programming/kafka-acks-explained-c0515b3b707e" target="_blank" rel="noopener">Kafka Acks Explained</a></p>
+<h3 id="4-副本管理"><a href="#4-副本管理" class="headerlink" title="(4) 副本管理"></a>(4) 副本管理</h3><p>副本管理使用循环方式在节点间平衡副本和leader的分布。</p>
+<p>Kafka选择一个broker作为controller。负责在broker级别上检测故障，并为失效broker上的所有分区改变leader。因此，可以打包多个leadership更改通知，使选举过程更加快捷。controller失效后会重新选择一个。</p>
+<h2 id="8-日志压缩"><a href="#8-日志压缩" class="headerlink" title="8 日志压缩"></a>8 日志压缩</h2><p>日志压缩保证Kafka在分区日志中保存有每个Key的至少最近的值，可用于恢复和重启。</p>
+<p>日志消息容量和日志过期时间适合临时事件数据，如日志。但是不能应对键值和不可变数据（如数据库表）的变化。</p>
+<p>日志压缩允许下游消费者恢复状态，而无需保存所有的更改。</p>
+<p>常见的场景：</p>
+<ul>
+<li>数据库更改订阅：通常在多个系统间维护一个数据集。</li>
+<li>事件采集</li>
+<li>高可用日志：通常用于恢复，如Samza</li>
+</ul>
+<p>以上场景中，传统的方式需要事实维护更新流，并且需要在故障时加载全部日志。详见<a href="http://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying" target="_blank" rel="noopener">this blog post</a>。</p>
+<p>保存更新流需要大量的磁盘空间，而丢弃旧更新不能获取当前状态。</p>
+<p>日志压缩是基于记录的细粒度保存机制，选择性地移除相同key下的旧更新，保证至少持有key的最新状态。</p>
+<p>可以为不同的主题设置不同的保存策略。</p>
+<p>该功能受到LinkedIn的数据库变化日志缓存服务<a href="https://github.com/linkedin/databus" target="_blank" rel="noopener">Databus</a>启发。</p>
+<h3 id="1-日志压缩概念"><a href="#1-日志压缩概念" class="headerlink" title="(1) 日志压缩概念"></a>(1) 日志压缩概念</h3><p><img src="/2020/06/11/200611Kafka设计/log_cleaner_anatomy.png" alt="log_cleaner_anatomy"></p>
+<p>日志分为头尾两部分。头部同传统的Kafka日志，使用连续的偏移保存数据。尾部对具有相同消息状态的偏移去重。</p>
+<p>日志压缩允许删除。具有null键值的键名将被删除。删除标记将导致相同键名的旧消息一同被删除。空间释放不是立即执行的，delete retention point指空间释放所到的位置。</p>
+<p>日志压缩在后台周期性地复制日志段进行。清理工作不阻塞读取，可以通过配置限制I/O吞吐量。</p>
+<p><img src="/2020/06/11/200611Kafka设计/log_compaction.png" alt="log_compaction"></p>
+<h3 id="2-日志压缩保证"><a href="#2-日志压缩保证" class="headerlink" title="(2) 日志压缩保证"></a>(2) 日志压缩保证</h3><ul>
+<li><p>处于头部的数据偏移连续。通过min.compaction.lag.ms和max.compaction.lag.ms控制压缩开始的延迟下界和上界。</p>
+</li>
+<li><p>日志压缩只删除，不排序</p>
+</li>
+<li><p>消息偏移不变</p>
+</li>
+<li><p>消费者至少可以获取delete.retention.ms（默认24h）内消息的最终状态。</p>
+<p>Additionally, all delete markers for deleted records will be seen, provided the consumer reaches the head of the log in a time period less than the topic’s <code>delete.retention.ms</code> setting (the default is 24 hours). In other words: since the removal of delete markers happens concurrently with reads, it is possible for a consumer to miss delete markers if it lags by more than <code>delete.retention.ms</code>.</p>
+</li>
+</ul>
+<h3 id="3-日志压缩细节"><a href="#3-日志压缩细节" class="headerlink" title="(3) 日志压缩细节"></a>(3) 日志压缩细节</h3><p>日志压缩通过log cleaner实现。log cleaner是用于拷贝日志段、移除记录的线程池。</p>
+<p>工作流程如下：</p>
+<ul>
+<li>选择头尾比最大的日志</li>
+<li>在头部总结每个key的最新偏移</li>
+<li>从头到尾拷贝消息并删除旧状态。新的干净段将立即交换到日志中，因此所需的额外磁盘空间只是一个额外的日志段（不是完整的日志副本）。</li>
+<li>日志总结实际上是一个紧凑的哈希表，使用24字节大小的entry。</li>
+</ul>
+<h3 id="4-配置Log-Cleaner"><a href="#4-配置Log-Cleaner" class="headerlink" title="(4) 配置Log Cleaner"></a>(4) 配置Log Cleaner</h3><p>默认开启log cleaner。</p>
+<p><code>log.cleanup.policy=compact</code>可设置特定主题开启。</p>
+<p><code>log.cleaner.min.compaction.lag.ms或log.cleaner.max.compaction.lag.ms</code>设置清理最早/晚开始的延迟，除了当前偏移。否则只有超过min.cleanable.dirty.ratio才压缩。最晚延迟不是强制性保证。详见<a href="http://kafka.apache.org/documentation.html#brokerconfigs" target="_blank" rel="noopener">here</a></p>
+<h2 id="9-配额"><a href="#9-配额" class="headerlink" title="9 配额"></a>9 配额</h2><p>用于控制客户端使用的中介资源。包括：</p>
+<ul>
+<li>网络带宽配额（字节）</li>
+<li>请求速率配额，将CPU使用率阈值定义为网络和I/O线程的百分比</li>
+</ul>
+<h3 id="1-必要性"><a href="#1-必要性" class="headerlink" title="(1) 必要性"></a>(1) 必要性</h3><p>避免网络饱和和拒绝请求。</p>
+<h3 id="2-用户组"><a href="#2-用户组" class="headerlink" title="(2) 用户组"></a>(2) 用户组</h3><p>客户端身份是在安全集群中代表认证用户的用户主体。在不安全集群中，用户主体是由中介通过PrincipalBuilder选择的用户组。客户端ID是客户端选择的逻辑分组。元组(user, client-id)定义了共享用户实体和客户端ID的客户端逻辑分组。</p>
+<p>配额可以应用于元组或其中元素。如 (user=”test-user”, client-id=”test-client”) 有10MB/s的生产者配额，因此所有具有相同用户和客户端ID的生产者共享。</p>
+<h3 id="3-配置"><a href="#3-配置" class="headerlink" title="(3) 配置"></a>(3) 配置</h3><p>配置可以ZooKeeper目录中实时覆盖，如<strong><em>/config/users</em></strong> 覆盖用户和(用户，客户端ID)，<strong><em>/config/clients</em></strong>覆盖客户端ID。</p>
+<p>覆盖的优先级如下，从上到下递减：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. /config/users/&lt;user&gt;/clients/&lt;client-id&gt;</span><br><span class="line">2. /config/users/&lt;user&gt;/clients/&lt;default&gt;</span><br><span class="line">3. /config/users/&lt;user&gt;</span><br><span class="line">4. /config/users/&lt;default&gt;/clients/&lt;client-id&gt;</span><br><span class="line">5. /config/users/&lt;default&gt;/clients/&lt;default&gt;</span><br><span class="line">6. /config/users/&lt;default&gt;</span><br><span class="line">7. /config/clients/&lt;client-id&gt;</span><br><span class="line">8. /config/clients/&lt;default&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="4-带宽配额"><a href="#4-带宽配额" class="headerlink" title="(4) 带宽配额"></a>(4) 带宽配额</h3><p>带宽配额定义为共享配额的每个客户端组的字节速率。默认每个用户组以固定配额接收。配额是基于每个broker定义的。在客户端被扼制前，每个客户端组可以发布或获取最大的速率。</p>
+<h3 id="5-请求速率配额"><a href="#5-请求速率配额" class="headerlink" title="(5) 请求速率配额"></a>(5) 请求速率配额</h3><p>请求速率配额定义为在配额窗口中，客户端可以使用的中介的I/O和网络线程的时间百分比。资源总量为((num.io.threads + num.network.threads) * 100)%。由于资源是基于CPU的，间接代表了CPU使用率。</p>
+<h3 id="6-实施"><a href="#6-实施" class="headerlink" title="(6) 实施"></a>(6) 实施</h3><p>基于每个中介的配置相比全局配置更容易实现，无需在客户端间协调资源。</p>
+<p>中介检测的到超额后，首先计算超额客户端恢复 到牌配额下的延迟量并立即返回延迟量给客户端。其次，暂停处理客户端请求至延迟结束。客户端在接收到延迟后，也将在延迟内避免发送请求。因此，双发都能有效地限制配额。</p>
+<p>建议使用多个小窗口(如30个1秒的窗口)，有利于测量带宽和请求速率，方便快速检测和纠正。而较大的窗口可能导致大量的突发流量和较长的延迟，不利于用户体验。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://kafka.apache.org/documentation/#design" target="_blank" rel="noopener">DESIGN</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/11/200611Hive Metastore 3.0/" rel="next" title="Hive Metastore 3.0">
+                <i class="fa fa-chevron-left"></i> Hive Metastore 3.0
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/11/200611CentOS7 + MySQL8/" rel="prev" title="CentOS7 + MySQL8">
+                CentOS7 + MySQL8 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-动机"><span class="nav-number">1.</span> <span class="nav-text">1 动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-持久化"><span class="nav-number">2.</span> <span class="nav-text">2 持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-文件系统"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据结构"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 数据结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-效率"><span class="nav-number">3.</span> <span class="nav-text">3 效率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#端到端批量压缩"><span class="nav-number">3.1.</span> <span class="nav-text">端到端批量压缩</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-生产者"><span class="nav-number">4.</span> <span class="nav-text">4 生产者</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-负载均衡"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-异步发送"><span class="nav-number">4.2.</span> <span class="nav-text">(2) 异步发送</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-消费者"><span class="nav-number">5.</span> <span class="nav-text">5 消费者</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-推-vs-拉"><span class="nav-number">5.1.</span> <span class="nav-text">(1) 推 vs 拉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-消费位置"><span class="nav-number">5.2.</span> <span class="nav-text">(2) 消费位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-离线数据加载"><span class="nav-number">5.3.</span> <span class="nav-text">(3) 离线数据加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-静态成员"><span class="nav-number">5.4.</span> <span class="nav-text">(4) 静态成员</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-消息传递语义"><span class="nav-number">6.</span> <span class="nav-text">6 消息传递语义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-发布可靠性"><span class="nav-number">6.1.</span> <span class="nav-text">(1) 发布可靠性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-消费保证"><span class="nav-number">6.2.</span> <span class="nav-text">(2) 消费保证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-副本"><span class="nav-number">7.</span> <span class="nav-text">7 副本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-副本日志"><span class="nav-number">7.1.</span> <span class="nav-text">(1) 副本日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-节点全体失效"><span class="nav-number">7.2.</span> <span class="nav-text">(2) 节点全体失效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-可用性和持久性保证"><span class="nav-number">7.3.</span> <span class="nav-text">(3) 可用性和持久性保证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-副本管理"><span class="nav-number">7.4.</span> <span class="nav-text">(4) 副本管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-日志压缩"><span class="nav-number">8.</span> <span class="nav-text">8 日志压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-日志压缩概念"><span class="nav-number">8.1.</span> <span class="nav-text">(1) 日志压缩概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-日志压缩保证"><span class="nav-number">8.2.</span> <span class="nav-text">(2) 日志压缩保证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-日志压缩细节"><span class="nav-number">8.3.</span> <span class="nav-text">(3) 日志压缩细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-配置Log-Cleaner"><span class="nav-number">8.4.</span> <span class="nav-text">(4) 配置Log Cleaner</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-配额"><span class="nav-number">9.</span> <span class="nav-text">9 配额</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-必要性"><span class="nav-number">9.1.</span> <span class="nav-text">(1) 必要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-用户组"><span class="nav-number">9.2.</span> <span class="nav-text">(2) 用户组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-配置"><span class="nav-number">9.3.</span> <span class="nav-text">(3) 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-带宽配额"><span class="nav-number">9.4.</span> <span class="nav-text">(4) 带宽配额</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-请求速率配额"><span class="nav-number">9.5.</span> <span class="nav-text">(5) 请求速率配额</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-实施"><span class="nav-number">9.6.</span> <span class="nav-text">(6) 实施</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">10.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/06/11/200611Kafka设计/';
+          this.page.identifier = '2020/06/11/200611Kafka设计/';
+          this.page.title = 'kafka设计';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

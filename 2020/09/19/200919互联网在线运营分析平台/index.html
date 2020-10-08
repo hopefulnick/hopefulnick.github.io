@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据仓库," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 业务场景与开发流程(1) 业务场景 统计网站PV和UV 按照终端类型和地域维度汇总">
+<meta name="keywords" content="数据仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="互联网在线运营分析平台">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/09/19/200919互联网在线运营分析平台/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 业务场景与开发流程(1) 业务场景 统计网站PV和UV 按照终端类型和地域维度汇总">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/09/19/200919互联网在线运营分析平台/开发流程.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/09/19/200919互联网在线运营分析平台/image-20200919220208673.png">
+<meta property="og:updated_time" content="2020-10-08T02:50:52.602Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="互联网在线运营分析平台">
+<meta name="twitter:description" content="1 业务场景与开发流程(1) 业务场景 统计网站PV和UV 按照终端类型和地域维度汇总">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/09/19/200919互联网在线运营分析平台/开发流程.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/09/19/200919互联网在线运营分析平台/"/>
+
+
+
+
+
+  <title>互联网在线运营分析平台 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/09/19/200919互联网在线运营分析平台/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">互联网在线运营分析平台</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-19T21:00:47+08:00">
+                2020-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据仓库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据仓库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/09/19/200919互联网在线运营分析平台/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/09/19/200919互联网在线运营分析平台/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-业务场景与开发流程"><a href="#1-业务场景与开发流程" class="headerlink" title="1 业务场景与开发流程"></a>1 业务场景与开发流程</h2><h3 id="1-业务场景"><a href="#1-业务场景" class="headerlink" title="(1) 业务场景"></a>(1) 业务场景</h3><ul>
+<li>统计网站PV和UV</li>
+<li>按照终端类型和地域维度汇总</li>
+</ul>
+<a id="more"></a>
+<h3 id="2-开发流程"><a href="#2-开发流程" class="headerlink" title="(2) 开发流程"></a>(2) 开发流程</h3><p><img src="/2020/09/19/200919互联网在线运营分析平台/开发流程.png" alt="开发流程"></p>
+<h2 id="2-环境准备"><a href="#2-环境准备" class="headerlink" title="2 环境准备"></a>2 环境准备</h2><ul>
+<li>表格存储<a href="https://www.aliyun.com/product/ots" target="_blank" rel="noopener">TableStore</a></li>
+<li>大数据计算服务<a href="https://www.aliyun.com/product/odps" target="_blank" rel="noopener">MaxCompute</a></li>
+<li>数据工场<a href="https://data.aliyun.com/product/ide" target="_blank" rel="noopener">DataWorks</a></li>
+<li>智能分析套件<a href="https://data.aliyun.com/product/bi" target="_blank" rel="noopener">Quick BI</a></li>
+</ul>
+<h2 id="3-数据准备"><a href="#3-数据准备" class="headerlink" title="3 数据准备"></a>3 数据准备</h2><p><img src="/2020/09/19/200919互联网在线运营分析平台/image-20200919220208673.png" alt="image-20200919220208673"></p>
+<h2 id="4-新建数据表"><a href="#4-新建数据表" class="headerlink" title="4 新建数据表"></a>4 新建数据表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">// 外部表</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">EXTERNAL</span> <span class="keyword">TABLE</span> ots_user_trace_log (</span><br><span class="line">    <span class="keyword">md5</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户uid的md5值前8位'</span>,</span><br><span class="line">    uid <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户uid'</span>,</span><br><span class="line">    ts <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'用户操作时间戳'</span>,</span><br><span class="line">    ip <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'ip地址'</span>,</span><br><span class="line">    <span class="keyword">status</span> <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'服务器返回状态码'</span>,</span><br><span class="line">    <span class="keyword">bytes</span> <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'返回给客户端的字节数'</span>,</span><br><span class="line">    device <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'终端型号'</span>,</span><br><span class="line">    <span class="keyword">system</span> <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'系统版本ios xxx/android xxx'</span>,</span><br><span class="line">    customize_event <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'自定义事件：登录/退出/购买/注册/点击/后台/切换用户/浏览'</span>,</span><br><span class="line">    use_time <span class="built_in">bigint</span> <span class="keyword">COMMENT</span> <span class="string">'APP单次使用时长，当事件为退出、后台、切换用户时有该项'</span>,</span><br><span class="line">    customize_event_content <span class="keyword">string</span> <span class="keyword">COMMENT</span> <span class="string">'用户关注内容信息，在customize_event为浏览和评论时 包含该列'</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">STORED</span> <span class="keyword">BY</span> <span class="string">'com.aliyun.odps.TableStoreStorageHandler'</span></span><br><span class="line"><span class="keyword">WITH</span> SERDEPROPERTIES (</span><br><span class="line">    <span class="string">'tablestore.columns.mapping'</span>=<span class="string">':md5,:uid,:ts, ip,status,bytes,device,system,customize_event,use_time,customize_event_content'</span>,</span><br><span class="line">    <span class="string">'tablestore.table.name'</span>=<span class="string">'user_trace_log'</span></span><br><span class="line">)</span><br><span class="line">LOCATION <span class="string">'tablestore://workshop-bj-001.cn-beijing.ots.aliyuncs.com/'</span>;</span><br><span class="line"></span><br><span class="line">// ODS层</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> ods_user_trace_log (</span><br><span class="line">    <span class="keyword">md5</span> <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'用户uid的md5值前8位'</span>,</span><br><span class="line">    uid <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'用户uid'</span>,</span><br><span class="line">    ts <span class="built_in">BIGINT</span> <span class="keyword">COMMENT</span> <span class="string">'用户操作时间戳'</span>,</span><br><span class="line">    ip <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'ip地址'</span>,</span><br><span class="line">    <span class="keyword">status</span> <span class="built_in">BIGINT</span> <span class="keyword">COMMENT</span> <span class="string">'服务器返回状态码'</span>,</span><br><span class="line">    <span class="keyword">bytes</span> <span class="built_in">BIGINT</span> <span class="keyword">COMMENT</span> <span class="string">'返回给客户端的字节数'</span>,</span><br><span class="line">    device <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'终端型号'</span>,</span><br><span class="line">    <span class="keyword">system</span> <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'系统版本ios xxx/android xxx'</span>,</span><br><span class="line">    customize_event <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'自定义事件：登录/退出/购买/注册/点击/后台/切换用户/浏览'</span>,</span><br><span class="line">    use_time <span class="built_in">BIGINT</span> <span class="keyword">COMMENT</span> <span class="string">'APP单次使用时长，当事件为退出、后台、切换用户时有该项'</span>,</span><br><span class="line">    customize_event_content <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'用户关注内容信息，在customize_event为浏览和评论时 包含该列'</span></span><br><span class="line">)</span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (</span><br><span class="line">    dt <span class="keyword">STRING</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">// DW层</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> dw_user_trace_log (</span><br><span class="line">    uid <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'用户uid'</span>,</span><br><span class="line">    region <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'地域，根据ip得到'</span>,</span><br><span class="line">    device_brand <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'设备品牌'</span>,</span><br><span class="line">    device <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'终端型号'</span>,</span><br><span class="line">    system_type <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'系统类型，Android、IOS、ipad、Windows_phone'</span>,</span><br><span class="line">    customize_event <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'自定义事件：登录/退出/购买/注册/点击/后台/切换用户/浏览'</span>,</span><br><span class="line">    use_time <span class="built_in">BIGINT</span> <span class="keyword">COMMENT</span> <span class="string">'APP单次使用时长，当事件为退出、后台、切换用户时有该项'</span>,</span><br><span class="line">    customize_event_content <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'用户关注内容信息，在customize_event为浏览和评论时 包含该列'</span></span><br><span class="line">)</span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (</span><br><span class="line">    dt <span class="keyword">STRING</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">// ADS层</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> rpt_user_trace_log (</span><br><span class="line">    country <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'国家'</span>,</span><br><span class="line">    province <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'省份'</span>,</span><br><span class="line">    city <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'城市'</span>,</span><br><span class="line">    device_brand <span class="keyword">string</span> <span class="keyword">comment</span> <span class="string">'设备品牌'</span>,</span><br><span class="line">    device <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'终端型号'</span>,</span><br><span class="line">    system_type <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'系统类型，Android、IOS、ipad、Windows_phone'</span>,</span><br><span class="line">    customize_event <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'自定义事件：登录/退出/购买/注册/点击/后台/切换用户/浏览'</span>,</span><br><span class="line">    use_time <span class="built_in">BIGINT</span> <span class="keyword">COMMENT</span> <span class="string">'APP单次使用时长，当事件为退出、后台、切换用户时有该项'</span>,</span><br><span class="line">    customize_event_content <span class="keyword">STRING</span> <span class="keyword">COMMENT</span> <span class="string">'用户关注内容信息，在customize_event为浏览和评论时 包含该列'</span>,</span><br><span class="line">    pv <span class="built_in">bigint</span> <span class="keyword">comment</span> <span class="string">'浏览量'</span>,</span><br><span class="line">    uv <span class="built_in">bigint</span> <span class="keyword">comment</span> <span class="string">'独立访客'</span></span><br><span class="line">)</span><br><span class="line">PARTITIONED <span class="keyword">BY</span> (</span><br><span class="line">    dt <span class="keyword">STRING</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="5-设计工作流"><a href="#5-设计工作流" class="headerlink" title="5 设计工作流"></a>5 设计工作流</h2><p>数据生产流程可视化配置</p>
+<h2 id="6-节点配置"><a href="#6-节点配置" class="headerlink" title="6 节点配置"></a>6 节点配置</h2><p>加载地址和IP转换库</p>
+<p>注册自定义处理函数</p>
+<h2 id="7-任务提交与测试"><a href="#7-任务提交与测试" class="headerlink" title="7 任务提交与测试"></a>7 任务提交与测试</h2><p>补数据测试，查看运行日志</p>
+<h2 id="8-数据可视化展现"><a href="#8-数据可视化展现" class="headerlink" title="8 数据可视化展现"></a>8 数据可视化展现</h2><p>Quick BI报表创建</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.alibabacloud.com/help/zh/doc-detail/122851.htm" target="_blank" rel="noopener">搭建互联网在线运营分析平台</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据仓库/" rel="tag"># 数据仓库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/14/200914数据仓库构建和优化/" rel="next" title="数据仓库构建和优化">
+                <i class="fa fa-chevron-left"></i> 数据仓库构建和优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/19/200919数据质量/" rel="prev" title="数据质量">
+                数据质量 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-业务场景与开发流程"><span class="nav-number">1.</span> <span class="nav-text">1 业务场景与开发流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-业务场景"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 业务场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-开发流程"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 开发流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-环境准备"><span class="nav-number">2.</span> <span class="nav-text">2 环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-数据准备"><span class="nav-number">3.</span> <span class="nav-text">3 数据准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-新建数据表"><span class="nav-number">4.</span> <span class="nav-text">4 新建数据表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-设计工作流"><span class="nav-number">5.</span> <span class="nav-text">5 设计工作流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-节点配置"><span class="nav-number">6.</span> <span class="nav-text">6 节点配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-任务提交与测试"><span class="nav-number">7.</span> <span class="nav-text">7 任务提交与测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-数据可视化展现"><span class="nav-number">8.</span> <span class="nav-text">8 数据可视化展现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">9.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/09/19/200919互联网在线运营分析平台/';
+          this.page.identifier = '2020/09/19/200919互联网在线运营分析平台/';
+          this.page.title = '互联网在线运营分析平台';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

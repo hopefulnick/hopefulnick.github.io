@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/image-20200516113038290.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/image-20200516113116976.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/05/15/200515数据仓库/200515%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/image-20200518114728518.png">
-<meta property="og:updated_time" content="2020-08-31T17:25:46.196Z">
+<meta property="og:updated_time" content="2020-09-13T13:29:59.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据仓库">
 <meta name="twitter:description" content="1 定义数据仓库是一个用于报表和数据分析的系统，被认为是BI的核心组件。">
@@ -382,6 +382,7 @@
 <p><a href="https://en.wikipedia.org/wiki/IBM_InfoSphere_DataStage" target="_blank" rel="noopener">IBM InfoSphere DataStage</a>, <a href="https://en.wikipedia.org/wiki/Ab_Initio_Software" target="_blank" rel="noopener">Ab Initio Software</a>, <a href="https://en.wikipedia.org/wiki/Informatica" target="_blank" rel="noopener">Informatica – PowerCenter</a></p>
 <h3 id="2-基于ELT的数据仓库"><a href="#2-基于ELT的数据仓库" class="headerlink" title="(2) 基于ELT的数据仓库"></a>(2) 基于ELT的数据仓库</h3><p>ELT方式staging包含在数据仓库中。数据在转换前，直接从多种数据源加载数据到仓库。转换操作也在数据仓库中完成。</p>
 <p><img src="/2020/05/15/200515数据仓库/1280px-ELT_Diagram.png" alt="img"></p>
+<p>思考：ETL和ELT都由Staging、Data Integration和Access三层结构组成。区别是数据转换是否在数据加载之前，前者为是，后者为否。</p>
 <h2 id="2-特性"><a href="#2-特性" class="headerlink" title="2 特性"></a>2 特性</h2><h3 id="1-优势"><a href="#1-优势" class="headerlink" title="(1) 优势"></a>(1) 优势</h3><ul>
 <li>整合多源数据，赋能单一数据查询引擎在ODS中展现数据，减少周转时间。同时提供ad-hoc(点对点)报表和查询</li>
 <li>缓解事务处理系统中分离的数据库中的锁竞争问题，当尝试运行海量、长时间和分析查询时</li>
@@ -437,7 +438,7 @@
 <p>事务数据被分为facts（通常为数值型事务数据）和维度（facts的上下文参考信息）。如销售事务，可以分解为facts(订购的产品产品数量和支付总价)，维度（订购日期、用户姓名、产品编号、收货方、开票方和销售人员）。</p>
 <p>优势：</p>
 <ul>
-<li>易于用户理解和使用，facts与业务流程、运营系统相关，维度提供了响应的上下文信息。</li>
+<li>易于用户理解和使用，facts与业务流程、运营系统相关，维度提供了相应的上下文信息。</li>
 <li>数据获取快速</li>
 <li>不必每次查询涉及关系型数据库，便于用户使用。</li>
 </ul>
@@ -446,7 +447,7 @@
 <li>加载数据复杂，为了保持fact和维度的完整性</li>
 <li>结构难以修改</li>
 </ul>
-<h4 id="2-规格化"><a href="#2-规格化" class="headerlink" title="2) 规格化"></a>2) 规格化</h4><p>数据按照数据库规格化规则存储。表按照主题领域分组，反应一般数据类别（如关于客户、产品和财务的数据）。数据分为多个实体，在关系型数据库中创建多个表。当应用到大型企业时，表现为大量表的连接网络。</p>
+<h4 id="2-规格化"><a href="#2-规格化" class="headerlink" title="2) 规格化"></a>2) 规格化</h4><p>数据按照数据库规格化规则存储。表按照主题领域分组，反映一般数据类别（如关于客户、产品和财务的数据）。数据分为多个实体，在关系型数据库中创建多个表。当应用到大型企业时，表现为大量表的连接网络。</p>
 <p>优势：</p>
 <ul>
 <li>数据添加直接</li>
@@ -718,7 +719,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -729,7 +730,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -740,7 +741,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

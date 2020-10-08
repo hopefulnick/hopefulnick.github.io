@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hopeful Nick">
 <meta property="og:description" content="1 基础MySQL只能高效地使用索引的最左前缀列。 ORM生成的查询只是合法查询，需要检查是否适合索引查询。 MySQL索引是由存储引擎实现。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-08-31T17:25:46.257Z">
+<meta property="og:updated_time" content="2020-10-08T02:43:33.168Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高性能索引">
 <meta name="twitter:description" content="1 基础MySQL只能高效地使用索引的最左前缀列。 ORM生成的查询只是合法查询，需要检查是否适合索引查询。 MySQL索引是由存储引擎实现。">
@@ -430,7 +430,7 @@
 <li>更新操作会强制移动数据行</li>
 <li>容易页分裂，额外占用磁盘空间。InnoDB页容量达到15/16时页分裂。</li>
 <li>页分裂导致数据存储不连续，全表扫描慢</li>
-<li>二级索引（即非聚簇索引）可能更大，因为二级索引叶子节点包含了应用行的主键列？</li>
+<li>二级索引（即非聚簇索引）可能更大，因为二级索引叶子节点包含了引用行的主键列？</li>
 <li>二级索引需要两次索引查找。查找数据行的主键和根据主键查找数据行</li>
 </ul>
 <p>高并发场景下的顺序主键：</p>
@@ -641,6 +641,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/08/29/200829Spark Streaming + Kafka/" rel="prev" title="Spark Streaming + Kafka">
+                Spark Streaming + Kafka <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -730,7 +734,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -741,7 +745,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -752,7 +756,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
