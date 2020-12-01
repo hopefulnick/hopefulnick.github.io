@@ -98,7 +98,7 @@
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/image-20200715175057730.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/image-20200715175703060.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/10/200710Structured%20Streaming/image-20200716105731531.png">
-<meta property="og:updated_time" content="2020-08-31T17:25:46.246Z">
+<meta property="og:updated_time" content="2020-11-18T05:47:33.172Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Structured Streaming">
 <meta name="twitter:description" content="1 概览Structured Streaming提供快速、弹性、容错、端到端刚好一次保证的流式处理。 延迟可低至100ms 版本&amp;gt;=2.3, 引入持续处理，延迟低至1ms，提供至少一次语义。">
@@ -379,11 +379,11 @@
 <ul>
 <li>完全：输出整个表</li>
 <li>追加：仅输出当前触发间隔新增的行，前提是之前的数据不会改变。</li>
-<li>更新：版本&gt;=2.1.1，仅处处更新的行。如果没有聚合操作，等价于追加模式。</li>
+<li>更新：版本&gt;=2.1.1，仅处理更新的行。如果没有聚合操作，等价于追加模式。</li>
 </ul>
 <p>注意：Structured Streaming不会物化输入表。与其他流式处理程序不同，其只保留用于更新结果的最少的中间状态数据。</p>
-<h3 id="2-处理事件时间和晚到数据"><a href="#2-处理事件时间和晚到数据" class="headerlink" title="(2) 处理事件时间和晚到数据"></a>(2) 处理事件时间和晚到数据</h3><p>事件时间数据包含在流失记录中，可用于窗口操作。</p>
-<p>对于相比时间事件晚到的数据，Spark可以清楚之前的聚合状态，重新聚合。</p>
+<h3 id="2-处理事件时间和晚到数据"><a href="#2-处理事件时间和晚到数据" class="headerlink" title="(2) 处理事件时间和晚到数据"></a>(2) 处理事件时间和晚到数据</h3><p>事件时间数据包含在流式记录中，可用于窗口操作。</p>
+<p>对于相比时间事件晚到的数据，Spark可以清除之前的聚合状态，重新聚合。</p>
 <p>版本&gt;=2.1,Spark提供水印用于限制晚到数据的阈值。</p>
 <h3 id="3-容错语义"><a href="#3-容错语义" class="headerlink" title="(3) 容错语义"></a>(3) 容错语义</h3><p>Structured Streaming提供端到端刚好一次语义。</p>
 <p>通过使用类似Kafka偏移的机制跟踪数据流读取位置，使用检查点和预写日志记录每个触发的记录偏移范围。输出过程设计为幂等。</p>
@@ -631,7 +631,7 @@
 <p>持续处理运行多个长时间任务，用于持续读取、处理并输出数据。任务数取决于能够并行得去的分区数量。需要保证至少分区数量个核心可用于查询处理</p>
 </li>
 <li><p>可忽略的终止警告</p>
-<p>终止持续处理可能昌盛任务终断警告，可以忽略</p>
+<p>终止持续处理可能产生任务终断警告，可以忽略</p>
 </li>
 <li><p>手动重试</p>
 <p>当前没有自动化的失败任务重试，需要手动从检查点重启。</p>
@@ -695,8 +695,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/07/06/200706数据仓库拾贝/" rel="next" title="数据仓库拾贝">
-                <i class="fa fa-chevron-left"></i> 数据仓库拾贝
+              <a href="/2020/07/06/200706MySQL架构与历史/" rel="next" title="MySQL架构与历史">
+                <i class="fa fa-chevron-left"></i> MySQL架构与历史
               </a>
             
           </div>
@@ -798,7 +798,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-count">96</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="高性能MySQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="查询优化、索引优化和库表结构优化需要齐头并进。">
+<meta name="keywords" content="高性能MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="查询性能优化">
+<meta property="og:url" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="查询优化、索引优化和库表结构优化需要齐头并进。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201026211515640.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201028215756230.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115213711709.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115213758776.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115221604370.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115221701084.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115222444613.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115222502779.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115223923602.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201115224133591.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201116224127952.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201116224049523.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201122221421282.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201122221439530.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201122223026876.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201122230230846.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201122230254233.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201122230323705.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201123222622337.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201123222752998.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201123222635621.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201123222847681.png">
+<meta property="og:updated_time" content="2020-12-01T13:23:40.887Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="查询性能优化">
+<meta name="twitter:description" content="查询优化、索引优化和库表结构优化需要齐头并进。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/image-20201026211515640.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/"/>
+
+
+
+
+
+  <title>查询性能优化 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2020/10/25/201025查询性能优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">查询性能优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-25T20:00:47+08:00">
+                2020-10-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/高性能MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">高性能MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/25/201025查询性能优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/25/201025查询性能优化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>查询优化、索引优化和库表结构优化需要齐头并进。</p>
+<a id="more"></a>
+<p>查询优化的目的：</p>
+<ul>
+<li>不做无用的操作</li>
+<li>快速计算</li>
+</ul>
+<h2 id="1-数据访问优化"><a href="#1-数据访问优化" class="headerlink" title="1 数据访问优化"></a>1 数据访问优化</h2><p>针对慢查询，需要检查：</p>
+<ul>
+<li>应用程序是否请求了多余的数据</li>
+<li>MySQL是否扫描了多余的数据</li>
+</ul>
+<h3 id="1-请求过量"><a href="#1-请求过量" class="headerlink" title="(1) 请求过量"></a>(1) 请求过量</h3><h4 id="1-查询多余的数据"><a href="#1-查询多余的数据" class="headerlink" title="1) 查询多余的数据"></a>1) 查询多余的数据</h4><p>MySQL总是返回所有的结果集再计算，需要使用LIMIT限制查询的数据规模</p>
+<h4 id="2-多表关联返回全部列"><a href="#2-多表关联返回全部列" class="headerlink" title="2) 多表关联返回全部列"></a>2) 多表关联返回全部列</h4><p>多表关联全取将返回所有表的列，需要限制返回的列</p>
+<h4 id="3-取出所有列"><a href="#3-取出所有列" class="headerlink" title="3) 取出所有列"></a>3) 取出所有列</h4><p>全取无法使用覆盖索引</p>
+<h4 id="4-重复查询"><a href="#4-重复查询" class="headerlink" title="4) 重复查询"></a>4) 重复查询</h4><p>缓存有助于提升性能</p>
+<h3 id="2-扫描过量"><a href="#2-扫描过量" class="headerlink" title="(2) 扫描过量"></a>(2) 扫描过量</h3><p>衡量查询开销的指标可以在慢查询日志中查看：</p>
+<ul>
+<li>响应时间</li>
+<li>扫描行数</li>
+<li>返回行数</li>
+</ul>
+<h4 id="1-响应时间"><a href="#1-响应时间" class="headerlink" title="1) 响应时间"></a>1) 响应时间</h4><p>响应时间包括：</p>
+<ul>
+<li>服务时间：查询实际耗费</li>
+<li>排队时间：等待资源时间</li>
+</ul>
+<p>为了衡量响应时间是否合理，可以使用<strong>快速上限估计</strong>估算。综合考虑索引、执行计划、顺序和随机I/O、每次I/O时间。详见Lahdenmaki T, Leach M. Relational Database Index Design and the Optimizers: DB2, Oracle, SQL Server, et al[M]. John Wiley &amp; Sons, 2005.</p>
+<h4 id="2-扫描行数和返回行数"><a href="#2-扫描行数和返回行数" class="headerlink" title="2) 扫描行数和返回行数"></a>2) 扫描行数和返回行数</h4><p>理想情况下扫描行数应该等于返回行数。</p>
+<p>优化应尽可能减少数量。</p>
+<h4 id="3-扫描行数和访问类型"><a href="#3-扫描行数和访问类型" class="headerlink" title="3) 扫描行数和访问类型"></a>3) 扫描行数和访问类型</h4><p>全表扫描-索引扫描-范围扫描-唯一索引查询-常数引用，速率依次提升，扫描行数依次减少</p>
+<p>最简便的提升方法是添加索引。</p>
+<p>从好到坏，MySQL处理WHERE条件的方式：</p>
+<ul>
+<li>索引过滤，存储引擎层完成</li>
+<li>覆盖扫描返回记录+索引过滤，服务器层完成</li>
+<li>记录过滤，服务器层完成</li>
+</ul>
+<p>扫描行数过多处理方法：</p>
+<ul>
+<li><p>重构查询</p>
+</li>
+<li><p>覆盖索引</p>
+</li>
+<li>改变库表结构，如增加汇总表</li>
+</ul>
+<h2 id="2-重构查询"><a href="#2-重构查询" class="headerlink" title="2 重构查询"></a>2 重构查询</h2><h3 id="1-切分查询"><a href="#1-切分查询" class="headerlink" title="(1) 切分查询"></a>(1) 切分查询</h3><p>在尽可能小地影响性能和延迟的前提下，将一个复杂、庞大的查询切分为多个简单的查询，可以减少服务器一次性的压力，并且分散到一段时间中。如删除数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rows_affected = 0</span><br><span class="line">do &#123;</span><br><span class="line">	rows_affected = do_query(</span><br><span class="line">    	&quot;DELETE FROM messages WHERE created &lt; DATE_SUB(NOW(), INTERVAL 3 MONTH) LIMIT 10000&quot;</span><br><span class="line">    )</span><br><span class="line">&#125; while rows_affected &gt; 0</span><br></pre></td></tr></table></figure>
+<h3 id="2-分解关联查询"><a href="#2-分解关联查询" class="headerlink" title="(2) 分解关联查询"></a>(2) 分解关联查询</h3><p>使用应用程序缓存查询结构，在应用程序处处理数据关联问题。</p>
+<p>优点：</p>
+<ul>
+<li>缓存效率更高</li>
+<li>可以重复利用，减少重复查询</li>
+<li>减少锁竞争</li>
+<li>应用层关联利于数据库拆分，易于高性能和可扩展。如使用哈希关联替代嵌套关联</li>
+<li>通过IN()顺序查询替代关联查询，优于随机查询</li>
+</ul>
+<h2 id="3-查询执行基础"><a href="#3-查询执行基础" class="headerlink" title="3 查询执行基础"></a>3 查询执行基础</h2><p><img src="/2020/10/25/201025查询性能优化/image-20201026211515640.png" alt="image-20201026211515640"></p>
+<p>1 客户端发送查询请求给服务器</p>
+<p>2 服务器检查查询缓存，返回缓存或进入下一步</p>
+<p>3 服务器对SQL解析、预处理，经优化器后生成执行计划</p>
+<p>4 服务器调用存储引擎API执行查询</p>
+<p>5 服务器返回结果给客户端</p>
+<h3 id="1-客户端-服务器通信协议"><a href="#1-客户端-服务器通信协议" class="headerlink" title="(1) 客户端/服务器通信协议"></a>(1) 客户端/服务器通信协议</h3><p>半双工：同一时刻只能单向通信。无法流量控制，一旦传输只能等待完成。</p>
+<p>客户端发送一个单独的包给服务器，如果包过大，需要设置max_allowed_packet：如果查询过大，拒绝接收并报错。</p>
+<p>服务器返回多个包给客户端，需要控制返回的数据量。</p>
+<p>多数连接MySQL的库函数都是获取全部结果集并缓存到内存中。但是在整个查询过程中资源都被锁定，需要注意资源占用量。</p>
+<p>查询状态，可以通过SHOW FULL PROCESSLIST命令获取：</p>
+<ul>
+<li>Sleep：等待新请求</li>
+<li>Query：正在查询或返回结果</li>
+<li>Locked：正在等待表锁。存储引擎级别的锁不会出现在线程查询状态中</li>
+<li>Analyzing and statistics：收集统计信息，并生成查询计划</li>
+<li>Copying to tmp table [on disk]：正在执行查询，并将结果复制到临时表中</li>
+<li>Sorting result：排序</li>
+<li>Sending data：状态间数据传输，或生成结果集，或返回结果</li>
+</ul>
+<h3 id="2-查询缓存"><a href="#2-查询缓存" class="headerlink" title="(2) 查询缓存"></a>(2) 查询缓存</h3><p>通过大小写敏感的哈希(包含SQL注释的)查找缓存，命中并且具有权限则返回缓存，避免了SQL解析、生成计划和执行等后续操作。</p>
+<h3 id="3-查询优化处理"><a href="#3-查询优化处理" class="headerlink" title="(3) 查询优化处理"></a>(3) 查询优化处理</h3><h4 id="1-语法解析器和预处理器"><a href="#1-语法解析器和预处理器" class="headerlink" title="1) 语法解析器和预处理器"></a>1) 语法解析器和预处理器</h4><p>解析器验证语法规则（如关键字、顺序和引号配对等），并将SQL语句解析为“解析树”。</p>
+<p>预处理器验证解析树和权限。如数据是否存在和别名等</p>
+<h4 id="2-查询优化器"><a href="#2-查询优化器" class="headerlink" title="2) 查询优化器"></a>2) 查询优化器</h4><p>优化器应用优化规则将“解析树”转化为执行计划。</p>
+<p>MySQL使用基于成本的优化器选择执行计划。成本的最小单位是随机读取一个4K数据页的成本。可以通过SHOW STATUS LIKE ‘Last_query_cost’查看，结果表示成本单位的倍数。</p>
+<h5 id="1‘-优化器"><a href="#1‘-优化器" class="headerlink" title="1‘ 优化器"></a>1‘ 优化器</h5><p>优化器选择的执行计划不一定是最优的，可能存在以下原因：</p>
+<ul>
+<li>不考虑并发查询间的影响</li>
+<li>不考虑不受控制的操作的成本，如存储过程和用户自定义函数</li>
+<li>有例外规则，如存在全文索引时使用全文索引</li>
+<li>统计信息不准确，InnoDB的统计信息是估计值</li>
+<li>优化器计算的成本与实际执行成本和执行时间不同</li>
+<li>无法估算所有可能的执行计划</li>
+</ul>
+<h5 id="2’-优化策略"><a href="#2’-优化策略" class="headerlink" title="2’ 优化策略"></a>2’ 优化策略</h5><p>优化策略主要分为两类;</p>
+<ul>
+<li><p>静态</p>
+<p>直接对解析树分析优化，不因参数变化而变化，相当于编译时优化。如将代数计算转换为WHERE条件</p>
+</li>
+<li><p>动态</p>
+<p>动态优化与上下文相关，需要每次执行前评估</p>
+</li>
+</ul>
+<h5 id="3‘-优化规则"><a href="#3‘-优化规则" class="headerlink" title="3‘ 优化规则"></a>3‘ 优化规则</h5><ul>
+<li><p>重新定义关联表顺序</p>
+</li>
+<li><p>外连接转换内连接</p>
+</li>
+<li><p>等价变换，简化并规范表达式</p>
+<p>如（5=5 and a&gt;5）等价变换为a&gt;5</p>
+</li>
+<li><p>优化COUNT()、MIN()、MAX()</p>
+<p>索引和列非空时可用。如极大和极小只需查找索引端点值即可。</p>
+</li>
+<li><p>预估并转化为常数表达式</p>
+<p>MySQL检测到表达式结果不变或可以转换为常数时直接使用常数。</p>
+</li>
+<li><p>覆盖索引</p>
+</li>
+<li><p>子查询优化</p>
+<p>转换为效率更高的形式</p>
+</li>
+<li><p>提前终止查询</p>
+<p>条件满足后终止查询，如LIMIT、DISTINCT、NOT EXIST()和LEFT JOIN等存在性判定查询</p>
+</li>
+<li><p>等值传播</p>
+<p>如关联查询中存在关联列上的条件查询，MySQL可以将条件分别应用到两个表中。</p>
+</li>
+<li><p>列表IN()的比较</p>
+<p>MySQL中IN()值先排序再二分查找，而不是像其他关系型数据库中等价于多个OR条件</p>
+</li>
+</ul>
+<h5 id="4‘-数据和索引的统计信息"><a href="#4‘-数据和索引的统计信息" class="headerlink" title="4‘ 数据和索引的统计信息"></a>4‘ 数据和索引的统计信息</h5><p>信息统计由存储引擎实现。在生成执行计划时，服务器询问表或索引的页面数量、索引基数、数据行和索引长度、索引分布等信息。</p>
+<h5 id="5’-关联查询执行"><a href="#5’-关联查询执行" class="headerlink" title="5’ 关联查询执行"></a>5’ 关联查询执行</h5><p>不论查询涉及的表数量，MySQL将每个查询视为一次关联。</p>
+<p>关联通过嵌套循环的形式实现，从上一张表中读取一条记录，循环匹配下一张表的每条记录。</p>
+<p>因此，也暗示了MySQL不支持全外连接。</p>
+<p>对于UNION，将一系列单个查询结果放入临时表中，再从临时表中读取数据完成UNION操作。</p>
+<h5 id="6‘-执行计划"><a href="#6‘-执行计划" class="headerlink" title="6‘ 执行计划"></a>6‘ 执行计划</h5><p>与其他关系型数据库不同，MySQL生成查询的指令树，通过存储引擎执行指令并返回结果，而不是生成查询字节码。可以通过EXPLAIN EXPAND + SHOW WARNINGS查询重构后的查询，与原查询语义相同。</p>
+<p>MySQL的执行计划时一颗左侧深度优先的树。</p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201028215756230.png" alt="image-20201028215756230"></p>
+<h5 id="7’-关联查询优化器"><a href="#7’-关联查询优化器" class="headerlink" title="7’ 关联查询优化器"></a>7’ 关联查询优化器</h5><p>关联查询优化依据成本选择表关联顺序。当关联表数量超过optimizer_search_depth后采用贪婪模式搜索。</p>
+<p>使用STRAIGHT_JOIN禁止顺序优化。</p>
+<h5 id="8‘-排序优化"><a href="#8‘-排序优化" class="headerlink" title="8‘ 排序优化"></a>8‘ 排序优化</h5><p>排序是高成本操作，需要避免或者减少数据量。</p>
+<p>数据量小于排序缓冲区时，在内存中快速排序；超出时，数据分块到磁盘，采用块内快排+块间归并的方式。</p>
+<p><strong>排序算法</strong></p>
+<p>(1) 两次传输排序（旧版本）</p>
+<p>过程：</p>
+<ul>
+<li>读取行指针和参与排序的字段进行排序</li>
+<li>根据排序结果读取数据行</li>
+</ul>
+<p>效果：</p>
+<p>第二次读取产生大量随机I/O，但是缓存的数据较少。MyISAM使用系统调用实现读取，依赖于操作系统的数据缓冲，受到随机I/O的影响更大。</p>
+<p>(2) 一次传输排序（新版本）</p>
+<p>过程：</p>
+<ul>
+<li>读取所有列，按照参与排序的字段排序后直接返回结果</li>
+</ul>
+<p>效果：</p>
+<p>读取过程是顺序I/O，但是需要占用大量的空间存储数据。</p>
+<p>而MySQL在排序时需要为每个字段分配足够长的定长空间用于临时存储。如UTF-8分配3个字节，VARCHAR分配完整长度。</p>
+<p>关联查询排序策略</p>
+<ul>
+<li>如果排序的列均来自关联的第一张表，先排序后关联。Using filesort</li>
+<li>否则，先关联，并将结果存储到临时表中，再排序.Using temporary;Using filesort</li>
+<li>最后LIMIT。MySQL 5.6针对LIMIT返回部分结果，会在排序筛除部分结果。</li>
+</ul>
+<h4 id="3-查询执行引擎"><a href="#3-查询执行引擎" class="headerlink" title="3) 查询执行引擎"></a>3) 查询执行引擎</h4><p>执行计划是一种数据结构，而不是和其他关系型数据库一样的字节码。执行引擎逐个执行计划中指令。指令通过调用存储引擎中的“handler API”，向搭建积木一样实现查询。</p>
+<h4 id="4-结果返回"><a href="#4-结果返回" class="headerlink" title="4) 结果返回"></a>4) 结果返回</h4><p>即使无需返回结果，MySQL也会返回如影响行数等的信息。</p>
+<p>如果查询可以缓存，可以将结果放置在查询缓存中。</p>
+<p>结果返回是一个增量、逐步返回的过程。</p>
+<p>每一行以满足通信协议的封包，通过TCP协议发送。传输过程中可能对封包缓存再批量发送。</p>
+<h3 id="4-查询优化器的局限性"><a href="#4-查询优化器的局限性" class="headerlink" title="(4) 查询优化器的局限性"></a>(4) 查询优化器的局限性</h3><h4 id="1-关联子查询"><a href="#1-关联子查询" class="headerlink" title="1) 关联子查询"></a>1) 关联子查询</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line"># 将外层查询压到子查询中，无法使用IN()的特殊优化。</span><br><span class="line">SELECT *</span><br><span class="line">FROM sakila.film</span><br><span class="line">WHERE film_id IN (</span><br><span class="line">	SELECT film_id</span><br><span class="line">    FROM sakila.film_actor</span><br><span class="line">    WHERE actor_id = 1</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 执行效果</span><br><span class="line"># 全表扫描film表，逐个与film_actor表关联</span><br><span class="line">SELECT *</span><br><span class="line">FROM sakila.film</span><br><span class="line">WHERE EXISTS (</span><br><span class="line">	SELECT *</span><br><span class="line">    FROM sakila.film_actor</span><br><span class="line">    WHERE actor_id = 1</span><br><span class="line">    AND film_actor.film_id = film.film_id</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 优化一：（高效）</span><br><span class="line"># GROUP_CONCAT构建逗号分隔的id集合 + EXISTS替代IN()和子查询的组合</span><br><span class="line">SELECT *</span><br><span class="line">FROM sakila.film</span><br><span class="line">WHERE EXISTS (</span><br><span class="line">	SELECT GROUP_CONCAT(film_id)</span><br><span class="line">    FROM sakila.film_actor</span><br><span class="line">    WHERE actor_id = 1</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 优化二</span><br><span class="line"># 关联查询</span><br><span class="line">SELECT film.*</span><br><span class="line">FROM sakila.film</span><br><span class="line">INNER JOIN sakila.film_actor</span><br><span class="line">USING(film_id)</span><br><span class="line">WHERE actor_id = 1;</span><br></pre></td></tr></table></figure>
+<p>注意：在版本8中，已经可以直接使用内层结果优化外层，而之前高效的查询反而更加低效。</p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115213711709.png" alt="image-20201115213711709"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115213758776.png" alt="image-20201115213758776"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115221604370.png" alt="image-20201115221604370"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115221701084.png" alt="image-20201115221701084"></p>
+<p>注意：关联子查询并不意味着低效，需要通过测试验证性能。如以下可以使用关联子查询避免使用DISTINCT和GROUP BY， 提升性能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line"># 存在一部电影有多个演员的情形</span><br><span class="line"># 一旦使用DISTINCT或GROUP BY，即意味着引入了临时表</span><br><span class="line">SELECT DISTINCT film.film_id</span><br><span class="line">FROM sakila.film</span><br><span class="line">INNER JOIN sakila.film_actor</span><br><span class="line">USING(film_id);</span><br><span class="line"></span><br><span class="line"># 关联子查询</span><br><span class="line">SELECT film_id</span><br><span class="line">FROM sakila.film</span><br><span class="line">WHERE EXISTS (</span><br><span class="line">	SELECT film_id</span><br><span class="line">    FROM sakila.film_actor</span><br><span class="line">    WHERE film.film_id = film_actor.film_id</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115222444613.png" alt="image-20201115222444613"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115222502779.png" alt="image-20201115222502779"></p>
+<p>注意：其中FirstMatch用于避免重复的查询，在首次查到后即返回，通常用于子查询中。对带有聚合的查询无效。</p>
+<h4 id="2-UNION的限制"><a href="#2-UNION的限制" class="headerlink" title="2) UNION的限制"></a>2) UNION的限制</h4><p>有时MySQL不能将限制条件“下推”到内层，导致内层查询需要访问更多的行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line"># 不能将外层的LIMIT应用到子查询中</span><br><span class="line">(SELECT first_name, last_name</span><br><span class="line"> FROM sakila.actor</span><br><span class="line"> ORDER BY last_name)</span><br><span class="line"> UNION ALL</span><br><span class="line"> (SELECT first_name, last_name</span><br><span class="line"> FROM sakila.customer</span><br><span class="line"> ORDER BY last_name)</span><br><span class="line"> LIMIT 20;</span><br><span class="line"> </span><br><span class="line"> # 人为应用到内层</span><br><span class="line"> (SELECT first_name, last_name</span><br><span class="line"> FROM sakila.actor</span><br><span class="line"> ORDER BY last_name</span><br><span class="line"> LIMIT 20)</span><br><span class="line"> UNION ALL</span><br><span class="line"> (SELECT first_name, last_name</span><br><span class="line"> FROM sakila.customer</span><br><span class="line"> ORDER BY last_name</span><br><span class="line"> LIMIT 20)</span><br><span class="line"> LIMIT 20;</span><br></pre></td></tr></table></figure>
+<p>注意：应用到内层后，加入了排序过程，限制了临时表的容量为40。</p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115223923602.png" alt="image-20201115223923602"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201115224133591.png" alt="image-20201115224133591"></p>
+<h4 id="3-索引合并优化"><a href="#3-索引合并优化" class="headerlink" title="3) 索引合并优化"></a>3) 索引合并优化</h4><p>版本&gt;5.0, WHERE子句中存在多个条件时， MySQL能够将单表的多个索引合并或交叉过滤。</p>
+<h4 id="4-等值传递"><a href="#4-等值传递" class="headerlink" title="4) 等值传递"></a>4) 等值传递</h4><p>优化器将IN()列表复制关联到各个表中，以高效过滤记录。但当列表过大时导致优化和执行缓慢。</p>
+<h4 id="5-并行执行"><a href="#5-并行执行" class="headerlink" title="5) 并行执行"></a>5) 并行执行</h4><p>MySQL无法利用多核并行执行。</p>
+<h4 id="6-哈希关联"><a href="#6-哈希关联" class="headerlink" title="6) 哈希关联"></a>6) 哈希关联</h4><p>MySQL所有的关联都是嵌套关联。</p>
+<p>Memory引擎支持哈希索引，可以实现类似于哈希关联的形式。</p>
+<p>其他引擎可以创建哈希索引以实现哈希关联。</p>
+<h4 id="7-松散索引扫描"><a href="#7-松散索引扫描" class="headerlink" title="7) 松散索引扫描"></a>7) 松散索引扫描</h4><p>MySQL基本不支持松散索引扫描，即不支持不连续地检索索引。</p>
+<p>通常可以通过增加索引和枚举前缀索引值的方式实现相同效果。</p>
+<p>版本&gt;5.0，可以使用Using index for group-by在查询极值时实现（版本8中没有）。版本&gt;5.6，可以使用索引条件下推实现。</p>
+<h4 id="8-极值优化"><a href="#8-极值优化" class="headerlink" title="8) 极值优化"></a>8) 极值优化</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line">#字段first_name没有适用索引，将全表扫描。即使actor_id是主键。</span><br><span class="line">SELECT MIN(actor_id)</span><br><span class="line">FROM sakila.actor</span><br><span class="line">WHERE first_name = &apos;PENELOPE&apos;;</span><br><span class="line"></span><br><span class="line"># 优化</span><br><span class="line"># 使用主键减少扫描行数</span><br><span class="line">SELECT actor_id</span><br><span class="line">FROM sakila.actor</span><br><span class="line">USING INDEX(PRIMARY)</span><br><span class="line">WHERE first_name = &apos;PENELOPE&apos;</span><br><span class="line">LIMIT 1;</span><br><span class="line"></span><br><span class="line"># MySQL 8</span><br><span class="line">SELECT actor_id</span><br><span class="line">FROM sakila.actor</span><br><span class="line">USE INDEX(PRIMARY)</span><br><span class="line">WHERE first_name = &apos;PENELOPE&apos;</span><br><span class="line">LIMIT 1;</span><br></pre></td></tr></table></figure>
+<p>注意：在MySQL8中优化无效。</p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201116224127952.png" alt="image-20201116224127952"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201116224049523.png" alt="image-20201116224049523"></p>
+<h4 id="9-在同一表上查询和更新"><a href="#9-在同一表上查询和更新" class="headerlink" title="9) 在同一表上查询和更新"></a>9) 在同一表上查询和更新</h4><p>MySQL不允许在查询表的同时更新表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 非法操作</span><br><span class="line">UPDATE players AS outer_table</span><br><span class="line">SET age = (</span><br><span class="line">	SELECT age</span><br><span class="line">    FROM players</span><br><span class="line">    AS inner_table</span><br><span class="line">    WHERE inner_table.name = outer_table.name</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 使用临时表关联</span><br><span class="line">UPDATE players AS outer_table</span><br><span class="line">INNER JOIN(</span><br><span class="line">	SELECT pid, age</span><br><span class="line">    FROM players</span><br><span class="line">) AS inner_table USING(pid)</span><br><span class="line">SET outer_table.age = inner_table.age;</span><br></pre></td></tr></table></figure>
+<h3 id="5-查询优化器提示"><a href="#5-查询优化器提示" class="headerlink" title="(5) 查询优化器提示"></a>(5) 查询优化器提示</h3><ul>
+<li><p>HIGH PRIORITY和LOW PRIORITY</p>
+<p>控制查询语句在获取表锁的队列中位置。</p>
+<p>仅适用于具有表锁的存储引擎，不建议在具有细粒度锁的存储引擎中使用，如InnoDB。</p>
+<p>将禁用并发插入，严重降低性能。</p>
+</li>
+<li><p>DELAYED</p>
+<p>立即返回，将插入的行数据放入缓冲区，等待系统空闲时批量写入。</p>
+<p>适用于客户端无需等待的日志系统或者大量数据写入。</p>
+<p>仅部分存储引擎支持，影响函数LAST_INSERT_ID()。</p>
+</li>
+<li><p>STRAIGHT_JOIN</p>
+<p>按照语句顺序关联表。</p>
+</li>
+<li><p>SQL_SMALL_RESULT和SQL_BIG_RESULT</p>
+<p>指定临时表位置， 前者在内存中，后者在磁盘中。</p>
+<p>仅对SELECT有效。</p>
+</li>
+<li><p>SQL_BUFFER_RESULT</p>
+<p>将查询结果缓存到服务器内存中的临时表，以尽快释放表锁。</p>
+</li>
+<li><p>SQL_CACHE和SQL_NO_CACHE</p>
+<p>是否缓存结果集到查询缓存中</p>
+</li>
+<li><p>SQL_CALC_FOUND_ROWS</p>
+<p>计算不带LIMIT的结果集容量，可以通过FOUND_ROWS()查看。</p>
+</li>
+<li><p>FOR UPDATE和LOCK IN SHARE MODE</p>
+<p>控制SELECT语句的锁机制。</p>
+<p>仅对具有行锁的存储引擎有效。</p>
+<p>影响优化，如覆盖索引扫描。不建议使用。</p>
+</li>
+<li><p>USE INDEX、IGNORE INDEx和FORCE INDEX</p>
+<p>指定查询使用的索引，FROCE更偏向使用索引。</p>
+<p>FOR ORDER BY和FOR GROUP BY可指定用途</p>
+</li>
+</ul>
+<p>版本&gt;=5.0，新增优化器参数：</p>
+<ul>
+<li><p>optimizer_search_depth</p>
+<p>穷举执行计划时的限度。如查询长时间处于“Statistics”时可用。</p>
+</li>
+<li><p>optimizer_prune_level</p>
+<p>根据扫描行数取舍执行计划，默认开启。</p>
+</li>
+<li><p>optimizer_switch</p>
+<p>控制优化器特性，如索引合并等。</p>
+</li>
+</ul>
+<p>注意：可以使用Percona Toolkit中的pt-upgrade工具检查数据库新旧版本是否返回结果一致。</p>
+<h3 id="6-特定类型查询优化"><a href="#6-特定类型查询优化" class="headerlink" title="(6) 特定类型查询优化"></a>(6) 特定类型查询优化</h3><h4 id="1）COUNT"><a href="#1）COUNT" class="headerlink" title="1）COUNT()"></a>1）COUNT()</h4><p>作用是统计非空列值数量或行数。</p>
+<ul>
+<li><p>统计列值：指定了列或表达式，不统计NULL</p>
+</li>
+<li><p>统计行数：列值或表达式非空，如COUNT(*)</p>
+</li>
+</ul>
+<h5 id="1’-MyISAM"><a href="#1’-MyISAM" class="headerlink" title="1’ MyISAM"></a>1’ MyISAM</h5><p>当且仅当统计没有条件限制的行数时，可以直接读取存储引擎保存的统计值。</p>
+<h5 id="2‘-简单优化"><a href="#2‘-简单优化" class="headerlink" title="2‘ 简单优化"></a>2‘ 简单优化</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># 一、MyISAM中减少扫描行数</span><br><span class="line"># 原查询</span><br><span class="line">SELECT COUNT(*)</span><br><span class="line">FROM world.city</span><br><span class="line">WHERE id &gt; 5;</span><br><span class="line"></span><br><span class="line">#在MyISAM中可以利用统计值优化，减少扫描行数</span><br><span class="line">SELECT (</span><br><span class="line">	SELECT COUNT(*)</span><br><span class="line">    FROM world.city</span><br><span class="line">	) - COUNT(*)</span><br><span class="line">FROM world.city</span><br><span class="line">WHERE id &lt;= 5;</span><br><span class="line"></span><br><span class="line"># 二、统计列值</span><br><span class="line"># 原查询，统计同一列中不同值</span><br><span class="line">SELECT SUM(color = &apos;blue&apos;) AS blue,</span><br><span class="line">		SUM(color = &apos;red&apos;) AS red</span><br><span class="line">FROM items;</span><br><span class="line"></span><br><span class="line"># COUNT()可以实现同样效果</span><br><span class="line"># 等效于SUM(IF(color = &apos;blue&apos;, 1, 0)), 因为COUNT()不统计空值</span><br><span class="line">SELECT COUNT(color = &apos;blue&apos; OR NULL) AS blue,</span><br><span class="line">		COUNT(color = &apos;red&apos; OR NULL) AS red</span><br><span class="line">FROM items;</span><br></pre></td></tr></table></figure>
+<h5 id="3’-使用近似值"><a href="#3’-使用近似值" class="headerlink" title="3’ 使用近似值"></a>3’ 使用近似值</h5><p>在不要求精确统计的场景中可以使用成本更小的近似值替代。</p>
+<ul>
+<li>EXPLAIN中的扫描行数</li>
+<li>去掉约束条件或去重条件后的查询结果，提升查询性能和避免文件排序</li>
+</ul>
+<h5 id="4‘-复杂优化"><a href="#4‘-复杂优化" class="headerlink" title="4‘ 复杂优化"></a>4‘ 复杂优化</h5><p>快速、精确和简单，只能同时选择两个。</p>
+<ul>
+<li>覆盖索引扫描</li>
+<li>汇总表或者类似memcached的外部缓存系统。</li>
+</ul>
+<h4 id="2-关联查询"><a href="#2-关联查询" class="headerlink" title="2) 关联查询"></a>2) 关联查询</h4><ul>
+<li>确保第二个表的关联列上有索引，多余的索引带来额外的负担。</li>
+<li>GROUP BY和ORDER BY只涉及其中一张表，以便优化。</li>
+<li>升级时，考虑前后版本关联语法、运算符优先级等变化。</li>
+</ul>
+<h4 id="3-子查询"><a href="#3-子查询" class="headerlink" title="3) 子查询"></a>3) 子查询</h4><p>版本&lt;5.6，尽量使用关联查询替代。</p>
+<h4 id="4-GROUP-BY和DISTINCT"><a href="#4-GROUP-BY和DISTINCT" class="headerlink" title="4) GROUP BY和DISTINCT"></a>4) GROUP BY和DISTINCT</h4><p>在MySQL内部，两者可以相互转换。</p>
+<h5 id="1’-使用索引"><a href="#1’-使用索引" class="headerlink" title="1’ 使用索引"></a>1’ 使用索引</h5><h5 id="2’-临时表或文件排序"><a href="#2’-临时表或文件排序" class="headerlink" title="2’ 临时表或文件排序"></a>2’ 临时表或文件排序</h5><p>在无法使用索引时，同城使用临时表或文件排序实现。</p>
+<ul>
+<li>SQL_SMALL_RESULT提示内存排序，SQL_BIG_RESULT提示磁盘排序</li>
+<li>使用主键分组更加高效</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line">SELECT actor.first_name, actor.last_name, COUNT(*)</span><br><span class="line">FROM sakila.film_actor</span><br><span class="line">INNER JOIN sakila.actor USING(actor_id)</span><br><span class="line">GROUP BY actor.first_name, actor.last_name;</span><br><span class="line"></span><br><span class="line"># 索引分组</span><br><span class="line"># 在MySQL8中避免了使用临时表</span><br><span class="line">SELECT actor.first_name, actor.last_name, COUNT(*)</span><br><span class="line">FROM sakila.film_actor</span><br><span class="line">INNER JOIN sakila.actor USING(actor_id)</span><br><span class="line">GROUP BY actor.actor_id;</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201122221421282.png" alt="image-20201122221421282"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201122221439530.png" alt="image-20201122221439530"></p>
+<h5 id="3’-排序优化"><a href="#3’-排序优化" class="headerlink" title="3’ 排序优化"></a>3’ 排序优化</h5><p>没有使用ORDER BY显式指定排序列而直接使用GROUP BY时，默认将结果集按照分组列排序。</p>
+<ul>
+<li>使用ORDER BY NULL取消排序</li>
+<li>可以直接在GROUP BY中通过ASC或DESC指定排序顺序</li>
+</ul>
+<h5 id="4‘-GROUP-BY-WITH-ROLLUP"><a href="#4‘-GROUP-BY-WITH-ROLLUP" class="headerlink" title="4‘ GROUP BY WITH ROLLUP"></a>4‘ GROUP BY WITH ROLLUP</h5><p>WITH ROLLUP要求MySQL对分组结果执行超级聚合。</p>
+<p>超级聚合：在分组的基础上统计，如按照姓名分组，再统计总金额。</p>
+<p>出于性能的考量：</p>
+<ul>
+<li>尽量将超级聚合转移到应用程序中处理</li>
+<li>FROM字句中嵌套使用子查询</li>
+<li>临时表中存储中间结果，UNION获得最终结果</li>
+</ul>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201122223026876.png" alt="image-20201122223026876"></p>
+<p><a href="https://www.cnblogs.com/phpper/p/9384614.html" target="_blank" rel="noopener">Mysql中的WITH ROLLUP用法</a></p>
+<h4 id="5-LIMIT"><a href="#5-LIMIT" class="headerlink" title="5) LIMIT"></a>5) LIMIT</h4><p>通常使用LIMIT + 偏移量 + ORDER BY。但在没有索引的情形下需要大量的文件排序操作。</p>
+<ul>
+<li>索引覆盖扫描+延迟关联</li>
+<li>计算索引列范围区间</li>
+<li>保存检索位置</li>
+<li>汇总表</li>
+<li>冗余表（只包含主键和排序列）</li>
+<li>Sphinx搜索优化</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line">SELECT film_id, description</span><br><span class="line">FROM sakila.film</span><br><span class="line">ORDER BY title</span><br><span class="line">LIMIT 100, 20;</span><br><span class="line"></span><br><span class="line"># 索引覆盖扫描+延迟关联</span><br><span class="line">SELECT film.film_id, film.description</span><br><span class="line">FROM sakila.film</span><br><span class="line">INNER JOIN(</span><br><span class="line">	SELECT film_id</span><br><span class="line">    FROM sakila.film</span><br><span class="line">    ORDER BY title</span><br><span class="line">    LIMIT 100, 20</span><br><span class="line">) AS f USING(film_id);</span><br><span class="line"></span><br><span class="line"># 转换为索引列的区间查询</span><br><span class="line">SELECT film_id, description</span><br><span class="line">FROM sakila.film</span><br><span class="line">WHERE position BETWEEN 101 AND 120</span><br><span class="line">ORDER BY position;</span><br><span class="line"></span><br><span class="line"># 从保存的检索位置查询</span><br><span class="line">SELECT film_id, description</span><br><span class="line">FROM sakila.film</span><br><span class="line">WHERE film_id BETWEEN 101 AND 120</span><br><span class="line">ORDER BY film_id;</span><br></pre></td></tr></table></figure>
+<p>原查询、延迟关联和保存位置：</p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201122230230846.png" alt="image-20201122230230846"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201122230254233.png" alt="image-20201122230254233"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201122230323705.png" alt="image-20201122230323705"></p>
+<h4 id="6-SQL-CALC-FOUND-ROWS"><a href="#6-SQL-CALC-FOUND-ROWS" class="headerlink" title="6) SQL_CALC_FOUND_ROWS"></a>6) SQL_CALC_FOUND_ROWS</h4><p>版本8.0.17标记弃用。</p>
+<p>通常用于统计没有LIMIT限制的结果集大小。实际仍然需要扫描满足条件的所有行，不能减少扫描行数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line">SELECT SQL_CALC_FOUND_ROWS * </span><br><span class="line">FROM tbl_name </span><br><span class="line">WHERE id &gt; 100 </span><br><span class="line">LIMIT 10;</span><br><span class="line"></span><br><span class="line">SELECT FOUND_ROWS();</span><br><span class="line"></span><br><span class="line"># 官网建议</span><br><span class="line"># https://dev.mysql.com/doc/refman/8.0/en/information-functions.html#function_found-rows</span><br><span class="line">SELECT * </span><br><span class="line">FROM tbl_name </span><br><span class="line">WHERE id &gt; 100 </span><br><span class="line">LIMIT 10;</span><br><span class="line"></span><br><span class="line">SELECT COUNT(*) </span><br><span class="line">FROM tbl_name </span><br><span class="line">WHERE id &gt; 100;</span><br></pre></td></tr></table></figure>
+<p>优化：</p>
+<ul>
+<li>多查一行。如果达到阈值则可以翻页。</li>
+<li>多查多行。在缓存中翻页。</li>
+<li>使用EXPLAIN中的函数作为结果集近似大小。</li>
+</ul>
+<h4 id="7-UNION"><a href="#7-UNION" class="headerlink" title="7) UNION"></a>7) UNION</h4><p>UNION会添加DISTINCT作唯一性检查，代价较大。</p>
+<p>没有去重需求，尽量使用UNION ALL。</p>
+<h4 id="8-静态查询分析"><a href="#8-静态查询分析" class="headerlink" title="8) 静态查询分析"></a>8) 静态查询分析</h4><p>Percona的pt-query-advisor可以对查询进行健康检查。包括解析查询日志、分析查询模式、列出潜在问题。给出详细建议等。</p>
+<h4 id="9-用户自定义变量"><a href="#9-用户自定义变量" class="headerlink" title="9) 用户自定义变量"></a>9) 用户自定义变量</h4><p>是用于存储内容的临时容器。</p>
+<h5 id="1‘-限制"><a href="#1‘-限制" class="headerlink" title="1‘ 限制"></a>1‘ 限制</h5><ul>
+<li>使用自定义变量的查询，无法查询缓存</li>
+<li>不能使用自定义变量替代常量或标识符，如表名、列名和LIMIT子句</li>
+<li>生命周期仅限于当前连接</li>
+<li>在使用连接池或持久化连接时可能代码结果混乱</li>
+<li>版本&lt;5.0时，大小写敏感</li>
+<li>不能显式声明类型，可以在初始化时通过值指定</li>
+<li>可能被优化器去除</li>
+<li>赋值时间和顺序不确定，依赖于优化器</li>
+<li>赋值符号:=优先级低</li>
+<li>使用未定义变量不会报错</li>
+</ul>
+<h5 id="2’-优化排名语句"><a href="#2’-优化排名语句" class="headerlink" title="2’ 优化排名语句"></a>2’ 优化排名语句</h5><p>注意变量赋值的时间不确定，可以拆分查询避免混乱。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#使用用户定义变量辅助排序</span><br><span class="line"></span><br><span class="line"># 混乱查询</span><br><span class="line"># COUNT(*) 和变量赋值时间不确定</span><br><span class="line">SET @curr_cnt := 0, @prev_cnt := 0, @rank := 0;</span><br><span class="line">SELECT actor_id,</span><br><span class="line">		@curr_cnt := COUNT(*) AS cnt,</span><br><span class="line">		@rank := IF(@prev_cnt &lt;&gt; @curr_cnt, @rank + 1, @rank) AS r,</span><br><span class="line">		@prev_cnt := @curr_cnt AS dummy</span><br><span class="line">FROM sakila.film_actor</span><br><span class="line">GROUP BY actor_id</span><br><span class="line">ORDER BY cnt DESC</span><br><span class="line">LIMIT 10;</span><br><span class="line"></span><br><span class="line"># 拆分查询</span><br><span class="line">SET @curr_cnt := 0, @prev_cnt := 0, @rank := 0;</span><br><span class="line">explain SELECT actor_id,</span><br><span class="line">		@curr_cnt := cnt AS cnt,</span><br><span class="line">		@rank := IF(@prev_cnt &lt;&gt; @curr_cnt, @rank + 1, @rank) AS r,</span><br><span class="line">		@prev_cnt := @curr_cnt AS dummy</span><br><span class="line">FROM (</span><br><span class="line">	SELECT actor_id, COUNT(*) AS cnt</span><br><span class="line">    FROM sakila.film_actor</span><br><span class="line">	GROUP BY actor_id</span><br><span class="line">	ORDER BY cnt DESC</span><br><span class="line">	LIMIT 10</span><br><span class="line">) AS der;</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li>rank在版本8中是关键字，不能用于别名</li>
+<li>提取的表需要命名，如der</li>
+</ul>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201123222622337.png" alt="image-20201123222622337"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201123222752998.png" alt="image-20201123222752998"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201123222635621.png" alt="image-20201123222635621"></p>
+<p><img src="/2020/10/25/201025查询性能优化/image-20201123222847681.png" alt="image-20201123222847681"></p>
+<h5 id="3‘-获取更新的数据"><a href="#3‘-获取更新的数据" class="headerlink" title="3‘ 获取更新的数据"></a>3‘ 获取更新的数据</h5><p>MySQL原生不支持返回更新的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line"># 两次表查询</span><br><span class="line">UPDATE t1</span><br><span class="line">SET lastUpdated = NOW()</span><br><span class="line">WHERE id = 1;</span><br><span class="line">SELECT lastUpdated</span><br><span class="line">FROM t1</span><br><span class="line">WHERE id = 1;</span><br><span class="line"></span><br><span class="line"># 变量保存</span><br><span class="line">UPDATE t1</span><br><span class="line">SET lastUpdated = NOW()</span><br><span class="line">WHERE id = 1 AND @now := NOW;</span><br><span class="line">SELECT @now;</span><br></pre></td></tr></table></figure>
+<h5 id="4’-统计更新和插入的行数"><a href="#4’-统计更新和插入的行数" class="headerlink" title="4’ 统计更新和插入的行数"></a>4’ 统计更新和插入的行数</h5><p>MySQL自动返回行数，无需如下操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 更新时@x自增，乘0避免对值产生影响</span><br><span class="line">INSERT INTO t1(c1, c2)</span><br><span class="line">VALUES(4, 4), (2, 1), (3, 1)</span><br><span class="line">ON DUPLICATE KEY UPDATE</span><br><span class="line">c1 = VALUES(c1) + (0 * (@x := @x + 1));</span><br></pre></td></tr></table></figure>
+<h5 id="5’-确定取值顺序"><a href="#5’-确定取值顺序" class="headerlink" title="5’ 确定取值顺序"></a>5’ 确定取值顺序</h5><p>为了避免意料之外的行为，变量的赋值和读取需要在查询的同一阶段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 混乱查询</span><br><span class="line"></span><br><span class="line"># 通常先WHERE后SELECT</span><br><span class="line">SET @rownum := 0;</span><br><span class="line">SELECT actor_id, @rownum := @rownum + 1 AS cnt</span><br><span class="line">FROM sakila.actor</span><br><span class="line">WHERE @rownum &lt;= 1;</span><br><span class="line"></span><br><span class="line"># ORDER BY引入了文件排序，WHERE在文件排序之后。相当于全选。</span><br><span class="line">SET @rownum := 0;</span><br><span class="line">SELECT actor_id, @rownum := @rownum + 1 AS cnt</span><br><span class="line">FROM sakila.actor</span><br><span class="line">WHERE @rownum &lt;= 1</span><br><span class="line">ORDER BY first_name;</span><br><span class="line"></span><br><span class="line"># 先文件排序时@rownum自增，再条件查询</span><br><span class="line">SET @rownum := 0;</span><br><span class="line">SELECT actor_id, @rownumAS cnt</span><br><span class="line">FROM sakila.actor</span><br><span class="line">WHERE @rownum &lt;= 1</span><br><span class="line">ORDER BY first_name , LEAST(0, @rownum := @rownum + 1);</span><br><span class="line"></span><br><span class="line"># 变量赋值和查询放在同一阶段</span><br><span class="line">SET @rownum := 0;</span><br><span class="line">SELECT actor_id, @rownum AS cnt</span><br><span class="line">FROM sakila.actor</span><br><span class="line">WHERE (@rownum := @rownum + 1) &lt;= 1;</span><br></pre></td></tr></table></figure>
+<h5 id="6‘-分支选择"><a href="#6‘-分支选择" class="headerlink" title="6‘ 分支选择"></a>6‘ 分支选择</h5><p>用于从冷热数据表中选择其一进行查询，另一表通过设置的变量“跳过”。</p>
+<p>通常用于对冷热数据和在线、归档数据查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 原查询</span><br><span class="line"># 两张表都会查询</span><br><span class="line">SELECT id FROM users WHERE id = 123</span><br><span class="line">UNION ALL</span><br><span class="line">SELECT id FROM users_archived WHERE id = 123;</span><br><span class="line"></span><br><span class="line"># 通过变量作分支选择，并通过变量指示查询的表。末尾将变量重置为NULL，防止多次查询时影响。</span><br><span class="line"># DUAL是MySQL提供的一个虚拟表，用在需要表名的位置占位。</span><br><span class="line"># https://dev.mysql.com/doc/refman/8.0/en/select.html</span><br><span class="line"># GREATEST()当存在参数为NULL时，返回NULL</span><br><span class="line"># https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#function_greatest</span><br><span class="line">SELECT GREATEST(@found := -1, id) AS id, &apos;users&apos; AS which_tbl;</span><br><span class="line">FROM users WHERE id = 123</span><br><span class="line">UNION ALL</span><br><span class="line">	SELECT id, &apos;users_archived&apos;</span><br><span class="line">	FROM users_archived WHERE id = 123 AND @found IS NULL</span><br><span class="line">UNION ALL</span><br><span class="line">	SELECT 123, &apos;reset&apos; FROM DUAL WHERE (@found := NULL) IS NOT NULL;</span><br></pre></td></tr></table></figure>
+<h5 id="7’-其他用处"><a href="#7’-其他用处" class="headerlink" title="7’ 其他用处"></a>7’ 其他用处</h5><ul>
+<li>运行时计算总数和平均值</li>
+<li>模拟GROUP语句中的FIRST()和LAST()函数</li>
+<li>数据计算</li>
+<li>计算大表的MD5散列值</li>
+<li>计数</li>
+<li>模拟读写游标</li>
+</ul>
+<h2 id="4-案例学习"><a href="#4-案例学习" class="headerlink" title="4 案例学习"></a>4 案例学习</h2><h3 id="1-队列表"><a href="#1-队列表" class="headerlink" title="(1) 队列表"></a>(1) 队列表</h3><p>在高流量、高并发场景下，更新不同的记录处理状态。通常用于邮件发送、多命令处理和评论修改等系统。</p>
+<p>最好将相应的任务队列从数据库中迁移出来。如使用Redis、memcached等内存存储，Q4M存储引擎或RabbitMQ、Gearman等消息队列。</p>
+<p>队列表任务:</p>
+<ul>
+<li>将已处理记录归档</li>
+<li>将标记处理中的记录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"># 阻塞线程</span><br><span class="line"># 使用带注释的SLEEP()超时函数,单位：秒</span><br><span class="line"># 超时或另一线程调用KILL QUERY终止休眠</span><br><span class="line"># 当新增数据后，通过SHOW PROCESSLIST根据注释找到休眠的线程，并KILL。使用GET_LOCK() + RELEASE_LOCK()或消息系统实现消息通知</span><br><span class="line">SELECT /* waiting on unsent_emails */ SLEEP(10000);</span><br><span class="line"></span><br><span class="line"># 标记处理中的线程</span><br><span class="line"># 尽量避免使用SELECT FOR UPDATE，否则将锁定查询的行直到结束</span><br><span class="line"></span><br><span class="line"># 建表语句</span><br><span class="line"># owner存储CONNECTION_ID()生成的连接线程ID</span><br><span class="line">CREATE TABLE unsent_emails (</span><br><span class="line">	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">    -- columns for the message, from, to , subject, etc.</span><br><span class="line">    status ENUM(&apos;unsent&apos;, &apos;claimed&apos;, &apos;sent&apos;),</span><br><span class="line">    owner INT UNSIGNED NOT NULL DEFAULT 0,</span><br><span class="line">    ts TIMESTAMP,</span><br><span class="line">    KEY (owner, status, ts)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 一次处理10条记录</span><br><span class="line">BEGIN;</span><br><span class="line">SELECT id </span><br><span class="line">FROM unsent_emails</span><br><span class="line">WHERE owner = 0 AND status = &apos;unsent&apos;</span><br><span class="line">LIMIT 10 FOR UPDATE;</span><br><span class="line">-- results: 123, 456, 789</span><br><span class="line"></span><br><span class="line">UPDATE unsent_emails</span><br><span class="line">SET status = &apos;claimed&apos;, owner = CONNECTION_ID()</span><br><span class="line">WHERE id IN(123,456, 789);</span><br><span class="line">COMMIT;</span><br><span class="line"></span><br><span class="line"># 减少两个查询间间隙时间引起的线程阻塞</span><br><span class="line"># 通过开启和禁用自动提交功能实现</span><br><span class="line"># 无需查询未处理记录，因为客户端会返回处理数量</span><br><span class="line">SET AUTOCOMMIT = 1;</span><br><span class="line">-- 开启自动提交</span><br><span class="line">COMMIT;</span><br><span class="line">UPDATE unsent_emails</span><br><span class="line">SET status = &apos;claimed&apos;, owner = CONNECTION_ID()</span><br><span class="line">WHERE owner = 0 AND status = &apos;unsent&apos;</span><br><span class="line">LIMIT 10;</span><br><span class="line">SET AUTOCOMMIT = 0;</span><br><span class="line">-- 关闭自动提交</span><br><span class="line">SELECT id</span><br><span class="line">FROM unsent_emails</span><br><span class="line">WHERE owner = CONNECTION_ID() AND status = &apos;claimed&apos;;</span><br><span class="line">-- results: 123, 456, 789</span><br><span class="line"></span><br><span class="line"># 还原处理异常记录</span><br><span class="line"># 使用SHOW PROCESSLIST获取正在处理的线程，以及刚开始的记录，避免影响正常处理</span><br><span class="line"># 此处假设正在处理的线程ID为10、20、30,十分钟内开始处理的记录为刚开始的记录</span><br><span class="line">UPDATE unsent_emails</span><br><span class="line">SET owner = 0, status = &apos;unsent&apos;</span><br><span class="line">WHERE owner NOT IN(10, 20, 30) AND status = &apos;claimed&apos;</span><br><span class="line">	AND ts &lt; CURRENT_TIMESTAMP() - INTERVAL 10 MINUTE;</span><br></pre></td></tr></table></figure>
+<h3 id="2-计算两点之间的距离"><a href="#2-计算两点之间的距离" class="headerlink" title="(2) 计算两点之间的距离"></a>(2) 计算两点之间的距离</h3><p>不建议使用MySQL进行复杂的空间计算，可选PostgreSQL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"># 查找某点半径范围内的点</span><br><span class="line"></span><br><span class="line"># 建表语句</span><br><span class="line">CREATE TABLE locations (</span><br><span class="line">	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">	name varchar(30),</span><br><span class="line">	lat FLOAT NOT NULL,</span><br><span class="line">	lon FLOAT NOT NULL</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 示例数据</span><br><span class="line">INSERT INTO locations(name, lat, lon)</span><br><span class="line">VALUES(&apos;Charlottesville&apos;, 38.03, -78.48),</span><br><span class="line">	(&apos;Chicago, Illinois&apos;, 41.85, -87.65),</span><br><span class="line">	(&apos;Washington, DC&apos;, 38.89, -77.04);</span><br><span class="line"></span><br><span class="line"># 求球面距离</span><br><span class="line"># 最大圆（半正矢）公式</span><br><span class="line"># 令点A(latA, lonA), 点B(latB, lonB)</span><br><span class="line">rad = ACOS(COS(latA) * COS(latB) * COS(lonA - lonB) + SIN(latA) * sin(latB))</span><br><span class="line"></span><br><span class="line"># 据Charlottesville100英里的点</span><br><span class="line"># 地球半径3979英里</span><br><span class="line"># 无法使用索引，计算复杂</span><br><span class="line">SELECT *</span><br><span class="line">FROM locations</span><br><span class="line">WHERE 3979 * ACOS(COS(RADIANS(lat)) * COS(RADIANS(38.03)) * COS(RADIANS(lon) - RADIANS(-78.48)) + SIN(RADIANS(lat)) * SIN(RADIANS(38.03))) &lt;= 100;</span><br><span class="line"></span><br><span class="line"># 近似计算</span><br><span class="line"># 实际并不需要精确计算，可以采用直线距离、对应行政区划中心距离估算、毕达哥拉斯定理三角函数变换</span><br><span class="line"># 以下使用边长为200英里的正方形估算到中心点距离100英里(0.0253弧度)的点</span><br><span class="line"># 增加索引(lat, lon)提高查询效率</span><br><span class="line">SELECT *</span><br><span class="line">FROM locations</span><br><span class="line">WHERE lat BETWEEN 38.03 - DEGREES(0.0253) AND 38.03 + DEGREES(0.0253)</span><br><span class="line">	AND lon BETWEEN -78.48 - DEGREES(0.0253) AND -78.48 + DEGREES(0.0253);</span><br><span class="line"></span><br><span class="line"># IN()优化</span><br><span class="line"># 增加近似值，用于枚举</span><br><span class="line">ALTER TABLE locations</span><br><span class="line">	ADD lat_floor INT NOT NULL DEFAULT 0,</span><br><span class="line">	ADD lon_floor INT NOT NULL DEFAULT 0,</span><br><span class="line">	ADD KEY(lat_floor, lon_floor);</span><br><span class="line"></span><br><span class="line">UPDATE locations</span><br><span class="line">SET lat_floor = FLOOR(lat), lon_floor = FLOOR(lon);</span><br><span class="line"></span><br><span class="line"># 获取枚举值</span><br><span class="line">SELECT FLOOR(38.03 - DEGREES(0.0253)) AS lat_lb,</span><br><span class="line">	CEILING(38.03 + DEGREES(0.0253)) AS lat_ub,</span><br><span class="line">	FLOOR(-78.48 - DEGREES(0.0253)) AS lon_lb,</span><br><span class="line">	CEILING(-78.48 + DEGREES(0.0253)) AS lon_ub;</span><br><span class="line">-- result: 36 40 -80 -77</span><br><span class="line"></span><br><span class="line">SELECT *</span><br><span class="line">FROM loacations</span><br><span class="line">WHERE lat BETWEEN 38.03 - DEGREES(0.0253) AND 38.03 + DEGREES(0.0253)</span><br><span class="line">	AND lon BETWEEN -78.48 - DEGREES(0.0253) AND -78.48 + DEGREES(0.0253)</span><br><span class="line">	AND lat_floor IN(36, 37, 38, 39, 40) AND lon_floor IN(-80, -79, -78, -77);</span><br><span class="line">	</span><br><span class="line"># 使用近似值过滤大部分记录， 使用半正矢公式精确计算结果</span><br><span class="line">SELECT *</span><br><span class="line">FROM locations</span><br><span class="line">WHERE lat_floor IN(36, 37, 38, 39, 40) AND lon_floor IN(-80, -79, -78, -77)</span><br><span class="line">	AND 3979 * ACOS(COS(RADIANS(lat)) * COS(RADIANS(38.03)) * COS(RADIANS(lon) - RADIANS(-78.48)) + SIN(RADIANS(lat)) * SIN(RADIANS(38.03))) &lt;= 100;</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li>Sphinx具有由于MySQL的地理信息搜索功能</li>
+<li>MyISAM虽然具有GIS函数， 但是其自身不适合于大数据量和高并发应用，并且具有表级粗粒度锁和数据文件崩溃等缺点</li>
+</ul>
+<h3 id="3-用户自定义函数"><a href="#3-用户自定义函数" class="headerlink" title="(3) 用户自定义函数"></a>(3) 用户自定义函数</h3><p>对于MySQL难以应对的场景，可以使用用户自定义函数UDF。可以使用其他语言或框架实现，运行在服务器上，通过简单的网络通信协议与MySQL交互。</p>
+<h2 id="5-小结"><a href="#5-小结" class="headerlink" title="5 小结"></a>5 小结</h2><p>优化原则：不做、少做和快速地做。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《高性能MySQL》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/高性能MySQL/" rel="tag"># 高性能MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/10/21/201021数据库锁/" rel="next" title="数据库锁">
+                <i class="fa fa-chevron-left"></i> 数据库锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据访问优化"><span class="nav-number">1.</span> <span class="nav-text">1 数据访问优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求过量"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 请求过量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-查询多余的数据"><span class="nav-number">1.1.1.</span> <span class="nav-text">1) 查询多余的数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-多表关联返回全部列"><span class="nav-number">1.1.2.</span> <span class="nav-text">2) 多表关联返回全部列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-取出所有列"><span class="nav-number">1.1.3.</span> <span class="nav-text">3) 取出所有列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-重复查询"><span class="nav-number">1.1.4.</span> <span class="nav-text">4) 重复查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-扫描过量"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 扫描过量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-响应时间"><span class="nav-number">1.2.1.</span> <span class="nav-text">1) 响应时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-扫描行数和返回行数"><span class="nav-number">1.2.2.</span> <span class="nav-text">2) 扫描行数和返回行数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-扫描行数和访问类型"><span class="nav-number">1.2.3.</span> <span class="nav-text">3) 扫描行数和访问类型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-重构查询"><span class="nav-number">2.</span> <span class="nav-text">2 重构查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-切分查询"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 切分查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-分解关联查询"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 分解关联查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-查询执行基础"><span class="nav-number">3.</span> <span class="nav-text">3 查询执行基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-客户端-服务器通信协议"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 客户端/服务器通信协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查询缓存"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-查询优化处理"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 查询优化处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-语法解析器和预处理器"><span class="nav-number">3.3.1.</span> <span class="nav-text">1) 语法解析器和预处理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-查询优化器"><span class="nav-number">3.3.2.</span> <span class="nav-text">2) 查询优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1‘-优化器"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">1‘ 优化器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2’-优化策略"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">2’ 优化策略</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3‘-优化规则"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">3‘ 优化规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4‘-数据和索引的统计信息"><span class="nav-number">3.3.2.4.</span> <span class="nav-text">4‘ 数据和索引的统计信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5’-关联查询执行"><span class="nav-number">3.3.2.5.</span> <span class="nav-text">5’ 关联查询执行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6‘-执行计划"><span class="nav-number">3.3.2.6.</span> <span class="nav-text">6‘ 执行计划</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7’-关联查询优化器"><span class="nav-number">3.3.2.7.</span> <span class="nav-text">7’ 关联查询优化器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8‘-排序优化"><span class="nav-number">3.3.2.8.</span> <span class="nav-text">8‘ 排序优化</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-查询执行引擎"><span class="nav-number">3.3.3.</span> <span class="nav-text">3) 查询执行引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-结果返回"><span class="nav-number">3.3.4.</span> <span class="nav-text">4) 结果返回</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-查询优化器的局限性"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 查询优化器的局限性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-关联子查询"><span class="nav-number">3.4.1.</span> <span class="nav-text">1) 关联子查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-UNION的限制"><span class="nav-number">3.4.2.</span> <span class="nav-text">2) UNION的限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-索引合并优化"><span class="nav-number">3.4.3.</span> <span class="nav-text">3) 索引合并优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-等值传递"><span class="nav-number">3.4.4.</span> <span class="nav-text">4) 等值传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-并行执行"><span class="nav-number">3.4.5.</span> <span class="nav-text">5) 并行执行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-哈希关联"><span class="nav-number">3.4.6.</span> <span class="nav-text">6) 哈希关联</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-松散索引扫描"><span class="nav-number">3.4.7.</span> <span class="nav-text">7) 松散索引扫描</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-极值优化"><span class="nav-number">3.4.8.</span> <span class="nav-text">8) 极值优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-在同一表上查询和更新"><span class="nav-number">3.4.9.</span> <span class="nav-text">9) 在同一表上查询和更新</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-查询优化器提示"><span class="nav-number">3.5.</span> <span class="nav-text">(5) 查询优化器提示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-特定类型查询优化"><span class="nav-number">3.6.</span> <span class="nav-text">(6) 特定类型查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1）COUNT"><span class="nav-number">3.6.1.</span> <span class="nav-text">1）COUNT()</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1’-MyISAM"><span class="nav-number">3.6.1.1.</span> <span class="nav-text">1’ MyISAM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2‘-简单优化"><span class="nav-number">3.6.1.2.</span> <span class="nav-text">2‘ 简单优化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3’-使用近似值"><span class="nav-number">3.6.1.3.</span> <span class="nav-text">3’ 使用近似值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4‘-复杂优化"><span class="nav-number">3.6.1.4.</span> <span class="nav-text">4‘ 复杂优化</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-关联查询"><span class="nav-number">3.6.2.</span> <span class="nav-text">2) 关联查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-子查询"><span class="nav-number">3.6.3.</span> <span class="nav-text">3) 子查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-GROUP-BY和DISTINCT"><span class="nav-number">3.6.4.</span> <span class="nav-text">4) GROUP BY和DISTINCT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1’-使用索引"><span class="nav-number">3.6.4.1.</span> <span class="nav-text">1’ 使用索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2’-临时表或文件排序"><span class="nav-number">3.6.4.2.</span> <span class="nav-text">2’ 临时表或文件排序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3’-排序优化"><span class="nav-number">3.6.4.3.</span> <span class="nav-text">3’ 排序优化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4‘-GROUP-BY-WITH-ROLLUP"><span class="nav-number">3.6.4.4.</span> <span class="nav-text">4‘ GROUP BY WITH ROLLUP</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-LIMIT"><span class="nav-number">3.6.5.</span> <span class="nav-text">5) LIMIT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-SQL-CALC-FOUND-ROWS"><span class="nav-number">3.6.6.</span> <span class="nav-text">6) SQL_CALC_FOUND_ROWS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-UNION"><span class="nav-number">3.6.7.</span> <span class="nav-text">7) UNION</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-静态查询分析"><span class="nav-number">3.6.8.</span> <span class="nav-text">8) 静态查询分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-用户自定义变量"><span class="nav-number">3.6.9.</span> <span class="nav-text">9) 用户自定义变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1‘-限制"><span class="nav-number">3.6.9.1.</span> <span class="nav-text">1‘ 限制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2’-优化排名语句"><span class="nav-number">3.6.9.2.</span> <span class="nav-text">2’ 优化排名语句</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3‘-获取更新的数据"><span class="nav-number">3.6.9.3.</span> <span class="nav-text">3‘ 获取更新的数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4’-统计更新和插入的行数"><span class="nav-number">3.6.9.4.</span> <span class="nav-text">4’ 统计更新和插入的行数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5’-确定取值顺序"><span class="nav-number">3.6.9.5.</span> <span class="nav-text">5’ 确定取值顺序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6‘-分支选择"><span class="nav-number">3.6.9.6.</span> <span class="nav-text">6‘ 分支选择</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7’-其他用处"><span class="nav-number">3.6.9.7.</span> <span class="nav-text">7’ 其他用处</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-案例学习"><span class="nav-number">4.</span> <span class="nav-text">4 案例学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-队列表"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 队列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-计算两点之间的距离"><span class="nav-number">4.2.</span> <span class="nav-text">(2) 计算两点之间的距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-用户自定义函数"><span class="nav-number">4.3.</span> <span class="nav-text">(3) 用户自定义函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-小结"><span class="nav-number">5.</span> <span class="nav-text">5 小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2020/10/25/201025查询性能优化/';
+          this.page.identifier = '2020/10/25/201025查询性能优化/';
+          this.page.title = '查询性能优化';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

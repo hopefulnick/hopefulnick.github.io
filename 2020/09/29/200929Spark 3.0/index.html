@@ -88,7 +88,7 @@
 <meta property="og:description" content="1 特性">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/09/29/200929Spark%203.0/blog-introducing-spark-8.png">
-<meta property="og:updated_time" content="2020-10-08T02:45:14.666Z">
+<meta property="og:updated_time" content="2020-11-18T05:33:32.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark 3.0">
 <meta name="twitter:description" content="1 特性">
@@ -357,7 +357,7 @@
       
         <h2 id="1-特性"><a href="#1-特性" class="headerlink" title="1 特性"></a>1 特性</h2><a id="more"></a>
 <ul>
-<li><a href="https://databricks.com/blog/2020/05/29/adaptive-query-execution-speeding-up-spark-sql-at-runtime.html" target="_blank" rel="noopener">adaptive query execution</a>和<a href="https://databricks.com/session_eu19/dynamic-partition-pruning-in-apache-spark" target="_blank" rel="noopener">dynamic partition pruning</a>，实现在TPC-DS上相交2.4版本2倍性能</li>
+<li><a href="https://databricks.com/blog/2020/05/29/adaptive-query-execution-speeding-up-spark-sql-at-runtime.html" target="_blank" rel="noopener">adaptive query execution</a>和<a href="https://databricks.com/session_eu19/dynamic-partition-pruning-in-apache-spark" target="_blank" rel="noopener">dynamic partition pruning</a>，实现在TPC-DS上相较2.4版本2倍性能</li>
 <li>兼容ANSI SQL标准</li>
 <li>Python类型提示和补充的pandas UDFs，详见<a href="https://databricks.com/blog/2020/05/20/new-pandas-udfs-and-python-type-hints-in-the-upcoming-release-of-apache-spark-3-0.html" target="_blank" rel="noopener">pandas APIs改进</a></li>
 <li>简化PySpark异常，提供更好的Python异常处理</li>
@@ -365,7 +365,7 @@
 <li>R用户自定义函数调用<a href="https://databricks.com/blog/2020/06/01/vectorized-r-i-o-in-upcoming-apache-spark-3-0.html" target="_blank" rel="noopener">可达40倍效率提升</a></li>
 </ul>
 <h2 id="2-Spark-SQL改进"><a href="#2-Spark-SQL改进" class="headerlink" title="2 Spark SQL改进"></a>2 Spark SQL改进</h2><p>新的<a href="https://databricks.com/blog/2020/05/29/adaptive-query-execution-speeding-up-spark-sql-at-runtime.html" target="_blank" rel="noopener">Adaptive Query Execution</a> (AQE)提升了性能和简化了运行时执行计划调优。</p>
-<h3 id="1-动态Shuffle分区"><a href="#1-动态Shuffle分区" class="headerlink" title="(1) 动态Shuffle分区"></a>(1) 动态Shuffle分区</h3><p>用户可与设置较大的Shuffle分区数量，AQE在运行时核心相邻的小分区，简化甚至避免分区调优。</p>
+<h3 id="1-动态Shuffle分区"><a href="#1-动态Shuffle分区" class="headerlink" title="(1) 动态Shuffle分区"></a>(1) 动态Shuffle分区</h3><p>用户可以设置较大的Shuffle分区数量，AQE在运行时合并相邻的小分区，简化甚至避免分区调优。</p>
 <h3 id="2-动态转换join策略"><a href="#2-动态转换join策略" class="headerlink" title="(2) 动态转换join策略"></a>(2) 动态转换join策略</h3><p>在运行时自动将sort-merge join转换为broadcast-hash join，避免因缺乏统计或错误估计规模导致执行不理想的计划。</p>
 <h3 id="3-动态优化倾斜join"><a href="#3-动态优化倾斜join" class="headerlink" title="(3) 动态优化倾斜join"></a>(3) 动态优化倾斜join</h3><p>自动检测并拆分倾斜分区，提升性能</p>
 <h2 id="3-动态分区修剪"><a href="#3-动态分区修剪" class="headerlink" title="3 动态分区修剪"></a>3 <a href="https://databricks.com/session_eu19/dynamic-partition-pruning-in-apache-spark#:~:text=Dynamic partition pruning occurs when,any number of dimension tables." target="_blank" rel="noopener">动态分区修剪</a></h2><p>优化编译时未能识别并跳过的分区。对于星型模型尤为常见。在事实表与维度表连接的场景中，通过识别维表过滤出的分区来修剪从事实表中读取的分区。</p>
@@ -442,6 +442,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/10/201010AbstractQueuedSynchronizer/" rel="prev" title="AbstractQueuedSynchronizer(AQS)">
+                AbstractQueuedSynchronizer(AQS) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -532,7 +536,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-count">96</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

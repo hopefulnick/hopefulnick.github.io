@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/log_cleaner_anatomy.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/06/11/200611Kafka设计/log_compaction.png">
-<meta property="og:updated_time" content="2020-09-28T02:21:57.699Z">
+<meta property="og:updated_time" content="2020-11-12T06:01:30.311Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka设计">
 <meta name="twitter:description" content="1 动机 大型企业处理所有实时数据的统一平台 海量 数据加载 低延迟消息传递 分区、分布式在线处理 容错">
@@ -422,7 +422,7 @@
 </ul>
 <p>详见<a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-345%3A+Introduce+static+membership+protocol+to+reduce+consumer+rebalances" target="_blank" rel="noopener">KIP-345</a></p>
 <h2 id="6-消息传递语义"><a href="#6-消息传递语义" class="headerlink" title="6 消息传递语义"></a>6 消息传递语义</h2><p>消息传递的“刚好一次“语义保证可以分解为两个问题：发布的可靠性和消费保证。</p>
-<h3 id="1-发布可靠性"><a href="#1-发布可靠性" class="headerlink" title="(1) 发布可靠性"></a>(1) 发布可靠性</h3><p>broker为每个生产者分配一个ID，使用生产者ID和消息序列号去重。同时声称者使用类似事务的方式发送消息到多个主题的分区中。</p>
+<h3 id="1-发布可靠性"><a href="#1-发布可靠性" class="headerlink" title="(1) 发布可靠性"></a>(1) 发布可靠性</h3><p>broker为每个生产者分配一个ID，使用生产者ID和消息序列号去重。同时生产者使用类似事务的方式发送消息到多个主题的分区中。</p>
 <p>并非所有的用例都需要以上的强保证。对于延迟敏感的场景，生产者可以指定所需的持久性等级，如等待提交的超时、异步、或是仅等待leader收到消息。</p>
 <h3 id="2-消费保证"><a href="#2-消费保证" class="headerlink" title="(2) 消费保证"></a>(2) 消费保证</h3><p>消费者位置存储存储在主题中，可以使用上述事务性生产者实现。当下游主题接收到消息时，可以在同一个事务中写入消费者偏移。这与事务的隔离等级有关，在未提交读等级中，未提交事务的消息对于其他消费者可见，而在提交读隔离等级中不可见。</p>
 <p>当写入外部系统时，需要协调消费位置和实际输出的位置。可以在消费位置和输出存储间引入“两阶段提交”。但是可以通过将输出和偏移保存到同一位置，实现更简单、通用的方式，避免外部系统对两阶段提交的不兼容。</p>
@@ -664,7 +664,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-count">96</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

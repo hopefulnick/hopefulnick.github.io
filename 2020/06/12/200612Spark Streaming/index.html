@@ -97,7 +97,7 @@
 <meta property="og:image" content="https://hopefulnick.github.io/2020/06/12/200612Spark%20Streaming/image-20200623235306076.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/06/12/200612Spark%20Streaming/image-20200624151906696.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/06/12/200612Spark%20Streaming/image-20200702120000332.png">
-<meta property="og:updated_time" content="2020-08-31T17:25:46.234Z">
+<meta property="og:updated_time" content="2020-11-17T16:14:39.757Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark Streaming">
 <meta name="twitter:description" content="适用于版本2.4.6.">
@@ -366,7 +366,7 @@
       
         <p>适用于版本2.4.6.</p>
 <a id="more"></a>
-<h2 id="1-概览"><a href="#1-概览" class="headerlink" title="1 概览"></a>1 概览</h2><p>Spark Streaming是核心API的扩展。通过将输入数据流分批处理达到流失处理目的。分批的数据流称为DStream(Discretized Stream， 离散流)，内部表现为RDD序列。</p>
+<h2 id="1-概览"><a href="#1-概览" class="headerlink" title="1 概览"></a>1 概览</h2><p>Spark Streaming是核心API的扩展。通过将输入数据流分批处理达到流式处理目的。分批的数据流称为DStream(Discretized Stream， 离散流)，内部表现为RDD序列。</p>
 <p>支持的输入源有Kafka、Flume和TCP套接字等，支持如map、reduce、join和window等API，可以与MLlib、GraphX等协作。</p>
 <p>注意：Python语言API略有不同</p>
 <p><img src="/2020/06/12/200612Spark Streaming/streaming-arch.png" alt="streaming-arch"></p>
@@ -375,8 +375,7 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.streaming._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.streaming.<span class="type">StreamingContext</span>._ <span class="comment">// not necessary since Spark 1.3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Create a local StreamingContext with two working thread and batch interval of 1 second.</span></span><br><span class="line"><span class="comment">// The master requires 2 cores to prevent a starvation scenario.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>().setMaster(<span class="string">"local[2]"</span>).setAppName(<span class="string">"NetworkWordCount"</span>)</span><br><span class="line"><span class="comment">// SttreamingContext是流式处理功能的主要入口</span></span><br><span class="line"><span class="keyword">val</span> ssc = <span class="keyword">new</span> <span class="type">StreamingContext</span>(conf, <span class="type">Seconds</span>(<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Create a DStream that will connect to hostname:port, like localhost:9999</span></span><br><span class="line"><span class="keyword">val</span> lines = ssc.socketTextStream(<span class="string">"localhost"</span>, <span class="number">9999</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Split each line into words</span></span><br><span class="line"><span class="keyword">val</span> words = lines.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Count each word in each batch</span></span><br><span class="line"><span class="keyword">val</span> pairs = words.map(word =&gt; (word, <span class="number">1</span>))</span><br><span class="line"><span class="keyword">val</span> wordCounts = pairs.reduceByKey(_ + _)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Print the first ten elements of each RDD generated in this DStream to the console</span></span><br><span class="line">wordCounts.print()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实际启动</span></span><br><span class="line">ssc.start()             <span class="comment">// Start the computation</span></span><br><span class="line">ssc.awaitTermination()  <span class="comment">// Wait for the computation to terminate</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 使用Netcat作为数据服务器</span><br><span class="line"><span class="meta">$</span> nc -lk 9999</span><br><span class="line">// 输入文本</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 在另一个控制台运行示例，结果将每秒输出</span><br><span class="line"><span class="meta">$</span> ./bin/run-example streaming.NetworkWordCount localhost 9999</span><br></pre></td></tr></table></figure>
-<h2 id="3-基本概念"><a href="#3-基本概念" class="headerlink" title="3 基本概念"></a>3 基本概念</h2><h3 id="1-依赖"><a href="#1-依赖" class="headerlink" title="(1) 依赖"></a>(1) 依赖</h3><p>引入合适版本的Spark Streaming库和响应的数据源库，详见[Maven re</p>
-<p>pository](<a href="https://search.maven.org/#search|ga|1|g%3A&quot;org.apache.spark" target="_blank" rel="noopener">https://search.maven.org/#search|ga|1|g%3A&quot;org.apache.spark</a>“ AND v%3A”2.4.6”)</p>
+<h2 id="3-基本概念"><a href="#3-基本概念" class="headerlink" title="3 基本概念"></a>3 基本概念</h2><h3 id="1-依赖"><a href="#1-依赖" class="headerlink" title="(1) 依赖"></a>(1) 依赖</h3><p>引入合适版本的Spark Streaming库和相应的数据源库，详见<a href="https://search.maven.org/#search|ga|1|g%3A&quot;org.apache.spark&quot; AND v%3A&quot;2.4.6&quot;" target="_blank" rel="noopener">Maven repository</a></p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.spark<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spark-streaming_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><img src="/2020/06/12/200612Spark Streaming/image-20200612145656315.png" alt="image-20200612145656315"></p>
 <h3 id="2-StreamingContext初始化"><a href="#2-StreamingContext初始化" class="headerlink" title="(2) StreamingContext初始化"></a>(2) StreamingContext初始化</h3><p><strong>local[*]</strong>参数自动检测CPU核心数，通常用于调试和测试。</p>
@@ -468,7 +467,7 @@
 <h3 id="8-MLlib"><a href="#8-MLlib" class="headerlink" title="(8) MLlib"></a>(8) MLlib</h3><p>MLlib提供有一些流式算法， 其余算法可以离线使用。</p>
 <h3 id="9-缓存与持久化"><a href="#9-缓存与持久化" class="headerlink" title="(9) 缓存与持久化"></a>(9) 缓存与持久化</h3><p>调用持久化接口可以对整个DStream缓存。</p>
 <p>窗口操作自动缓存到内存中。</p>
-<p>为了容错，网络输入流默认持久化到两个节点。</p>
+<p>为了容错，网络输入流默认持久化到2个节点。</p>
 <p>与RDD不同，DStream持久化等级是序列化到内存中。</p>
 <p>详见<a href="https://spark.apache.org/docs/2.4.6/streaming-programming-guide.html#memory-tuning" target="_blank" rel="noopener">Performance Tuning</a> </p>
 <h3 id="10-检查点"><a href="#10-检查点" class="headerlink" title="(10) 检查点"></a>(10) 检查点</h3><p>用于处理程序逻辑之外的故障。</p>
@@ -568,7 +567,7 @@
 </ul>
 <h4 id="4-任务运行负载"><a href="#4-任务运行负载" class="headerlink" title="4) 任务运行负载"></a>4) 任务运行负载</h4><p>任务数频繁提交将导致明显负载，影响延迟。</p>
 <ul>
-<li>调整执行模式：优先使用Standalon或粗粒度Mesos，详见<a href="https://spark.apache.org/docs/2.4.6/running-on-mesos.html" target="_blank" rel="noopener">Running on Mesos guide</a> 。</li>
+<li>调整执行模式：优先使用Standalone或粗粒度Mesos，详见<a href="https://spark.apache.org/docs/2.4.6/running-on-mesos.html" target="_blank" rel="noopener">Running on Mesos guide</a> 。</li>
 </ul>
 <h3 id="2-设置合适的批处理间隔"><a href="#2-设置合适的批处理间隔" class="headerlink" title="(2) 设置合适的批处理间隔"></a>(2) 设置合适的批处理间隔</h3><p>批处理间隔应当与批处理时间一致。</p>
 <p>可以通过初始设置间隔为5-10s,观察Spark driver log4j logs中的Total delay或使用<a href="https://spark.apache.org/docs/2.4.6/api/scala/index.html#org.apache.spark.streaming.scheduler.StreamingListener" target="_blank" rel="noopener">StreamingListener</a>接口查看延迟。在数据量稳定时，不断调整间隔以使延迟趋于稳定。</p>
@@ -600,7 +599,7 @@
 <p>spark.cores.max需要考虑接收和处理各自的核心数量需求。</p>
 </li>
 <li><p>接收过程</p>
-<p>Receiver每隔块间隔创建一个块，放入接收的数据。</p>
+<p>Receiver每个块间隔创建一个块，放入接收的数据。</p>
 <p>块数量=批处理间隔/块间隔</p>
 <p>当前执行器的块管理器将块分发和其他执行器的块管理器。</p>
 <p>随后通知驱动阶段的网络输入跟踪器块的位置信息，以便后续处理。</p>
@@ -642,7 +641,7 @@
 <p>需要考虑的故障：</p>
 <ul>
 <li>工作节点：其上内存中和接收器缓存的数据丢失</li>
-<li>驱动节点：SparkContext和而所有执行器内存中数据丢失</li>
+<li>驱动节点：SparkContext和所有执行器内存中数据丢失</li>
 </ul>
 <h3 id="2-语义定义"><a href="#2-语义定义" class="headerlink" title="(2) 语义定义"></a>(2) 语义定义</h3><p>即使发生故障，数据被处理的次数：</p>
 <ul>
@@ -856,7 +855,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-count">96</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
