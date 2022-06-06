@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hudi," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本0.10.1。 以下步骤在经过MacBook测试。">
+<meta name="keywords" content="Hudi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hudi Docker Demo">
+<meta property="og:url" content="https://hopefulnick.github.io/2022/04/08/20220408Hudi Docker Demo/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本0.10.1。 以下步骤在经过MacBook测试。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-06-06T08:07:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hudi Docker Demo">
+<meta name="twitter:description" content="适用于版本0.10.1。 以下步骤在经过MacBook测试。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2022/04/08/20220408Hudi Docker Demo/"/>
+
+
+
+
+
+  <title>Hudi Docker Demo | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2022/04/08/20220408Hudi Docker Demo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hudi Docker Demo</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-04-08T11:00:47+08:00">
+                2022-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hudi/" itemprop="url" rel="index">
+                    <span itemprop="name">Hudi</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/04/08/20220408Hudi Docker Demo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/04/08/20220408Hudi Docker Demo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本0.10.1。</p>
+<p>以下步骤在经过MacBook测试。</p>
+<a id="more"></a>
+<h2 id="1-准备"><a href="#1-准备" class="headerlink" title="1 准备"></a>1 准备</h2><ul>
+<li><p>硬件</p>
+<p>执行Spark SQL查询需要至少6GB内存和4个CPU核心</p>
+</li>
+<li><p>Docker环境</p>
+</li>
+<li><p>kcat</p>
+<p>从命令行生产消费kafka主题的工具</p>
+</li>
+<li><p>/etc/hosts</p>
+<p>映射容器服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 adhoc-1</span><br><span class="line">127.0.0.1 adhoc-2</span><br><span class="line">127.0.0.1 namenode</span><br><span class="line">127.0.0.1 datanode1</span><br><span class="line">127.0.0.1 hiveserver</span><br><span class="line">127.0.0.1 hivemetastore</span><br><span class="line">127.0.0.1 kafkabroker</span><br><span class="line">127.0.0.1 sparkmaster</span><br><span class="line">127.0.0.1 zookeeper</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JDK 8</p>
+</li>
+<li><p>Maven</p>
+</li>
+<li><p>jq</p>
+<p>用于命令行处理json</p>
+</li>
+</ul>
+<h2 id="2-部署Docker集群"><a href="#2-部署Docker集群" class="headerlink" title="2 部署Docker集群"></a>2 部署Docker集群</h2><h3 id="1-编译Hudi"><a href="#1-编译Hudi" class="headerlink" title="(1) 编译Hudi"></a>(1) 编译Hudi</h3><p>当前默认使用Scala 2.11</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> &lt;HUDI_WORKSPACE&gt;</span><br><span class="line">mvn package -DskipTests</span><br></pre></td></tr></table></figure>
+<h3 id="2-启动集群"><a href="#2-启动集群" class="headerlink" title="(2) 启动集群"></a>(2) 启动集群</h3><p>执行docker compose脚本并配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> docker</span><br><span class="line">$ ./setup_demo.sh</span><br><span class="line">....</span><br><span class="line">....</span><br><span class="line">....</span><br><span class="line">[+] Running 10/13</span><br><span class="line">⠿ Container zookeeper             Removed                 8.6s</span><br><span class="line">⠿ Container datanode1             Removed                18.3s</span><br><span class="line">⠿ Container trino-worker-1        Removed                50.7s</span><br><span class="line">⠿ Container spark-worker-1        Removed                16.7s</span><br><span class="line">⠿ Container adhoc-2               Removed                16.9s</span><br><span class="line">⠿ Container graphite              Removed                16.9s</span><br><span class="line">⠿ Container kafkabroker           Removed                14.1s</span><br><span class="line">⠿ Container adhoc-1               Removed                14.1s</span><br><span class="line">⠿ Container presto-worker-1       Removed                11.9s</span><br><span class="line">⠿ Container presto-coordinator-1  Removed                34.6s</span><br><span class="line">.......</span><br><span class="line">......</span><br><span class="line">[+] Running 17/17</span><br><span class="line">⠿ adhoc-1 Pulled                                          2.9s</span><br><span class="line">⠿ graphite Pulled                                         2.8s</span><br><span class="line">⠿ spark-worker-1 Pulled                                   3.0s</span><br><span class="line">⠿ kafka Pulled                                            2.9s</span><br><span class="line">⠿ datanode1 Pulled                                        2.9s</span><br><span class="line">⠿ hivemetastore Pulled                                    2.9s</span><br><span class="line">⠿ hiveserver Pulled                                       3.0s</span><br><span class="line">⠿ hive-metastore-postgresql Pulled                        2.8s</span><br><span class="line">⠿ presto-coordinator-1 Pulled                             2.9s</span><br><span class="line">⠿ namenode Pulled                                         2.9s</span><br><span class="line">⠿ trino-worker-1 Pulled                                   2.9s</span><br><span class="line">⠿ sparkmaster Pulled                                      2.9s</span><br><span class="line">⠿ presto-worker-1 Pulled                                  2.9s</span><br><span class="line">⠿ zookeeper Pulled                                        2.8s</span><br><span class="line">⠿ adhoc-2 Pulled                                          2.9s</span><br><span class="line">⠿ historyserver Pulled                                    2.9s</span><br><span class="line">⠿ trino-coordinator-1 Pulled                              2.9s</span><br><span class="line">[+] Running 17/17</span><br><span class="line">⠿ Container zookeeper                  Started           41.0s</span><br><span class="line">⠿ Container kafkabroker                Started           41.7s</span><br><span class="line">⠿ Container graphite                   Started           41.5s</span><br><span class="line">⠿ Container hive-metastore-postgresql  Running            0.0s</span><br><span class="line">⠿ Container namenode                   Running            0.0s</span><br><span class="line">⠿ Container hivemetastore              Running            0.0s</span><br><span class="line">⠿ Container trino-coordinator-1        Runni...           0.0s</span><br><span class="line">⠿ Container presto-coordinator-1       Star...           42.1s</span><br><span class="line">⠿ Container historyserver              Started           41.0s</span><br><span class="line">⠿ Container datanode1                  Started           49.9s</span><br><span class="line">⠿ Container hiveserver                 Running            0.0s</span><br><span class="line">⠿ Container trino-worker-1             Started           42.1s</span><br><span class="line">⠿ Container sparkmaster                Started           41.9s</span><br><span class="line">⠿ Container spark-worker-1             Started           50.2s</span><br><span class="line">⠿ Container adhoc-2                    Started           38.5s</span><br><span class="line">⠿ Container adhoc-1                    Started           38.5s</span><br><span class="line">⠿ Container presto-worker-1            Started           38.4s</span><br><span class="line">Copying spark default config and setting up configs</span><br><span class="line">Copying spark default config and setting up configs</span><br><span class="line">$ docker ps</span><br></pre></td></tr></table></figure>
+<p>至此，以下服务准备就绪：</p>
+<ul>
+<li>HDFS（包含命名节点和数据节点）</li>
+<li>Spark主从节点</li>
+<li>Hive服务（包含Metastore、PostgresDB支持的HiveServer2）</li>
+<li>Kafka Broker（作为输入源）和一个ZooKeeper节点</li>
+<li>Presto主从节点</li>
+<li>Trino主从节点</li>
+<li>Hive with Hudi命令行即时查询容器</li>
+</ul>
+<h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3 示例"></a>3 示例</h2><p>示例数据为股票追踪数据，按照分钟粒度呈现，存放在docer/demo/data下。其中包含两批数据，第一批早9点半到10点半，第二批早10点半到11点，两批之间存在数据交叉。</p>
+<h3 id="1-发布首批数据到kafka"><a href="#1-发布首批数据到kafka" class="headerlink" title="(1) 发布首批数据到kafka"></a>(1) 发布首批数据到kafka</h3><p>上传第一批数据到<code>stock ticks</code>主题中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 上传数据</span></span><br><span class="line">$ cat docker/demo/data/batch_1.json | kcat -b kafkabroker -t stock_ticks -P</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查数据</span></span><br><span class="line">$ kcat -b kafkabroker -L -J | jq .</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"originating_broker"</span>: &#123;</span><br><span class="line">    <span class="string">"id"</span>: 1001,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"kafkabroker:9092/1001"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"query"</span>: &#123;</span><br><span class="line">    <span class="string">"topic"</span>: <span class="string">"*"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"brokers"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"id"</span>: 1001,</span><br><span class="line">      <span class="string">"name"</span>: <span class="string">"kafkabroker:9092"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"topics"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"topic"</span>: <span class="string">"stock_ticks"</span>,</span><br><span class="line">      <span class="string">"partitions"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="string">"partition"</span>: 0,</span><br><span class="line">          <span class="string">"leader"</span>: 1001,</span><br><span class="line">          <span class="string">"replicas"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="string">"id"</span>: 1001</span><br><span class="line">            &#125;</span><br><span class="line">          ],</span><br><span class="line">          <span class="string">"isrs"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="string">"id"</span>: 1001</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-从kafka主题中增量消费数据"><a href="#2-从kafka主题中增量消费数据" class="headerlink" title="(2) 从kafka主题中增量消费数据"></a>(2) 从kafka主题中增量消费数据</h3><p>DeltaStreamer可以连接多种数据源（包含kafka），并且应用变化到Hudi表中。</p>
+<p>此处使用DeltaStreamer从kafka主题中下载json数据并初始化Hudi COW/MOR表。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-2 /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run the following spark-submit command to execute the delta-streamer and ingest to stock_ticks_cow table in HDFS</span></span><br><span class="line">spark-submit \</span><br><span class="line">  --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer <span class="variable">$HUDI_UTILITIES_BUNDLE</span> \</span><br><span class="line">  --table-type COPY_ON_WRITE \</span><br><span class="line">  --<span class="built_in">source</span>-class org.apache.hudi.utilities.sources.JsonKafkaSource \</span><br><span class="line">  --<span class="built_in">source</span>-ordering-field ts  \</span><br><span class="line">  --target-base-path /user/hive/warehouse/stock_ticks_cow \</span><br><span class="line">  --target-table stock_ticks_cow --props /var/demo/config/kafka-source.properties \</span><br><span class="line">  --schemaprovider-class org.apache.hudi.utilities.schema.FilebasedSchemaProvider</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run the following spark-submit command to execute the delta-streamer and ingest to stock_ticks_mor table in HDFS</span></span><br><span class="line">spark-submit \</span><br><span class="line">  --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer <span class="variable">$HUDI_UTILITIES_BUNDLE</span> \</span><br><span class="line">  --table-type MERGE_ON_READ \</span><br><span class="line">  --<span class="built_in">source</span>-class org.apache.hudi.utilities.sources.JsonKafkaSource \</span><br><span class="line">  --<span class="built_in">source</span>-ordering-field ts \</span><br><span class="line">  --target-base-path /user/hive/warehouse/stock_ticks_mor \</span><br><span class="line">  --target-table stock_ticks_mor \</span><br><span class="line">  --props /var/demo/config/kafka-source.properties \</span><br><span class="line">  --schemaprovider-class org.apache.hudi.utilities.schema.FilebasedSchemaProvider \</span><br><span class="line">  --<span class="built_in">disable</span>-compaction</span><br><span class="line"></span><br><span class="line"><span class="comment"># As part of the setup (Look at setup_demo.sh), the configs needed for DeltaStreamer is uploaded to HDFS. The configs</span></span><br><span class="line"><span class="comment"># contain mostly Kafa connectivity settings, the avro-schema to be used for ingesting along with key and partitioning fields.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<p>可以通过HDFS浏览器查看创建的表，如<a href="http://namenode:50070/explorer.html#/user/hive/warehouse/stock_ticks_cow" target="_blank" rel="noopener">http://namenode:50070/explorer.html#/user/hive/warehouse/stock_ticks_cow</a></p>
+<p>分区文件夹中，.hoodie下的commit或deltacommit文件标志提交成功</p>
+<h3 id="3-同步Hive"><a href="#3-同步Hive" class="headerlink" title="(3) 同步Hive"></a>(3) 同步Hive</h3><p>至此HDFS上的表文件已经准备就绪，需要创建Hive表以执行Hive查询。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-2 /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># This command takes in HiveServer URL and COW Hudi table location in HDFS and sync the HDFS state to Hive</span></span><br><span class="line">/var/hoodie/ws/hudi-sync/hudi-hive-sync/run_sync_tool.sh \</span><br><span class="line">  --jdbc-url jdbc:hive2://hiveserver:10000 \</span><br><span class="line">  --user hive \</span><br><span class="line">  --pass hive \</span><br><span class="line">  --partitioned-by dt \</span><br><span class="line">  --base-path /user/hive/warehouse/stock_ticks_cow \</span><br><span class="line">  --database default \</span><br><span class="line">  --table stock_ticks_cow</span><br><span class="line">.....</span><br><span class="line">2020-01-25 19:51:28,953 INFO  [main] hive.HiveSyncTool (HiveSyncTool.java:syncHoodieTable(129)) - Sync complete <span class="keyword">for</span> stock_ticks_cow</span><br><span class="line">.....</span><br><span class="line"></span><br><span class="line"><span class="comment"># Now run hive-sync for the second data-set in HDFS using Merge-On-Read (MOR table type)</span></span><br><span class="line">/var/hoodie/ws/hudi-sync/hudi-hive-sync/run_sync_tool.sh \</span><br><span class="line">  --jdbc-url jdbc:hive2://hiveserver:10000 \</span><br><span class="line">  --user hive \</span><br><span class="line">  --pass hive \</span><br><span class="line">  --partitioned-by dt \</span><br><span class="line">  --base-path /user/hive/warehouse/stock_ticks_mor \</span><br><span class="line">  --database default \</span><br><span class="line">  --table stock_ticks_mor</span><br><span class="line">...</span><br><span class="line">2020-01-25 19:51:51,066 INFO  [main] hive.HiveSyncTool (HiveSyncTool.java:syncHoodieTable(129)) - Sync complete <span class="keyword">for</span> stock_ticks_mor_ro</span><br><span class="line">...</span><br><span class="line">2020-01-25 19:51:51,569 INFO  [main] hive.HiveSyncTool (HiveSyncTool.java:syncHoodieTable(129)) - Sync complete <span class="keyword">for</span> stock_ticks_mor_rt</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-查询"><a href="#4-查询" class="headerlink" title="(4) 查询"></a>(4) 查询</h3><h4 id="1-Hive查询"><a href="#1-Hive查询" class="headerlink" title="1) Hive查询"></a>1) Hive查询</h4><p>查询股票代码GOOG最近的数据时间戳。由于Hudi为首批数据创建的是parquet文件，因此RO表和RT表查询结果一致。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-2 /bin/bash</span><br><span class="line">beeline -u jdbc:hive2://hiveserver:10000 \</span><br><span class="line">  --hiveconf hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat \</span><br><span class="line">  --hiveconf hive.stats.autogather=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># List Tables</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; show tables;</span><br><span class="line">+---------------------+--+</span><br><span class="line">|      tab_name       |</span><br><span class="line">+---------------------+--+</span><br><span class="line">| stock_ticks_cow     |</span><br><span class="line">| stock_ticks_mor_ro  |</span><br><span class="line">| stock_ticks_mor_rt  |</span><br><span class="line">+---------------------+--+</span><br><span class="line">3 rows selected (1.199 seconds)</span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Look at partitions that were added</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; show partitions stock_ticks_mor_rt;</span><br><span class="line">+----------------+--+</span><br><span class="line">|   partition    |</span><br><span class="line">+----------------+--+</span><br><span class="line">| dt=2018-08-31  |</span><br><span class="line">+----------------+--+</span><br><span class="line">1 row selected (0.24 seconds)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># COPY-ON-WRITE Queries:</span></span><br><span class="line">=========================</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_cow group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:29:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line"></span><br><span class="line">Now, run a projection query:</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_cow <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924221953       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924221953       | GOOG    | 2018-08-31 10:29:00  | 3391    | 1230.1899  | 1230.085  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Merge-On-Read Queries:</span></span><br><span class="line">==========================</span><br><span class="line"></span><br><span class="line">Lets run similar queries against M-O-R table. Lets look at both </span><br><span class="line">ReadOptimized and Snapshot(realtime data) queries supported by M-O-R table</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run ReadOptimized Query. Notice that the latest timestamp is 10:29</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">WARNING: Hive-on-MR is deprecated <span class="keyword">in</span> Hive 2 and may not be available <span class="keyword">in</span> the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:29:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">1 row selected (6.326 seconds)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Run Snapshot Query. Notice that the latest timestamp is again 10:29</span></span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_mor_rt group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">WARNING: Hive-on-MR is deprecated <span class="keyword">in</span> Hive 2 and may not be available <span class="keyword">in</span> the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:29:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">1 row selected (1.606 seconds)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Run Read Optimized and Snapshot project queries</span></span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_ro <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 10:29:00  | 3391    | 1230.1899  | 1230.085  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_rt <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 10:29:00  | 3391    | 1230.1899  | 1230.085  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-Spark-SQL查询"><a href="#2-Spark-SQL查询" class="headerlink" title="2) Spark SQL查询"></a>2) Spark SQL查询</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-1 /bin/bash</span><br><span class="line"><span class="variable">$SPARK_INSTALL</span>/bin/spark-shell \</span><br><span class="line">  --jars <span class="variable">$HUDI_SPARK_BUNDLE</span> \</span><br><span class="line">  --master <span class="built_in">local</span>[2] \</span><br><span class="line">  --driver-class-path <span class="variable">$HADOOP_CONF_DIR</span> \</span><br><span class="line">  --conf spark.sql.hive.convertMetastoreParquet=<span class="literal">false</span> \</span><br><span class="line">  --deploy-mode client \</span><br><span class="line">  --driver-memory 1G \</span><br><span class="line">  --executor-memory 3G \</span><br><span class="line">  --num-executors 1 \</span><br><span class="line">  --packages org.apache.spark:spark-avro_2.11:2.4.4</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Welcome to</span><br><span class="line">      ____              __</span><br><span class="line">     / __/__  ___ _____/ /__</span><br><span class="line">    _\ \/ _ \/ _ `/ __/  <span class="string">'_/</span></span><br><span class="line"><span class="string">   /___/ .__/\_,_/_/ /_/\_\   version 2.4.4</span></span><br><span class="line"><span class="string">      /_/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Using Scala version 2.11.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_212)</span></span><br><span class="line"><span class="string">Type in expressions to have them evaluated.</span></span><br><span class="line"><span class="string">Type :help for more information.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scala&gt; spark.sql("show tables").show(100, false)</span></span><br><span class="line"><span class="string">+--------+------------------+-----------+</span></span><br><span class="line"><span class="string">|database|tableName         |isTemporary|</span></span><br><span class="line"><span class="string">+--------+------------------+-----------+</span></span><br><span class="line"><span class="string">|default |stock_ticks_cow   |false      |</span></span><br><span class="line"><span class="string">|default |stock_ticks_mor_ro|false      |</span></span><br><span class="line"><span class="string">|default |stock_ticks_mor_rt|false      |</span></span><br><span class="line"><span class="string">+--------+------------------+-----------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Copy-On-Write Table</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## Run max timestamp query against COW table</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scala&gt; spark.sql("select symbol, max(ts) from stock_ticks_cow group by symbol HAVING symbol = '</span>GOOG<span class="string">'").show(100, false)</span></span><br><span class="line"><span class="string">[Stage 0:&gt;                                                          (0 + 1) / 1]SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".</span></span><br><span class="line"><span class="string">SLF4J: Defaulting to no-operation (NOP) logger implementation</span></span><br><span class="line"><span class="string">SLF4J: See http://www.slf4j.org/codes#StaticLoggerBinder for further details.</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string">|symbol|max(ts)            |</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string">|GOOG  |2018-08-31 10:29:00|</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## Projection Query</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scala&gt; spark.sql("select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_cow where  symbol = '</span>GOOG<span class="string">'").show(100, false)</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string">|_hoodie_commit_time|symbol|ts                 |volume|open     |close   |</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string">|20180924221953     |GOOG  |2018-08-31 09:59:00|6330  |1230.5   |1230.02 |</span></span><br><span class="line"><span class="string">|20180924221953     |GOOG  |2018-08-31 10:29:00|3391  |1230.1899|1230.085|</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Merge-On-Read Queries:</span></span><br><span class="line"><span class="string">==========================</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Lets run similar queries against M-O-R table. Lets look at both</span></span><br><span class="line"><span class="string">ReadOptimized and Snapshot queries supported by M-O-R table</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Run ReadOptimized Query. Notice that the latest timestamp is 10:29</span></span><br><span class="line"><span class="string">scala&gt; spark.sql("select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = '</span>GOOG<span class="string">'").show(100, false)</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string">|symbol|max(ts)            |</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string">|GOOG  |2018-08-31 10:29:00|</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Run Snapshot Query. Notice that the latest timestamp is again 10:29</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scala&gt; spark.sql("select symbol, max(ts) from stock_ticks_mor_rt group by symbol HAVING symbol = '</span>GOOG<span class="string">'").show(100, false)</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string">|symbol|max(ts)            |</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string">|GOOG  |2018-08-31 10:29:00|</span></span><br><span class="line"><span class="string">+------+-------------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Run Read Optimized and Snapshot project queries</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scala&gt; spark.sql("select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_ro where  symbol = '</span>GOOG<span class="string">'").show(100, false)</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string">|_hoodie_commit_time|symbol|ts                 |volume|open     |close   |</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string">|20180924222155     |GOOG  |2018-08-31 09:59:00|6330  |1230.5   |1230.02 |</span></span><br><span class="line"><span class="string">|20180924222155     |GOOG  |2018-08-31 10:29:00|3391  |1230.1899|1230.085|</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scala&gt; spark.sql("select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_rt where  symbol = '</span>GOOG<span class="string">'").show(100, false)</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string">|_hoodie_commit_time|symbol|ts                 |volume|open     |close   |</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br><span class="line"><span class="string">|20180924222155     |GOOG  |2018-08-31 09:59:00|6330  |1230.5   |1230.02 |</span></span><br><span class="line"><span class="string">|20180924222155     |GOOG  |2018-08-31 10:29:00|3391  |1230.1899|1230.085|</span></span><br><span class="line"><span class="string">+-------------------+------+-------------------+------+---------+--------+</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-Presto查询"><a href="#3-Presto查询" class="headerlink" title="3) Presto查询"></a>3) Presto查询</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it presto-worker-1 presto --server presto-coordinator-1:8090</span><br><span class="line">presto&gt; show catalogs;</span><br><span class="line">  Catalog</span><br><span class="line">-----------</span><br><span class="line"> hive</span><br><span class="line"> jmx</span><br><span class="line"> localfile</span><br><span class="line"> system</span><br><span class="line">(4 rows)</span><br><span class="line"></span><br><span class="line">Query 20190817_134851_00000_j8rcz, FINISHED, 1 node</span><br><span class="line">Splits: 19 total, 19 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:04 [0 rows, 0B] [0 rows/s, 0B/s]</span><br><span class="line"></span><br><span class="line">presto&gt; use hive.default;</span><br><span class="line">USE</span><br><span class="line">presto:default&gt; show tables;</span><br><span class="line">       Table</span><br><span class="line">--------------------</span><br><span class="line"> stock_ticks_cow</span><br><span class="line"> stock_ticks_mor_ro</span><br><span class="line"> stock_ticks_mor_rt</span><br><span class="line">(3 rows)</span><br><span class="line"></span><br><span class="line">Query 20190822_181000_00001_segyw, FINISHED, 2 nodes</span><br><span class="line">Splits: 19 total, 19 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:05 [3 rows, 99B] [0 rows/s, 18B/s]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># COPY-ON-WRITE Queries:</span></span><br><span class="line">=========================</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">presto:default&gt; select symbol, max(ts) from stock_ticks_cow group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> symbol |        _col1</span><br><span class="line">--------+---------------------</span><br><span class="line"> GOOG   | 2018-08-31 10:29:00</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">Query 20190822_181011_00002_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 49 total, 49 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:12 [197 rows, 613B] [16 rows/s, 50B/s]</span><br><span class="line"></span><br><span class="line">presto:default&gt; select <span class="string">"_hoodie_commit_time"</span>, symbol, ts, volume, open, close from stock_ticks_cow <span class="built_in">where</span> symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> _hoodie_commit_time | symbol |         ts          | volume |   open    |  close</span><br><span class="line">---------------------+--------+---------------------+--------+-----------+----------</span><br><span class="line"> 20190822180221      | GOOG   | 2018-08-31 09:59:00 |   6330 |    1230.5 |  1230.02</span><br><span class="line"> 20190822180221      | GOOG   | 2018-08-31 10:29:00 |   3391 | 1230.1899 | 1230.085</span><br><span class="line">(2 rows)</span><br><span class="line"></span><br><span class="line">Query 20190822_181141_00003_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 17 total, 17 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:02 [197 rows, 613B] [109 rows/s, 341B/s]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Merge-On-Read Queries:</span></span><br><span class="line">==========================</span><br><span class="line"></span><br><span class="line">Lets run similar queries against M-O-R table. </span><br><span class="line"></span><br><span class="line"><span class="comment"># Run ReadOptimized Query. Notice that the latest timestamp is 10:29</span></span><br><span class="line">    presto:default&gt; select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> symbol |        _col1</span><br><span class="line">--------+---------------------</span><br><span class="line"> GOOG   | 2018-08-31 10:29:00</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">Query 20190822_181158_00004_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 49 total, 49 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:02 [197 rows, 613B] [110 rows/s, 343B/s]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">presto:default&gt;  select <span class="string">"_hoodie_commit_time"</span>, symbol, ts, volume, open, close  from stock_ticks_mor_ro <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> _hoodie_commit_time | symbol |         ts          | volume |   open    |  close</span><br><span class="line">---------------------+--------+---------------------+--------+-----------+----------</span><br><span class="line"> 20190822180250      | GOOG   | 2018-08-31 09:59:00 |   6330 |    1230.5 |  1230.02</span><br><span class="line"> 20190822180250      | GOOG   | 2018-08-31 10:29:00 |   3391 | 1230.1899 | 1230.085</span><br><span class="line">(2 rows)</span><br><span class="line"></span><br><span class="line">Query 20190822_181256_00006_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 17 total, 17 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:02 [197 rows, 613B] [92 rows/s, 286B/s]</span><br><span class="line"></span><br><span class="line">presto:default&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-Trino查询"><a href="#4-Trino查询" class="headerlink" title="4) Trino查询"></a>4) Trino查询</h4><p>略</p>
+<h3 id="5-上传第二批数据并使用Delta-Streamer消费"><a href="#5-上传第二批数据并使用Delta-Streamer消费" class="headerlink" title="(5) 上传第二批数据并使用Delta Streamer消费"></a>(5) 上传第二批数据并使用Delta Streamer消费</h3><p>上传第二批数据。由于没有创建新的分区，因此无需同步Hive。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">cat docker/demo/data/batch_2.json | kcat -b kafkabroker -t stock_ticks -P</span><br><span class="line"></span><br><span class="line"><span class="comment"># Within Docker container, run the ingestion command</span></span><br><span class="line">docker <span class="built_in">exec</span> -it adhoc-2 /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run the following spark-submit command to execute the delta-streamer and ingest to stock_ticks_cow table in HDFS</span></span><br><span class="line">spark-submit \</span><br><span class="line">  --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer <span class="variable">$HUDI_UTILITIES_BUNDLE</span> \</span><br><span class="line">  --table-type COPY_ON_WRITE \</span><br><span class="line">  --<span class="built_in">source</span>-class org.apache.hudi.utilities.sources.JsonKafkaSource \</span><br><span class="line">  --<span class="built_in">source</span>-ordering-field ts \</span><br><span class="line">  --target-base-path /user/hive/warehouse/stock_ticks_cow \</span><br><span class="line">  --target-table stock_ticks_cow \</span><br><span class="line">  --props /var/demo/config/kafka-source.properties \</span><br><span class="line">  --schemaprovider-class org.apache.hudi.utilities.schema.FilebasedSchemaProvider</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run the following spark-submit command to execute the delta-streamer and ingest to stock_ticks_mor table in HDFS</span></span><br><span class="line">spark-submit \</span><br><span class="line">  --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer <span class="variable">$HUDI_UTILITIES_BUNDLE</span> \</span><br><span class="line">  --table-type MERGE_ON_READ \</span><br><span class="line">  --<span class="built_in">source</span>-class org.apache.hudi.utilities.sources.JsonKafkaSource \</span><br><span class="line">  --<span class="built_in">source</span>-ordering-field ts \</span><br><span class="line">  --target-base-path /user/hive/warehouse/stock_ticks_mor \</span><br><span class="line">  --target-table stock_ticks_mor \</span><br><span class="line">  --props /var/demo/config/kafka-source.properties \</span><br><span class="line">  --schemaprovider-class org.apache.hudi.utilities.schema.FilebasedSchemaProvider \</span><br><span class="line">  --<span class="built_in">disable</span>-compaction</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h3 id="6-查询"><a href="#6-查询" class="headerlink" title="(6) 查询"></a>(6) 查询</h3><p>第二次提交，对于COW表将产生新的parquet文件，而对于MOR表只是追加到log变化文件中。</p>
+<p>因此MOR表读优化由于只读区parquet文件，将不会反应最新变化，而快照读可以。</p>
+<h4 id="1-Hive查询-1"><a href="#1-Hive查询-1" class="headerlink" title="1) Hive查询"></a>1) Hive查询</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-2 /bin/bash</span><br><span class="line">beeline -u jdbc:hive2://hiveserver:10000 \</span><br><span class="line">  --hiveconf hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat \</span><br><span class="line">  --hiveconf hive.stats.autogather=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy On Write Table:</span></span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_cow group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">WARNING: Hive-on-MR is deprecated <span class="keyword">in</span> Hive 2 and may not be available <span class="keyword">in</span> the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:59:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">1 row selected (1.932 seconds)</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_cow <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924221953       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924224524       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line">As you can notice, the above queries now reflect the changes that came as part of ingesting second batch.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Merge On Read Table:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Read Optimized Query</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">WARNING: Hive-on-MR is deprecated <span class="keyword">in</span> Hive 2 and may not be available <span class="keyword">in</span> the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:29:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">1 row selected (1.6 seconds)</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_ro <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 10:29:00  | 3391    | 1230.1899  | 1230.085  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line"><span class="comment"># Snapshot Query</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_mor_rt group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">WARNING: Hive-on-MR is deprecated <span class="keyword">in</span> Hive 2 and may not be available <span class="keyword">in</span> the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:59:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_rt <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924224537       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-Spark-SQL查询-1"><a href="#2-Spark-SQL查询-1" class="headerlink" title="2) Spark SQL查询"></a>2) Spark SQL查询</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-1 /bin/bash</span><br><span class="line"><span class="variable">$SPARK_INSTALL</span>/bin/spark-shell \</span><br><span class="line">  --jars <span class="variable">$HUDI_SPARK_BUNDLE</span> \</span><br><span class="line">  --driver-class-path <span class="variable">$HADOOP_CONF_DIR</span> \</span><br><span class="line">  --conf spark.sql.hive.convertMetastoreParquet=<span class="literal">false</span> \</span><br><span class="line">  --deploy-mode client \</span><br><span class="line">  --driver-memory 1G \</span><br><span class="line">  --master <span class="built_in">local</span>[2] \</span><br><span class="line">  --executor-memory 3G \</span><br><span class="line">  --num-executors 1 \</span><br><span class="line">  --packages org.apache.spark:spark-avro_2.11:2.4.4</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy On Write Table:</span></span><br><span class="line"></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select symbol, max(ts) from stock_ticks_cow group by symbol HAVING symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+------+-------------------+</span><br><span class="line">|symbol|max(ts)            |</span><br><span class="line">+------+-------------------+</span><br><span class="line">|GOOG  |2018-08-31 10:59:00|</span><br><span class="line">+------+-------------------+</span><br><span class="line"></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_cow where  symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924221953       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924224524       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line">As you can notice, the above queries now reflect the changes that came as part of ingesting second batch.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Merge On Read Table:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Read Optimized Query</span></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| GOOG    | 2018-08-31 10:29:00  |</span><br><span class="line">+---------+----------------------+</span><br><span class="line">1 row selected (1.6 seconds)</span><br><span class="line"></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_ro where  symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 10:29:00  | 3391    | 1230.1899  | 1230.085  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line"></span><br><span class="line"><span class="comment"># Snapshot Query</span></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select symbol, max(ts) from stock_ticks_mor_rt group by symbol HAVING symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| GOOG    | 2018-08-31 10:59:00  |</span><br><span class="line">+---------+----------------------+</span><br><span class="line"></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_rt where  symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| 20180924222155       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924224537       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-Presto查询-1"><a href="#3-Presto查询-1" class="headerlink" title="3) Presto查询"></a>3) Presto查询</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it presto-worker-1 presto --server presto-coordinator-1:8090</span><br><span class="line">presto&gt; use hive.default;</span><br><span class="line">USE</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy On Write Table:</span></span><br><span class="line"></span><br><span class="line">presto:default&gt;select symbol, max(ts) from stock_ticks_cow group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> symbol |        _col1</span><br><span class="line">--------+---------------------</span><br><span class="line"> GOOG   | 2018-08-31 10:59:00</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">Query 20190822_181530_00007_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 49 total, 49 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:02 [197 rows, 613B] [125 rows/s, 389B/s]</span><br><span class="line"></span><br><span class="line">presto:default&gt;select <span class="string">"_hoodie_commit_time"</span>, symbol, ts, volume, open, close  from stock_ticks_cow <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> _hoodie_commit_time | symbol |         ts          | volume |   open    |  close</span><br><span class="line">---------------------+--------+---------------------+--------+-----------+----------</span><br><span class="line"> 20190822180221      | GOOG   | 2018-08-31 09:59:00 |   6330 |    1230.5 |  1230.02</span><br><span class="line"> 20190822181433      | GOOG   | 2018-08-31 10:59:00 |   9021 | 1227.1993 | 1227.215</span><br><span class="line">(2 rows)</span><br><span class="line"></span><br><span class="line">Query 20190822_181545_00008_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 17 total, 17 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:02 [197 rows, 613B] [106 rows/s, 332B/s]</span><br><span class="line"></span><br><span class="line">As you can notice, the above queries now reflect the changes that came as part of ingesting second batch.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Merge On Read Table:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Read Optimized Query</span></span><br><span class="line">presto:default&gt; select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> symbol |        _col1</span><br><span class="line">--------+---------------------</span><br><span class="line"> GOOG   | 2018-08-31 10:29:00</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">Query 20190822_181602_00009_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 49 total, 49 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:01 [197 rows, 613B] [139 rows/s, 435B/s]</span><br><span class="line"></span><br><span class="line">presto:default&gt;select <span class="string">"_hoodie_commit_time"</span>, symbol, ts, volume, open, close  from stock_ticks_mor_ro <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> _hoodie_commit_time | symbol |         ts          | volume |   open    |  close</span><br><span class="line">---------------------+--------+---------------------+--------+-----------+----------</span><br><span class="line"> 20190822180250      | GOOG   | 2018-08-31 09:59:00 |   6330 |    1230.5 |  1230.02</span><br><span class="line"> 20190822180250      | GOOG   | 2018-08-31 10:29:00 |   3391 | 1230.1899 | 1230.085</span><br><span class="line">(2 rows)</span><br><span class="line"></span><br><span class="line">Query 20190822_181615_00010_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 17 total, 17 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:01 [197 rows, 613B] [154 rows/s, 480B/s]</span><br><span class="line"></span><br><span class="line">presto:default&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-Trino查询-1"><a href="#4-Trino查询-1" class="headerlink" title="4) Trino查询"></a>4) Trino查询</h4><p>略</p>
+<h3 id="7-增量查询"><a href="#7-增量查询" class="headerlink" title="(7) 增量查询"></a>(7) 增量查询</h3><h4 id="1-Hive"><a href="#1-Hive" class="headerlink" title="1) Hive"></a>1) Hive</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-2 /bin/bash</span><br><span class="line">beeline -u jdbc:hive2://hiveserver:10000 \</span><br><span class="line">  --hiveconf hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat \</span><br><span class="line">  --hiveconf hive.stats.autogather=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; <span class="built_in">set</span> hoodie.stock_ticks_cow.consume.mode=INCREMENTAL;</span><br><span class="line">No rows affected (0.009 seconds)</span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; <span class="built_in">set</span> hoodie.stock_ticks_cow.consume.max.commits=3;</span><br><span class="line">No rows affected (0.009 seconds)</span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; <span class="built_in">set</span> hoodie.stock_ticks_cow.consume.start.timestamp=20180924064621;</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt;</span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_cow <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span> and `_hoodie_commit_time` &gt; <span class="string">'20180924064621'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924065039       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">1 row selected (0.83 seconds)</span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="2-Spark-Shell"><a href="#2-Spark-Shell" class="headerlink" title="2) Spark Shell"></a>2) Spark Shell</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-1 /bin/bash</span><br><span class="line"><span class="variable">$SPARK_INSTALL</span>/bin/spark-shell \</span><br><span class="line">  --jars <span class="variable">$HUDI_SPARK_BUNDLE</span> \</span><br><span class="line">  --driver-class-path <span class="variable">$HADOOP_CONF_DIR</span> \</span><br><span class="line">  --conf spark.sql.hive.convertMetastoreParquet=<span class="literal">false</span> \</span><br><span class="line">  --deploy-mode client \</span><br><span class="line">  --driver-memory 1G \</span><br><span class="line">  --master <span class="built_in">local</span>[2] \</span><br><span class="line">  --executor-memory 3G \</span><br><span class="line">  --num-executors 1 \</span><br><span class="line">  --packages org.apache.spark:spark-avro_2.11:2.4.4</span><br><span class="line"></span><br><span class="line">Welcome to</span><br><span class="line">      ____              __</span><br><span class="line">     / __/__  ___ _____/ /__</span><br><span class="line">    _\ \/ _ \/ _ `/ __/  <span class="string">'_/</span></span><br><span class="line"><span class="string">   /___/ .__/\_,_/_/ /_/\_\   version 2.4.4</span></span><br><span class="line"><span class="string">      /_/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Using Scala version 2.11.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_212)</span></span><br><span class="line"><span class="string">Type in expressions to have them evaluated.</span></span><br><span class="line"><span class="string">Type :help for more information.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scala&gt; import org.apache.hudi.DataSourceReadOptions</span></span><br><span class="line"><span class="string">import org.apache.hudi.DataSourceReadOptions</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># In the below query, 20180925045257 is the first commit'</span>s timestamp</span><br><span class="line">scala&gt; val hoodieIncViewDF =  spark.read.format(<span class="string">"org.apache.hudi"</span>).option(DataSourceReadOptions.QUERY_TYPE_OPT_KEY, DataSourceReadOptions.QUERY_TYPE_INCREMENTAL_OPT_VAL).option(DataSourceReadOptions.BEGIN_INSTANTTIME_OPT_KEY, <span class="string">"20180924064621"</span>).load(<span class="string">"/user/hive/warehouse/stock_ticks_cow"</span>)</span><br><span class="line">SLF4J: Failed to load class <span class="string">"org.slf4j.impl.StaticLoggerBinder"</span>.</span><br><span class="line">SLF4J: Defaulting to no-operation (NOP) logger implementation</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes<span class="comment">#StaticLoggerBinder for further details.</span></span><br><span class="line">hoodieIncViewDF: org.apache.spark.sql.DataFrame = [_hoodie_commit_time: string, _hoodie_commit_seqno: string ... 15 more fields]</span><br><span class="line"></span><br><span class="line">scala&gt; hoodieIncViewDF.registerTempTable(<span class="string">"stock_ticks_cow_incr_tmp1"</span>)</span><br><span class="line">warning: there was one deprecation warning; re-run with -deprecation <span class="keyword">for</span> details</span><br><span class="line"></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_cow_incr_tmp1 where  symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>);</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| 20180924065039       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br></pre></td></tr></table></figure>
+<h3 id="8-调度并对MOR表压缩"><a href="#8-调度并对MOR表压缩" class="headerlink" title="(8) 调度并对MOR表压缩"></a>(8) 调度并对MOR表压缩</h3><p>使用Hudi CLI调度并压缩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-1 /bin/bash</span><br><span class="line">root@adhoc-1:/opt<span class="comment"># /var/hoodie/ws/hudi-cli/hudi-cli.sh</span></span><br><span class="line">...</span><br><span class="line">Table <span class="built_in">command</span> getting loaded</span><br><span class="line">HoodieSplashScreen loaded</span><br><span class="line">===================================================================</span><br><span class="line">*         ___                          ___                        *</span><br><span class="line">*        /\__\          ___           /\  \           ___         *</span><br><span class="line">*       / /  /         /\__\         /  \  \         /\  \        *</span><br><span class="line">*      / /__/         / /  /        / /\ \  \        \ \  \       *</span><br><span class="line">*     /  \  \ ___    / /  /        / /  \ \__\       /  \__\      *</span><br><span class="line">*    / /\ \  /\__\  / /__/  ___   / /__/ \ |__|     / /\/__/      *</span><br><span class="line">*    \/  \ \/ /  /  \ \  \ /\__\  \ \  \ / /  /  /\/ /  /         *</span><br><span class="line">*         \  /  /    \ \  / /  /   \ \  / /  /   \  /__/          *</span><br><span class="line">*         / /  /      \ \/ /  /     \ \/ /  /     \ \__\          *</span><br><span class="line">*        / /  /        \  /  /       \  /  /       \/__/          *</span><br><span class="line">*        \/__/          \/__/         \/__/    Apache Hudi CLI    *</span><br><span class="line">*                                                                 *</span><br><span class="line">===================================================================</span><br><span class="line"></span><br><span class="line">Welcome to Apache Hudi CLI. Please <span class="built_in">type</span> <span class="built_in">help</span> <span class="keyword">if</span> you are looking <span class="keyword">for</span> <span class="built_in">help</span>.</span><br><span class="line">hudi-&gt;connect --path /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">18/09/24 06:59:34 WARN util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... using <span class="built_in">builtin</span>-java classes <span class="built_in">where</span> applicable</span><br><span class="line">18/09/24 06:59:35 INFO table.HoodieTableMetaClient: Loading HoodieTableMetaClient from /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">18/09/24 06:59:35 INFO util.FSUtils: Hadoop Configuration: fs.defaultFS: [hdfs://namenode:8020], Config:[Configuration: core-default.xml, core-site.xml, mapred-default.xml, mapred-site.xml, yarn-default.xml, yarn-site.xml, hdfs-default.xml, hdfs-site.xml], FileSystem: [DFS[DFSClient[clientName=DFSClient_NONMAPREDUCE_-1261652683_11, ugi=root (auth:SIMPLE)]]]</span><br><span class="line">18/09/24 06:59:35 INFO table.HoodieTableConfig: Loading table properties from /user/hive/warehouse/stock_ticks_mor/.hoodie/hoodie.properties</span><br><span class="line">18/09/24 06:59:36 INFO table.HoodieTableMetaClient: Finished Loading Table of <span class="built_in">type</span> MERGE_ON_READ(version=1) from /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">Metadata <span class="keyword">for</span> table stock_ticks_mor loaded</span><br><span class="line">hoodie:stock_ticks_mor-&gt;compactions show all</span><br><span class="line">20/02/10 03:41:32 INFO timeline.HoodieActiveTimeline: Loaded instants [[20200210015059__clean__COMPLETED], [20200210015059__deltacommit__COMPLETED], [20200210022758__clean__COMPLETED], [20200210022758__deltacommit__COMPLETED], [==&gt;20200210023843__compaction__REQUESTED]]</span><br><span class="line">___________________________________________________________________</span><br><span class="line">| Compaction Instant Time| State    | Total FileIds to be Compacted|</span><br><span class="line">|==================================================================|</span><br><span class="line"></span><br><span class="line"><span class="comment"># Schedule a compaction. This will use Spark Launcher to schedule compaction</span></span><br><span class="line">hoodie:stock_ticks_mor-&gt;compaction schedule</span><br><span class="line">....</span><br><span class="line">Compaction successfully completed <span class="keyword">for</span> 20180924070031</span><br><span class="line"></span><br><span class="line"><span class="comment"># Now refresh and check again. You will see that there is a new compaction requested</span></span><br><span class="line"></span><br><span class="line">hoodie:stock_ticks-&gt;connect --path /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">18/09/24 07:01:16 INFO table.HoodieTableMetaClient: Loading HoodieTableMetaClient from /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">18/09/24 07:01:16 INFO util.FSUtils: Hadoop Configuration: fs.defaultFS: [hdfs://namenode:8020], Config:[Configuration: core-default.xml, core-site.xml, mapred-default.xml, mapred-site.xml, yarn-default.xml, yarn-site.xml, hdfs-default.xml, hdfs-site.xml], FileSystem: [DFS[DFSClient[clientName=DFSClient_NONMAPREDUCE_-1261652683_11, ugi=root (auth:SIMPLE)]]]</span><br><span class="line">18/09/24 07:01:16 INFO table.HoodieTableConfig: Loading table properties from /user/hive/warehouse/stock_ticks_mor/.hoodie/hoodie.properties</span><br><span class="line">18/09/24 07:01:16 INFO table.HoodieTableMetaClient: Finished Loading Table of <span class="built_in">type</span> MERGE_ON_READ(version=1) from /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">Metadata <span class="keyword">for</span> table stock_ticks_mor loaded</span><br><span class="line"></span><br><span class="line">hoodie:stock_ticks_mor-&gt;compactions show all</span><br><span class="line">18/09/24 06:34:12 INFO timeline.HoodieActiveTimeline: Loaded instants [[20180924041125__clean__COMPLETED], [20180924041125__deltacommit__COMPLETED], [20180924042735__clean__COMPLETED], [20180924042735__deltacommit__COMPLETED], [==&gt;20180924063245__compaction__REQUESTED]]</span><br><span class="line">___________________________________________________________________</span><br><span class="line">| Compaction Instant Time| State    | Total FileIds to be Compacted|</span><br><span class="line">|==================================================================|</span><br><span class="line">| 20180924070031         | REQUESTED| 1                            |</span><br><span class="line"></span><br><span class="line"><span class="comment"># Execute the compaction. The compaction instant value passed below must be the one displayed in the above "compactions show all" query</span></span><br><span class="line">hoodie:stock_ticks_mor-&gt;compaction run --compactionInstant  20180924070031 --parallelism 2 --sparkMemory 1G  --schemaFilePath /var/demo/config/schema.avsc --retry 1  </span><br><span class="line">....</span><br><span class="line">Compaction successfully completed <span class="keyword">for</span> 20180924070031</span><br><span class="line"></span><br><span class="line"><span class="comment">## Now check if compaction is completed</span></span><br><span class="line"></span><br><span class="line">hoodie:stock_ticks_mor-&gt;connect --path /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">18/09/24 07:03:00 INFO table.HoodieTableMetaClient: Loading HoodieTableMetaClient from /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">18/09/24 07:03:00 INFO util.FSUtils: Hadoop Configuration: fs.defaultFS: [hdfs://namenode:8020], Config:[Configuration: core-default.xml, core-site.xml, mapred-default.xml, mapred-site.xml, yarn-default.xml, yarn-site.xml, hdfs-default.xml, hdfs-site.xml], FileSystem: [DFS[DFSClient[clientName=DFSClient_NONMAPREDUCE_-1261652683_11, ugi=root (auth:SIMPLE)]]]</span><br><span class="line">18/09/24 07:03:00 INFO table.HoodieTableConfig: Loading table properties from /user/hive/warehouse/stock_ticks_mor/.hoodie/hoodie.properties</span><br><span class="line">18/09/24 07:03:00 INFO table.HoodieTableMetaClient: Finished Loading Table of <span class="built_in">type</span> MERGE_ON_READ(version=1) from /user/hive/warehouse/stock_ticks_mor</span><br><span class="line">Metadata <span class="keyword">for</span> table stock_ticks_mor loaded</span><br><span class="line"></span><br><span class="line">hoodie:stock_ticks-&gt;compactions show all</span><br><span class="line">18/09/24 07:03:15 INFO timeline.HoodieActiveTimeline: Loaded instants [[20180924064636__clean__COMPLETED], [20180924064636__deltacommit__COMPLETED], [20180924065057__clean__COMPLETED], [20180924065057__deltacommit__COMPLETED], [20180924070031__commit__COMPLETED]]</span><br><span class="line">___________________________________________________________________</span><br><span class="line">| Compaction Instant Time| State    | Total FileIds to be Compacted|</span><br><span class="line">|==================================================================|</span><br><span class="line">| 20180924070031         | COMPLETED| 1                            |</span><br></pre></td></tr></table></figure>
+<h3 id="9-Hive查询（包含增量数据）"><a href="#9-Hive查询（包含增量数据）" class="headerlink" title="(9) Hive查询（包含增量数据）"></a>(9) Hive查询（包含增量数据）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-2 /bin/bash</span><br><span class="line">beeline -u jdbc:hive2://hiveserver:10000 \</span><br><span class="line">  --hiveconf hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat \</span><br><span class="line">  --hiveconf hive.stats.autogather=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Read Optimized Query</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">WARNING: Hive-on-MR is deprecated <span class="keyword">in</span> Hive 2 and may not be available <span class="keyword">in</span> the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:59:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">1 row selected (1.6 seconds)</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_ro <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924064636       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924070031       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line"><span class="comment"># Snapshot Query</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select symbol, max(ts) from stock_ticks_mor_rt group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">WARNING: Hive-on-MR is deprecated <span class="keyword">in</span> Hive 2 and may not be available <span class="keyword">in</span> the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| symbol  |         _c1          |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line">| GOOG    | 2018-08-31 10:59:00  |</span><br><span class="line">+---------+----------------------+--+</span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_rt <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924064636       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924070031       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line"><span class="comment"># Incremental Query:</span></span><br><span class="line"></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; <span class="built_in">set</span> hoodie.stock_ticks_mor.consume.mode=INCREMENTAL;</span><br><span class="line">No rows affected (0.008 seconds)</span><br><span class="line"><span class="comment"># Max-Commits covers both second batch and compaction commit</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; <span class="built_in">set</span> hoodie.stock_ticks_mor.consume.max.commits=3;</span><br><span class="line">No rows affected (0.007 seconds)</span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; <span class="built_in">set</span> hoodie.stock_ticks_mor.consume.start.timestamp=20180924064636;</span><br><span class="line">No rows affected (0.013 seconds)</span><br><span class="line"><span class="comment"># Query:</span></span><br><span class="line">0: jdbc:hive2://hiveserver:10000&gt; select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_ro <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span> and `_hoodie_commit_time` &gt; <span class="string">'20180924064636'</span>;</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line">| 20180924070031       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+--+</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h3 id="10-使用Spark-SQL对压缩后MOR表读优化查询和快照查询"><a href="#10-使用Spark-SQL对压缩后MOR表读优化查询和快照查询" class="headerlink" title="(10) 使用Spark SQL对压缩后MOR表读优化查询和快照查询"></a>(10) 使用Spark SQL对压缩后MOR表读优化查询和快照查询</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it adhoc-1 /bin/bash</span><br><span class="line"><span class="variable">$SPARK_INSTALL</span>/bin/spark-shell \</span><br><span class="line">  --jars <span class="variable">$HUDI_SPARK_BUNDLE</span> \</span><br><span class="line">  --driver-class-path <span class="variable">$HADOOP_CONF_DIR</span> \</span><br><span class="line">  --conf spark.sql.hive.convertMetastoreParquet=<span class="literal">false</span> \</span><br><span class="line">  --deploy-mode client \</span><br><span class="line">  --driver-memory 1G \</span><br><span class="line">  --master <span class="built_in">local</span>[2] \</span><br><span class="line">  --executor-memory 3G \</span><br><span class="line">  --num-executors 1 \</span><br><span class="line">  --packages org.apache.spark:spark-avro_2.11:2.4.4</span><br><span class="line"></span><br><span class="line"><span class="comment"># Read Optimized Query</span></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| symbol  |        max(ts)       |</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| GOOG    | 2018-08-31 10:59:00  |</span><br><span class="line">+---------+----------------------+</span><br><span class="line">1 row selected (1.6 seconds)</span><br><span class="line"></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_ro where  symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| 20180924064636       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924070031       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line"></span><br><span class="line"><span class="comment"># Snapshot Query</span></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select symbol, max(ts) from stock_ticks_mor_rt group by symbol HAVING symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| symbol  |     max(ts)          |</span><br><span class="line">+---------+----------------------+</span><br><span class="line">| GOOG    | 2018-08-31 10:59:00  |</span><br><span class="line">+---------+----------------------+</span><br><span class="line"></span><br><span class="line">scala&gt; spark.sql(<span class="string">"select `_hoodie_commit_time`, symbol, ts, volume, open, close  from stock_ticks_mor_rt where  symbol = 'GOOG'"</span>).show(100, <span class="literal">false</span>)</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| _hoodie_commit_time  | symbol  |          ts          | volume  |    open    |   close   |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br><span class="line">| 20180924064636       | GOOG    | 2018-08-31 09:59:00  | 6330    | 1230.5     | 1230.02   |</span><br><span class="line">| 20180924070031       | GOOG    | 2018-08-31 10:59:00  | 9021    | 1227.1993  | 1227.215  |</span><br><span class="line">+----------------------+---------+----------------------+---------+------------+-----------+</span><br></pre></td></tr></table></figure>
+<h3 id="11-使用Presto对压缩后MOR表读优化查询"><a href="#11-使用Presto对压缩后MOR表读优化查询" class="headerlink" title="(11) 使用Presto对压缩后MOR表读优化查询"></a>(11) 使用Presto对压缩后MOR表读优化查询</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it presto-worker-1 presto --server presto-coordinator-1:8090</span><br><span class="line">presto&gt; use hive.default;</span><br><span class="line">USE</span><br><span class="line"></span><br><span class="line"><span class="comment"># Read Optimized Query</span></span><br><span class="line">resto:default&gt; select symbol, max(ts) from stock_ticks_mor_ro group by symbol HAVING symbol = <span class="string">'GOOG'</span>;</span><br><span class="line">  symbol |        _col1</span><br><span class="line">--------+---------------------</span><br><span class="line"> GOOG   | 2018-08-31 10:59:00</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">Query 20190822_182319_00011_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 49 total, 49 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:01 [197 rows, 613B] [133 rows/s, 414B/s]</span><br><span class="line"></span><br><span class="line">presto:default&gt; select <span class="string">"_hoodie_commit_time"</span>, symbol, ts, volume, open, close  from stock_ticks_mor_ro <span class="built_in">where</span>  symbol = <span class="string">'GOOG'</span>;</span><br><span class="line"> _hoodie_commit_time | symbol |         ts          | volume |   open    |  close</span><br><span class="line">---------------------+--------+---------------------+--------+-----------+----------</span><br><span class="line"> 20190822180250      | GOOG   | 2018-08-31 09:59:00 |   6330 |    1230.5 |  1230.02</span><br><span class="line"> 20190822181944      | GOOG   | 2018-08-31 10:59:00 |   9021 | 1227.1993 | 1227.215</span><br><span class="line">(2 rows)</span><br><span class="line"></span><br><span class="line">Query 20190822_182333_00012_segyw, FINISHED, 1 node</span><br><span class="line">Splits: 17 total, 17 <span class="keyword">done</span> (100.00%)</span><br><span class="line">0:02 [197 rows, 613B] [98 rows/s, 307B/s]</span><br><span class="line"></span><br><span class="line">presto:default&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-测试Hudi"><a href="#4-测试Hudi" class="headerlink" title="4 测试Hudi"></a>4 测试Hudi</h2><p>当前组件版本Hadoop2.8.4、Hive2.3.3和Spark2.4.4.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- 启动包含Hadoop、Hive和Spark的Docker环境</span><br><span class="line">$ mvn pre-integration-test -DskipTests</span><br><span class="line"></span><br><span class="line">-- 关闭容器</span><br><span class="line">$ <span class="built_in">cd</span> hudi-integ-test</span><br><span class="line">$ mvn docker-compose:down</span><br><span class="line"></span><br><span class="line">-- 启动容器</span><br><span class="line">$ <span class="built_in">cd</span> hudi-integ-test</span><br><span class="line">$ mvn docker-compose:up -DdetachedMode=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-构建本地Docker容器"><a href="#1-构建本地Docker容器" class="headerlink" title="(1) 构建本地Docker容器"></a>(1) 构建本地Docker容器</h3><p>docker/compose/docker-compose_hadoop284_hive233_spark244.yml保证了本地jar覆盖内建jar。</p>
+<p>ocker/build_local_docker_images.sh构建本地docker镜像。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hudi/" rel="tag"># Hudi</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/31/20220331Hudi Spark指南/" rel="next" title="Hudi on Spark">
+                <i class="fa fa-chevron-left"></i> Hudi on Spark
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/04/11/20220411Hudi压缩/" rel="prev" title="Hudi压缩">
+                Hudi压缩 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-准备"><span class="nav-number">1.</span> <span class="nav-text">1 准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-部署Docker集群"><span class="nav-number">2.</span> <span class="nav-text">2 部署Docker集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-编译Hudi"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 编译Hudi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-启动集群"><span class="nav-number">2.2.</span> <span class="nav-text">(2) 启动集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-示例"><span class="nav-number">3.</span> <span class="nav-text">3 示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-发布首批数据到kafka"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 发布首批数据到kafka</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-从kafka主题中增量消费数据"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 从kafka主题中增量消费数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-同步Hive"><span class="nav-number">3.3.</span> <span class="nav-text">(3) 同步Hive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-查询"><span class="nav-number">3.4.</span> <span class="nav-text">(4) 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Hive查询"><span class="nav-number">3.4.1.</span> <span class="nav-text">1) Hive查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Spark-SQL查询"><span class="nav-number">3.4.2.</span> <span class="nav-text">2) Spark SQL查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Presto查询"><span class="nav-number">3.4.3.</span> <span class="nav-text">3) Presto查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Trino查询"><span class="nav-number">3.4.4.</span> <span class="nav-text">4) Trino查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-上传第二批数据并使用Delta-Streamer消费"><span class="nav-number">3.5.</span> <span class="nav-text">(5) 上传第二批数据并使用Delta Streamer消费</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-查询"><span class="nav-number">3.6.</span> <span class="nav-text">(6) 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Hive查询-1"><span class="nav-number">3.6.1.</span> <span class="nav-text">1) Hive查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Spark-SQL查询-1"><span class="nav-number">3.6.2.</span> <span class="nav-text">2) Spark SQL查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Presto查询-1"><span class="nav-number">3.6.3.</span> <span class="nav-text">3) Presto查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Trino查询-1"><span class="nav-number">3.6.4.</span> <span class="nav-text">4) Trino查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-增量查询"><span class="nav-number">3.7.</span> <span class="nav-text">(7) 增量查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Hive"><span class="nav-number">3.7.1.</span> <span class="nav-text">1) Hive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Spark-Shell"><span class="nav-number">3.7.2.</span> <span class="nav-text">2) Spark Shell</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-调度并对MOR表压缩"><span class="nav-number">3.8.</span> <span class="nav-text">(8) 调度并对MOR表压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-Hive查询（包含增量数据）"><span class="nav-number">3.9.</span> <span class="nav-text">(9) Hive查询（包含增量数据）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-使用Spark-SQL对压缩后MOR表读优化查询和快照查询"><span class="nav-number">3.10.</span> <span class="nav-text">(10) 使用Spark SQL对压缩后MOR表读优化查询和快照查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-使用Presto对压缩后MOR表读优化查询"><span class="nav-number">3.11.</span> <span class="nav-text">(11) 使用Presto对压缩后MOR表读优化查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-测试Hudi"><span class="nav-number">4.</span> <span class="nav-text">4 测试Hudi</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-构建本地Docker容器"><span class="nav-number">4.1.</span> <span class="nav-text">(1) 构建本地Docker容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2022/04/08/20220408Hudi Docker Demo/';
+          this.page.identifier = '2022/04/08/20220408Hudi Docker Demo/';
+          this.page.title = 'Hudi Docker Demo';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

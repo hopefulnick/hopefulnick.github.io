@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ANTLR 4," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 语义谓词语义谓词是使用目标语言编写的布尔表达式，表示沿谓词“保护”路径继续进行语法分析的有效性。">
+<meta name="keywords" content="ANTLR 4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ANTLR 4语义谓词">
+<meta property="og:url" content="https://hopefulnick.github.io/2021/03/25/210325语义谓词/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 语义谓词语义谓词是使用目标语言编写的布尔表达式，表示沿谓词“保护”路径继续进行语法分析的有效性。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-06-06T07:30:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ANTLR 4语义谓词">
+<meta name="twitter:description" content="1 语义谓词语义谓词是使用目标语言编写的布尔表达式，表示沿谓词“保护”路径继续进行语法分析的有效性。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2021/03/25/210325语义谓词/"/>
+
+
+
+
+
+  <title>ANTLR 4语义谓词 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2021/03/25/210325语义谓词/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ANTLR 4语义谓词</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-25T11:00:47+08:00">
+                2021-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ANTLR-4/" itemprop="url" rel="index">
+                    <span itemprop="name">ANTLR 4</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/03/25/210325语义谓词/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/03/25/210325语义谓词/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-语义谓词"><a href="#1-语义谓词" class="headerlink" title="1 语义谓词"></a>1 语义谓词</h2><p>语义谓词是使用目标语言编写的布尔表达式，表示沿谓词“保护”路径继续进行语法分析的有效性。</p>
+<a id="more"></a>
+<p>可以像动作一样出现在任意位置，但是只有出现在选项左边缘的谓词才能影响预测（在选项间选择）。</p>
+<h2 id="2-解析决策"><a href="#2-解析决策" class="headerlink" title="2 解析决策"></a>2 解析决策</h2><p>通常决策策略是选择最先匹配且预测为true的选项。</p>
+<p>如下匹配C++中的数组引用的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">expr: ID &apos;(&apos; expr &apos;)&apos; // array reference (ANTLR picks this one)</span><br><span class="line"> 	| &#123;istype()&#125;? ID &apos;(&apos; expr &apos;)&apos; // ctor-style typecast</span><br><span class="line"> 	| ID &apos;(&apos; expr &apos;)&apos; // function call</span><br><span class="line"> 	;</span><br></pre></td></tr></table></figure>
+<p>对于输入x(i)，3个选项都会匹配。但是按照顺序，最终只取第一个。此外，对于不是类型名称的x，不会匹配第二个选项。</p>
+<p>建议针对n个选项，配备n-1个谓词。</p>
+<p>单一选项具有多个谓词时，会合并相关的语义。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">stat: decl | expr ;</span><br><span class="line">decl: ID ID ;</span><br><span class="line">expr: &#123;istype()&#125;? ID &apos;(&apos; expr &apos;)&apos; // ctor-style typecast</span><br><span class="line"> 	| &#123;isfunc()&#125;? ID &apos;(&apos; expr &apos;)&apos; // function call</span><br><span class="line"> 	;</span><br></pre></td></tr></table></figure>
+<p>规则stat会合并expr的条件，生成istype()||isfunc()。</p>
+<p>如果在一个序列中连续出现了多个谓词，则使用&amp;&amp;连接谓词。如以下示例将产生java5&amp;&amp;(istype()||isfunc())</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stat: decl | &#123;java5&#125;? expr ;</span><br></pre></td></tr></table></figure>
+<p>当没有可选项时，将抛出异常。</p>
+<p>如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prog: &#123;false&#125;? &apos;return&apos; INT ; // throws FailedPredicateException</span><br></pre></td></tr></table></figure>
+<p>在解析器中将增加条件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( !<span class="keyword">false</span> ) <span class="keyword">throw</span> <span class="keyword">new</span> FailedPredicateException(...);</span><br></pre></td></tr></table></figure>
+<h2 id="3-查找可见谓词"><a href="#3-查找可见谓词" class="headerlink" title="3 查找可见谓词"></a>3 查找可见谓词</h2><p>到目前为止，使用的谓词都是可见且可用于谓词处理的，但是事实不止于此。</p>
+<p>解析器不会评估出现在动作或记号引用后的谓词。</p>
+<p>ANTLR必须在决定采用哪个规则选项后再执行动作。因为动作可能对谓词产生意外的影响，或者不可撤销的影响，如打印操作等。</p>
+<p>如下示例不能在谓词前执行动作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@members &#123;boolean allowgoto=false;&#125;</span><br><span class="line">stat: &#123;System.out.println(&quot;goto&quot;); allowgoto=true;&#125; &#123;java5&#125;? &apos;goto&apos; ID &apos;;&apos;</span><br><span class="line"> 	| ...</span><br><span class="line"> 	;</span><br></pre></td></tr></table></figure>
+<p>同样，不能在谓词前使用记号引用，因为记号引用会导致匹配下标后移。</p>
+<p>如下示例期望getCurrentToken返回记号ID，但谓词并不会</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">stat: &apos;&#123;&apos; decl &apos;&#125;&apos;</span><br><span class="line"> 	| &apos;&#123;&apos; stat &apos;&#125;&apos;</span><br><span class="line"> 	;</span><br><span class="line">decl: &#123;istype(getCurrentToken().getText())&#125;? ID ID &apos;;&apos; ;</span><br><span class="line">expr: &#123;isvar(getCurrentToken().getText())&#125;? ID ;</span><br></pre></td></tr></table></figure>
+<p>在stat中引用了记号{，导致了谓词不能测试。</p>
+<p>可见谓词是指在动作或记号引用前出现的谓词。对于不可见谓词将直接忽略。</p>
+<p>在少数场景中，即使可见谓词也不能使用。详见下方。</p>
+<h2 id="4-上下文依赖谓词"><a href="#4-上下文依赖谓词" class="headerlink" title="4 上下文依赖谓词"></a>4 上下文依赖谓词</h2><p>上下文依赖谓词是指依赖规则中的参数或本地变量的谓词。</p>
+<p>ANTLR会忽略不在当前规则范围内的上下文依赖谓词。甚至有时即使在同一规则内也会被无法评估。检测发生在Adaptive LL(*) Prediction阶段。</p>
+<p>如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">prog: stat+ ; // stat can follow stat</span><br><span class="line">stat</span><br><span class="line">locals [int i=0]</span><br><span class="line"> 	: &#123;$i==0&#125;? &apos;if&apos; expr &apos;then&apos; stat &#123;$i=5;&#125; (&apos;else&apos; stat)?</span><br><span class="line"> 	| &apos;break&apos; &apos;;&apos;</span><br><span class="line"> 	;</span><br></pre></td></tr></table></figure>
+<p>?The prediction process is trying to figure out what can follow an if statement other than an else clause. Since the input can have multiple stats in a row, the prediction for the optional branch of the else subrule reenters stat. This time, of course, it gets a new copy of <code>$i</code> with a value of 0, not 5. ANTLR ignores context-dependent predicate <code>{$i==0}?</code> because it knows that the parser isn’t in the original stat call. The predicate would test a different version of <code>$i</code> so the parser can’t evaluate it.</p>
+<h2 id="5-词法规则中的谓词"><a href="#5-词法规则中的谓词" class="headerlink" title="5 词法规则中的谓词"></a>5 词法规则中的谓词</h2><p>与解析器中谓词必须出现在选项左边不同，在词法器中倾向于出现在右边，因为可以在找到记号文本后选择规则。</p>
+<p>词法器中的谓词理论上可以出现在任意位置。</p>
+<p>词法器中的谓词即使在单一匹配中也可能被执行多次。</p>
+<p>简单的说，词法器的目的是选择与输入字符最匹配的规则。对于每一个字符，词法器可以决定哪些规则可见。但最终只有一个可见的规则，词法器根据这个规则构建记号对象。</p>
+<p>词法解析器匹配第一个适配的规则，因此需要将关键规则放置在识别规则之前。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ENUM : &apos;enum&apos; ;</span><br><span class="line">ID : [a-z]+ ;</span><br></pre></td></tr></table></figure>
+<p>由于词法规则适配可能受到动作影响，词法规则应该放置在动作之前。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ENUM: [a-z]+ &#123;getText().equals(&quot;enum&quot;)&#125;?</span><br><span class="line">	   &#123;System.out.println(&quot;enum!&quot;);&#125;</span><br><span class="line">    ;</span><br><span class="line">ID  : [a-z]+ &#123;System.out.println(&quot;ID &quot;+getText());&#125; ;</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ANTLR-4/" rel="tag"># ANTLR 4</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/24/210324解析树匹配和XPath/" rel="next" title="ANTLR 4解析树匹配和XPath">
+                <i class="fa fa-chevron-left"></i> ANTLR 4解析树匹配和XPath
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/31/210331选项/" rel="prev" title="ANTLR 4选项">
+                ANTLR 4选项 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-语义谓词"><span class="nav-number">1.</span> <span class="nav-text">1 语义谓词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-解析决策"><span class="nav-number">2.</span> <span class="nav-text">2 解析决策</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-查找可见谓词"><span class="nav-number">3.</span> <span class="nav-text">3 查找可见谓词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-上下文依赖谓词"><span class="nav-number">4.</span> <span class="nav-text">4 上下文依赖谓词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-词法规则中的谓词"><span class="nav-number">5.</span> <span class="nav-text">5 词法规则中的谓词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2021/03/25/210325语义谓词/';
+          this.page.identifier = '2021/03/25/210325语义谓词/';
+          this.page.title = 'ANTLR 4语义谓词';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

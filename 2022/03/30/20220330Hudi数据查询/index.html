@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hudi," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本0.10.1。 1 Spark数据源可以简单地通过spark.read.parquet方式加载hudi表。">
+<meta name="keywords" content="Hudi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hudi数据查询">
+<meta property="og:url" content="https://hopefulnick.github.io/2022/03/30/20220330Hudi数据查询/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本0.10.1。 1 Spark数据源可以简单地通过spark.read.parquet方式加载hudi表。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-06-06T08:06:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hudi数据查询">
+<meta name="twitter:description" content="适用于版本0.10.1。 1 Spark数据源可以简单地通过spark.read.parquet方式加载hudi表。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2022/03/30/20220330Hudi数据查询/"/>
+
+
+
+
+
+  <title>Hudi数据查询 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2022/03/30/20220330Hudi数据查询/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hudi数据查询</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-30T11:00:47+08:00">
+                2022-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hudi/" itemprop="url" rel="index">
+                    <span itemprop="name">Hudi</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/03/30/20220330Hudi数据查询/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/03/30/20220330Hudi数据查询/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本0.10.1。</p>
+<h2 id="1-Spark数据源"><a href="#1-Spark数据源" class="headerlink" title="1 Spark数据源"></a>1 Spark数据源</h2><p>可以简单地通过<code>spark.read.parquet</code>方式加载hudi表。</p>
+<a id="more"></a>
+<h3 id="1-快照查询"><a href="#1-快照查询" class="headerlink" title="(1) 快照查询"></a>(1) 快照查询</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> hudiIncQueryDF = spark</span><br><span class="line">     .read()</span><br><span class="line">     .format(<span class="string">"hudi"</span>)</span><br><span class="line">     .option(<span class="type">DataSourceReadOptions</span>.<span class="type">QUERY_TYPE_OPT_KEY</span>(), <span class="type">DataSourceReadOptions</span>.<span class="type">QUERY_TYPE_SNAPSHOT_OPT_VAL</span>())</span><br><span class="line">     .load(tablePath)</span><br></pre></td></tr></table></figure>
+<h3 id="2-增量查询"><a href="#2-增量查询" class="headerlink" title="(2) 增量查询"></a>(2) 增量查询</h3><p>查询beginInstantTime时间后的增量数据。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="type">Dataset</span>&lt;<span class="type">Row</span>&gt; hudiIncQueryDF = spark.read()</span><br><span class="line">     .format(<span class="string">"org.apache.hudi"</span>)</span><br><span class="line">     .option(<span class="type">DataSourceReadOptions</span>.<span class="type">QUERY_TYPE_OPT_KEY</span>(), <span class="type">DataSourceReadOptions</span>.<span class="type">QUERY_TYPE_INCREMENTAL_OPT_VAL</span>())</span><br><span class="line">     .option(<span class="type">DataSourceReadOptions</span>.<span class="type">BEGIN_INSTANTTIME_OPT_KEY</span>(), &lt;beginInstantTime&gt;)</span><br><span class="line">     .option(<span class="type">DataSourceReadOptions</span>.<span class="type">INCR_PATH_GLOB_OPT_KEY</span>(), <span class="string">"/year=2020/month=*/day=*"</span>) <span class="comment">// Optional, use glob pattern if querying certain partitions</span></span><br><span class="line">     .load(tablePath); <span class="comment">// For incremental query, pass in the root/base path of table</span></span><br><span class="line">     </span><br><span class="line">hudiIncQueryDF.createOrReplaceTempView(<span class="string">"hudi_trips_incremental"</span>)</span><br><span class="line">spark.sql(<span class="string">"select `_hoodie_commit_time`, fare, begin_lon, begin_lat, ts from  hudi_trips_incremental where fare &gt; 20.0"</span>).show()</span><br></pre></td></tr></table></figure>
+<p>HoodieReadClient提供了以下隐式索引。</p>
+<table>
+<thead>
+<tr>
+<th><strong>API</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>read(keys)</td>
+<td>Read out the data corresponding to the keys as a DataFrame, using Hudi’s own index for faster lookup</td>
+</tr>
+<tr>
+<td>filterExists()</td>
+<td>Filter out already existing records from the provided <code>RDD[HoodieRecord]</code>. Useful for de-duplication</td>
+</tr>
+<tr>
+<td>checkExists(keys)</td>
+<td>Check if the provided keys exist in a Hudi table</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-Spark-SQL"><a href="#3-Spark-SQL" class="headerlink" title="(3) Spark SQL"></a>(3) Spark SQL</h3><p>Spark SQL默认使用自身的Parquet实现，而不是使用Hive SerDe。</p>
+<p>不同的表类型需要注意以下设置：</p>
+<h4 id="1-COW"><a href="#1-COW" class="headerlink" title="1) COW"></a>1) COW</h4><p>Spark默认Parquet读取器可用于保留内建的优化，如向量化读取等。需要如下设置路径过滤器：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark.sparkContext.hadoopConfiguration.setClass(<span class="string">"mapreduce.input.pathFilter.class"</span>, classOf[org.apache.hudi.hadoop.<span class="type">HoodieROTablePathFilter</span>], classOf[org.apache.hadoop.fs.<span class="type">PathFilter</span>]);</span><br></pre></td></tr></table></figure>
+<p>关闭默认读取器后依旧可以查询。</p>
+<h4 id="2-MOR"><a href="#2-MOR" class="headerlink" title="2) MOR"></a>2) MOR</h4><p>版本&gt;0.9.0无需额外配置。</p>
+<h2 id="2-Flink-SQL"><a href="#2-Flink-SQL" class="headerlink" title="2 Flink SQL"></a>2 Flink SQL</h2><h2 id="3-Hive"><a href="#3-Hive" class="headerlink" title="3 Hive"></a>3 Hive</h2><h3 id="1-增量查询"><a href="#1-增量查询" class="headerlink" title="(1) 增量查询"></a>(1) 增量查询</h3><p>HiveIncrementalPuller允许使用HiveQL增量查询，使用Hive JDBC运行Hive查询，并将结果保存在临时表中。</p>
+<p>Upsert工具HoodieDeltaStreamer能够从文件架构获取所需的状态信息，如app/incremental-hql/intermediate/{source_table_name}_temp/{last_commit_included}。变化表将注册为{tmpdb}.{source<em>table}</em>{last_commit_included}。</p>
+<p>HiveIncrementalPuller配置如下：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Config</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Default</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hiveUrl</td>
+<td>Hive Server 2 URL to connect to</td>
+<td></td>
+</tr>
+<tr>
+<td>hiveUser</td>
+<td>Hive Server 2 Username</td>
+<td></td>
+</tr>
+<tr>
+<td>hivePass</td>
+<td>Hive Server 2 Password</td>
+<td></td>
+</tr>
+<tr>
+<td>queue</td>
+<td>YARN Queue name</td>
+<td></td>
+</tr>
+<tr>
+<td>tmp</td>
+<td>Directory where the temporary delta data is stored in DFS. The directory structure will follow conventions. Please see the below section.</td>
+<td></td>
+</tr>
+<tr>
+<td>extractSQLFile</td>
+<td>The SQL to execute on the source table to extract the data. The data extracted will be all the rows that changed since a particular point in time.</td>
+<td></td>
+</tr>
+<tr>
+<td>sourceTable</td>
+<td>Source Table Name. Needed to set hive environment properties.</td>
+<td></td>
+</tr>
+<tr>
+<td>sourceDb</td>
+<td>Source DB name. Needed to set hive environment properties.</td>
+<td></td>
+</tr>
+<tr>
+<td>targetTable</td>
+<td>Target Table Name. Needed for the intermediate storage directory structure.</td>
+<td></td>
+</tr>
+<tr>
+<td>targetDb</td>
+<td>Target table’s DB name.</td>
+<td></td>
+</tr>
+<tr>
+<td>tmpdb</td>
+<td>The database to which the intermediate temp delta table will be created</td>
+<td>hoodie_temp</td>
+</tr>
+<tr>
+<td>fromCommitTime</td>
+<td>This is the most important parameter. This is the point in time from which the changed records are queried from.</td>
+<td></td>
+</tr>
+<tr>
+<td>maxCommits</td>
+<td>Number of commits to include in the query. Setting this to -1 will include all the commits from fromCommitTime. Setting this to a value &gt; 0, will include records that ONLY changed in the specified number of commits after fromCommitTime. This may be needed if you need to catch up say 2 commits at a time.</td>
+<td>3</td>
+</tr>
+<tr>
+<td>help</td>
+<td>Utility Help</td>
+</tr>
+</tbody>
+</table>
+<p>设置fromCommitTime=0和maxCommits=-1可用于初始化backfill。当前存在的局限是不能在不同查询模式间自关联。</p>
+<p>注意Hive增量查询使用Fetch Task执行。因为Fetch Task对每个分区调用一次InputFormat.listStatus()，Hoodie元数据将在每次调用时列出。可以设置<code>set hive.fetch.task.conversion=none</code>保证合并分区并只调用一次。</p>
+<h2 id="4-PrestoDB"><a href="#4-PrestoDB" class="headerlink" title="4 PrestoDB"></a>4 PrestoDB</h2><h2 id="5-Trino"><a href="#5-Trino" class="headerlink" title="5 Trino"></a>5 Trino</h2><h2 id="6-Impala-gt-3-4"><a href="#6-Impala-gt-3-4" class="headerlink" title="6 Impala(&gt;=3.4)"></a>6 Impala(&gt;=3.4)</h2><h2 id="7-支持矩阵"><a href="#7-支持矩阵" class="headerlink" title="7 支持矩阵"></a>7 支持矩阵</h2><h3 id="1-COW-1"><a href="#1-COW-1" class="headerlink" title="(1) COW"></a>(1) COW</h3><table>
+<thead>
+<tr>
+<th>Query Engine</th>
+<th>Snapshot Queries</th>
+<th>Incremental Queries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hive</strong></td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Spark SQL</strong></td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Spark Datasource</strong></td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Flink SQL</strong></td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>PrestoDB</strong></td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Trino</strong></td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>Impala</strong></td>
+<td>Y</td>
+<td>N</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-MOR-1"><a href="#2-MOR-1" class="headerlink" title="(2) MOR"></a>(2) MOR</h3><table>
+<thead>
+<tr>
+<th>Query Engine</th>
+<th>Snapshot Queries</th>
+<th>Incremental Queries</th>
+<th>Read Optimized Queries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hive</strong></td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Spark SQL</strong></td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Spark Datasource</strong></td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Flink SQL</strong></td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>PrestoDB</strong></td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Trino</strong></td>
+<td>N</td>
+<td>N</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>Impala</strong></td>
+<td>N</td>
+<td>N</td>
+<td>Y</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hudi/" rel="tag"># Hudi</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/25/20220325Hudi流式消费/" rel="next" title="Hudi流式消费">
+                <i class="fa fa-chevron-left"></i> Hudi流式消费
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/03/31/20220331Hudi Spark指南/" rel="prev" title="Hudi on Spark">
+                Hudi on Spark <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Spark数据源"><span class="nav-number">1.</span> <span class="nav-text">1 Spark数据源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-快照查询"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 快照查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-增量查询"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 增量查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Spark-SQL"><span class="nav-number">1.3.</span> <span class="nav-text">(3) Spark SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-COW"><span class="nav-number">1.3.1.</span> <span class="nav-text">1) COW</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-MOR"><span class="nav-number">1.3.2.</span> <span class="nav-text">2) MOR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Flink-SQL"><span class="nav-number">2.</span> <span class="nav-text">2 Flink SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Hive"><span class="nav-number">3.</span> <span class="nav-text">3 Hive</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-增量查询"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 增量查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-PrestoDB"><span class="nav-number">4.</span> <span class="nav-text">4 PrestoDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Trino"><span class="nav-number">5.</span> <span class="nav-text">5 Trino</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Impala-gt-3-4"><span class="nav-number">6.</span> <span class="nav-text">6 Impala(>=3.4)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-支持矩阵"><span class="nav-number">7.</span> <span class="nav-text">7 支持矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-COW-1"><span class="nav-number">7.1.</span> <span class="nav-text">(1) COW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-MOR-1"><span class="nav-number">7.2.</span> <span class="nav-text">(2) MOR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2022/03/30/20220330Hudi数据查询/';
+          this.page.identifier = '2022/03/30/20220330Hudi数据查询/';
+          this.page.title = 'Hudi数据查询';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

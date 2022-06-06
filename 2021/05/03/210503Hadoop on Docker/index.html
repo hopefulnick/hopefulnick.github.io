@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hadoop," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本3.3.0 1 总览The Linux Container Executor (LCE)允许在物理机或Docker镜像中运行YARN节点。">
+<meta name="keywords" content="Hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop on Docker">
+<meta property="og:url" content="https://hopefulnick.github.io/2021/05/03/210503Hadoop on Docker/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本3.3.0 1 总览The Linux Container Executor (LCE)允许在物理机或Docker镜像中运行YARN节点。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2021/05/03/210503Hadoop%20on%20Docker/截屏2021-05-03%20下午8.39.44.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2021/05/03/210503Hadoop%20on%20Docker/截屏2021-05-03%20下午8.43.47.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2021/05/03/210503Hadoop%20on%20Docker/截屏2021-05-03%20下午8.45.12.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2021/05/03/210503Hadoop%20on%20Docker/截屏2021-05-03%20下午9.52.30.png">
+<meta property="og:updated_time" content="2022-06-06T16:44:58.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop on Docker">
+<meta name="twitter:description" content="适用于版本3.3.0 1 总览The Linux Container Executor (LCE)允许在物理机或Docker镜像中运行YARN节点。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2021/05/03/210503Hadoop%20on%20Docker/截屏2021-05-03%20下午8.39.44.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2021/05/03/210503Hadoop on Docker/"/>
+
+
+
+
+
+  <title>Hadoop on Docker | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2021/05/03/210503Hadoop on Docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hadoop on Docker</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-05-03T11:00:46+08:00">
+                2021-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">Hadoop</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/05/03/210503Hadoop on Docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/05/03/210503Hadoop on Docker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本3.3.0</p>
+<h2 id="1-总览"><a href="#1-总览" class="headerlink" title="1 总览"></a>1 总览</h2><p>The Linux Container Executor (LCE)允许在物理机或Docker镜像中运行YARN节点。</p>
+<a id="more"></a>
+<h2 id="2-集群配置"><a href="#2-集群配置" class="headerlink" title="2 集群配置"></a>2 集群配置</h2><p>为了避免启动作业时超时，需要提前将较大的镜像拉取到Docker缓存中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull library/openjdk:8</span><br></pre></td></tr></table></figure>
+<p>yarn-site.xml设置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.container-executor.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      This is the container executor setting that ensures that all applications</span><br><span class="line">      are started with the LinuxContainerExecutor.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.linux-container-executor.group<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hadoop<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      The POSIX group of the NodeManager. It should match the setting in</span><br><span class="line">      "container-executor.cfg". This configuration is required for validating</span><br><span class="line">      the secure access of the container-executor binary.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Whether all applications should be run as the NodeManager process' owner.</span><br><span class="line">      When false, applications are launched instead as the application owner.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.allowed-runtimes<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>default,docker<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Comma separated list of runtimes that are allowed when using</span><br><span class="line">      LinuxContainerExecutor. The allowed values are default, docker, and</span><br><span class="line">      javasandbox.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.type<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. Sets the default container runtime to use.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.image-name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. Default docker image to be used when the docker runtime is</span><br><span class="line">      selected.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.image-update<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. Default option to decide whether to pull the latest image</span><br><span class="line">      or not.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.allowed-container-networks<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>host,none,bridge<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. A comma-separated set of networks allowed when launching</span><br><span class="line">      containers. Valid values are determined by Docker networks available from</span><br><span class="line">      `docker network ls`</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.default-container-network<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>host<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      The network used when launching Docker containers when no</span><br><span class="line">      network is specified in the request. This network must be one of the</span><br><span class="line">      (configurable) set of allowed container networks.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.host-pid-namespace.allowed<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. Whether containers are allowed to use the host PID namespace.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.privileged-containers.allowed<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. Whether applications are allowed to run in privileged</span><br><span class="line">      containers. Privileged containers are granted the complete set of</span><br><span class="line">      capabilities and are not subject to the limitations imposed by the device</span><br><span class="line">      cgroup controller. In other words, privileged containers can do almost</span><br><span class="line">      everything that the host can do. Use with extreme care.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.delayed-removal.allowed<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. Whether or not users are allowed to request that Docker</span><br><span class="line">      containers honor the debug deletion delay. This is useful for</span><br><span class="line">      troubleshooting Docker container related launch failures.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.stop.grace-period<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>10<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. A configurable value to pass to the Docker Stop command. This</span><br><span class="line">      value defines the number of seconds between the docker stop command sending</span><br><span class="line">      a SIGTERM and a SIGKILL.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.privileged-containers.acl<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. A comma-separated list of users who are allowed to request</span><br><span class="line">      privileged containers if privileged containers are allowed.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.capabilities<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>CHOWN,DAC_OVERRIDE,FSETID,FOWNER,MKNOD,NET_RAW,SETGID,SETUID,SETFCAP,SETPCAP,NET_BIND_SERVICE,SYS_CHROOT,KILL,AUDIT_WRITE<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. This configuration setting determines the capabilities</span><br><span class="line">      assigned to docker containers when they are launched. While these may not</span><br><span class="line">      be case-sensitive from a docker perspective, it is best to keep these</span><br><span class="line">      uppercase. To run without any capabilites, set this value to</span><br><span class="line">      "none" or "NONE"</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.enable-userremapping.allowed<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. Whether docker containers are run with the UID and GID of the</span><br><span class="line">      calling user.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.userremapping-uid-threshold<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. The minimum acceptable UID for a remapped user. Users with UIDs</span><br><span class="line">      lower than this value will not be allowed to launch containers when user</span><br><span class="line">      remapping is enabled.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.runtime.linux.docker.userremapping-gid-threshold<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">      Optional. The minimum acceptable GID for a remapped user. Users belonging</span><br><span class="line">      to any group with a GID lower than this value will not be allowed to</span><br><span class="line">      launch containers when user remapping is enabled.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>此外，必须有一个属主为root，权限为0400，格式为Java Properties的container-executor.cfg文件，用户设置容器执行器的属性。</p>
+<p>常用的设置：    </p>
+<p>启用Docker支持：</p>
+<p><img src="/2021/05/03/210503Hadoop on Docker/截屏2021-05-03 下午8.39.44.png" alt="截屏2021-05-03 下午8.39.44"></p>
+<p>容器属性：</p>
+<p><img src="/2021/05/03/210503Hadoop on Docker/截屏2021-05-03 下午8.43.47.png" alt="截屏2021-05-03 下午8.43.47"></p>
+<p>注意：如果需要访问YARN本地目录，需要设置<code>docker.allowed.rw-mounts</code>。</p>
+<p>可选属性：</p>
+<p><img src="/2021/05/03/210503Hadoop on Docker/截屏2021-05-03 下午8.45.12.png" alt="截屏2021-05-03 下午8.45.12"></p>
+<p>示例设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yarn.nodemanager.linux-container-executor.group=yarn</span><br><span class="line">[docker]</span><br><span class="line">  module.enabled=true</span><br><span class="line">  docker.privileged-containers.enabled=true</span><br><span class="line">  docker.privileged-containers.registries=local</span><br><span class="line">  docker.trusted.registries=centos</span><br><span class="line">  docker.allowed.capabilities=SYS_CHROOT,MKNOD,SETFCAP,SETPCAP,FSETID,CHOWN,AUDIT_WRITE,SETGID,NET_RAW,FOWNER,SETUID,DAC_OVERRIDE,KILL,NET_BIND_SERVICE</span><br><span class="line">  docker.allowed.networks=bridge,host,none</span><br><span class="line">  docker.allowed.ro-mounts=/sys/fs/cgroup</span><br><span class="line">  docker.allowed.rw-mounts=/var/hadoop/yarn/local-dir,/var/hadoop/yarn/log-dir</span><br></pre></td></tr></table></figure>
+<h2 id="3-镜像要求"><a href="#3-镜像要求" class="headerlink" title="3 镜像要求"></a>3 镜像要求</h2><h3 id="1-用户"><a href="#1-用户" class="headerlink" title="(1) 用户"></a>(1) 用户</h3><p>应用属主被显式设置为容器属主。如果应用属主不是合法的容器属主，或者两者UID不同，将导致启动失败。详见<a href="https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/DockerContainers.html#user-management" target="_blank" rel="noopener">ser Management in Docker Container</a></p>
+<h3 id="2-依赖"><a href="#2-依赖" class="headerlink" title="(2) 依赖"></a>(2) 依赖</h3><p>镜像需要包含应用所需的全部前置条件，如运行时环境、环境变量，并且需要保证版本兼容。</p>
+<p><code>YARN_CONTAINER_RUNTIME_DOCKER_RUN_OVERRIDE_DISABLE</code>将影响命令运行行为。如果设置了EntryPoint并且设置为true，命令将传递给EntryPoint。</p>
+<p>过大的镜像依赖将触发拉取操作，可能引起超时，需要提前缓存。</p>
+<h2 id="4-CGroups配置要求"><a href="#4-CGroups配置要求" class="headerlink" title="4 CGroups配置要求"></a>4 CGroups配置要求</h2><p>Docker使用cgroups限制单一容器的资源使用。因为运行的容器属于YARN，因此–cgroup-parent可用于设置控制组。</p>
+<p>Docker支持两种cgroups驱动，cgroupfs和systemd。但只支持cgroups启动容器，否则报错。</p>
+<h2 id="5-应用提交"><a href="#5-应用提交" class="headerlink" title="5 应用提交"></a>5 应用提交</h2><p><img src="/2021/05/03/210503Hadoop on Docker/截屏2021-05-03 下午9.52.30.png" alt="截屏2021-05-03 下午9.52.30"></p>
+<p>注意：前两项必需。</p>
+<h2 id="6-使用Docker-Bind-Mounted-Volume"><a href="#6-使用Docker-Bind-Mounted-Volume" class="headerlink" title="6 使用Docker Bind Mounted Volume"></a>6 使用Docker Bind Mounted Volume</h2><p>注意：不建议绑定系统目录，可能导致信息泄漏。</p>
+<p>设置：</p>
+<ul>
+<li><p>管理员设置目录白名单（到父目录），使用<code>docker.allowed.ro-mounts</code>和<code>docker.allowed.rw-mounts</code></p>
+</li>
+<li><p>应用提交者使用<code>YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS</code>设置请求的目录，只能匹配管理员的设置。</p>
+</li>
+</ul>
+<p>用户配置按照<code>source:destination(:mode)</code>格式提交，source是物理路径，destination是镜像中映射的路径，mode是读写模式，默认为rw。mode也可以带有绑定传播选项，如shared, rshared, slave, rslave, private, or rprivate。示例：<code>/sys/fs/cgroup:/sys/fs/cgroup:ro</code></p>
+<h2 id="7-用户管理"><a href="#7-用户管理" class="headerlink" title="7 用户管理"></a>7 用户管理</h2><p>使用和YARN相同的did:gid组合识别用户，需要保持宿主和容器一致。</p>
+<p>非安全模式中使用用户nobody运行进程，详见<a href="https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/NodeManagerCgroups.html" target="_blank" rel="noopener">Using CGroups with YARN</a>。在CentOS中该用户和用户组ID为99，如果在容器中对应的用户不是99，将失败或导致未知结果。</p>
+<p>特权容器是一种例外，其将运行容器的用户映射到容器内，因此可以不用设置uid:gid匹配。</p>
+<p>Docker不会使用容器内的<code>/etc/passwd</code>或<code>/etc/shadow</code>用于用户认证，需要使用以下方式：</p>
+<h3 id="1-静态用户管理"><a href="#1-静态用户管理" class="headerlink" title="(1) 静态用户管理"></a>(1) 静态用户管理</h3><p>用于非安全模式中设置已知的单一用户，适用于测试环境</p>
+<p>手动修改UID和GID:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">usermod -u 99 nobody</span><br><span class="line">groupmod -g 99 nobody</span><br></pre></td></tr></table></figure>
+<h3 id="2-绑定"><a href="#2-绑定" class="headerlink" title="(2) 绑定"></a>(2) 绑定</h3><p>绑定容器外部的用户配置文件<code>/etc/passwd</code>和<code>/etc/group</code>，需要在配置文件<code>container-executor.cfg</code>属性<code>docker.allowed.ro-mounts</code>中指定。提交应用时需要在<code>YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS</code>中包含<code>/etc/passwd:/etc/passwd:ro,/etc/group:/etc/group:ro</code></p>
+<p> 局限：</p>
+<ul>
+<li>完全覆盖容器内的用户配置</li>
+<li>一次性读取，运行时不能修改</li>
+</ul>
+<h3 id="3-SSSD"><a href="#3-SSSD" class="headerlink" title="(3) SSSD"></a>(3) SSSD</h3><p>System Security Services Daemon (SSSD) 。如 LDAP和Active Directory。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 通常Linux认证模式</span><br><span class="line">application -&gt; libpam -&gt; pam_authenticate -&gt; pam_unix.so -&gt; /etc/passwd</span><br><span class="line"># 使用SSSD后</span><br><span class="line">application -&gt; libpam -&gt; pam_authenticate -&gt; pam_unix.so -&gt; /etc/passwd</span><br></pre></td></tr></table></figure>
+<p>步骤：</p>
+<h4 id="1-宿主"><a href="#1-宿主" class="headerlink" title="1) 宿主"></a>1) 宿主</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装软件</span></span><br><span class="line">yum -y install sssd-common sssd-proxy</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为容器创建PAM服务</span></span><br><span class="line">cat /etc/pam.d/sss_proxy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">auth required pam_unix.so</span><br><span class="line">account required pam_unix.so</span><br><span class="line">password required pam_unix.so</span><br><span class="line">session required pam_unix.so</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建/etc/sssd/sssd.conf配置文件，属主为root:root，权限为0400</span></span><br><span class="line">cat /etc/sssd/sssd/conf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[sssd]</span><br><span class="line">services = nss,pam</span><br><span class="line">config_file_version = 2</span><br><span class="line">domains = proxy</span><br><span class="line">[nss]</span><br><span class="line">[pam]</span><br><span class="line">[domain/proxy]</span><br><span class="line">id_provider = proxy</span><br><span class="line">proxy_lib_name = files</span><br><span class="line">proxy_pam_target = sss_proxy</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">systemctl start sssd</span><br><span class="line"></span><br><span class="line"><span class="comment">## 验证用户localuser</span></span><br><span class="line">getent passwd -s sss localuser</span><br></pre></td></tr></table></figure>
+<h4 id="2-容器"><a href="#2-容器" class="headerlink" title="2) 容器"></a>2) 容器</h4><p>注意绑定目录<code>/var/lib/sss/pipes</code>，因为SSSD Unix套接字在这个位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-v /var/lib/sss/pipes:/var/lib/sss/pipes:rw</span><br></pre></td></tr></table></figure>
+<p>配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"># 安装客户端</span><br><span class="line">yum -y install sssd-client</span><br><span class="line"></span><br><span class="line"># 确保sss为passwd和group数据在/etc/nsswitch.conf配置</span><br><span class="line"></span><br><span class="line"># 配置PAM服务</span><br><span class="line">cat /etc/pam.d/system-auth</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#%PAM-1.0</span><br><span class="line"># This file is auto-generated.</span><br><span class="line"># User changes will be destroyed the next time authconfig is run.</span><br><span class="line">auth        required      pam_env.so</span><br><span class="line">auth        sufficient    pam_unix.so try_first_pass nullok</span><br><span class="line">auth        sufficient    pam_sss.so forward_pass</span><br><span class="line">auth        required      pam_deny.so</span><br><span class="line"></span><br><span class="line">account     required      pam_unix.so</span><br><span class="line">account     [default=bad success=ok user_unknown=ignore] pam_sss.so</span><br><span class="line">account     required      pam_permit.so</span><br><span class="line"></span><br><span class="line">password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=</span><br><span class="line">password    sufficient    pam_unix.so try_first_pass use_authtok nullok sha512 shadow</span><br><span class="line">password    sufficient    pam_sss.so use_authtok</span><br><span class="line">password    required      pam_deny.so</span><br><span class="line"></span><br><span class="line">session     optional      pam_keyinit.so revoke</span><br><span class="line">session     required      pam_limits.so</span><br><span class="line">-session     optional      pam_systemd.so</span><br><span class="line">session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid</span><br><span class="line">session     required      pam_unix.so</span><br><span class="line">session     optional      pam_sss.so</span><br><span class="line"></span><br><span class="line"># 保存并作为应用的基础镜像</span><br><span class="line"></span><br><span class="line"># 测试YARN环境中的镜像</span><br><span class="line">id</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">uid=5000(localuser) gid=5000(localuser) groups=5000(localuser),1337(hadoop)</span><br></pre></td></tr></table></figure>
+<h2 id="8-特权容器的安全考量"><a href="#8-特权容器的安全考量" class="headerlink" title="8 特权容器的安全考量"></a>8 特权容器的安全考量</h2><p>默认关闭了特权容器。只能对开启ENTRYPOINT的镜像开启<code>docker.privileged-containers.enabled</code>，为了防止对宿主造成不良影响，对宿主的访问关闭，但可以使用root权限操作容器。</p>
+<p>用户可以设置受信的镜像，以下<code>library</code>是一个受信的镜像：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[docker]</span><br><span class="line">  docker.privileged-containers.enabled=true</span><br><span class="line">  docker.trusted.registries=library</span><br></pre></td></tr></table></figure>
+<p>细粒度控制，<code>docker.privileged-containers.registries</code>缺省时使用<code>docker.trusted.registries</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[docker]</span><br><span class="line">  docker.privileged-containers.enabled=true</span><br><span class="line">  docker.privileged-containers.registries=local/centos:latest</span><br><span class="line">  docker.trusted.registries=library</span><br></pre></td></tr></table></figure>
+<p>添加端口标记本地镜像，可以与远程镜像区分：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag centos:latest localhost:5000/centos:latest</span><br></pre></td></tr></table></figure>
+<p>示例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 为本地镜像设置标签</span></span><br><span class="line">docker tag centos:latest localhost:5000/centos:latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加local到 docker.trusted.registries中</span></span><br></pre></td></tr></table></figure>
+<p>受信的进行可以绑定外部的设备，如HDFS、NFS或宿主级别的Hadoop配置。</p>
+<p>详见<a href="https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/yarn-service/Examples.html" target="_blank" rel="noopener">YARN Service HTTPD example</a></p>
+<h2 id="9-容器再获取需求"><a href="#9-容器再获取需求" class="headerlink" title="9 容器再获取需求"></a>9 容器再获取需求</h2><p>重启时，NodeManager通过验证容器pid是否在/proc文件系统中来确认容器是否存活。</p>
+<p>出于安全，操作系统管理员可能开启hidepid选项，此时设置类似以下白名单，否则重启失败：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proc     /proc     proc     nosuid,nodev,noexec,hidepid=2,gid=yarn     0 0</span><br></pre></td></tr></table></figure>
+<h2 id="10-连接受信的Docker注册点"><a href="#10-连接受信的Docker注册点" class="headerlink" title="10 连接受信的Docker注册点"></a>10 连接受信的Docker注册点</h2><p>Docker客户端命令会从默认位置NodeManager的<code>$HOME/.docker/config.json</code>获取配置。因为Docker配置是受信证书存储的位置，因此使用带有安全Docker repo的LCE不推荐这种方式。</p>
+<p>YARN-5428提供了安全提供Docker客户端配置分布式Shell。</p>
+<p>作为临时方案，可以手动将每一个NodeManager主机上的Docker进程使用Docker登录命令登录到安全repo中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker login [OPTIONS] [SERVER]</span><br><span class="line"></span><br><span class="line">Register or log in to a Docker registry server, if no server is specified</span><br><span class="line">&quot;https://index.docker.io/v1/&quot; is the default.</span><br><span class="line"></span><br><span class="line">-e, --email=&quot;&quot;       Email</span><br><span class="line">-p, --password=&quot;&quot;    Password</span><br><span class="line">-u, --username=&quot;&quot;    Username</span><br></pre></td></tr></table></figure>
+<p>注意：这种方式意味着所有的用户都可以访问安全repo。</p>
+<p>Hadoop通过YARN服务API整合Docker受信注册。Docker注册可以存储镜像到HDFS、S3或使用CSI驱动的外部存储中。</p>
+<h3 id="1-HDFS"><a href="#1-HDFS" class="headerlink" title="(1) HDFS"></a>(1) HDFS</h3><p>NFS Gateway提供了将HDFS绑定为NFS绑定点的能力。</p>
+<p>Docker注册可以使用标准的文件系统API配置写出到HDFS。</p>
+<p>hdfs-site.xml配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>nfs.exports.allowed.hosts<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>* rw<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>nfs.file.dump.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/tmp/.hdfs-nfs<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>nfs.kerberos.principal<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>nfs/_HOST@EXAMPLE.COM<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>nfs.keytab.file<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/etc/security/keytabs/nfs.service.keytab<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在所有数据节点：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以hdfs用户运行NFS Gateway</span></span><br><span class="line"><span class="variable">$HADOOP_HOME</span>/bin/hdfs --daemon start nfs3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露nfs绑定点到/hdfs,其中$DN_IP是数据节点IP</span></span><br><span class="line">mount -t nfs -o vers=3,proto=tcp,nolock,noacl,sync <span class="variable">$DN_IP</span>:/ /hdfs</span><br></pre></td></tr></table></figure>
+<p>配置Container-executor.cfg，以允许受信镜像：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[docker]</span><br><span class="line">docker.privileged-containers.enabled=true</span><br><span class="line">docker.trusted.registries=library,registry.docker-registry.registry.example.com:5000</span><br><span class="line">docker.allowed.rw-mounts=/tmp,/usr/local/hadoop/logs,/hdfs</span><br></pre></td></tr></table></figure>
+<p>可以配置registry.json，使用YARN服务启动Docker Registry:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"docker-registry"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0"</span>,</span><br><span class="line">  <span class="attr">"kerberos_principal"</span> : &#123;</span><br><span class="line">    <span class="attr">"principal_name"</span> : <span class="string">"registry/_HOST@EXAMPLE.COM"</span>,</span><br><span class="line">    <span class="attr">"keytab"</span> : <span class="string">"file:///etc/security/keytabs/registry.service.keytab"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"components"</span> :</span><br><span class="line">  [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"registry"</span>,</span><br><span class="line">      <span class="attr">"number_of_containers"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"artifact"</span>: &#123;</span><br><span class="line">        <span class="attr">"id"</span>: <span class="string">"registry:latest"</span>,</span><br><span class="line">        <span class="attr">"type"</span>: <span class="string">"DOCKER"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"resource"</span>: &#123;</span><br><span class="line">        <span class="attr">"cpus"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"memory"</span>: <span class="string">"256"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"run_privileged_container"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">"configuration"</span>: &#123;</span><br><span class="line">        <span class="attr">"env"</span>: &#123;</span><br><span class="line">          <span class="attr">"YARN_CONTAINER_RUNTIME_DOCKER_RUN_OVERRIDE_DISABLE"</span>:<span class="string">"true"</span>,</span><br><span class="line">          <span class="attr">"YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS"</span>:<span class="string">"/hdfs/apps/docker/registry:/var/lib/registry"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"properties"</span>: &#123;</span><br><span class="line">          <span class="attr">"docker.network"</span>: <span class="string">"host"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn app -launch docker-registry /tmp/registry.json</span><br></pre></td></tr></table></figure>
+<p>遵循Hadoop Registry DNS格式访问registry：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">registry.docker-registry.$USER.$DOMAIN:5000</span><br></pre></td></tr></table></figure>
+<p>当registry应用达到了STABLE状态，用户可以使用<code>registry.docker-registry.registry.example.com:5000/</code>前缀推送或拉取。</p>
+<h3 id="2-S3"><a href="#2-S3" class="headerlink" title="(2) S3"></a>(2) S3</h3><p>略</p>
+<h2 id="11-示例配置"><a href="#11-示例配置" class="headerlink" title="11 示例配置"></a>11 示例配置</h2><p>假设Hadoop安装在<code>/usr/local/hadoop</code>，<code>container-executor.cfg</code>文件中的<code>docker.allowed.ro-mounts</code>已经包含<code>/usr/local/hadoop,/etc/passwd,/etc/group</code>。</p>
+<h3 id="1-MapReduce-提交Pi计算任务"><a href="#1-MapReduce-提交Pi计算任务" class="headerlink" title="(1) MapReduce: 提交Pi计算任务"></a>(1) MapReduce: 提交Pi计算任务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">HADOOP_HOME=/usr/<span class="built_in">local</span>/hadoop</span><br><span class="line">YARN_EXAMPLES_JAR=<span class="variable">$HADOOP_HOME</span>/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar</span><br><span class="line">MOUNTS=<span class="string">"<span class="variable">$HADOOP_HOME</span>:<span class="variable">$HADOOP_HOME</span>:ro,/etc/passwd:/etc/passwd:ro,/etc/group:/etc/group:ro"</span></span><br><span class="line">IMAGE_ID=<span class="string">"library/openjdk:8"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> YARN_CONTAINER_RUNTIME_TYPE=docker</span><br><span class="line"><span class="built_in">export</span> YARN_CONTAINER_RUNTIME_DOCKER_IMAGE=<span class="variable">$IMAGE_ID</span></span><br><span class="line"><span class="built_in">export</span> YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS=<span class="variable">$MOUNTS</span></span><br><span class="line"></span><br><span class="line">yarn jar <span class="variable">$YARN_EXAMPLES_JAR</span> pi \</span><br><span class="line">  -Dmapreduce.map.env.YARN_CONTAINER_RUNTIME_TYPE=docker \</span><br><span class="line">  -Dmapreduce.map.env.YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS=<span class="variable">$MOUNTS</span> \</span><br><span class="line">  -Dmapreduce.map.env.YARN_CONTAINER_RUNTIME_DOCKER_IMAGE=<span class="variable">$IMAGE_ID</span> \</span><br><span class="line">  -Dmapreduce.reduce.env.YARN_CONTAINER_RUNTIME_TYPE=docker \</span><br><span class="line">  -Dmapreduce.reduce.env.YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS=<span class="variable">$MOUNTS</span> \</span><br><span class="line">  -Dmapreduce.reduce.env.YARN_CONTAINER_RUNTIME_DOCKER_IMAGE=<span class="variable">$IMAGE_ID</span> \</span><br><span class="line">  1 40000</span><br></pre></td></tr></table></figure>
+<p>注意：主节点、map和reduce任务是独立配置的。</p>
+<h3 id="2-Spark-容器中运行Spark-Shell"><a href="#2-Spark-容器中运行Spark-Shell" class="headerlink" title="(2) Spark: 容器中运行Spark Shell"></a>(2) Spark: 容器中运行Spark Shell</h3><p>假设Spark安装在<code>/usr/local/spark</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">HADOOP_HOME=/usr/<span class="built_in">local</span>/hadoop</span><br><span class="line">SPARK_HOME=/usr/<span class="built_in">local</span>/spark</span><br><span class="line">MOUNTS=<span class="string">"<span class="variable">$HADOOP_HOME</span>:<span class="variable">$HADOOP_HOME</span>:ro,/etc/passwd:/etc/passwd:ro,/etc/group:/etc/group:ro"</span></span><br><span class="line">IMAGE_ID=<span class="string">"library/openjdk:8"</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$SPARK_HOME</span>/bin/spark-shell --master yarn \</span><br><span class="line">  --conf spark.yarn.appMasterEnv.YARN_CONTAINER_RUNTIME_TYPE=docker \</span><br><span class="line">  --conf spark.yarn.appMasterEnv.YARN_CONTAINER_RUNTIME_DOCKER_IMAGE=<span class="variable">$IMAGE_ID</span> \</span><br><span class="line">  --conf spark.yarn.appMasterEnv.YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS=<span class="variable">$MOUNTS</span> \</span><br><span class="line">  --conf spark.executorEnv.YARN_CONTAINER_RUNTIME_TYPE=docker \</span><br><span class="line">  --conf spark.executorEnv.YARN_CONTAINER_RUNTIME_DOCKER_IMAGE=<span class="variable">$IMAGE_ID</span> \</span><br><span class="line">  --conf spark.executorEnv.YARN_CONTAINER_RUNTIME_DOCKER_MOUNTS=<span class="variable">$MOUNTS</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-ENTRYPOINT支持"><a href="#3-ENTRYPOINT支持" class="headerlink" title="(3) ENTRYPOINT支持"></a>(3) ENTRYPOINT支持</h3><p>Hadoop 2.x引入了Docker支持，可用于在Docker容器中运行已有的Hadoop程序，整合了日志和环境设置到NodeManager中。</p>
+<p>Hadoop 3.x支持使用ENTRYPOINT的Docker原生形式。</p>
+<p>通过配置<code>YARN_CONTAINER_RUNTIME_DOCKER_RUN_OVERRIDE_DISABLE</code>，应用可以选择使用YARN模式还是Docker模式。</p>
+<p>在yarn-site.xml中设置环境白名单：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.env-whitelist<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME,YARN_CONTAINER_RUNTIME_DOCKER_RUN_OVERRIDE_DISABLE<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在yarn-env.sh中设置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> YARN_CONTAINER_RUNTIME_DOCKER_RUN_OVERRIDE_DISABLE=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-不使用ENTRYPOINT时的YARN模式要求"><a href="#4-不使用ENTRYPOINT时的YARN模式要求" class="headerlink" title="(4) 不使用ENTRYPOINT时的YARN模式要求"></a>(4) 不使用ENTRYPOINT时的YARN模式要求</h3><h4 id="1-bin-bash"><a href="#1-bin-bash" class="headerlink" title="1) /bin/bash"></a>1) /bin/bash</h4><p>需要在容器中可用。在最小镜像中可能没有安装bash。</p>
+<h4 id="2-find"><a href="#2-find" class="headerlink" title="2) find"></a>2) find</h4><p>需要在容器中可用。</p>
+<h2 id="12-YARN-SysFS支持"><a href="#12-YARN-SysFS支持" class="headerlink" title="12 YARN SysFS支持"></a>12 YARN SysFS支持</h2><p>是YARN框架支持的一个用于输出集群信息的伪文件系统。输出路径为<code>/hadoop/yarn/sysfs</code>。</p>
+<p>允许开发者在没有外部服务支持的情况下，使用NodeManager REST API访问集群信息。</p>
+<h2 id="13-容器服务模式"><a href="#13-容器服务模式" class="headerlink" title="13 容器服务模式"></a>13 容器服务模式</h2><p>运行容器，但是没有设置用户和用户组。</p>
+<p>默认关闭。管理员可以在<code>container-executor.cfg</code>设置<code>docker.service-mode.enabled</code>开启。</p>
+<p>部分示例设置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yarn.nodemanager.linux-container-executor.group=yarn</span><br><span class="line">[docker]</span><br><span class="line">  module.enabled=true</span><br><span class="line">  docker.privileged-containers.enabled=true</span><br><span class="line">  docker.service-mode.enabled=true</span><br></pre></td></tr></table></figure>
+<p>应用可以在设置<code>YARN_CONTAINER_RUNTIME_DOCKER_SERVICE_MODE</code>环境控制。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/04/29/210429Spark SQL源码小记/" rel="next" title="Spark SQL源码小记">
+                <i class="fa fa-chevron-left"></i> Spark SQL源码小记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/05/04/210504Spark on Kubernetes/" rel="prev" title="Spark on k8s">
+                Spark on k8s <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-总览"><span class="nav-number">1.</span> <span class="nav-text">1 总览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-集群配置"><span class="nav-number">2.</span> <span class="nav-text">2 集群配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-镜像要求"><span class="nav-number">3.</span> <span class="nav-text">3 镜像要求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-用户"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-依赖"><span class="nav-number">3.2.</span> <span class="nav-text">(2) 依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-CGroups配置要求"><span class="nav-number">4.</span> <span class="nav-text">4 CGroups配置要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-应用提交"><span class="nav-number">5.</span> <span class="nav-text">5 应用提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-使用Docker-Bind-Mounted-Volume"><span class="nav-number">6.</span> <span class="nav-text">6 使用Docker Bind Mounted Volume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-用户管理"><span class="nav-number">7.</span> <span class="nav-text">7 用户管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-静态用户管理"><span class="nav-number">7.1.</span> <span class="nav-text">(1) 静态用户管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-绑定"><span class="nav-number">7.2.</span> <span class="nav-text">(2) 绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-SSSD"><span class="nav-number">7.3.</span> <span class="nav-text">(3) SSSD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-宿主"><span class="nav-number">7.3.1.</span> <span class="nav-text">1) 宿主</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-容器"><span class="nav-number">7.3.2.</span> <span class="nav-text">2) 容器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-特权容器的安全考量"><span class="nav-number">8.</span> <span class="nav-text">8 特权容器的安全考量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-容器再获取需求"><span class="nav-number">9.</span> <span class="nav-text">9 容器再获取需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-连接受信的Docker注册点"><span class="nav-number">10.</span> <span class="nav-text">10 连接受信的Docker注册点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-HDFS"><span class="nav-number">10.1.</span> <span class="nav-text">(1) HDFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-S3"><span class="nav-number">10.2.</span> <span class="nav-text">(2) S3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-示例配置"><span class="nav-number">11.</span> <span class="nav-text">11 示例配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-MapReduce-提交Pi计算任务"><span class="nav-number">11.1.</span> <span class="nav-text">(1) MapReduce: 提交Pi计算任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Spark-容器中运行Spark-Shell"><span class="nav-number">11.2.</span> <span class="nav-text">(2) Spark: 容器中运行Spark Shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ENTRYPOINT支持"><span class="nav-number">11.3.</span> <span class="nav-text">(3) ENTRYPOINT支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-不使用ENTRYPOINT时的YARN模式要求"><span class="nav-number">11.4.</span> <span class="nav-text">(4) 不使用ENTRYPOINT时的YARN模式要求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-bin-bash"><span class="nav-number">11.4.1.</span> <span class="nav-text">1) /bin/bash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-find"><span class="nav-number">11.4.2.</span> <span class="nav-text">2) find</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-YARN-SysFS支持"><span class="nav-number">12.</span> <span class="nav-text">12 YARN SysFS支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-容器服务模式"><span class="nav-number">13.</span> <span class="nav-text">13 容器服务模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">14.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2021/05/03/210503Hadoop on Docker/';
+          this.page.identifier = '2021/05/03/210503Hadoop on Docker/';
+          this.page.title = 'Hadoop on Docker';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

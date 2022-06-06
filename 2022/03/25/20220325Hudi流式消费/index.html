@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hudi," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本0.10.1。 1 DeltaStreamer能力：  刚好一次消费保证，Kafka、Scoop增量导入、HiveIncrementalPuller输出、DFS文件 支持多种来源记录类型，如json、avro和自定义类型 支持管理检查点、回退和恢复 利用DFS中的avro模式或融合模式注册 支持插件转换">
+<meta name="keywords" content="Hudi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hudi流式消费">
+<meta property="og:url" content="https://hopefulnick.github.io/2022/03/25/20220325Hudi流式消费/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本0.10.1。 1 DeltaStreamer能力：  刚好一次消费保证，Kafka、Scoop增量导入、HiveIncrementalPuller输出、DFS文件 支持多种来源记录类型，如json、avro和自定义类型 支持管理检查点、回退和恢复 利用DFS中的avro模式或融合模式注册 支持插件转换">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2022/03/25/20220325Hudi流式消费/cdc-2-hudi-d151389758f4ce3fd873c1258b0a8ce5.png">
+<meta property="og:updated_time" content="2022-06-06T08:05:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hudi流式消费">
+<meta name="twitter:description" content="适用于版本0.10.1。 1 DeltaStreamer能力：  刚好一次消费保证，Kafka、Scoop增量导入、HiveIncrementalPuller输出、DFS文件 支持多种来源记录类型，如json、avro和自定义类型 支持管理检查点、回退和恢复 利用DFS中的avro模式或融合模式注册 支持插件转换">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2022/03/25/20220325Hudi流式消费/cdc-2-hudi-d151389758f4ce3fd873c1258b0a8ce5.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2022/03/25/20220325Hudi流式消费/"/>
+
+
+
+
+
+  <title>Hudi流式消费 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2022/03/25/20220325Hudi流式消费/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hudi流式消费</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-25T11:00:47+08:00">
+                2022-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hudi/" itemprop="url" rel="index">
+                    <span itemprop="name">Hudi</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/03/25/20220325Hudi流式消费/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/03/25/20220325Hudi流式消费/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本0.10.1。</p>
+<h2 id="1-DeltaStreamer"><a href="#1-DeltaStreamer" class="headerlink" title="1 DeltaStreamer"></a>1 DeltaStreamer</h2><p>能力：</p>
+<ul>
+<li>刚好一次消费保证，Kafka、<a href="https://sqoop.apache.org/docs/1.4.2/SqoopUserGuide#_incremental_imports" target="_blank" rel="noopener">Scoop增量导入</a>、HiveIncrementalPuller输出、DFS文件</li>
+<li>支持多种来源记录类型，如json、avro和自定义类型</li>
+<li>支持管理检查点、回退和恢复</li>
+<li>利用DFS中的avro模式或<a href="https://github.com/confluentinc/schema-registry" target="_blank" rel="noopener">融合模式注册</a></li>
+<li>支持插件转换</li>
+</ul>
+<a id="more"></a>
+<p>详细能力支持详见命令行帮助：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">[hoodie]$ spark-submit --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer `ls packaging/hudi-utilities-bundle/target/hudi-utilities-bundle-*.jar` --<span class="built_in">help</span></span><br><span class="line">Usage: &lt;main class&gt; [options]</span><br><span class="line">Options:</span><br><span class="line">    --checkpoint</span><br><span class="line">      Resume Delta Streamer from this checkpoint.</span><br><span class="line">    --commit-on-errors</span><br><span class="line">      Commit even when some records failed to be written</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --compact-scheduling-minshare</span><br><span class="line">      Minshare <span class="keyword">for</span> compaction as defined <span class="keyword">in</span></span><br><span class="line">      https://spark.apache.org/docs/latest/job-scheduling</span><br><span class="line">      Default: 0</span><br><span class="line">    --compact-scheduling-weight</span><br><span class="line">      Scheduling weight <span class="keyword">for</span> compaction as defined <span class="keyword">in</span></span><br><span class="line">      https://spark.apache.org/docs/latest/job-scheduling</span><br><span class="line">      Default: 1</span><br><span class="line">    --continuous</span><br><span class="line">      Delta Streamer runs <span class="keyword">in</span> continuous mode running <span class="built_in">source</span>-fetch -&gt; Transform</span><br><span class="line">      -&gt; Hudi Write <span class="keyword">in</span> loop</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --delta-sync-scheduling-minshare</span><br><span class="line">      Minshare <span class="keyword">for</span> delta sync as defined <span class="keyword">in</span></span><br><span class="line">      https://spark.apache.org/docs/latest/job-scheduling</span><br><span class="line">      Default: 0</span><br><span class="line">    --delta-sync-scheduling-weight</span><br><span class="line">      Scheduling weight <span class="keyword">for</span> delta sync as defined <span class="keyword">in</span></span><br><span class="line">      https://spark.apache.org/docs/latest/job-scheduling</span><br><span class="line">      Default: 1</span><br><span class="line">    --<span class="built_in">disable</span>-compaction</span><br><span class="line">      Compaction is enabled <span class="keyword">for</span> MoR table by default. This flag disables it</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --<span class="built_in">enable</span>-hive-sync</span><br><span class="line">      Enable syncing to hive</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --filter-dupes</span><br><span class="line">      Should duplicate records from <span class="built_in">source</span> be dropped/filtered out before</span><br><span class="line">      insert/bulk-insert</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --<span class="built_in">help</span>, -h</span><br><span class="line"></span><br><span class="line">    --hoodie-conf</span><br><span class="line">      Any configuration that can be <span class="built_in">set</span> <span class="keyword">in</span> the properties file (using the CLI</span><br><span class="line">      parameter <span class="string">"--propsFilePath"</span>) can also be passed <span class="built_in">command</span> line using this</span><br><span class="line">      parameter</span><br><span class="line">      Default: []</span><br><span class="line">    --max-pending-compactions</span><br><span class="line">      Maximum number of outstanding inflight/requested compactions. Delta Sync</span><br><span class="line">      will not happen unlessoutstanding compactions is less than this number</span><br><span class="line">      Default: 5</span><br><span class="line">    --min-sync-interval-seconds</span><br><span class="line">      the min sync interval of each sync <span class="keyword">in</span> continuous mode</span><br><span class="line">      Default: 0</span><br><span class="line">    --op</span><br><span class="line">      Takes one of these values : UPSERT (default), INSERT (use when input is</span><br><span class="line">      purely new data/inserts to gain speed)</span><br><span class="line">      Default: UPSERT</span><br><span class="line">      Possible Values: [UPSERT, INSERT, BULK_INSERT]</span><br><span class="line">    --payload-class</span><br><span class="line">      subclass of HoodieRecordPayload, that works off a GenericRecord.</span><br><span class="line">      Implement your own, <span class="keyword">if</span> you want to <span class="keyword">do</span> something other than overwriting</span><br><span class="line">      existing value</span><br><span class="line">      Default: org.apache.hudi.common.model.OverwriteWithLatestAvroPayload</span><br><span class="line">    --props</span><br><span class="line">      path to properties file on localfs or dfs, with configurations <span class="keyword">for</span></span><br><span class="line">      hoodie client, schema provider, key generator and data <span class="built_in">source</span>. For</span><br><span class="line">      hoodie client props, sane defaults are used, but recommend use to</span><br><span class="line">      provide basic things like metrics endpoints, hive configs etc. For</span><br><span class="line">      sources, referto individual classes, <span class="keyword">for</span> supported properties.</span><br><span class="line">      Default: file:///Users/vinoth/bin/hoodie/src/<span class="built_in">test</span>/resources/delta-streamer-config/dfs-source.properties</span><br><span class="line">    --schemaprovider-class</span><br><span class="line">      subclass of org.apache.hudi.utilities.schema.SchemaProvider to attach</span><br><span class="line">      schemas to input &amp; target table data, built <span class="keyword">in</span> options:</span><br><span class="line">      org.apache.hudi.utilities.schema.FilebasedSchemaProvider.Source (See</span><br><span class="line">      org.apache.hudi.utilities.sources.Source) implementation can implement</span><br><span class="line">      their own SchemaProvider. For Sources that <span class="built_in">return</span> Dataset&lt;Row&gt;, the</span><br><span class="line">      schema is obtained implicitly. However, this CLI option allows</span><br><span class="line">      overriding the schemaprovider returned by Source.</span><br><span class="line">    --<span class="built_in">source</span>-class</span><br><span class="line">      Subclass of org.apache.hudi.utilities.sources to <span class="built_in">read</span> data. Built-in</span><br><span class="line">      options: org.apache.hudi.utilities.sources.&#123;JsonDFSSource (default), </span><br><span class="line">      AvroDFSSource, AvroKafkaSource, CsvDFSSource, HiveIncrPullSource, </span><br><span class="line">      JdbcSource, JsonKafkaSource, ORCDFSSource, ParquetDFSSource, </span><br><span class="line">      S3EventsHoodieIncrSource, S3EventsSource, SqlSource&#125;</span><br><span class="line">      Default: org.apache.hudi.utilities.sources.JsonDFSSource</span><br><span class="line">    --<span class="built_in">source</span>-limit</span><br><span class="line">      Maximum amount of data to <span class="built_in">read</span> from <span class="built_in">source</span>. Default: No <span class="built_in">limit</span> For e.g:</span><br><span class="line">      DFS-Source =&gt; max bytes to <span class="built_in">read</span>, Kafka-Source =&gt; max events to <span class="built_in">read</span></span><br><span class="line">      Default: 9223372036854775807</span><br><span class="line">    --<span class="built_in">source</span>-ordering-field</span><br><span class="line">      Field within <span class="built_in">source</span> record to decide how to <span class="built_in">break</span> ties between records</span><br><span class="line">      with same key <span class="keyword">in</span> input data. Default: <span class="string">'ts'</span> holding unix timestamp of</span><br><span class="line">      record</span><br><span class="line">      Default: ts</span><br><span class="line">    --spark-master</span><br><span class="line">      spark master to use.</span><br><span class="line">      Default: <span class="built_in">local</span>[2]</span><br><span class="line">  * --table-type</span><br><span class="line">      Type of table. COPY_ON_WRITE (or) MERGE_ON_READ</span><br><span class="line">  * --target-base-path</span><br><span class="line">      base path <span class="keyword">for</span> the target hoodie table. (Will be created <span class="keyword">if</span> did not exist</span><br><span class="line">      first time around. If exists, expected to be a hoodie table)</span><br><span class="line">  * --target-table</span><br><span class="line">      name of the target table <span class="keyword">in</span> Hive</span><br><span class="line">    --transformer-class</span><br><span class="line">      subclass of org.apache.hudi.utilities.transform.Transformer. Allows</span><br><span class="line">      transforming raw <span class="built_in">source</span> Dataset to a target Dataset (conforming to</span><br><span class="line">      target schema) before writing. Default : Not <span class="built_in">set</span>. E:g -</span><br><span class="line">      org.apache.hudi.utilities.transform.SqlQueryBasedTransformer (<span class="built_in">which</span></span><br><span class="line">      allows a SQL query templated to be passed as a transformation <span class="keyword">function</span>)</span><br></pre></td></tr></table></figure>
+<p>Kafka、dfs配置示例详见hudi-utilities/src/test/resources/delta-streamer-config。</p>
+<p>示例：</p>
+<p>使用Confluent Kafkashi使用avro文件模式注册并产生测试数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[confluent-5.0.0]$ bin/ksql-datagen schema=../impressions.avro format=avro topic=impressions key=impressionid</span><br></pre></td></tr></table></figure>
+<p>消费数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hoodie]$ spark-submit --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer `ls packaging/hudi-utilities-bundle/target/hudi-utilities-bundle-*.jar` \</span><br><span class="line">  --props file://<span class="variable">$&#123;PWD&#125;</span>/hudi-utilities/src/<span class="built_in">test</span>/resources/delta-streamer-config/kafka-source.properties \</span><br><span class="line">  --schemaprovider-class org.apache.hudi.utilities.schema.SchemaRegistryProvider \</span><br><span class="line">  --<span class="built_in">source</span>-class org.apache.hudi.utilities.sources.AvroKafkaSource \</span><br><span class="line">  --<span class="built_in">source</span>-ordering-field impresssiontime \</span><br><span class="line">  --target-base-path file:\/\/\/tmp/hudi-deltastreamer-op \ </span><br><span class="line">  --target-table uber.impressions \</span><br><span class="line">  --op BULK_INSERT</span><br></pre></td></tr></table></figure>
+<p>提前迁移表至Hudi，详见<a href="https://hudi.apache.org/cn/docs/migration_guide" target="_blank" rel="noopener">迁移指南</a>。</p>
+<h3 id="1-多表DeltaStreamer"><a href="#1-多表DeltaStreamer" class="headerlink" title="(1) 多表DeltaStreamer"></a>(1) 多表DeltaStreamer</h3><p>HoodieMultiTableDeltaStreamer是包装后的HoodieDeltaStreamer，用于消费数据到多张表中。</p>
+<p>当前仅支持顺序消费和COW类型。</p>
+<p>与HoodieDeltaStreamer不同的是，需要为不同的表单独配置。</p>
+<p>示例配置详见hudi-utilities/src/test/resources/delta-streamer-config</p>
+<p>详情参照<a href="https://hudi.apache.org/blog/2020/08/22/ingest-multiple-tables-using-hudi" target="_blank" rel="noopener">博客</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">  * --config-folder</span><br><span class="line">    the path to the folder <span class="built_in">which</span> contains all the table wise config files</span><br><span class="line">    --base-path-prefix</span><br><span class="line">    this is added to <span class="built_in">enable</span> users to create all the hudi datasets <span class="keyword">for</span> related tables under one path <span class="keyword">in</span> FS. The datasets are <span class="keyword">then</span> created under the path - &lt;base_path_prefix&gt;/&lt;database&gt;/&lt;table_to_be_ingested&gt;. However you can override the paths <span class="keyword">for</span> every table by setting the property hoodie.deltastreamer.ingestion.targetBasePath</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">hoodie.deltastreamer.ingestion.tablesToBeIngested</span><br><span class="line">  comma separated names of tables to be ingested <span class="keyword">in</span> the format &lt;database&gt;.&lt;table&gt;, <span class="keyword">for</span> example db1.table1,db1.table2</span><br><span class="line">hoodie.deltastreamer.ingestion.targetBasePath</span><br><span class="line">  <span class="keyword">if</span> you wish to ingest a particular table <span class="keyword">in</span> a separate path, you can mention that path here</span><br><span class="line">hoodie.deltastreamer.ingestion.&lt;database&gt;.&lt;table&gt;.configFile</span><br><span class="line">  path to the config file <span class="keyword">in</span> dedicated config folder <span class="built_in">which</span> contains table overridden properties <span class="keyword">for</span> the particular table to be ingested.</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">[hoodie]$ spark-submit --class org.apache.hudi.utilities.deltastreamer.HoodieMultiTableDeltaStreamer `ls packaging/hudi-utilities-bundle/target/hudi-utilities-bundle-*.jar` \</span><br><span class="line">  --props file://<span class="variable">$&#123;PWD&#125;</span>/hudi-utilities/src/<span class="built_in">test</span>/resources/delta-streamer-config/kafka-source.properties \</span><br><span class="line">  --config-folder file://tmp/hudi-ingestion-config \</span><br><span class="line">  --schemaprovider-class org.apache.hudi.utilities.schema.SchemaRegistryProvider \</span><br><span class="line">  --<span class="built_in">source</span>-class org.apache.hudi.utilities.sources.AvroKafkaSource \</span><br><span class="line">  --<span class="built_in">source</span>-ordering-field impresssiontime \</span><br><span class="line">  --base-path-prefix file:\/\/\/tmp/hudi-deltastreamer-op \ </span><br><span class="line">  --target-table uber.impressions \</span><br><span class="line">  --op BULK_INSERT</span><br></pre></td></tr></table></figure>
+<h3 id="2-并发控制"><a href="#2-并发控制" class="headerlink" title="(2) 并发控制"></a>(2) 并发控制</h3><p>OCC示例，如需要配置kafka-source.properties</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hoodie]$ spark-submit --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer `ls packaging/hudi-utilities-bundle/target/hudi-utilities-bundle-*.jar` \</span><br><span class="line">  --props file://<span class="variable">$&#123;PWD&#125;</span>/hudi-utilities/src/<span class="built_in">test</span>/resources/delta-streamer-config/kafka-source.properties \</span><br><span class="line">  --schemaprovider-class org.apache.hudi.utilities.schema.SchemaRegistryProvider \</span><br><span class="line">  --<span class="built_in">source</span>-class org.apache.hudi.utilities.sources.AvroKafkaSource \</span><br><span class="line">  --<span class="built_in">source</span>-ordering-field impresssiontime \</span><br><span class="line">  --target-base-path file:\/\/\/tmp/hudi-deltastreamer-op \ </span><br><span class="line">  --target-table uber.impressions \</span><br><span class="line">  --op BULK_INSERT</span><br></pre></td></tr></table></figure>
+<h2 id="2-检查点"><a href="#2-检查点" class="headerlink" title="2 检查点"></a>2 检查点</h2><p>使用检查点记录上次消费的数据位置。Kafka数据源使用<a href="https://cwiki.apache.org/confluence/display/KAFKA/Offset+Management" target="_blank" rel="noopener">Kafka Offset</a>记录，DFS数据源使用最新文件的最近修改时间。数据记录在.hoodie文件中的deltastreamer.checkpoint.key。</p>
+<p>修改检查点的方式：</p>
+<ul>
+<li><p>–checkpoint</p>
+<p>将修改deltastreamer.checkpoint.reset_key以覆盖检查点</p>
+</li>
+<li><p>–source-limit</p>
+<p>设置读取的最大数据量。DFS数据源单位为字节，Kafka数据源单位为事件数量。</p>
+</li>
+</ul>
+<h2 id="3-模式推断"><a href="#3-模式推断" class="headerlink" title="3 模式推断"></a>3 模式推断</h2><p>默认Spark可以从数据源中推断模式。同时也可以通过以下方式显式定义。</p>
+<h3 id="1-在线注册"><a href="#1-在线注册" class="headerlink" title="(1) 在线注册"></a>(1) 在线注册</h3><p>可以通过在线注册的方式获取最新模式。</p>
+<p>spark-submit配置形如–hoodie-conf hoodie.deltastreamer.schemaprovider.registry.url=<a href="https://foo:bar@schemaregistry.org" target="_blank" rel="noopener">https://foo:bar@schemaregistry.org</a></p>
+<table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.registry.url</td>
+<td>The schema of the source you are reading from</td>
+<td><a href="https://foo:[bar@schemaregistry.org](mailto:bar@schemaregistry.org" target="_blank" rel="noopener">https://foo:[bar@schemaregistry.org](mailto:bar@schemaregistry.org</a>)</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.registry.targetUrl</td>
+<td>The schema of the target you are writing to</td>
+<td><a href="https://foo:[bar@schemaregistry.org](mailto:bar@schemaregistry.org" target="_blank" rel="noopener">https://foo:[bar@schemaregistry.org](mailto:bar@schemaregistry.org</a>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-JDBC方式"><a href="#2-JDBC方式" class="headerlink" title="(2) JDBC方式"></a>(2) JDBC方式</h3><p>spark-submit配置形如–hoodie-conf hoodie.deltastreamer.jdbcbasedschemaprovider.connection.url=jdbc:postgresql://localhost/test?user=fred&amp;password=secret</p>
+<table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.jdbc.connection.url</td>
+<td>The JDBC URL to connect to. You can specify source specific connection properties in the URL</td>
+<td>jdbc:postgresql://localhost/test?user=fred&amp;password=secret</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.jdbc.driver.type</td>
+<td>The class name of the JDBC driver to use to connect to this URL</td>
+<td>org.h2.Driver</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.jdbc.username</td>
+<td>username for the connection</td>
+<td>fred</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.jdbc.password</td>
+<td>password for the connection</td>
+<td>secret</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.jdbc.dbtable</td>
+<td>The table with the schema to reference</td>
+<td>test_database.test1_table or test1_table</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.jdbc.timeout</td>
+<td>The number of seconds the driver will wait for a Statement object to execute to the given number of seconds. Zero means there is no limit. In the write path, this option depends on how JDBC drivers implement the API setQueryTimeout, e.g., the h2 JDBC driver checks the timeout of each query instead of an entire JDBC batch. It defaults to 0.</td>
+<td>0</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.jdbc.nullable</td>
+<td>If true, all columns are nullable</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-文件方式"><a href="#3-文件方式" class="headerlink" title="(3)文件方式"></a>(3)文件方式</h3><p>定义.avsc文件</p>
+<table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.source.schema.file</td>
+<td>The schema of the source you are reading from</td>
+<td><a href="https://github.com/apache/hudi/blob/a8fb69656f522648233f0310ca3756188d954281/docker/demo/config/test-suite/source.avsc" target="_blank" rel="noopener">example schema file</a></td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.schemaprovider.target.schema.file</td>
+<td>The schema of the target you are writing to</td>
+<td><a href="https://github.com/apache/hudi/blob/a8fb69656f522648233f0310ca3756188d954281/docker/demo/config/test-suite/target.avsc" target="_blank" rel="noopener">example schema file</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-Post-Processor方式"><a href="#4-Post-Processor方式" class="headerlink" title="(4) Post Processor方式"></a>(4) Post Processor方式</h3><p>从以上方式中选择一个用于获取模式，需要实现<a href="https://github.com/apache/hudi/blob/master/hudi-utilities/src/main/java/org/apache/hudi/utilities/schema/SchemaPostProcessor.java" target="_blank" rel="noopener">SchemaPostProcessor</a></p>
+<h2 id="4-来源"><a href="#4-来源" class="headerlink" title="4 来源"></a>4 来源</h2><h3 id="1-DFS"><a href="#1-DFS" class="headerlink" title="(1) DFS"></a>(1) DFS</h3><p>支持以下数据格式：</p>
+<ul>
+<li>CSV</li>
+<li>AVRO</li>
+<li>JSON</li>
+<li>PARQUET</li>
+<li>ORC</li>
+<li>HUDI</li>
+</ul>
+<h3 id="2-Kafka"><a href="#2-Kafka" class="headerlink" title="(2) Kafka"></a>(2) Kafka</h3><p>可以直接从kafka集群读取数据，刚好一次语义、检查点和插件转换详见HoodieDeltaStreamer。</p>
+<p>支持以下数据格式：</p>
+<ul>
+<li>AVRO</li>
+<li>JSON</li>
+</ul>
+<h3 id="3-S3事件"><a href="#3-S3事件" class="headerlink" title="(3) S3事件"></a>(3) S3事件</h3><p>略</p>
+<h3 id="4-JDBC"><a href="#4-JDBC" class="headerlink" title="(4) JDBC"></a>(4) JDBC</h3><p>可以整个读取表，或者基于检查点增量读取。</p>
+<table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hoodie.deltastreamer.jdbc.url</td>
+<td>URL of the JDBC connection</td>
+<td>jdbc:postgresql://localhost/test</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.user</td>
+<td>User to use for authentication of the JDBC connection</td>
+<td>fred</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.password</td>
+<td>Password to use for authentication of the JDBC connection</td>
+<td>secret</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.password.file</td>
+<td>If you prefer to use a password file for the connection</td>
+<td></td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.driver.class</td>
+<td>Driver class to use for the JDBC connection</td>
+<td></td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.table.name</td>
+<td></td>
+<td>my_table</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.table.incr.column.name</td>
+<td>If run in incremental mode, this field will be used to pull new data incrementally</td>
+<td></td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.incr.pull</td>
+<td>Will the JDBC connection perform an incremental pull?</td>
+<td></td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.extra.options.</td>
+<td>How you pass extra configurations that would normally by specified as spark.read.option()</td>
+<td>hoodie.deltastreamer.jdbc.extra.options.fetchSize=100 hoodie.deltastreamer.jdbc.extra.options.upperBound=1 hoodie.deltastreamer.jdbc.extra.options.lowerBound=100</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.storage.level</td>
+<td>Used to control the persistence level</td>
+<td>Default = MEMORY_AND_DISK_SER</td>
+</tr>
+<tr>
+<td>hoodie.deltastreamer.jdbc.incr.fallback.to.full.fetch</td>
+<td>Boolean which if set true makes an incremental fetch fallback to a full fetch if there is any error in the incremental read</td>
+<td>FALSE</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-SQL"><a href="#5-SQL" class="headerlink" title="(5) SQL"></a>(5) SQL</h3><p>SQL数据源主要用于填充指定分区的数据，不会更新deltastreamer.checkpoint.key，而是设置为最近成功提交的检查点。</p>
+<p>为了获取并使用最近增量检查点，需要设置<code>hoodie.write.meta.key.prefixes = &#39;deltastreamer.checkpoint.key&#39;</code>。</p>
+<p>Spark SQL需要设置<code>hoodie.deltastreamer.source.sql.sql.query = &#39;select * from source_table&#39;</code>。</p>
+<h2 id="5-Flink消费"><a href="#5-Flink消费" class="headerlink" title="5 Flink消费"></a>5 Flink消费</h2><h3 id="1-CDC消费"><a href="#1-CDC消费" class="headerlink" title="(1) CDC消费"></a>(1) CDC消费</h3><p>Change Data Capture用于跟踪数据源的变化。推荐使用以下两种方式：</p>
+<p><img src="/2022/03/25/20220325Hudi流式消费/cdc-2-hudi-d151389758f4ce3fd873c1258b0a8ce5.png" alt="slide1 title"></p>
+<ul>
+<li>使用<a href="https://github.com/ververica/flink-cdc-connectors" target="_blank" rel="noopener">flink-cdc-connectors</a>直接连接数据库并同步binlog到Hudi。优点是不需要消息队列，缺点是增加数据库负载。</li>
+<li>使用flink cdc format格式从消息队列消费。优点是高可扩展，缺点是依赖消息队列。</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>如果上游数据无法保证有序，需要显式设置<code>write.precombine.field</code>。</li>
+<li>当前MOR表在事件时间序列中无法删除，会导致数据丢失。最好转换为changelog模式<code>changelog.enabled</code>。</li>
+</ul>
+<h3 id="2-批量插入"><a href="#2-批量插入" class="headerlink" title="(2) 批量插入"></a>(2) 批量插入</h3><p>使用批量插入导入快照数据。</p>
+<p>注意：</p>
+<ul>
+<li>批量插入忽略了序列化和数据合并，需要自行保证数据唯一性。</li>
+<li>在批量执行模式中批量插入更有效率。默认批量执行模式按分区路径排序，避免频繁文件操作导致的写性能下降。</li>
+<li>批量插入的并发由<code>write.tasks</code>配置。并发度影响小文件的数量。理论上，批量插入的并发度是bucket的数量，但当bucket写满时，会新增文件，因此文件数量不小于<a href="https://hudi.apache.org/docs/hoodie_deltastreamer#parallelism" target="_blank" rel="noopener">write.bucket_assign.tasks</a></li>
+</ul>
+<p>配置</p>
+<table>
+<thead>
+<tr>
+<th>Option Name</th>
+<th>Required</th>
+<th>Default</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>write.operation</code></td>
+<td><code>true</code></td>
+<td><code>upsert</code></td>
+<td>Setting as <code>bulk_insert</code> to open this function</td>
+</tr>
+<tr>
+<td><code>write.tasks</code></td>
+<td><code>false</code></td>
+<td><code>4</code></td>
+<td>The parallelism of <code>bulk_insert</code>, <code>the number of files</code> &gt;= <a href="https://hudi.apache.org/docs/hoodie_deltastreamer#parallelism" target="_blank" rel="noopener"><code>write.bucket_assign.tasks</code></a></td>
+</tr>
+<tr>
+<td><code>write.bulk_insert.shuffle_by_partition</code></td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td>Whether to shuffle data according to the partition field before writing. Enabling this option will reduce the number of small files, but there may be a risk of data skew</td>
+</tr>
+<tr>
+<td><code>write.bulk_insert.sort_by_partition</code></td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td>Whether to sort data according to the partition field before writing. Enabling this option will reduce the number of small files when a write task writes multiple partitions</td>
+</tr>
+<tr>
+<td><code>write.sort.memory</code></td>
+<td><code>false</code></td>
+<td><code>128</code></td>
+<td>Available managed memory of sort operator. default <code>128</code> MB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-索引引导"><a href="#3-索引引导" class="headerlink" title="(3) 索引引导"></a>(3) 索引引导</h3><p>在导入快照数据后，可以导入增量数据，使用index bootstrap功能去重。</p>
+<p>注意：如认为过程耗时，可以在在导入快照数据的同时增加资源以流式写入，减少资源或开启速率限制写入增量数据。</p>
+<p>配置</p>
+<table>
+<thead>
+<tr>
+<th>Option Name</th>
+<th>Required</th>
+<th>Default</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index.bootstrap.enabled</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td>When index bootstrap is enabled, the remain records in Hudi table will be loaded into the Flink state at one time</td>
+</tr>
+<tr>
+<td><code>index.partition.regex</code></td>
+<td><code>false</code></td>
+<td><code>*</code></td>
+<td>Optimize option. Setting regular expressions to filter partitions. By default, all partitions are loaded into flink state</td>
+</tr>
+</tbody>
+</table>
+<p>使用步骤</p>
+<p>1) CREATE TABLE创建正确table.type类型的表。</p>
+<p>2) 设置<code>index.bootstrap.enabled = true</code>开启索引引导功能。</p>
+<p>3) 根据检查点调度时间，在flink-conf.yaml中设置检查点失败上限<code>execution.checkpointing.tolerable-failed-checkpoints = n</code></p>
+<p>4) 第一个检查点成功创建时，索引引导配置成功。</p>
+<p>5) 索引引导完成后，用户可以退出并保存检查点（或者直接使用外部检查点）。</p>
+<p>6) 重启作业，关闭索引引导。</p>
+<p>注意</p>
+<ul>
+<li>索引引导阻塞时，检查点不能成功完成。</li>
+<li>索引引导由输入数据出发，用户需要保证每个分区中都有数据。</li>
+<li>索引引导并行执行，可以通过<code>`finish loading the index under partition</code>和<code>Load record form file</code>观察。</li>
+<li>首个检查点创建成功即成功，不需要在检查点恢复时重新加载索引。</li>
+</ul>
+<h3 id="4-变化日志模式"><a href="#4-变化日志模式" class="headerlink" title="(4) 变化日志模式"></a>(4) 变化日志模式</h3><p>Hudi可以保存所有的中间变化消息，然flink状态计算达到近实时数仓ETL管道（增量计算）的目的。Hudi MOR表以行的形式保存消息，支持保存所有变化日志（在数据格式级别整合）。所有的变化日志记录可以使用flink流式读取器消费。</p>
+<p>配置</p>
+<table>
+<thead>
+<tr>
+<th>Option Name</th>
+<th>Required</th>
+<th>Default</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>changelog.enabled</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td>It is turned off by default, to have the <code>upsert</code> semantics, only the merged messages are ensured to be kept, intermediate changes may be merged. Setting to true to support consumption of all changes</td>
+</tr>
+</tbody>
+</table>
+<p>注意</p>
+<ul>
+<li>批量（快照）读取依旧会合并中间变化，不论格式是否保存了中间变化日志消息。</li>
+<li>当变化日志模式开启时，异步压缩任务会合并变化日志记录到一条记录。如果流式数据源没有及时消费，将只能读取压缩后的记录。可以通过设置压缩选项增加缓冲时间，如<a href="https://hudi.apache.org/docs/hoodie_deltastreamer#compaction" target="_blank" rel="noopener">compaction.delta_commits</a>和<a href="https://hudi.apache.org/docs/hoodie_deltastreamer#compaction" target="_blank" rel="noopener">compaction.delta_seconds</a></li>
+</ul>
+<h3 id="5-追加模式"><a href="#5-追加模式" class="headerlink" title="(5) 追加模式"></a>(5) 追加模式</h3><p>INSERT操作，对于COW表默认不会合并小文件，但MOR表会。</p>
+<p>COW可开启 <code>write.insert.cluster</code>配置合并小文件。</p>
+<table>
+<thead>
+<tr>
+<th>Option Name</th>
+<th>Required</th>
+<th>Default</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>write.insert.cluster</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td>Whether to merge small files while ingesting, for COW table, open the option to enable the small file merging strategy(no deduplication for keys but the throughput will be affected)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-速率限制"><a href="#6-速率限制" class="headerlink" title="(6) 速率限制"></a>(6) 速率限制</h3><table>
+<thead>
+<tr>
+<th>Option Name</th>
+<th>Required</th>
+<th>Default</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>write.rate.limit</code></td>
+<td><code>false</code></td>
+<td><code>0</code></td>
+<td>Default disable the rate limit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-流式查询"><a href="#7-流式查询" class="headerlink" title="(7) 流式查询"></a>(7) 流式查询</h3><h3 id="8-增量查询"><a href="#8-增量查询" class="headerlink" title="(8) 增量查询"></a>(8) 增量查询</h3><h2 id="6-Kafka连接Sink"><a href="#6-Kafka连接Sink" class="headerlink" title="6 Kafka连接Sink"></a>6 Kafka连接Sink</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hudi/" rel="tag"># Hudi</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/17/20220317Hudi SQL DDL/" rel="next" title="Hudi SQL DDL">
+                <i class="fa fa-chevron-left"></i> Hudi SQL DDL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/03/30/20220330Hudi数据查询/" rel="prev" title="Hudi数据查询">
+                Hudi数据查询 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-DeltaStreamer"><span class="nav-number">1.</span> <span class="nav-text">1 DeltaStreamer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-多表DeltaStreamer"><span class="nav-number">1.1.</span> <span class="nav-text">(1) 多表DeltaStreamer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-并发控制"><span class="nav-number">1.2.</span> <span class="nav-text">(2) 并发控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-检查点"><span class="nav-number">2.</span> <span class="nav-text">2 检查点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-模式推断"><span class="nav-number">3.</span> <span class="nav-text">3 模式推断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-在线注册"><span class="nav-number">3.1.</span> <span class="nav-text">(1) 在线注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-JDBC方式"><span class="nav-number">3.2.</span> <span class="nav-text">(2) JDBC方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-文件方式"><span class="nav-number">3.3.</span> <span class="nav-text">(3)文件方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Post-Processor方式"><span class="nav-number">3.4.</span> <span class="nav-text">(4) Post Processor方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-来源"><span class="nav-number">4.</span> <span class="nav-text">4 来源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-DFS"><span class="nav-number">4.1.</span> <span class="nav-text">(1) DFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Kafka"><span class="nav-number">4.2.</span> <span class="nav-text">(2) Kafka</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-S3事件"><span class="nav-number">4.3.</span> <span class="nav-text">(3) S3事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-JDBC"><span class="nav-number">4.4.</span> <span class="nav-text">(4) JDBC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-SQL"><span class="nav-number">4.5.</span> <span class="nav-text">(5) SQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Flink消费"><span class="nav-number">5.</span> <span class="nav-text">5 Flink消费</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-CDC消费"><span class="nav-number">5.1.</span> <span class="nav-text">(1) CDC消费</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-批量插入"><span class="nav-number">5.2.</span> <span class="nav-text">(2) 批量插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-索引引导"><span class="nav-number">5.3.</span> <span class="nav-text">(3) 索引引导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-变化日志模式"><span class="nav-number">5.4.</span> <span class="nav-text">(4) 变化日志模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-追加模式"><span class="nav-number">5.5.</span> <span class="nav-text">(5) 追加模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-速率限制"><span class="nav-number">5.6.</span> <span class="nav-text">(6) 速率限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-流式查询"><span class="nav-number">5.7.</span> <span class="nav-text">(7) 流式查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-增量查询"><span class="nav-number">5.8.</span> <span class="nav-text">(8) 增量查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Kafka连接Sink"><span class="nav-number">6.</span> <span class="nav-text">6 Kafka连接Sink</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2022/03/25/20220325Hudi流式消费/';
+          this.page.identifier = '2022/03/25/20220325Hudi流式消费/';
+          this.page.title = 'Hudi流式消费';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -99,7 +99,7 @@
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/200702Spark%20SQL/image-20200710115929340.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200710120047554.png">
 <meta property="og:image" content="https://hopefulnick.github.io/2020/07/02/200702Spark%20SQL/image-20200710120107513.png">
-<meta property="og:updated_time" content="2020-11-23T13:11:47.443Z">
+<meta property="og:updated_time" content="2020-12-27T15:30:08.176Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark SQL">
 <meta name="twitter:description" content="适用于版本2.3.0">
@@ -443,6 +443,9 @@
 <p>分组将数据分布在固定数量的桶中。</p>
 <p>分区对唯一值数量敏感，即对具有高基数的列的适用性有限。</p>
 <p>可以同时使用分组和分区。</p>
+<p>Spark 3.0</p>
+<p>partittionBy创建了分区发现一节中描述的目录结构，因此限制了高基数的列的可用性。</p>
+<p>bucketBy在固定数量桶中分散数据，可以用于唯一值数量没有边界的的场景</p>
 <p>注意：bucketBy使用了列的哈希值分桶，保证具有相同哈希值的记录在同一个桶中，可以避免shuffle。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">peopleDF.write.bucketBy(<span class="number">42</span>, <span class="string">"name"</span>).sortBy(<span class="string">"age"</span>).saveAsTable(<span class="string">"people_bucketed"</span>)</span><br><span class="line"></span><br><span class="line">usersDF.write.partitionBy(<span class="string">"favorite_color"</span>).format(<span class="string">"parquet"</span>).save(<span class="string">"namesPartByColor.parquet"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同时使用分组和分区</span></span><br><span class="line">usersDF</span><br><span class="line">  .write</span><br><span class="line">  .partitionBy(<span class="string">"favorite_color"</span>)</span><br><span class="line">  .bucketBy(<span class="number">42</span>, <span class="string">"name"</span>)</span><br><span class="line">  .saveAsTable(<span class="string">"users_partitioned_bucketed"</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="2-Parquet文件"><a href="#2-Parquet文件" class="headerlink" title="(2) Parquet文件"></a>(2) Parquet文件</h3><p><a href="http://parquet.io/" target="_blank" rel="noopener">Parquet</a>是列格式的数据。自描述格式，保存有模式信息。</p>
@@ -624,8 +627,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/07/02/200702数据仓库和ODS/" rel="next" title="数据仓库和ODS">
-                <i class="fa fa-chevron-left"></i> 数据仓库和ODS
+              <a href="/2020/07/01/200701数据仓库的成本论证和投资回报/" rel="next" title="数据仓库的成本论证和投资回报">
+                <i class="fa fa-chevron-left"></i> 数据仓库的成本论证和投资回报
               </a>
             
           </div>
@@ -634,8 +637,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/07/04/200704MySQL 5.7vs8.0/" rel="prev" title="MySQL 5.7vs8.0">
-                MySQL 5.7vs8.0 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/07/02/200702数据仓库和ODS/" rel="prev" title="数据仓库和ODS">
+                数据仓库和ODS <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -727,7 +730,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-count">161</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -738,7 +741,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -749,7 +752,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -818,7 +821,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

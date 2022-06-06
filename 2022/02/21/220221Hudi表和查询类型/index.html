@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hudi," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本0.10.1 1 概览表类型定义了索引方式和数据在分布式文件系统中的布局，以及相关的功能和时间线活动。如写数据方式。 查询类型定义了数据暴露给查询的方式。如读数据方式">
+<meta name="keywords" content="Hudi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hudi表和查询类型">
+<meta property="og:url" content="https://hopefulnick.github.io/2022/02/21/220221Hudi表和查询类型/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本0.10.1 1 概览表类型定义了索引方式和数据在分布式文件系统中的布局，以及相关的功能和时间线活动。如写数据方式。 查询类型定义了数据暴露给查询的方式。如读数据方式">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2022/02/21/220221Hudi表和查询类型/hudi_cow-9750b5f006646e2d1874ad18b355d200.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2022/02/21/220221Hudi表和查询类型/hudi_mor-5f9da4e0c57c9ee20b74b31c035ba0e6.png">
+<meta property="og:updated_time" content="2022-06-06T07:58:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hudi表和查询类型">
+<meta name="twitter:description" content="适用于版本0.10.1 1 概览表类型定义了索引方式和数据在分布式文件系统中的布局，以及相关的功能和时间线活动。如写数据方式。 查询类型定义了数据暴露给查询的方式。如读数据方式">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2022/02/21/220221Hudi表和查询类型/hudi_cow-9750b5f006646e2d1874ad18b355d200.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2022/02/21/220221Hudi表和查询类型/"/>
+
+
+
+
+
+  <title>Hudi表和查询类型 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2022/02/21/220221Hudi表和查询类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hudi表和查询类型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-02-21T11:00:47+08:00">
+                2022-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hudi/" itemprop="url" rel="index">
+                    <span itemprop="name">Hudi</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/02/21/220221Hudi表和查询类型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/02/21/220221Hudi表和查询类型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本0.10.1</p>
+<h2 id="1-概览"><a href="#1-概览" class="headerlink" title="1 概览"></a>1 概览</h2><p>表类型定义了索引方式和数据在分布式文件系统中的布局，以及相关的功能和时间线活动。如写数据方式。</p>
+<p>查询类型定义了数据暴露给查询的方式。如读数据方式</p>
+<a id="more"></a>
+<table>
+<thead>
+<tr>
+<th>Table Type</th>
+<th>Supported Query types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Copy On Write</td>
+<td>Snapshot Queries + Incremental Queries</td>
+</tr>
+<tr>
+<td>Merge On Read</td>
+<td>Snapshot Queries + Incremental Queries + Read Optimized Queries</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-表类型"><a href="#2-表类型" class="headerlink" title="2 表类型"></a>2 表类型</h2><ul>
+<li><a href="https://hudi.apache.org/cn/docs/table_types#copy-on-write-table" target="_blank" rel="noopener">Copy On Write</a> : 使用单一列文件格式，如parquet。在写入时更新版本并同步合并文件。</li>
+<li><a href="https://hudi.apache.org/cn/docs/table_types#merge-on-read-table" target="_blank" rel="noopener">Merge On Read</a> : 使列 + 行文件格式存储，如parquet + avro。更新时写入增量文件，后期同步或异步生成新版本列文件。</li>
+</ul>
+<p>优势对比：</p>
+<p>cow查询延迟低，存储空间小。mor数据延迟低、IO成本低、写入放大小。</p>
+<table>
+<thead>
+<tr>
+<th>Trade-off</th>
+<th>CopyOnWrite</th>
+<th>MergeOnRead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data Latency</td>
+<td>Higher</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Query Latency</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Update cost (I/O)</td>
+<td>Higher (rewrite entire parquet)</td>
+<td>Lower (append to delta log)</td>
+</tr>
+<tr>
+<td>Parquet File Size</td>
+<td>Smaller (high update(I/0) cost)</td>
+<td>Larger (low update cost)</td>
+</tr>
+<tr>
+<td>Write Amplification</td>
+<td>Higher</td>
+<td>Lower (depending on compaction strategy)</td>
+</tr>
+</tbody>
+</table>
+<p>Write Amplification: 写入放大，写入占用的空间比实际数据量大。因为闪存需要先擦除，再写入。</p>
+<h2 id="3-查询类型"><a href="#3-查询类型" class="headerlink" title="3 查询类型"></a>3 查询类型</h2><ul>
+<li><strong>Snapshot Queries</strong> : 可以查询最新提交或压缩的数据。</li>
+<li><strong>Incremental Queries</strong> : 可以查询从某个提交或压缩开始的数据。</li>
+<li><strong>Read Optimized Queries</strong> : 可以查询最新提交或压缩的数据。只暴露base/columnar文件最新的文件分片。保证和非hudi表相同的列查询性能。</li>
+</ul>
+<p>优势对比：</p>
+<p>快照查询数据延迟低，读优化查询延迟低。</p>
+<table>
+<thead>
+<tr>
+<th>Trade-off</th>
+<th>Snapshot</th>
+<th>Read Optimized</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data Latency</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Query Latency</td>
+<td>Higher (merge base / columnar file + row based delta / log files)</td>
+<td>Lower (raw base / columnar file performance)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-COW表"><a href="#4-COW表" class="headerlink" title="4 COW表"></a>4 COW表</h2><p>适用查询为主场景，因为读取放大为0，而写入放大很大。</p>
+<p>文件分片只包含base/columnar文件，并且每次提交产生新版本base文件。也就是在每次提交时隐式压缩。</p>
+<p>数据写入时，更新操作产生新的数据分片，而插入操作为新的文件组写入第一个数据分片。</p>
+<p>查询时过滤书所有最新的文件分片，这样可以避免因为写失败和部分写入导致的查询问题。</p>
+<p><img src="/2022/02/21/220221Hudi表和查询类型/hudi_cow-9750b5f006646e2d1874ad18b355d200.png" alt="hudi_cow.png"></p>
+<p>COW表目的：</p>
+<ul>
+<li>在文件级别上支持原子数据更新，而不是重写整个分区或表</li>
+<li>增量消费变化数据，而不是浪费地扫描</li>
+<li>控制文件大小，已避免小文件导致的查询性能降级</li>
+</ul>
+<h2 id="5-MOR表"><a href="#5-MOR表" class="headerlink" title="5 MOR表"></a>5 MOR表</h2><p>从某种意义上讲，MOR表是COW表的超集，其通过只暴露base/columnar文件的最新文件分片以支持读优化查询。</p>
+<p>此外，将更新插入些图到基于行的增量日志中。查询时，通过应用增量日志以支持快照查询。因此可以平衡读取放大和写入放大。</p>
+<p>在压缩时，为了避免较大增量日志引发的长时间合并，增量日志将被谨慎选取以保持运行时查询性能。</p>
+<p><img src="/2022/02/21/220221Hudi表和查询类型/hudi_mor-5f9da4e0c57c9ee20b74b31c035ba0e6.png" alt="hudi_mor.png"></p>
+<ul>
+<li>每分钟提交一次，数据延迟更低。</li>
+<li>在每个文件id组中，有一个增量日志记录变化。而base/columnar文件保持现有的版本。如果只查询base文件，那么等同于查COW表。</li>
+<li>周期性合并增量文件和base文件。</li>
+<li>两种方式查询：读优化和快照查询，取决于倾向查询性能或数据实时性。</li>
+<li>提交的数据何时可用于读优化查询是不确定的。但是可以保证快照查询读取的都是最新的数据。</li>
+<li>通过应用压缩策略，读优化查询可以查询一段连续时间内的数据。</li>
+</ul>
+<p>MOR表的设计意图是直接在DFS上进行准实时处理，而不是将数据拷贝到其他系统。由于避免了数据同步合并，同时也降低了写入放大。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hudi/" rel="tag"># Hudi</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/02/19/210219Spark迁移/" rel="next" title="Spark 2.4迁移至3.0">
+                <i class="fa fa-chevron-left"></i> Spark 2.4迁移至3.0
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/02/23/220223Hudi索引/" rel="prev" title="Hudi索引">
+                Hudi索引 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概览"><span class="nav-number">1.</span> <span class="nav-text">1 概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-表类型"><span class="nav-number">2.</span> <span class="nav-text">2 表类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-查询类型"><span class="nav-number">3.</span> <span class="nav-text">3 查询类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-COW表"><span class="nav-number">4.</span> <span class="nav-text">4 COW表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-MOR表"><span class="nav-number">5.</span> <span class="nav-text">5 MOR表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2022/02/21/220221Hudi表和查询类型/';
+          this.page.identifier = '2022/02/21/220221Hudi表和查询类型/';
+          this.page.title = 'Hudi表和查询类型';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

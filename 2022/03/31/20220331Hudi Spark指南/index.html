@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hudi," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本0.10.1。 1 配置 支持Spark 2.4.3+版本。 0.9.0已添加Spark DML支持，但处于实验中。 对于Spark 3支持情况     Hudi Supported Spark 3 version     0.10.0 3.1.x (default build), 3.0.x   0.7.0">
+<meta name="keywords" content="Hudi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hudi on Spark">
+<meta property="og:url" content="https://hopefulnick.github.io/2022/03/31/20220331Hudi Spark指南/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本0.10.1。 1 配置 支持Spark 2.4.3+版本。 0.9.0已添加Spark DML支持，但处于实验中。 对于Spark 3支持情况     Hudi Supported Spark 3 version     0.10.0 3.1.x (default build), 3.0.x   0.7.0 - 0.9.0 3.0.x   0.6.0 and prior not sup">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-06-06T08:06:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hudi on Spark">
+<meta name="twitter:description" content="适用于版本0.10.1。 1 配置 支持Spark 2.4.3+版本。 0.9.0已添加Spark DML支持，但处于实验中。 对于Spark 3支持情况     Hudi Supported Spark 3 version     0.10.0 3.1.x (default build), 3.0.x   0.7.0 - 0.9.0 3.0.x   0.6.0 and prior not sup">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2022/03/31/20220331Hudi Spark指南/"/>
+
+
+
+
+
+  <title>Hudi on Spark | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2022/03/31/20220331Hudi Spark指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hudi on Spark</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-31T11:00:47+08:00">
+                2022-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hudi/" itemprop="url" rel="index">
+                    <span itemprop="name">Hudi</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/03/31/20220331Hudi Spark指南/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/03/31/20220331Hudi Spark指南/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本0.10.1。</p>
+<h2 id="1-配置"><a href="#1-配置" class="headerlink" title="1 配置"></a>1 配置</h2><ul>
+<li>支持Spark 2.4.3+版本。</li>
+<li>0.9.0已添加Spark DML支持，但处于实验中。</li>
+<li>对于Spark 3支持情况</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Hudi</th>
+<th>Supported Spark 3 version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.10.0</td>
+<td>3.1.x (default build), 3.0.x</td>
+</tr>
+<tr>
+<td>0.7.0 - 0.9.0</td>
+<td>3.0.x</td>
+</tr>
+<tr>
+<td>0.6.0 and prior</td>
+<td>not supported</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Spark SQL</li>
+</ul>
+<p>使用<strong>HoodieSparkSessionExtension</strong>支持数据读写</p>
+<a id="more"></a>
+<p>需要注意添加spark-avro支持和保持版本一致</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Spark SQL for spark 3.1</span></span><br><span class="line">spark-sql --packages org.apache.hudi:hudi-spark3.1.2-bundle_2.12:0.10.1,org.apache.spark:spark-avro_2.12:3.1.2 \</span><br><span class="line">--conf <span class="string">'spark.serializer=org.apache.spark.serializer.KryoSerializer'</span> \</span><br><span class="line">--conf <span class="string">'spark.sql.extensions=org.apache.spark.sql.hudi.HoodieSparkSessionExtension'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark SQL for spark 3.0</span></span><br><span class="line">spark-sql --packages org.apache.hudi:hudi-spark3.0.3-bundle_2.12:0.10.1,org.apache.spark:spark-avro_2.12:3.0.3 \</span><br><span class="line">--conf <span class="string">'spark.serializer=org.apache.spark.serializer.KryoSerializer'</span> \</span><br><span class="line">--conf <span class="string">'spark.sql.extensions=org.apache.spark.sql.hudi.HoodieSparkSessionExtension'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark SQL for spark 2 with scala 2.11</span></span><br><span class="line">spark-sql --packages org.apache.hudi:hudi-spark-bundle_2.11:0.10.1,org.apache.spark:spark-avro_2.11:2.4.4 \</span><br><span class="line">--conf <span class="string">'spark.serializer=org.apache.spark.serializer.KryoSerializer'</span> \</span><br><span class="line">--conf <span class="string">'spark.sql.extensions=org.apache.spark.sql.hudi.HoodieSparkSessionExtension'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Spark SQL for spark 2 with scala 2.12</span></span><br><span class="line">spark-sql \</span><br><span class="line">  --packages org.apache.hudi:hudi-spark-bundle_2.12:0.10.1,org.apache.spark:spark-avro_2.12:2.4.4 \</span><br><span class="line">  --conf <span class="string">'spark.serializer=org.apache.spark.serializer.KryoSerializer'</span> \</span><br><span class="line">  --conf <span class="string">'spark.sql.extensions=org.apache.spark.sql.hudi.HoodieSparkSessionExtension'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Spark DataSource</p>
+<p>数据生成器详见<a href="https://github.com/apache/hudi/blob/master/hudi-spark-datasource/hudi-spark/src/main/java/org/apache/hudi/QuickstartUtils.java#L51" target="_blank" rel="noopener">DataGenerator</a></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line"><span class="keyword">import</span> org.apache.hudi.<span class="type">QuickstartUtils</span>._</span><br><span class="line"><span class="keyword">import</span> scala.collection.<span class="type">JavaConversions</span>._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SaveMode</span>._</span><br><span class="line"><span class="keyword">import</span> org.apache.hudi.<span class="type">DataSourceReadOptions</span>._</span><br><span class="line"><span class="keyword">import</span> org.apache.hudi.<span class="type">DataSourceWriteOptions</span>._</span><br><span class="line"><span class="keyword">import</span> org.apache.hudi.config.<span class="type">HoodieWriteConfig</span>._</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> tableName = <span class="string">"hudi_trips_cow"</span></span><br><span class="line"><span class="keyword">val</span> basePath = <span class="string">"file:///tmp/hudi_trips_cow"</span></span><br><span class="line"><span class="keyword">val</span> dataGen = <span class="keyword">new</span> <span class="type">DataGenerator</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-Spark-SQL类型支持"><a href="#2-Spark-SQL类型支持" class="headerlink" title="2 Spark SQL类型支持"></a>2 Spark SQL类型支持</h2><table>
+<thead>
+<tr>
+<th>Spark</th>
+<th>Hudi</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boolean</td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>byte</td>
+<td>int</td>
+<td>*</td>
+</tr>
+<tr>
+<td>short</td>
+<td>int</td>
+<td>*</td>
+</tr>
+<tr>
+<td>integer</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>long</td>
+<td>long</td>
+<td></td>
+</tr>
+<tr>
+<td>date</td>
+<td>date</td>
+<td></td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>timestamp</td>
+<td></td>
+</tr>
+<tr>
+<td>float</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>double</td>
+<td>double</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>decimal</td>
+<td>decimal</td>
+<td></td>
+</tr>
+<tr>
+<td>binary</td>
+<td>bytes</td>
+<td>*</td>
+</tr>
+<tr>
+<td>array</td>
+<td>array</td>
+<td></td>
+</tr>
+<tr>
+<td>map</td>
+<td>map</td>
+<td></td>
+</tr>
+<tr>
+<td>struct</td>
+<td>struct</td>
+<td></td>
+</tr>
+<tr>
+<td>char</td>
+<td></td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>varchar</td>
+<td></td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>numeric</td>
+<td></td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>null</td>
+<td></td>
+<td>not supported</td>
+</tr>
+<tr>
+<td>object</td>
+<td></td>
+<td>not supported</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-建表"><a href="#3-建表" class="headerlink" title="3 建表"></a>3 建表</h2><p>使用DataSource API将自动创建表。</p>
+<p>使用Spark SQL需要显式创建表，需要以下参数：</p>
+<ul>
+<li><p>表类型</p>
+<p>cow或mor</p>
+</li>
+<li><p>是否分区</p>
+<p>通过是否使用partition by语句判定</p>
+</li>
+<li><p>是否外部表</p>
+<p>通过使用location或create external table指定外部表，否则创建内部表。详见<a href="https://sparkbyexamples.com/apache-hive/difference-between-hive-internal-tables-and-external-tables/" target="_blank" rel="noopener">内部表和外部表</a></p>
+</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>从0.10.0开始必须设置主键，包括之前版本创建的表。默认使用uuid作为主键。</li>
+<li>primaryKey、preCombineField和type区分大小写。</li>
+<li>优先使用tblproperties设置，而不是options。</li>
+<li>Spark SQL创建的表会默认设置hoodie.table.keygenerator.class为org.apache.hudi.keygen.ComplexKeyGenerator，设置hoodie.datasource.write.hive_style_partitioning为true。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- create a cow table, with default primaryKey 'uuid' and without preCombineField provided</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_cow_nonpcf_tbl (</span><br><span class="line">  <span class="keyword">uuid</span> <span class="built_in">int</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="keyword">string</span>,</span><br><span class="line">  price <span class="keyword">double</span></span><br><span class="line">) <span class="keyword">using</span> hudi;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- create a mor non-partitioned table without preCombineField provided</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_mor_tbl (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">int</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="keyword">string</span>,</span><br><span class="line">  price <span class="keyword">double</span>,</span><br><span class="line">  ts <span class="built_in">bigint</span></span><br><span class="line">) <span class="keyword">using</span> hudi</span><br><span class="line">tblproperties (</span><br><span class="line">  <span class="keyword">type</span> = <span class="string">'mor'</span>,</span><br><span class="line">  primaryKey = <span class="string">'id'</span>,</span><br><span class="line">  preCombineField = <span class="string">'ts'</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- create a partitioned, preCombineField-provided cow table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_cow_pt_tbl (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">bigint</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="keyword">string</span>,</span><br><span class="line">  ts <span class="built_in">bigint</span>,</span><br><span class="line">  dt <span class="keyword">string</span>,</span><br><span class="line">  hh <span class="keyword">string</span></span><br><span class="line">) <span class="keyword">using</span> hudi</span><br><span class="line">tblproperties (</span><br><span class="line">  <span class="keyword">type</span> = <span class="string">'cow'</span>,</span><br><span class="line">  primaryKey = <span class="string">'id'</span>,</span><br><span class="line">  preCombineField = <span class="string">'ts'</span></span><br><span class="line"> )</span><br><span class="line">partitioned <span class="keyword">by</span> (dt, hh)</span><br><span class="line">location <span class="string">'/tmp/hudi/hudi_cow_pt_tbl'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- create an external hudi table based on an existing path</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- for non-partitioned table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_existing_tbl0 <span class="keyword">using</span> hudi</span><br><span class="line">location <span class="string">'file:///tmp/hudi/dataframe_hudi_nonpt_table'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- for partitioned table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_existing_tbl1 <span class="keyword">using</span> hudi</span><br><span class="line">partitioned <span class="keyword">by</span> (dt, hh)</span><br><span class="line">location <span class="string">'file:///tmp/hudi/dataframe_hudi_pt_table'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- CTAS使用bulk_insert插入数据</span></span><br><span class="line"><span class="comment">-- CTAS: create a non-partitioned cow table without preCombineField</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_ctas_cow_nonpcf_tbl</span><br><span class="line"><span class="keyword">using</span> hudi</span><br><span class="line">tblproperties (primaryKey = <span class="string">'id'</span>)</span><br><span class="line"><span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">as</span> <span class="keyword">id</span>, <span class="string">'a1'</span> <span class="keyword">as</span> <span class="keyword">name</span>, <span class="number">10</span> <span class="keyword">as</span> price;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- CTAS: create a partitioned, preCombineField-provided cow table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_ctas_cow_pt_tbl</span><br><span class="line"><span class="keyword">using</span> hudi</span><br><span class="line">tblproperties (<span class="keyword">type</span> = <span class="string">'cow'</span>, primaryKey = <span class="string">'id'</span>, preCombineField = <span class="string">'ts'</span>)</span><br><span class="line">partitioned <span class="keyword">by</span> (dt)</span><br><span class="line"><span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">as</span> <span class="keyword">id</span>, <span class="string">'a1'</span> <span class="keyword">as</span> <span class="keyword">name</span>, <span class="number">10</span> <span class="keyword">as</span> price, <span class="number">1000</span> <span class="keyword">as</span> ts, <span class="string">'2021-12-01'</span> <span class="keyword">as</span> dt;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- create managed parquet table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> parquet_mngd <span class="keyword">using</span> parquet location <span class="string">'file:///tmp/parquet_dataset/*.parquet'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- CTAS by loading data into hudi table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> hudi_ctas_cow_pt_tbl2 <span class="keyword">using</span> hudi location <span class="string">'file:/tmp/hudi/hudi_tbl/'</span> options (</span><br><span class="line">  <span class="keyword">type</span> = <span class="string">'cow'</span>,</span><br><span class="line">  primaryKey = <span class="string">'id'</span>,</span><br><span class="line">  preCombineField = <span class="string">'ts'</span></span><br><span class="line"> )</span><br><span class="line">partitioned <span class="keyword">by</span> (datestr) <span class="keyword">as</span> <span class="keyword">select</span> * <span class="keyword">from</span> parquet_mngd;</span><br></pre></td></tr></table></figure>
+<p>关键配置</p>
+<table>
+<thead>
+<tr>
+<th>Parameter Name</th>
+<th>Default</th>
+<th>Introduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>primaryKey</td>
+<td>uuid</td>
+<td>The primary key names of the table, multiple fields separated by commas. Same as <code>hoodie.datasource.write.recordkey.field</code></td>
+</tr>
+<tr>
+<td>preCombineField</td>
+<td></td>
+<td>The pre-combine field of the table. Same as <code>hoodie.datasource.write.precombine.field</code></td>
+</tr>
+<tr>
+<td>type</td>
+<td>cow</td>
+<td>The table type to create. type = ‘cow’ means a COPY-ON-WRITE table, while type = ‘mor’ means a MERGE-ON-READ table. Same as <code>hoodie.datasource.write.table.type</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-插入数据"><a href="#4-插入数据" class="headerlink" title="4 插入数据"></a>4 插入数据</h2><ul>
+<li>Scala</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line"><span class="keyword">val</span> inserts = convertToStringList(dataGen.generateInserts(<span class="number">10</span>))</span><br><span class="line"><span class="keyword">val</span> df = spark.read.json(spark.sparkContext.parallelize(inserts, <span class="number">2</span>))</span><br><span class="line">df.write.format(<span class="string">"hudi"</span>).</span><br><span class="line">  options(getQuickstartWriteConfigs).</span><br><span class="line">  option(<span class="type">PRECOMBINE_FIELD_OPT_KEY</span>, <span class="string">"ts"</span>).</span><br><span class="line">  option(<span class="type">RECORDKEY_FIELD_OPT_KEY</span>, <span class="string">"uuid"</span>).</span><br><span class="line">  option(<span class="type">PARTITIONPATH_FIELD_OPT_KEY</span>, <span class="string">"partitionpath"</span>).</span><br><span class="line">  option(<span class="type">TABLE_NAME</span>, tableName).</span><br><span class="line">  mode(<span class="type">Overwrite</span>).</span><br><span class="line">  save(basePath)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Spark SQL</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- insert into non-partitioned table</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> hudi_cow_nonpcf_tbl <span class="keyword">select</span> <span class="number">1</span>, <span class="string">'a1'</span>, <span class="number">20</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> hudi_mor_tbl <span class="keyword">select</span> <span class="number">1</span>, <span class="string">'a1'</span>, <span class="number">20</span>, <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- insert dynamic partition</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> hudi_cow_pt_tbl <span class="keyword">partition</span> (dt, hh)</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">as</span> <span class="keyword">id</span>, <span class="string">'a1'</span> <span class="keyword">as</span> <span class="keyword">name</span>, <span class="number">1000</span> <span class="keyword">as</span> ts, <span class="string">'2021-12-09'</span> <span class="keyword">as</span> dt, <span class="string">'10'</span> <span class="keyword">as</span> hh;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- insert static partition</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> hudi_cow_pt_tbl <span class="keyword">partition</span>(dt = <span class="string">'2021-12-09'</span>, hh=<span class="string">'11'</span>) <span class="keyword">select</span> <span class="number">2</span>, <span class="string">'a2'</span>, <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 如果设置了preCombineField,将使用upsert插入</span></span><br><span class="line"><span class="comment">-- upsert mode for preCombineField-provided table</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> hudi_mor_tbl <span class="keyword">select</span> <span class="number">1</span>, <span class="string">'a1_1'</span>, <span class="number">20</span>, <span class="number">1001</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">id</span>, <span class="keyword">name</span>, price, ts <span class="keyword">from</span> hudi_mor_tbl;</span><br><span class="line">1   a1_1    20.0    1001</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 支持使用bulk_insert写入，但需要设置以下两个参数</span></span><br><span class="line"><span class="comment">-- bulk_insert mode for preCombineField-provided table</span></span><br><span class="line"><span class="keyword">set</span> hoodie.sql.bulk.insert.enable=<span class="literal">true</span>;</span><br><span class="line"><span class="keyword">set</span> hoodie.sql.insert.mode=non-<span class="keyword">strict</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> hudi_mor_tbl <span class="keyword">select</span> <span class="number">1</span>, <span class="string">'a1_2'</span>, <span class="number">20</span>, <span class="number">1002</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">id</span>, <span class="keyword">name</span>, price, ts <span class="keyword">from</span> hudi_mor_tbl;</span><br><span class="line">1   a1_1    20.0    1001</span><br><span class="line">1   a1_2    20.0    1002</span><br></pre></td></tr></table></figure>
+<h2 id="5-查询数据"><a href="#5-查询数据" class="headerlink" title="5 查询数据"></a>5 查询数据</h2><h3 id="1-Scala"><a href="#1-Scala" class="headerlink" title="(1) Scala"></a>(1) Scala</h3><p>加载数据</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line"><span class="keyword">val</span> tripsSnapshotDF = spark.</span><br><span class="line">  read.</span><br><span class="line">  format(<span class="string">"hudi"</span>).</span><br><span class="line">  load(basePath)</span><br><span class="line"><span class="comment">//load(basePath) use "/partitionKey=partitionValue" folder structure for Spark auto partition discovery</span></span><br><span class="line">tripsSnapshotDF.createOrReplaceTempView(<span class="string">"hudi_trips_snapshot"</span>)</span><br><span class="line"></span><br><span class="line">spark.sql(<span class="string">"select fare, begin_lon, begin_lat, ts from  hudi_trips_snapshot where fare &gt; 20.0"</span>).show()</span><br><span class="line">spark.sql(<span class="string">"select _hoodie_commit_time, _hoodie_record_key, _hoodie_partition_path, rider, driver, fare from  hudi_trips_snapshot"</span>).show()</span><br></pre></td></tr></table></figure>
+<h4 id="时间旅行查询-gt-0-9-0"><a href="#时间旅行查询-gt-0-9-0" class="headerlink" title="时间旅行查询(&gt;=0.9.0)"></a>时间旅行查询(&gt;=0.9.0)</h4><p>三种时间格式查询</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">spark.read.</span><br><span class="line">  format(<span class="string">"hudi"</span>).</span><br><span class="line">  option(<span class="string">"as.of.instant"</span>, <span class="string">"20210728141108100"</span>).</span><br><span class="line">  load(basePath)</span><br><span class="line"></span><br><span class="line">spark.read.</span><br><span class="line">  format(<span class="string">"hudi"</span>).</span><br><span class="line">  option(<span class="string">"as.of.instant"</span>, <span class="string">"2021-07-28 14:11:08.200"</span>).</span><br><span class="line">  load(basePath)</span><br><span class="line"></span><br><span class="line"><span class="comment">// It is equal to "as.of.instant = 2021-07-28 00:00:00"</span></span><br><span class="line">spark.read.</span><br><span class="line">  format(<span class="string">"hudi"</span>).</span><br><span class="line">  option(<span class="string">"as.of.instant"</span>, <span class="string">"2021-07-28"</span>).</span><br><span class="line">  load(basePath)</span><br></pre></td></tr></table></figure>
+<p>注意</p>
+<p>从版本0.9.0开始支持内建文件索引HoodieFileIndex。可用于分区裁剪和元数据查询。</p>
+<p>支持非全局路径？</p>
+<h3 id="2-Spark-SQL"><a href="#2-Spark-SQL" class="headerlink" title="(2) Spark SQL"></a>(2) Spark SQL</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> fare, begin_lon, begin_lat, ts <span class="keyword">from</span>  hudi_trips_snapshot <span class="keyword">where</span> fare &gt; <span class="number">20.0</span></span><br></pre></td></tr></table></figure>
+<h2 id="6-更新数据"><a href="#6-更新数据" class="headerlink" title="6 更新数据"></a>6 更新数据</h2><h3 id="1-Scala-1"><a href="#1-Scala-1" class="headerlink" title="(1) Scala"></a>(1) Scala</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line"><span class="keyword">val</span> updates = convertToStringList(dataGen.generateUpdates(<span class="number">10</span>))</span><br><span class="line"><span class="keyword">val</span> df = spark.read.json(spark.sparkContext.parallelize(updates, <span class="number">2</span>))</span><br><span class="line">df.write.format(<span class="string">"hudi"</span>).</span><br><span class="line">  options(getQuickstartWriteConfigs).</span><br><span class="line">  option(<span class="type">PRECOMBINE_FIELD_OPT_KEY</span>, <span class="string">"ts"</span>).</span><br><span class="line">  option(<span class="type">RECORDKEY_FIELD_OPT_KEY</span>, <span class="string">"uuid"</span>).</span><br><span class="line">  option(<span class="type">PARTITIONPATH_FIELD_OPT_KEY</span>, <span class="string">"partitionpath"</span>).</span><br><span class="line">  option(<span class="type">TABLE_NAME</span>, tableName).</span><br><span class="line">  mode(<span class="type">Append</span>).</span><br><span class="line">  save(basePath)</span><br></pre></td></tr></table></figure>
+<h3 id="2-Spark-SQL-1"><a href="#2-Spark-SQL-1" class="headerlink" title="(2) Spark SQL"></a>(2) Spark SQL</h3><h4 id="1-更新"><a href="#1-更新" class="headerlink" title="1) 更新"></a>1) 更新</h4><p>需要设置preCombineField</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="keyword">UPDATE</span> tableIdentifier <span class="keyword">SET</span> <span class="keyword">column</span> = EXPRESSION(,<span class="keyword">column</span> = EXPRESSION) [ <span class="keyword">WHERE</span> boolExpression]</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 示例</span></span><br><span class="line"><span class="keyword">update</span> hudi_mor_tbl <span class="keyword">set</span> price = price * <span class="number">2</span>, ts = <span class="number">1111</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">update</span> hudi_cow_pt_tbl <span class="keyword">set</span> <span class="keyword">name</span> = <span class="string">'a1_1'</span>, ts = <span class="number">1001</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="2-MergeInto"><a href="#2-MergeInto" class="headerlink" title="2) MergeInto"></a>2) MergeInto</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="keyword">MERGE</span> <span class="keyword">INTO</span> tableIdentifier <span class="keyword">AS</span> target_alias</span><br><span class="line"><span class="keyword">USING</span> (sub_query | tableIdentifier) <span class="keyword">AS</span> source_alias</span><br><span class="line"><span class="keyword">ON</span> &lt;merge_condition&gt;</span><br><span class="line">[ <span class="keyword">WHEN</span> <span class="keyword">MATCHED</span> [ <span class="keyword">AND</span> &lt;condition&gt; ] <span class="keyword">THEN</span> &lt;matched_action&gt; ]</span><br><span class="line">[ <span class="keyword">WHEN</span> <span class="keyword">MATCHED</span> [ <span class="keyword">AND</span> &lt;condition&gt; ] <span class="keyword">THEN</span> &lt;matched_action&gt; ]</span><br><span class="line">[ <span class="keyword">WHEN</span> <span class="keyword">NOT</span> <span class="keyword">MATCHED</span> [ <span class="keyword">AND</span> &lt;condition&gt; ]  <span class="keyword">THEN</span> &lt;not_matched_action&gt; ]</span><br><span class="line"></span><br><span class="line">&lt;merge_condition&gt; =A equal bool condition </span><br><span class="line">&lt;matched_action&gt;  =</span><br><span class="line">  <span class="keyword">DELETE</span>  |</span><br><span class="line">  <span class="keyword">UPDATE</span> <span class="keyword">SET</span> *  |</span><br><span class="line">  <span class="keyword">UPDATE</span> <span class="keyword">SET</span> column1 = expression1 [, column2 = expression2 ...]</span><br><span class="line">&lt;not_matched_action&gt;  =</span><br><span class="line">  <span class="keyword">INSERT</span> *  |</span><br><span class="line">  <span class="keyword">INSERT</span> (column1 [, column2 ...]) <span class="keyword">VALUES</span> (value1 [, value2 ...])</span><br><span class="line">  </span><br><span class="line"><span class="comment">-- 示例</span></span><br><span class="line"><span class="comment">-- source table using hudi for testing merging into non-partitioned table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> merge_source (<span class="keyword">id</span> <span class="built_in">int</span>, <span class="keyword">name</span> <span class="keyword">string</span>, price <span class="keyword">double</span>, ts <span class="built_in">bigint</span>) <span class="keyword">using</span> hudi</span><br><span class="line">tblproperties (primaryKey = <span class="string">'id'</span>, preCombineField = <span class="string">'ts'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> merge_source <span class="keyword">values</span> (<span class="number">1</span>, <span class="string">"old_a1"</span>, <span class="number">22.22</span>, <span class="number">900</span>), (<span class="number">2</span>, <span class="string">"new_a2"</span>, <span class="number">33.33</span>, <span class="number">2000</span>), (<span class="number">3</span>, <span class="string">"new_a3"</span>, <span class="number">44.44</span>, <span class="number">2000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">merge</span> <span class="keyword">into</span> hudi_mor_tbl <span class="keyword">as</span> target</span><br><span class="line"><span class="keyword">using</span> merge_source <span class="keyword">as</span> <span class="keyword">source</span></span><br><span class="line"><span class="keyword">on</span> target.id = source.id</span><br><span class="line"><span class="keyword">when</span> <span class="keyword">matched</span> <span class="keyword">then</span> <span class="keyword">update</span> <span class="keyword">set</span> *</span><br><span class="line"><span class="keyword">when</span> <span class="keyword">not</span> <span class="keyword">matched</span> <span class="keyword">then</span> <span class="keyword">insert</span> *</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- source table using parquet for testing merging into partitioned table</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> merge_source2 (<span class="keyword">id</span> <span class="built_in">int</span>, <span class="keyword">name</span> <span class="keyword">string</span>, flag <span class="keyword">string</span>, dt <span class="keyword">string</span>, hh <span class="keyword">string</span>) <span class="keyword">using</span> parquet;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> merge_source2 <span class="keyword">values</span> (<span class="number">1</span>, <span class="string">"new_a1"</span>, <span class="string">'update'</span>, <span class="string">'2021-12-09'</span>, <span class="string">'10'</span>), (<span class="number">2</span>, <span class="string">"new_a2"</span>, <span class="string">'delete'</span>, <span class="string">'2021-12-09'</span>, <span class="string">'11'</span>), (<span class="number">3</span>, <span class="string">"new_a3"</span>, <span class="string">'insert'</span>, <span class="string">'2021-12-09'</span>, <span class="string">'12'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">merge</span> <span class="keyword">into</span> hudi_cow_pt_tbl <span class="keyword">as</span> target</span><br><span class="line"><span class="keyword">using</span> (</span><br><span class="line">  <span class="keyword">select</span> <span class="keyword">id</span>, <span class="keyword">name</span>, <span class="string">'1000'</span> <span class="keyword">as</span> ts, flag, dt, hh <span class="keyword">from</span> merge_source2</span><br><span class="line">) <span class="keyword">source</span></span><br><span class="line"><span class="keyword">on</span> target.id = source.id</span><br><span class="line"><span class="keyword">when</span> <span class="keyword">matched</span> <span class="keyword">and</span> flag != <span class="string">'delete'</span> <span class="keyword">then</span></span><br><span class="line"> <span class="keyword">update</span> <span class="keyword">set</span> <span class="keyword">id</span> = source.id, <span class="keyword">name</span> = source.name, ts = source.ts, dt = source.dt, hh = source.hh</span><br><span class="line"><span class="keyword">when</span> <span class="keyword">matched</span> <span class="keyword">and</span> flag = <span class="string">'delete'</span> <span class="keyword">then</span> <span class="keyword">delete</span></span><br><span class="line"><span class="keyword">when</span> <span class="keyword">not</span> <span class="keyword">matched</span> <span class="keyword">then</span></span><br><span class="line"> <span class="keyword">insert</span> (<span class="keyword">id</span>, <span class="keyword">name</span>, ts, dt, hh) <span class="keyword">values</span>(source.id, source.name, source.ts, source.dt, source.hh)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+<h2 id="7-增量查询"><a href="#7-增量查询" class="headerlink" title="7 增量查询"></a>7 增量查询</h2><p>查询从某一时间点起的数据</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line"><span class="comment">// reload data</span></span><br><span class="line">spark.</span><br><span class="line">  read.</span><br><span class="line">  format(<span class="string">"hudi"</span>).</span><br><span class="line">  load(basePath).</span><br><span class="line">  createOrReplaceTempView(<span class="string">"hudi_trips_snapshot"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> commits = spark.sql(<span class="string">"select distinct(_hoodie_commit_time) as commitTime from  hudi_trips_snapshot order by commitTime"</span>).map(k =&gt; k.getString(<span class="number">0</span>)).take(<span class="number">50</span>)</span><br><span class="line"><span class="keyword">val</span> beginTime = commits(commits.length - <span class="number">2</span>) <span class="comment">// commit time we are interested in</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// incrementally query data</span></span><br><span class="line"><span class="keyword">val</span> tripsIncrementalDF = spark.read.format(<span class="string">"hudi"</span>).</span><br><span class="line">  option(<span class="type">QUERY_TYPE_OPT_KEY</span>, <span class="type">QUERY_TYPE_INCREMENTAL_OPT_VAL</span>).</span><br><span class="line">  option(<span class="type">BEGIN_INSTANTTIME_OPT_KEY</span>, beginTime).</span><br><span class="line">  load(basePath)</span><br><span class="line">tripsIncrementalDF.createOrReplaceTempView(<span class="string">"hudi_trips_incremental"</span>)</span><br><span class="line"></span><br><span class="line">spark.sql(<span class="string">"select `_hoodie_commit_time`, fare, begin_lon, begin_lat, ts from  hudi_trips_incremental where fare &gt; 20.0"</span>).show()</span><br></pre></td></tr></table></figure>
+<h2 id="8-Point-in-time查询"><a href="#8-Point-in-time查询" class="headerlink" title="8 Point in time查询"></a>8 Point in time查询</h2><p>查询某个时间段的数据</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line"><span class="keyword">val</span> beginTime = <span class="string">"000"</span> <span class="comment">// Represents all commits &gt; this time.</span></span><br><span class="line"><span class="keyword">val</span> endTime = commits(commits.length - <span class="number">2</span>) <span class="comment">// commit time we are interested in</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//incrementally query data</span></span><br><span class="line"><span class="keyword">val</span> tripsPointInTimeDF = spark.read.format(<span class="string">"hudi"</span>).</span><br><span class="line">  option(<span class="type">QUERY_TYPE_OPT_KEY</span>, <span class="type">QUERY_TYPE_INCREMENTAL_OPT_VAL</span>).</span><br><span class="line">  option(<span class="type">BEGIN_INSTANTTIME_OPT_KEY</span>, beginTime).</span><br><span class="line">  option(<span class="type">END_INSTANTTIME_OPT_KEY</span>, endTime).</span><br><span class="line">  load(basePath)</span><br><span class="line">tripsPointInTimeDF.createOrReplaceTempView(<span class="string">"hudi_trips_point_in_time"</span>)</span><br><span class="line">spark.sql(<span class="string">"select `_hoodie_commit_time`, fare, begin_lon, begin_lat, ts from hudi_trips_point_in_time where fare &gt; 20.0"</span>).show()</span><br></pre></td></tr></table></figure>
+<h2 id="9-删除数据"><a href="#9-删除数据" class="headerlink" title="9 删除数据"></a>9 删除数据</h2><ul>
+<li><p>Scala</p>
+<p>删除操作只支持Append模式。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line"><span class="comment">// fetch total records count</span></span><br><span class="line">spark.sql(<span class="string">"select uuid, partitionpath from hudi_trips_snapshot"</span>).count()</span><br><span class="line"><span class="comment">// fetch two records to be deleted</span></span><br><span class="line"><span class="keyword">val</span> ds = spark.sql(<span class="string">"select uuid, partitionpath from hudi_trips_snapshot"</span>).limit(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// issue deletes</span></span><br><span class="line"><span class="keyword">val</span> deletes = dataGen.generateDeletes(ds.collectAsList())</span><br><span class="line"><span class="keyword">val</span> df = spark.read.json(spark.sparkContext.parallelize(deletes, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">df.write.format(<span class="string">"hudi"</span>).</span><br><span class="line">  options(getQuickstartWriteConfigs).</span><br><span class="line">  option(<span class="type">OPERATION_OPT_KEY</span>,<span class="string">"delete"</span>).</span><br><span class="line">  option(<span class="type">PRECOMBINE_FIELD_OPT_KEY</span>, <span class="string">"ts"</span>).</span><br><span class="line">  option(<span class="type">RECORDKEY_FIELD_OPT_KEY</span>, <span class="string">"uuid"</span>).</span><br><span class="line">  option(<span class="type">PARTITIONPATH_FIELD_OPT_KEY</span>, <span class="string">"partitionpath"</span>).</span><br><span class="line">  option(<span class="type">TABLE_NAME</span>, tableName).</span><br><span class="line">  mode(<span class="type">Append</span>).</span><br><span class="line">  save(basePath)</span><br><span class="line"></span><br><span class="line"><span class="comment">// run the same read query as above.</span></span><br><span class="line"><span class="keyword">val</span> roAfterDeleteViewDF = spark.</span><br><span class="line">  read.</span><br><span class="line">  format(<span class="string">"hudi"</span>).</span><br><span class="line">  load(basePath)</span><br><span class="line"></span><br><span class="line">roAfterDeleteViewDF.registerTempTable(<span class="string">"hudi_trips_snapshot"</span>)</span><br><span class="line"><span class="comment">// fetch should return (total - 2) records</span></span><br><span class="line">spark.sql(<span class="string">"select uuid, partitionpath from hudi_trips_snapshot"</span>).count()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Spark SQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> tableIdentifier [ <span class="keyword">WHERE</span> BOOL_EXPRESSION]</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 示例</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> hudi_cow_nonpcf_tbl <span class="keyword">where</span> <span class="keyword">uuid</span> = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> hudi_mor_tbl <span class="keyword">where</span> <span class="keyword">id</span> % <span class="number">2</span> = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="10-插入覆盖"><a href="#10-插入覆盖" class="headerlink" title="10 插入覆盖"></a>10 插入覆盖</h2><p>相比upsert，更适用于批量作业。因为增量更新，跳过索引、预聚合和再分区步骤。</p>
+<ul>
+<li><p>Scala</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spark-shell</span></span><br><span class="line">spark.</span><br><span class="line">  read.format(<span class="string">"hudi"</span>).</span><br><span class="line">  load(basePath).</span><br><span class="line">  select(<span class="string">"uuid"</span>,<span class="string">"partitionpath"</span>).</span><br><span class="line">  sort(<span class="string">"partitionpath"</span>,<span class="string">"uuid"</span>).</span><br><span class="line">  show(<span class="number">100</span>, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> inserts = convertToStringList(dataGen.generateInserts(<span class="number">10</span>))</span><br><span class="line"><span class="keyword">val</span> df = spark.</span><br><span class="line">  read.json(spark.sparkContext.parallelize(inserts, <span class="number">2</span>)).</span><br><span class="line">  filter(<span class="string">"partitionpath = 'americas/united_states/san_francisco'"</span>)</span><br><span class="line">df.write.format(<span class="string">"hudi"</span>).</span><br><span class="line">  options(getQuickstartWriteConfigs).</span><br><span class="line">  option(<span class="type">OPERATION</span>.key(),<span class="string">"insert_overwrite"</span>).</span><br><span class="line">  option(<span class="type">PRECOMBINE_FIELD</span>.key(), <span class="string">"ts"</span>).</span><br><span class="line">  option(<span class="type">RECORDKEY_FIELD</span>.key(), <span class="string">"uuid"</span>).</span><br><span class="line">  option(<span class="type">PARTITIONPATH_FIELD</span>.key(), <span class="string">"partitionpath"</span>).</span><br><span class="line">  option(<span class="type">TBL_NAME</span>.key(), tableName).</span><br><span class="line">  mode(<span class="type">Append</span>).</span><br><span class="line">  save(basePath)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Should have different keys now for San Francisco alone, from query before.</span></span><br><span class="line">spark.</span><br><span class="line">  read.format(<span class="string">"hudi"</span>).</span><br><span class="line">  load(basePath).</span><br><span class="line">  select(<span class="string">"uuid"</span>,<span class="string">"partitionpath"</span>).</span><br><span class="line">  sort(<span class="string">"partitionpath"</span>,<span class="string">"uuid"</span>).</span><br><span class="line">  show(<span class="number">100</span>, <span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Spark SQL</p>
+<p>分区表使用insert overwrite， 非分区表使用insert overwrite table。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- insert overwrite non-partitioned table</span></span><br><span class="line"><span class="keyword">insert</span> overwrite hudi_mor_tbl <span class="keyword">select</span> <span class="number">99</span>, <span class="string">'a99'</span>, <span class="number">20.0</span>, <span class="number">900</span>;</span><br><span class="line"><span class="keyword">insert</span> overwrite hudi_cow_nonpcf_tbl <span class="keyword">select</span> <span class="number">99</span>, <span class="string">'a99'</span>, <span class="number">20.0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- insert overwrite partitioned table with dynamic partition</span></span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> hudi_cow_pt_tbl <span class="keyword">select</span> <span class="number">10</span>, <span class="string">'a10'</span>, <span class="number">1100</span>, <span class="string">'2021-12-09'</span>, <span class="string">'10'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- insert overwrite partitioned table with static partition</span></span><br><span class="line"><span class="keyword">insert</span> overwrite hudi_cow_pt_tbl <span class="keyword">partition</span>(dt = <span class="string">'2021-12-09'</span>, hh=<span class="string">'12'</span>) <span class="keyword">select</span> <span class="number">13</span>, <span class="string">'a13'</span>, <span class="number">1100</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="11-其他命令"><a href="#11-其他命令" class="headerlink" title="11 其他命令"></a>11 其他命令</h2><h3 id="1-修改表"><a href="#1-修改表" class="headerlink" title="(1)  修改表"></a>(1)  修改表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="comment">-- Alter table name</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> oldTableName <span class="keyword">RENAME</span> <span class="keyword">TO</span> newTableName</span><br><span class="line"></span><br><span class="line"><span class="comment">-- Alter table add columns</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tableIdentifier <span class="keyword">ADD</span> <span class="keyword">COLUMNS</span>(colAndType (,colAndType)*)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- Alter table column type</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tableIdentifier <span class="keyword">CHANGE</span> <span class="keyword">COLUMN</span> colName colName colType</span><br><span class="line"></span><br><span class="line"><span class="comment">-- Alter table properties</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tableIdentifier <span class="keyword">SET</span> TBLPROPERTIES (<span class="keyword">key</span> = <span class="string">'value'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 示例</span></span><br><span class="line"><span class="comment">--rename to:</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> hudi_cow_nonpcf_tbl <span class="keyword">RENAME</span> <span class="keyword">TO</span> hudi_cow_nonpcf_tbl2;</span><br><span class="line"></span><br><span class="line"><span class="comment">--add column:</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> hudi_cow_nonpcf_tbl2 <span class="keyword">add</span> <span class="keyword">columns</span>(remark <span class="keyword">string</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--change column:</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> hudi_cow_nonpcf_tbl2 <span class="keyword">change</span> <span class="keyword">column</span> <span class="keyword">uuid</span> <span class="keyword">uuid</span> <span class="built_in">bigint</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--set properties;</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> hudi_cow_nonpcf_tbl2 <span class="keyword">set</span> tblproperties (hoodie.keep.max.commits = <span class="string">'10'</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="2-分区命令"><a href="#2-分区命令" class="headerlink" title="(2) 分区命令"></a>(2) 分区命令</h3><p>当前show partitions命令基于文件路径展示，当删除分区或整个分区内数据后将不再准确。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="comment">-- Drop Partition</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tableIdentifier <span class="keyword">DROP</span> <span class="keyword">PARTITION</span> ( partition_col_name = partition_col_val [ , ... ] )</span><br><span class="line"></span><br><span class="line"><span class="comment">-- Show Partitions</span></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">PARTITIONS</span> tableIdentifier</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 示例</span></span><br><span class="line"><span class="comment">--show partition:</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">partitions</span> hudi_cow_pt_tbl;</span><br><span class="line"></span><br><span class="line"><span class="comment">--drop partition：</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> hudi_cow_pt_tbl <span class="keyword">drop</span> <span class="keyword">partition</span> (dt=<span class="string">'2021-12-09'</span>, hh=<span class="string">'10'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="12-其他指引"><a href="#12-其他指引" class="headerlink" title="12 其他指引"></a>12 其他指引</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hudi/" rel="tag"># Hudi</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/30/20220330Hudi数据查询/" rel="next" title="Hudi数据查询">
+                <i class="fa fa-chevron-left"></i> Hudi数据查询
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/04/08/20220408Hudi Docker Demo/" rel="prev" title="Hudi Docker Demo">
+                Hudi Docker Demo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-配置"><span class="nav-number">1.</span> <span class="nav-text">1 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Spark-SQL类型支持"><span class="nav-number">2.</span> <span class="nav-text">2 Spark SQL类型支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-建表"><span class="nav-number">3.</span> <span class="nav-text">3 建表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-插入数据"><span class="nav-number">4.</span> <span class="nav-text">4 插入数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-查询数据"><span class="nav-number">5.</span> <span class="nav-text">5 查询数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Scala"><span class="nav-number">5.1.</span> <span class="nav-text">(1) Scala</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#时间旅行查询-gt-0-9-0"><span class="nav-number">5.1.1.</span> <span class="nav-text">时间旅行查询(>=0.9.0)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Spark-SQL"><span class="nav-number">5.2.</span> <span class="nav-text">(2) Spark SQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-更新数据"><span class="nav-number">6.</span> <span class="nav-text">6 更新数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Scala-1"><span class="nav-number">6.1.</span> <span class="nav-text">(1) Scala</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Spark-SQL-1"><span class="nav-number">6.2.</span> <span class="nav-text">(2) Spark SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-更新"><span class="nav-number">6.2.1.</span> <span class="nav-text">1) 更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-MergeInto"><span class="nav-number">6.2.2.</span> <span class="nav-text">2) MergeInto</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-增量查询"><span class="nav-number">7.</span> <span class="nav-text">7 增量查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Point-in-time查询"><span class="nav-number">8.</span> <span class="nav-text">8 Point in time查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-删除数据"><span class="nav-number">9.</span> <span class="nav-text">9 删除数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-插入覆盖"><span class="nav-number">10.</span> <span class="nav-text">10 插入覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-其他命令"><span class="nav-number">11.</span> <span class="nav-text">11 其他命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-修改表"><span class="nav-number">11.1.</span> <span class="nav-text">(1)  修改表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-分区命令"><span class="nav-number">11.2.</span> <span class="nav-text">(2) 分区命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-其他指引"><span class="nav-number">12.</span> <span class="nav-text">12 其他指引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">13.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2022/03/31/20220331Hudi Spark指南/';
+          this.page.identifier = '2022/03/31/20220331Hudi Spark指南/';
+          this.page.title = 'Hudi on Spark';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

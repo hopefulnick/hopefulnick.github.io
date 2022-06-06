@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark SQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 Spark Core(1) ExecutorPluginorg.apache.spark.ExecutorPlugin替换为org.apache.spark.api.plugin.SparkPlugin。">
+<meta name="keywords" content="Spark SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark 2.4迁移至3.0">
+<meta property="og:url" content="https://hopefulnick.github.io/2022/02/19/210219Spark迁移/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="1 Spark Core(1) ExecutorPluginorg.apache.spark.ExecutorPlugin替换为org.apache.spark.api.plugin.SparkPlugin。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2022/02/19/210219Spark迁移/截屏2021-02-20%20上午9.18.51.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2022/02/19/210219Spark迁移/截屏2021-02-22%20上午9.53.18.png">
+<meta property="og:image" content="https://hopefulnick.github.io/2022/02/19/210219Spark迁移/截屏2021-02-28%20下午10.03.38.png">
+<meta property="og:updated_time" content="2022-06-06T07:19:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark 2.4迁移至3.0">
+<meta name="twitter:description" content="1 Spark Core(1) ExecutorPluginorg.apache.spark.ExecutorPlugin替换为org.apache.spark.api.plugin.SparkPlugin。">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2022/02/19/210219Spark迁移/截屏2021-02-20%20上午9.18.51.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2022/02/19/210219Spark迁移/"/>
+
+
+
+
+
+  <title>Spark 2.4迁移至3.0 | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2022/02/19/210219Spark迁移/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark 2.4迁移至3.0</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-02-19T11:00:47+08:00">
+                2022-02-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/02/19/210219Spark迁移/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/02/19/210219Spark迁移/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-Spark-Core"><a href="#1-Spark-Core" class="headerlink" title="1 Spark Core"></a>1 Spark Core</h2><h3 id="1-ExecutorPlugin"><a href="#1-ExecutorPlugin" class="headerlink" title="(1) ExecutorPlugin"></a>(1) ExecutorPlugin</h3><p>org.apache.spark.ExecutorPlugin替换为org.apache.spark.api.plugin.SparkPlugin。<br><a id="more"></a></p>
+<p>⚠️注意区分org.apache.spark.api.plugin.ExecutorPlugin</p>
+<p>用于动态加载插件到Spark中。分为Driver自动加载的单例DriverPlugin和Executor控制加载的ExecutorPlugin。</p>
+<p>详见<a href="https://spark.apache.org/docs/latest/monitoring.html" target="_blank" rel="noopener">Monitor</a></p>
+<h3 id="2-TaskContext"><a href="#2-TaskContext" class="headerlink" title="(2) TaskContext"></a>(2) TaskContext</h3><p>isRunninglocally()用于判断任务是否在驱动节点执行，已移除</p>
+<h3 id="3-ShuffleWriterMetrics"><a href="#3-ShuffleWriterMetrics" class="headerlink" title="(3) ShuffleWriterMetrics"></a>(3) ShuffleWriterMetrics</h3><p>替换shuffleBytesWritten、shuffleWriteTime和shuffleRecordsWritten为bytesWritten、writeTime和recordsWritten</p>
+<p>因为前者是为了兼容以前的接口。</p>
+<h3 id="4-AccumulableInfo"><a href="#4-AccumulableInfo" class="headerlink" title="(4) AccumulableInfo"></a>(4) AccumulableInfo</h3><p>移除apply方法，因为不允许程序创建AccumulableInfo</p>
+<h3 id="5-Accumulator"><a href="#5-Accumulator" class="headerlink" title="(5) Accumulator"></a>(5) Accumulator</h3><p>移除V1接口</p>
+<h3 id="6-Event-Log"><a href="#6-Event-Log" class="headerlink" title="(6) Event Log"></a>(6) Event Log</h3><p>采用UTF-8编码，而不是Driver JVM进程的默认编码。</p>
+<p>历史服务因为需要兼容，会执行一次转码。</p>
+<h3 id="7-Shuffle-Block-Protocol"><a href="#7-Shuffle-Block-Protocol" class="headerlink" title="(7) Shuffle Block Protocol"></a>(7) Shuffle Block Protocol</h3><p>版本3.0使用了一种新的获取Shuffle Block的协议。</p>
+<p>推荐版本3.0应用使用版本3.0的External Shuffle Service，否则使用旧版本需要设置spark.shuffle.useOldFetchProtocol，以防报错IllegalArgumentException: Unexpected message type: \<number\></number\></p>
+<h3 id="8-SPARK-WORKER-INSTANCE"><a href="#8-SPARK-WORKER-INSTANCE" class="headerlink" title="(8) SPARK_WORKER_INSTANCE"></a>(8) SPARK_WORKER_INSTANCE</h3><p>在Standalone模式中已标记弃用。</p>
+<p>推荐在一个节点运行一个Worker,一个Worker中运行多个Executor。而不是多个Worker中运行一个Executor。</p>
+<h2 id="2-Spark-SQL"><a href="#2-Spark-SQL" class="headerlink" title="2 Spark SQL"></a>2 Spark SQL</h2><h3 id="1-Dataset-Dataframe-API"><a href="#1-Dataset-Dataframe-API" class="headerlink" title="(1) Dataset/Dataframe API"></a>(1) Dataset/Dataframe API</h3><h4 id="1-unoinAll"><a href="#1-unoinAll" class="headerlink" title="1) unoinAll"></a>1) unoinAll</h4><p>不再标记弃用，成为union的别名。</p>
+<h4 id="2-Dataset-groupByKey"><a href="#2-Dataset-groupByKey" class="headerlink" title="2) Dataset.groupByKey"></a>2) Dataset.groupByKey</h4><p>返回的结果是一个带有key的聚合dataset, 但是key的名称被错误命名为<code>value</code>。如ds.groupByKey(…).count()的结果是(value, count)。</p>
+<p>版本3.0将键名修正为<code>key</code>。</p>
+<p>使用旧版本命名需要设置spark.sql.legacy.dataset.nameNonStructGroupingKeyAsValue。</p>
+<h4 id="3-Column-Metadata"><a href="#3-Column-Metadata" class="headerlink" title="3) Column Metadata"></a>3) Column Metadata</h4><p>在Column.name和Column.as中传播。</p>
+<p>之前版本，仅在调用API时为新列设置名为explicitMetadata的NamedExpression元数据。之后即使NamedExpression改变了元数据也不变。</p>
+<p>使用旧版本可以调用as(alias: String, metadata: Metadata)接口。</p>
+<h3 id="2-DDL"><a href="#2-DDL" class="headerlink" title="(2) DDL"></a>(2) DDL</h3><h4 id="1-Type-Coercion"><a href="#1-Type-Coercion" class="headerlink" title="1) Type Coercion"></a>1) Type Coercion</h4><p>版本3.0在插入不匹配的类型时，类型转换遵循ANSI标准。</p>
+<p>如string转int和double转boolean不再被允许。数值溢出将抛出异常。</p>
+<p>之前的版本允许合法的类型的转换，并且按照Java/Scala截取溢出的数值。</p>
+<p>以上行为由spark.sql.storeAssignmentPolicy控制，默认ANSI。使用旧版本可设置为Legacy。</p>
+<h4 id="2-ADD-JAR"><a href="#2-ADD-JAR" class="headerlink" title="2) ADD JAR"></a>2) ADD JAR</h4><p>指令返回空的结果集，而不是包含数值0的结果集</p>
+<h4 id="3-SET"><a href="#3-SET" class="headerlink" title="3) SET"></a>3) SET</h4><p>使用SET设置SparkConf时报错，因为SET命令不会更新SparkConf配置。</p>
+<p>之前版本直接忽略。</p>
+<p>使用旧版本可以关闭spark.sql.legacy.setCommandRejectsSparkCoreConfs</p>
+<h4 id="4-Refresh-Cached-Table"><a href="#4-Refresh-Cached-Table" class="headerlink" title="4) Refresh Cached Table"></a>4) Refresh Cached Table</h4><p>取消缓存前，先存储缓存名称和存储等级；再取消缓存，最后惰性缓存。</p>
+<p>之前版本不会存储名称和等级，容易导致前后不一致。</p>
+<h4 id="5-保留字"><a href="#5-保留字" class="headerlink" title="5) 保留字"></a>5) 保留字</h4><p><img src="/2022/02/19/210219Spark迁移/截屏2021-02-20 上午9.18.51.png" alt="截屏2021-02-20 上午9.18.51"></p>
+<p>保留字需要在正确的位置使用，否则失败。如CREATE DATABASE test COMMENT ‘any comment’ LOCATION ‘some path’。</p>
+<p>而CREATE DATABASE … WITH DBPROPERTIES和ALTER TABLE … SET TBLPROPERTIES中设置将会失败。</p>
+<p>可以设置spark.sql.legacy.notReserveProperties忽略ParseException。</p>
+<p>直接设置属性将不会生效，如SET DBPROPERTIES(‘location’=’/tmp’)。</p>
+<p>之前版本中设置属性不会生效，但会产生无用的属性，如’a’=’b’</p>
+<h4 id="6-ADD-FILE"><a href="#6-ADD-FILE" class="headerlink" title="6) ADD FILE"></a>6) ADD FILE</h4><p>支持添加目录</p>
+<p>之前版本只能逐个文件添加</p>
+<p>使用旧版本可以设置spark.sql.legacy.addSingleFileInAddFile</p>
+<h4 id="7-SHOW-TBLPROPERTIES"><a href="#7-SHOW-TBLPROPERTIES" class="headerlink" title="7) SHOW TBLPROPERTIES"></a>7) SHOW TBLPROPERTIES</h4><p>表不存在抛出AnalysisException异常，而不是NoSuchTableException。</p>
+<h4 id="8-SHOW-CREATE-TABLE"><a href="#8-SHOW-CREATE-TABLE" class="headerlink" title="8) SHOW CREATE TABLE"></a>8) SHOW CREATE TABLE</h4><p>返回Spark DDL，即使是Hive SerDe Table。</p>
+<p>生成Hive DDL需要使用SHOW CREATE TABLE AS SERDE。</p>
+<h4 id="9-CHAR"><a href="#9-CHAR" class="headerlink" title="9) CHAR"></a>9) CHAR</h4><p>不允许在非Hive SerDe表中使用CHAR列，建议使用STRING类型。在CREATE/ALTER TABLE 中使用将会失败。</p>
+<p>之前版本CHAR类型当作STRING类型处理，并简单忽略长度参数。</p>
+<h3 id="3-UDF和内建函数"><a href="#3-UDF和内建函数" class="headerlink" title="(3) UDF和内建函数"></a>(3) UDF和内建函数</h3><h4 id="1-date-add和date-sub"><a href="#1-date-add和date-sub" class="headerlink" title="1) date_add和date_sub"></a>1) date_add和date_sub</h4><p>第二个参数只支持int、smallint和tinyint类型，不再支持小数和字符串。如date_add(cast(‘1964-05-23’ as date), ‘12.34’)将会抛出异常。</p>
+<h4 id="2-percentile-approx-approx-percentile"><a href="#2-percentile-approx-approx-percentile" class="headerlink" title="2) percentile_approx (approx_percentile)"></a>2) percentile_approx (approx_percentile)</h4><p>accuracy参数只支持[1, 2147483647]范围内的整型值，不再支持小数和字符串。</p>
+<h4 id="3-hash-expression"><a href="#3-hash-expression" class="headerlink" title="3) hash expression"></a>3) hash expression</h4><p>应用到MapType时抛出异常AnalysisException</p>
+<p>使用旧版本设置spark.sql.legacy.allowHashOnMapType</p>
+<h4 id="4-array-map-function"><a href="#4-array-map-function" class="headerlink" title="4) array/map function"></a>4) array/map function</h4><p>无参调用时返回元素类型为NullType的空集合，而不是元素类型为StringType的空集合。</p>
+<p>使用旧版本设置spark.sql.legacy.createEmptyCollectionUsingStringType</p>
+<h4 id="5-from-json"><a href="#5-from-json" class="headerlink" title="5) from_json"></a>5) from_json</h4><p>支持两种模式：PERMISSIVE（默认）和FAILFAST。</p>
+<p>之前版本以以上两种模式不同，尤其是对于错误格式的JSON。如{“a” 1}将INT转换为null类型，而新版本转换为Row(null)。</p>
+<h4 id="6-创建map类型的map键值"><a href="#6-创建map类型的map键值" class="headerlink" title="6) 创建map类型的map键值"></a>6) 创建map类型的map键值</h4><p>不再支持使用内部函数创建map类型的mapl键值，如CreateMap, MapFromArrays等。</p>
+<p>可以但不建议读取map类型的map键值。</p>
+<p>可以使用map_entries将map转换为array&lt;struct&lt;key, value»中间类型过渡。</p>
+<h4 id="7-使用重复key创建map"><a href="#7-使用重复key创建map" class="headerlink" title="7) 使用重复key创建map"></a>7) 使用重复key创建map</h4><p>不再支持使用重复key创建map,否则抛出异常RuntimeException。</p>
+<p>之前版本会导致不一致的行为，如map查找返回找到第一个键值，Dataset.collect只保存出现的最后一个键值，MapKeys返回重复的键名等。</p>
+<p>使用最后一个出现的键值，可以设置spark.sql.mapKeyDedupPolicy为LAST_WIN。</p>
+<p>读取依旧需要注意不一致的行为问题。</p>
+<h4 id="8-org-apache-spark-sql-functions-udf-AnyRef-DataType"><a href="#8-org-apache-spark-sql-functions-udf-AnyRef-DataType" class="headerlink" title="8) org.apache.spark.sql.functions.udf(AnyRef, DataType)"></a>8) org.apache.spark.sql.functions.udf(AnyRef, DataType)</h4><p>默认不再允许。</p>
+<p>可以移除返回类型以转换为带类型的udf函数，或者设置spark.sql.legacy.allowUntypedScalaUDF继续使用。</p>
+<p>之前版本对于null基本类型的输入，返回null。</p>
+<p>由于版本3.0使用Scala 2.12构建，会返回默认值。</p>
+<h4 id="9-exists"><a href="#9-exists" class="headerlink" title="9) exists"></a>9) exists</h4><p>高阶函数exist遵循three-valued boolean logic。</p>
+<p>如果predicate返回null，并且没有得到true，exists将返回null，而不是false。如exists(array(1, null, 3), x -&gt; x % 2 == 0)返回null</p>
+<p>使用旧版本可以关闭spark.sql.legacy.followThreeValuedLogicInArrayExists</p>
+<h4 id="10-add-months"><a href="#10-add-months" class="headerlink" title="10) add_months"></a>10) add_months</h4><p>对当月最后一日，不再设置为另一月最后一日。</p>
+<p>如select add_months(DATE’2019-02-28’, 1)返回2019-03-28，而不是2019-03-31</p>
+<h4 id="11-current-timestamp"><a href="#11-current-timestamp" class="headerlink" title="11) current_timestamp"></a>11) current_timestamp</h4><p>如果系统时钟支持，可以返回毫秒单位时间戳。</p>
+<p>之前版本只支持微秒单位。</p>
+<h4 id="12-无参Java-UDF"><a href="#12-无参Java-UDF" class="headerlink" title="12) 无参Java UDF"></a>12) 无参Java UDF</h4><p>与其他UDF一样在执行器侧执行。</p>
+<p>之前版本在驱动侧执行，然后传播到执行器侧。虽然高效，但是某些场景会导致不一致。</p>
+<h4 id="13-java-lang-Math中log、log1p、exp、expm1和pow"><a href="#13-java-lang-Math中log、log1p、exp、expm1和pow" class="headerlink" title="13) java.lang.Math中log、log1p、exp、expm1和pow"></a>13) java.lang.Math中log、log1p、exp、expm1和pow</h4><p>与java.lang.StrictMath结果保持一致</p>
+<p>之前版本可能因为平台不同而不同。</p>
+<h4 id="14-cast"><a href="#14-cast" class="headerlink" title="14) cast"></a>14) cast</h4><p>转换为double或float类型时，‘Infinity’, ‘+Infinity’, ‘-Infinity’, ‘NaN’, ‘Inf’, ‘+Inf’, ‘-Inf’大小写不敏感，为了与其他数据库系统保持一致</p>
+<p>之前版本大小写敏感。</p>
+<p><img src="/2022/02/19/210219Spark迁移/截屏2021-02-22 上午9.53.18.png" alt="截屏2021-02-22 上午9.53.18"></p>
+<h4 id="15-interval"><a href="#15-interval" class="headerlink" title="15) interval"></a>15) interval</h4><p>时间间隔转字符串是不再带有“interval ”字样。</p>
+<p>之前版本形如“interval 1 days 2 hours”。</p>
+<h4 id="16-string"><a href="#16-string" class="headerlink" title="16) string"></a>16) string</h4><p>字符串转整型、时间和布尔类型时，去除前后的空白符(&lt;= ANSI 32)。</p>
+<p>之前版本只在转时间类型时删除末尾的空格(= ANSI 32)。</p>
+<h3 id="4-查询引擎"><a href="#4-查询引擎" class="headerlink" title="(4) 查询引擎"></a>(4) 查询引擎</h3><h4 id="1-FROM-SELECT"><a href="#1-FROM-SELECT" class="headerlink" title="1) FROM \ SELECT \"></a>1) FROM \<table\> SELECT \<expr\></expr\></table\></h4><p>SELECT  \<expr\>不能忽略。</expr\></p>
+<p>之前版本意外支持<code>FROM &lt;table&gt;</code>或<code>FROM &lt;table&gt; UNION ALL FROM &lt;table&gt;</code></p>
+<h4 id="2-interval-from-to"><a href="#2-interval-from-to" class="headerlink" title="2) interval from-to"></a>2) interval from-to</h4><p>不再支持多个from-to，如SELECT INTERVAL ‘1-1’ YEAR TO MONTH ‘2-2’ YEAR TO MONTH’，否则抛出解析异常。</p>
+<h4 id="3-科学计数"><a href="#3-科学计数" class="headerlink" title="3) 科学计数"></a>3) 科学计数</h4><p>科学计数将被转换为双精度，而不是Decimal.</p>
+<p>使用旧版本设置spark.sql.legacy.exponentLiteralAsDecimal.enabled</p>
+<h4 id="4-时间区间字符串"><a href="#4-时间区间字符串" class="headerlink" title="4) 时间区间字符串"></a>4) 时间区间字符串</h4><p>时间区间字符串被转换为带有from和to的边界。如果模式不匹配，将抛出异常ParseException。</p>
+<p>如interval ‘2 10:20’ hour不匹配[+|-]h[h]:[m]m模式，将抛出异常。</p>
+<p>之前版本不考虑from边界，to边界只用于过滤结果。以上示例将转换为interval 10 hours 20 minutes。</p>
+<p>使用旧版本可设置spark.sql.legacy.fromDayTimeString.enabled</p>
+<h4 id="5-Decimal？"><a href="#5-Decimal？" class="headerlink" title="5) Decimal？"></a>5) Decimal？</h4><p>默认不支持Decimal的负值范围。</p>
+<p>如1E10BD将转换为DecimalType(11, 0)，而不是DecimalType(2, -9)。</p>
+<p>使用旧版本可设置spark.sql.legacy.allowNegativeScaleOfDecimal</p>
+<h4 id="6"><a href="#6" class="headerlink" title="6) +"></a>6) +</h4><p>一元算术操作符只允许字符串、数值和区间类型作为输入。</p>
+<p>其中与整型字符串搭配，将转换为双精度。如+ ‘1’返回1.0</p>
+<p>之前版本没有类型检查和转换。</p>
+<h4 id="7-self-join"><a href="#7-self-join" class="headerlink" title="7) self join"></a>7) self join</h4><p>包含不明确列值的Dataset自身关联将失败。</p>
+<p>如val df1 = …; val df2 = df1.filter(…);执行操作df1.join(df2, df1(“a”) &gt; df2(“a”))将返回空集合。其中df1(“a”)等价于df2(“a”)</p>
+<p>使用旧版本可关闭spark.sql.analyzer.failAmbiguousSelfJoin</p>
+<h4 id="8-spark-sql-legacy-ctePrecedencePolicy"><a href="#8-spark-sql-legacy-ctePrecedencePolicy" class="headerlink" title="8) spark.sql.legacy.ctePrecedencePolicy"></a>8) spark.sql.legacy.ctePrecedencePolicy</h4><p>用于处理嵌套WITH中的命名冲突。</p>
+<p>EXCEPTION抛出异常AnalysisException。</p>
+<p>CORRECTED取前面最近的定义。</p>
+<p>LEGACY取最外面的定义。</p>
+<p>如WITH t AS (SELECT 1), t2 AS (WITH t AS (SELECT 2) SELECT <em> FROM t) SELECT </em> FROM t2在CORRECTED返回2，而LEGACY返回1</p>
+<h4 id="9-spark-sql-crossJoin-enabled"><a href="#9-spark-sql-crossJoin-enabled" class="headerlink" title="9) spark.sql.crossJoin.enabled"></a>9) spark.sql.crossJoin.enabled</h4><p>成为内部配置，并默认开启。因此隐式cross join不会抛出异常。</p>
+<h4 id="10-浮点0-0"><a href="#10-浮点0-0" class="headerlink" title="10) 浮点0.0"></a>10) 浮点0.0</h4><p>浮点正负0.0在用做聚合分组键、窗口分区键和关联键时等价。</p>
+<p>如Seq(-0.0, 0.0).toDF(“d”).groupBy(“d”).count()返回[(0.0, 2)]</p>
+<h4 id="11-timezone-id"><a href="#11-timezone-id" class="headerlink" title="11) timezone id"></a>11) timezone id</h4><p>非法id将抛出异常java.time.DateTimeException，而不是设置为GMT时区。</p>
+<h4 id="12-格里高利历"><a href="#12-格里高利历" class="headerlink" title="12) 格里高利历"></a>12) 格里高利历</h4><p>使用遵循<a href="https://docs.oracle.com/javase/8/docs/api/java/time/chrono/IsoChronology.html" target="_blank" rel="noopener">ISO chronology</a>的Java 8 API中的java.time，而不是<a href="https://docs.oracle.com/javase/7/docs/api/java/util/GregorianCalendar.html" target="_blank" rel="noopener">Julian + Gregorian</a>。主要影响1582-10-15之前的时间。</p>
+<ul>
+<li><p>时间、字符串解析和格式化</p>
+<p>严格按照<a href="https://spark.apache.org/docs/latest/sql-ref-datetime-pattern.html" target="_blank" rel="noopener">Datetime Patterns for Formatting and Parsing</a>解析</p>
+<p>如2015-07-22 10:00:00不再部分匹配yyyy-MM-dd，31/01/2015 00:00不再匹配带有12小时制hh的dd/MM/yyyy hh:mm。</p>
+<p>之前版本使用java.text.SimpleDateFormat。</p>
+<p>使用旧版本可设置spark.sql.legacy.timeParserPolicy为LEGACY</p>
+</li>
+<li><p>第几天</p>
+<p>使用java.time API 计算</p>
+</li>
+<li><p>JDBC options lowerBound和upperBound</p>
+<p>转换为时间戳或日期类型，同字符串转换，使用格里高利历和spark.sql.session.timeZone配置的时区。</p>
+<p>之前版本使用儒略历和系统时区。</p>
+</li>
+<li><p>格式化时间戳和日期字面量</p>
+</li>
+<li><p>string to time</p>
+<p>使用类型转换操作，时区采用spark.sql.session.timeZone。如TIMESTAMP ‘2019-12-23 12:59:30’等价于CAST(‘2019-12-23 12:59:30’ AS TIMESTAMP)</p>
+<p>之前版本使用JVM系统时间。</p>
+</li>
+</ul>
+<h4 id="13-TIMESTAMP-to-string"><a href="#13-TIMESTAMP-to-string" class="headerlink" title="13) TIMESTAMP to string"></a>13) TIMESTAMP to string</h4><p>使用spark.sql.session.timeZone配置的时区，而不是JVM默认时区。</p>
+<h4 id="14-string-to-DATE-TIMESTAMP"><a href="#14-string-to-DATE-TIMESTAMP" class="headerlink" title="14) string to DATE/TIMESTAMP"></a>14) string to DATE/TIMESTAMP</h4><p>在二进制上进行类型转换？</p>
+<p>使用旧版本可开启spark.sql.legacy.typeCoercion.datetimeToString.enabled</p>
+<h4 id="15-特殊时间值"><a href="#15-特殊时间值" class="headerlink" title="15) 特殊时间值"></a>15) 特殊时间值</h4><p>DATE</p>
+<p>如查询 <code>SELECT date &#39;tomorrow&#39; - date &#39;yesterday&#39;;</code>返回2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">epoch [zoneId] - 1970-01-01</span><br><span class="line">today [zoneId] - the current date in the time zone specified by spark.sql.session.timeZone</span><br><span class="line">yesterday [zoneId] - the current date - 1</span><br><span class="line">tomorrow [zoneId] - the current date + 1</span><br><span class="line">now - the date of running the current query. It has the same notion as today</span><br></pre></td></tr></table></figure>
+<p>TIMESTAMP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">epoch [zoneId] - 1970-01-01 00:00:00+00 (Unix system time zero)</span><br><span class="line">today [zoneId] - midnight today</span><br><span class="line">yesterday [zoneId] - midnight yesterday</span><br><span class="line">tomorrow [zoneId] - midnight tomorrow</span><br><span class="line">now - current query start time</span><br></pre></td></tr></table></figure>
+<h4 id="16-EXTRACT"><a href="#16-EXTRACT" class="headerlink" title="16) EXTRACT"></a>16) EXTRACT</h4><p>提取DATE/TIMESTAMP的秒信息是，返回DecimalType(8, 6)类型，而不是IntegerType。</p>
+<p>如extract(second from to_timestamp(‘2019-09-20 10:10:10.1’))返回10.100000，而不是10</p>
+<h4 id="17-datetime-F"><a href="#17-datetime-F" class="headerlink" title="17) datetime F"></a>17) datetime F</h4><p>代表当月从1日为第一周的第一天，当前周的第几天。如2020-07-30返回2（第5周的第2天）</p>
+<p>之前版本返回当前所在的自然周数，如2020-07-30返回5。注意此时第一周是07.01-07.04。</p>
+<h3 id="5-数据源"><a href="#5-数据源" class="headerlink" title="(5) 数据源"></a>(5) 数据源</h3><h4 id="1-Hive-SerDe"><a href="#1-Hive-SerDe" class="headerlink" title="1) Hive SerDe"></a>1) Hive SerDe</h4><p>使用原生数据源（如parquet/orc）读取Hive SerDe表时不再推断Schema并更新metastore。</p>
+<p>预期不会对用户产生影响，使用旧版本可设置spark.sql.hive.caseSensitiveInferenceMode为INFER_AND_SAVE。</p>
+<h4 id="2-partition-column"><a href="#2-partition-column" class="headerlink" title="2) partition column"></a>2) partition column</h4><p>分区字段不能转换为用户Schema时，抛出异常，而不是转换为null。</p>
+<p>使用旧版本可关闭spark.sql.sources.validatePartitionColumns</p>
+<h4 id="3-文件递归"><a href="#3-文件递归" class="headerlink" title="3) 文件递归"></a>3) 文件递归</h4><p>在文件递归时，文件或子目录消失将导致失败，而不是忽略。</p>
+<p>使用旧版本可开启spark.sql.files.ignoreMissingFiles</p>
+<p>Note that this change of behavior only applies during initial table file listing (or during <code>REFRESH TABLE</code>), not during query execution: the net change is that <code>spark.sql.files.ignoreMissingFiles</code> is now obeyed during table file listing / query planning, not <strong>only？</strong> at query execution time.</p>
+<h4 id="4-空字符串"><a href="#4-空字符串" class="headerlink" title="4) 空字符串"></a>4) 空字符串</h4><p>解析JSON数据源时，不允许空字符串，除了StringType和BinaryType。</p>
+<p>之前版本会将IntegerType等转换为null。</p>
+<p>使用旧版本可开启spark.sql.legacy.json.allowEmptyString.enabled</p>
+<h4 id="5-错误JSON格式"><a href="#5-错误JSON格式" class="headerlink" title="5) 错误JSON格式"></a>5) 错误JSON格式</h4><p>在使用JSON数据源和JSON函数时(PERMISSIVE mode, StructType)，允许部分解析错误JSON格式记录中的字段，而不是返回一个所有字段都为null的数据。</p>
+<h4 id="6-推断JSON-TIMESTAMP"><a href="#6-推断JSON-TIMESTAMP" class="headerlink" title="6) 推断JSON TIMESTAMP"></a>6) 推断JSON TIMESTAMP</h4><p>如果匹配SON option <code>timestampFormat</code>，JSON数据源和schema_of_json函数将自动推断时间戳字符串。</p>
+<p>可通过设置JSON option <code>inferTimestamp</code>为false关闭。</p>
+<h4 id="7-CSV"><a href="#7-CSV" class="headerlink" title="7) CSV"></a>7) CSV</h4><p>在PERMISSIVE 模式下，允许部分解析错误CSV格式中的字段。</p>
+<h4 id="8-Avro-Filed"><a href="#8-Avro-Filed" class="headerlink" title="8) Avro Filed"></a>8) Avro Filed</h4><p>使用用户Schema保存时，按名称匹配，而不是按位置。</p>
+<h4 id="9-Avro-Nullable"><a href="#9-Avro-Nullable" class="headerlink" title="9) Avro Nullable"></a>9) Avro Nullable</h4><p>可以将Nullable的Catalyst Schema写出到Non-nullable的Avro Schema。但是一旦出现null值将抛出空指针异常。</p>
+<h3 id="6-其他"><a href="#6-其他" class="headerlink" title="(6) 其他"></a>(6) 其他</h3><h4 id="1-cloneSession"><a href="#1-cloneSession" class="headerlink" title="1) cloneSession()"></a>1) cloneSession()</h4><p>新创建的SparkSession优先继承SparkSession属性，而不是SparkContext。</p>
+<p>使用旧版本开启spark.sql.legacy.sessionInitWithConfigDefaults</p>
+<h4 id="2-hive-default-fileformat"><a href="#2-hive-default-fileformat" class="headerlink" title="2) hive.default.fileformat"></a>2) hive.default.fileformat</h4><p>如果在Spark SQL configuration中没有找到，使用Hadoop configuration of SparkContext中的配置。</p>
+<h4 id="3-spark-sql"><a href="#3-spark-sql" class="headerlink" title="3) spark-sql"></a>3) spark-sql</h4><p>小数添加后置0</p>
+<p><img src="/2022/02/19/210219Spark迁移/截屏2021-02-28 下午10.03.38.png" alt="截屏2021-02-28 下午10.03.38"></p>
+<h4 id="4-hive"><a href="#4-hive" class="headerlink" title="4) hive"></a>4) hive</h4><p>内置hive从版本1.2升级到2.3</p>
+<ul>
+<li>连接特定版本的Hive Metastore需要设置spark.sql.hive.metastore.version和spark.sql.hive.metastore.jars</li>
+<li>迁移自定义的SerDe，或者编译特定hive版本的Spark</li>
+<li>在脚本中使用TRANSFORM，需要注意不同的小数表示。Hive 2.3总是填充到18位小数，而Hive1.2总是忽略。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark-SQL/" rel="tag"># Spark SQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/02/17/220217Hudi概念/" rel="next" title="Hudi概念">
+                <i class="fa fa-chevron-left"></i> Hudi概念
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/02/21/220221Hudi表和查询类型/" rel="prev" title="Hudi表和查询类型">
+                Hudi表和查询类型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Spark-Core"><span class="nav-number">1.</span> <span class="nav-text">1 Spark Core</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-ExecutorPlugin"><span class="nav-number">1.1.</span> <span class="nav-text">(1) ExecutorPlugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-TaskContext"><span class="nav-number">1.2.</span> <span class="nav-text">(2) TaskContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ShuffleWriterMetrics"><span class="nav-number">1.3.</span> <span class="nav-text">(3) ShuffleWriterMetrics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-AccumulableInfo"><span class="nav-number">1.4.</span> <span class="nav-text">(4) AccumulableInfo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Accumulator"><span class="nav-number">1.5.</span> <span class="nav-text">(5) Accumulator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Event-Log"><span class="nav-number">1.6.</span> <span class="nav-text">(6) Event Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Shuffle-Block-Protocol"><span class="nav-number">1.7.</span> <span class="nav-text">(7) Shuffle Block Protocol</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-SPARK-WORKER-INSTANCE"><span class="nav-number">1.8.</span> <span class="nav-text">(8) SPARK_WORKER_INSTANCE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Spark-SQL"><span class="nav-number">2.</span> <span class="nav-text">2 Spark SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Dataset-Dataframe-API"><span class="nav-number">2.1.</span> <span class="nav-text">(1) Dataset/Dataframe API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-unoinAll"><span class="nav-number">2.1.1.</span> <span class="nav-text">1) unoinAll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Dataset-groupByKey"><span class="nav-number">2.1.2.</span> <span class="nav-text">2) Dataset.groupByKey</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Column-Metadata"><span class="nav-number">2.1.3.</span> <span class="nav-text">3) Column Metadata</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-DDL"><span class="nav-number">2.2.</span> <span class="nav-text">(2) DDL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Type-Coercion"><span class="nav-number">2.2.1.</span> <span class="nav-text">1) Type Coercion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-ADD-JAR"><span class="nav-number">2.2.2.</span> <span class="nav-text">2) ADD JAR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-SET"><span class="nav-number">2.2.3.</span> <span class="nav-text">3) SET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Refresh-Cached-Table"><span class="nav-number">2.2.4.</span> <span class="nav-text">4) Refresh Cached Table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-保留字"><span class="nav-number">2.2.5.</span> <span class="nav-text">5) 保留字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-ADD-FILE"><span class="nav-number">2.2.6.</span> <span class="nav-text">6) ADD FILE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-SHOW-TBLPROPERTIES"><span class="nav-number">2.2.7.</span> <span class="nav-text">7) SHOW TBLPROPERTIES</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-SHOW-CREATE-TABLE"><span class="nav-number">2.2.8.</span> <span class="nav-text">8) SHOW CREATE TABLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-CHAR"><span class="nav-number">2.2.9.</span> <span class="nav-text">9) CHAR</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-UDF和内建函数"><span class="nav-number">2.3.</span> <span class="nav-text">(3) UDF和内建函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-date-add和date-sub"><span class="nav-number">2.3.1.</span> <span class="nav-text">1) date_add和date_sub</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-percentile-approx-approx-percentile"><span class="nav-number">2.3.2.</span> <span class="nav-text">2) percentile_approx (approx_percentile)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-hash-expression"><span class="nav-number">2.3.3.</span> <span class="nav-text">3) hash expression</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-array-map-function"><span class="nav-number">2.3.4.</span> <span class="nav-text">4) array/map function</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-from-json"><span class="nav-number">2.3.5.</span> <span class="nav-text">5) from_json</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-创建map类型的map键值"><span class="nav-number">2.3.6.</span> <span class="nav-text">6) 创建map类型的map键值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-使用重复key创建map"><span class="nav-number">2.3.7.</span> <span class="nav-text">7) 使用重复key创建map</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-org-apache-spark-sql-functions-udf-AnyRef-DataType"><span class="nav-number">2.3.8.</span> <span class="nav-text">8) org.apache.spark.sql.functions.udf(AnyRef, DataType)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-exists"><span class="nav-number">2.3.9.</span> <span class="nav-text">9) exists</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-add-months"><span class="nav-number">2.3.10.</span> <span class="nav-text">10) add_months</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-current-timestamp"><span class="nav-number">2.3.11.</span> <span class="nav-text">11) current_timestamp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-无参Java-UDF"><span class="nav-number">2.3.12.</span> <span class="nav-text">12) 无参Java UDF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-java-lang-Math中log、log1p、exp、expm1和pow"><span class="nav-number">2.3.13.</span> <span class="nav-text">13) java.lang.Math中log、log1p、exp、expm1和pow</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-cast"><span class="nav-number">2.3.14.</span> <span class="nav-text">14) cast</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-interval"><span class="nav-number">2.3.15.</span> <span class="nav-text">15) interval</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-string"><span class="nav-number">2.3.16.</span> <span class="nav-text">16) string</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-查询引擎"><span class="nav-number">2.4.</span> <span class="nav-text">(4) 查询引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-FROM-SELECT"><span class="nav-number">2.4.1.</span> <span class="nav-text">1) FROM \ SELECT \</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-interval-from-to"><span class="nav-number">2.4.2.</span> <span class="nav-text">2) interval from-to</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-科学计数"><span class="nav-number">2.4.3.</span> <span class="nav-text">3) 科学计数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-时间区间字符串"><span class="nav-number">2.4.4.</span> <span class="nav-text">4) 时间区间字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-Decimal？"><span class="nav-number">2.4.5.</span> <span class="nav-text">5) Decimal？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6"><span class="nav-number">2.4.6.</span> <span class="nav-text">6) +</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-self-join"><span class="nav-number">2.4.7.</span> <span class="nav-text">7) self join</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-spark-sql-legacy-ctePrecedencePolicy"><span class="nav-number">2.4.8.</span> <span class="nav-text">8) spark.sql.legacy.ctePrecedencePolicy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-spark-sql-crossJoin-enabled"><span class="nav-number">2.4.9.</span> <span class="nav-text">9) spark.sql.crossJoin.enabled</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-浮点0-0"><span class="nav-number">2.4.10.</span> <span class="nav-text">10) 浮点0.0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-timezone-id"><span class="nav-number">2.4.11.</span> <span class="nav-text">11) timezone id</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-格里高利历"><span class="nav-number">2.4.12.</span> <span class="nav-text">12) 格里高利历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-TIMESTAMP-to-string"><span class="nav-number">2.4.13.</span> <span class="nav-text">13) TIMESTAMP to string</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-string-to-DATE-TIMESTAMP"><span class="nav-number">2.4.14.</span> <span class="nav-text">14) string to DATE/TIMESTAMP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-特殊时间值"><span class="nav-number">2.4.15.</span> <span class="nav-text">15) 特殊时间值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-EXTRACT"><span class="nav-number">2.4.16.</span> <span class="nav-text">16) EXTRACT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-datetime-F"><span class="nav-number">2.4.17.</span> <span class="nav-text">17) datetime F</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-数据源"><span class="nav-number">2.5.</span> <span class="nav-text">(5) 数据源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Hive-SerDe"><span class="nav-number">2.5.1.</span> <span class="nav-text">1) Hive SerDe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-partition-column"><span class="nav-number">2.5.2.</span> <span class="nav-text">2) partition column</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-文件递归"><span class="nav-number">2.5.3.</span> <span class="nav-text">3) 文件递归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-空字符串"><span class="nav-number">2.5.4.</span> <span class="nav-text">4) 空字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-错误JSON格式"><span class="nav-number">2.5.5.</span> <span class="nav-text">5) 错误JSON格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-推断JSON-TIMESTAMP"><span class="nav-number">2.5.6.</span> <span class="nav-text">6) 推断JSON TIMESTAMP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-CSV"><span class="nav-number">2.5.7.</span> <span class="nav-text">7) CSV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-Avro-Filed"><span class="nav-number">2.5.8.</span> <span class="nav-text">8) Avro Filed</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-Avro-Nullable"><span class="nav-number">2.5.9.</span> <span class="nav-text">9) Avro Nullable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-其他"><span class="nav-number">2.6.</span> <span class="nav-text">(6) 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-cloneSession"><span class="nav-number">2.6.1.</span> <span class="nav-text">1) cloneSession()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-hive-default-fileformat"><span class="nav-number">2.6.2.</span> <span class="nav-text">2) hive.default.fileformat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-spark-sql"><span class="nav-number">2.6.3.</span> <span class="nav-text">3) spark-sql</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-hive"><span class="nav-number">2.6.4.</span> <span class="nav-text">4) hive</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2022/02/19/210219Spark迁移/';
+          this.page.identifier = '2022/02/19/210219Spark迁移/';
+          this.page.title = 'Spark 2.4迁移至3.0';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

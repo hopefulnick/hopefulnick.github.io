@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon32.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon16.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="适用于版本3.1.2 1 安全默认关闭。详见Spark Security">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark on k8s">
+<meta property="og:url" content="https://hopefulnick.github.io/2021/05/04/210504Spark on Kubernetes/index.html">
+<meta property="og:site_name" content="Hopeful Nick">
+<meta property="og:description" content="适用于版本3.1.2 1 安全默认关闭。详见Spark Security">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hopefulnick.github.io/2021/05/04/210504Spark%20on%20Kubernetes/k8s-cluster-mode.png">
+<meta property="og:updated_time" content="2022-06-06T07:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark on k8s">
+<meta name="twitter:description" content="适用于版本3.1.2 1 安全默认关闭。详见Spark Security">
+<meta name="twitter:image" content="https://hopefulnick.github.io/2021/05/04/210504Spark%20on%20Kubernetes/k8s-cluster-mode.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hopefulnick.github.io/2021/05/04/210504Spark on Kubernetes/"/>
+
+
+
+
+
+  <title>Spark on k8s | Hopeful Nick</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hopeful Nick</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hopefulnick.github.io/2021/05/04/210504Spark on Kubernetes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hopeful Nick">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hopeful Nick">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark on k8s</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-05-04T11:00:47+08:00">
+                2021-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/05/04/210504Spark on Kubernetes/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/05/04/210504Spark on Kubernetes/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>适用于版本3.1.2</p>
+<h2 id="1-安全"><a href="#1-安全" class="headerlink" title="1 安全"></a>1 安全</h2><p>默认关闭。详见<a href="https://spark.apache.org/docs/latest/security.html" target="_blank" rel="noopener">Spark Security</a> </p>
+<a id="more"></a>
+<h2 id="2-用户识别"><a href="#2-用户识别" class="headerlink" title="2 用户识别"></a>2 用户识别</h2><p>项目构建的镜像中默认包含了UID为185的用户。</p>
+<p>使用<code>docker-image-tool.sh</code>脚本构建时通过<code>-u</code>选项设置UID。</p>
+<p>此外，<a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#pod-template" target="_blank" rel="noopener">Pod Template</a> 允许向Spark提交的Pod中添加带有<code>runAsUser</code>的<a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#volumes-and-file-systems" target="_blank" rel="noopener">Security Context</a>。</p>
+<p>集群管理员应该使用<a href="https://kubernetes.io/docs/concepts/policy/pod-security-policy/#users-and-groups" target="_blank" rel="noopener">Pod Security Policies</a>限制可以使用的用户。</p>
+<h2 id="3-Volume挂载"><a href="#3-Volume挂载" class="headerlink" title="3 Volume挂载"></a>3 Volume挂载</h2><p>详见<a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#using-kubernetes-volumes" target="_blank" rel="noopener">Using Kubernetes Volumes</a></p>
+<p>注意<a href="https://kubernetes.io/docs/concepts/storage/volumes/#hostpath" target="_blank" rel="noopener"><code>hostPath</code></a>存在安全隐患，管理员应该使用策略加以限制。</p>
+<h2 id="4-前提"><a href="#4-前提" class="headerlink" title="4 前提"></a>4 前提</h2><ul>
+<li><p>版本&gt;=2.3</p>
+</li>
+<li><p>k8s版本&gt;=1.6， 并且开启了<a href="https://kubernetes.io/docs/user-guide/prereqs/" target="_blank" rel="noopener">kubectl</a>。</p>
+<p>测试环境可以在本地使用<a href="https://kubernetes.io/docs/getting-started-guides/minikube/" target="_blank" rel="noopener">minikube</a>。</p>
+<ul>
+<li>推荐使用最新版本，并且开启了DNS addon。</li>
+<li>默认配置资源不足以运行Spark。单个执行阶段推荐使用3 CPU和4G内存。</li>
+</ul>
+</li>
+<li><p>具有增删改查Pod的权限。</p>
+<p>可以使用以下命令验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl auth can-i &lt;list|create|edit|delete&gt; pods</span><br></pre></td></tr></table></figure>
+<ul>
+<li>驱动pod使用的服务账号证书必须具有创建pod、service和configmap的权限。</li>
+</ul>
+</li>
+<li><p>必须配置<a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener">Kubernetes DNS</a>。</p>
+</li>
+</ul>
+<h2 id="5-原理"><a href="#5-原理" class="headerlink" title="5 原理"></a>5 原理</h2><p><img src="/2021/05/04/210504Spark on Kubernetes/k8s-cluster-mode.png" alt="Spark cluster components"></p>
+<ul>
+<li>Spark在<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/" target="_blank" rel="noopener">Kubernetes pod</a>中创建并运行驱动程序</li>
+<li>驱动程序在Pod中创建执行器并运行用户代码</li>
+<li>执行完毕，结束并清理执行器Pod。启动Pod持久化日志并保持k8s的完成状态，等待垃圾回收或者手动清理。注意：在完成状态中并不占用计算或内存资源。</li>
+<li>驱动和执行Pod由k8s调度，通过fabric8实现。节点选择详见<a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector" target="_blank" rel="noopener">node selector</a>，更多未来功能详见<a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity" target="_blank" rel="noopener">node/pod affinities</a>。</li>
+</ul>
+<h2 id="6-应用提交"><a href="#6-应用提交" class="headerlink" title="6 应用提交"></a>6 应用提交</h2><h3 id="1-Docker镜像"><a href="#1-Docker镜像" class="headerlink" title="(1) Docker镜像"></a>(1) Docker镜像</h3><p>K8s需要提供Pod内可部署的镜像，常用Docker镜像。</p>
+<p>Sparkx从版本2.3开始提供Dockerfile，详见kubernetes/dockerfiles/。</p>
+<p>可以使用bin/docker-image-tool.sh脚本构建并发布支持k8s的镜像。</p>
+<p>示例:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 使用默认配置构建并发布，更多详见-h</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./bin/docker-image-tool.sh -r &lt;repo&gt; -t my-tag build</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./bin/docker-image-tool.sh -r &lt;repo&gt; -t my-tag push</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认运行JVM作业，其他语言示例如下</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> To build additional PySpark docker image</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./bin/docker-image-tool.sh -r &lt;repo&gt; -t my-tag -p ./kubernetes/dockerfiles/spark/bindings/python/Dockerfile build</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> To build additional SparkR docker image</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./bin/docker-image-tool.sh -r &lt;repo&gt; -t my-tag -R ./kubernetes/dockerfiles/spark/bindings/R/Dockerfile build</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-集群模式"><a href="#2-集群模式" class="headerlink" title="(2) 集群模式"></a>(2) 集群模式</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./bin/spark-submit \</span></span><br><span class="line">    --master k8s://https://&lt;k8s-apiserver-host&gt;:&lt;k8s-apiserver-port&gt; \</span><br><span class="line">    --deploy-mode cluster \</span><br><span class="line">    --name spark-pi \</span><br><span class="line">    --class org.apache.spark.examples.SparkPi \</span><br><span class="line">    --conf spark.executor.instances=5 \</span><br><span class="line">    --conf spark.kubernetes.container.image=&lt;spark-image&gt; \</span><br><span class="line">    local:///path/to/examples.jar</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<p>master格式配置如上，没有指定http协议时默认使用https。</p>
+<p>应用名称使用数字或自渡开头和结束，可包含’_’和’.’。</p>
+<p>local指定的资源需要包含在镜像内</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> kubectl cluster-info</span></span><br><span class="line">Kubernetes master is running at http://127.0.0.1:6443</span><br></pre></td></tr></table></figure>
+<p>用于发现可用的API Server</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> kubectl proxy</span></span><br></pre></td></tr></table></figure>
+<p>用于设置代理</p>
+<h3 id="3-客户端模式"><a href="#3-客户端模式" class="headerlink" title="(3) 客户端模式"></a>(3) 客户端模式</h3><p>版本&gt;=2.4，可以在宿主或Pod中运行客户端模式。</p>
+<p>使用客户端模式时，需要考虑一下因素：</p>
+<h4 id="1-网络"><a href="#1-网络" class="headerlink" title="1) 网络"></a>1) 网络</h4><p>执行器可以使用唯一的主机和端口组合访问驱动程序。如果在Pod中启动，可以通过<a href="https://kubernetes.io/docs/concepts/services-networking/service/#headless-services" target="_blank" rel="noopener">headless service</a>实现，使用<code>spark.driver.host</code>和<code>spark.driver.port</code>配置。</p>
+<h4 id="2-执行器垃圾回收"><a href="#2-执行器垃圾回收" class="headerlink" title="2) 执行器垃圾回收"></a>2) 执行器垃圾回收</h4><p>在Pod中运行驱动时，建议设置<code>spark.kubernetes.driver.pod.name</code>。用于使用<a href="https://kubernetes.io/docs/concepts/workloads/controllers/garbage-collection/" target="_blank" rel="noopener">OwnerReference</a>关联驱动和执行器，确保删除驱动的同时删除对应的执行器。驱动会在设置的命名空间<code>spark.kubernetes.namespace</code>中查询关联关系。</p>
+<p>不在Pod中运行或没有设置pod名称时，可能因为对API Server请求失败等原因导致执行器不能正常回收，需要确保执行器与驱动断连后不会消耗计算资源。可以通过<code>spark.kubernetes.executor.podNamePrefix</code>完全控制执行器名称，建议确保执行器名称全局唯一。</p>
+<h4 id="3-认证参数"><a href="#3-认证参数" class="headerlink" title="3) 认证参数"></a>3) 认证参数</h4><p>使用<code>spark.kubernetes.authenticate</code>作为客户端模式的认证参数。</p>
+<h3 id="4-依赖管理"><a href="#4-依赖管理" class="headerlink" title="(4) 依赖管理"></a>(4) 依赖管理</h3><p>使用HDFS或HTTP文件路径</p>
+<p>在构建的镜像中，可以在镜像中使用local://或<code>SPARK_EXTRA_CLASSPATH</code>指定。</p>
+<p>在作业提交的系统中，可以使用本地文件系统路径。</p>
+<p>注意：文件将被上传到同一目录，需要保证文件名唯一。</p>
+<p>支持<code>spark.jars</code>， <code>spark.files</code>和<code>spark.archives</code></p>
+<h3 id="5-安全管理"><a href="#5-安全管理" class="headerlink" title="(5) 安全管理"></a>(5) 安全管理</h3><p>使用<a href="https://kubernetes.io/docs/concepts/configuration/secret/" target="_blank" rel="noopener">Secrets</a>实现对安全服务的用户控制。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 对于驱动和执行器的安全管理是在同一命名空间下，形如：</span></span><br><span class="line">spark.kubernetes.driver.secrets.[SecretName]=&lt;mount path&gt;</span><br><span class="line">spark.kubernetes.executor.secrets.[SecretName]=&lt;mount path&gt; </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> spark-submit形式</span></span><br><span class="line">--conf spark.kubernetes.driver.secrets.spark-secret=/etc/secrets</span><br><span class="line">--conf spark.kubernetes.executor.secrets.spark-secret=/etc/secrets</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 属性提交形式</span></span><br><span class="line">--conf spark.kubernetes.driver.secretKeyRef.ENV_NAME=name:key</span><br><span class="line">--conf spark.kubernetes.executor.secretKeyRef.ENV_NAME=name:key</span><br></pre></td></tr></table></figure>
+<h3 id="6-Pod模版"><a href="#6-Pod模版" class="headerlink" title="(6) Pod模版"></a>(6) Pod模版</h3><p>允许使用<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/#pod-templates" target="_blank" rel="noopener">template files</a>定义pod。</p>
+<p>使用<code>spark.kubernetes.driver.podTemplateFile</code>和<code>spark.kubernetes.executor.podTemplateFile</code>分别设置。文件需要能被spark-submit进程访问。</p>
+<p>为了允许驱动Pod访问执行器 Pod， 文件将以Volumes自动挂载到驱动Pod上。</p>
+<p>文件验证完全依靠k8s，Spark不做验证。</p>
+<p>注意Spark的模某些配置将覆盖k8s的配置，详见<a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#pod-template-properties" target="_blank" rel="noopener">full list</a>。</p>
+<p>模版可以定义多个容器。使用<code>spark.kubernetes.driver.podTemplateContainerName</code>和<code>spark.kubernetes.executor.podTemplateContainerName</code>指定生效的配置。在没有指定生效配置或制定无效时，默认采用列表第一个配置。</p>
+<h3 id="7-Volumes"><a href="#7-Volumes" class="headerlink" title="(7) Volumes"></a>(7) Volumes</h3><h4 id="1-支持类型"><a href="#1-支持类型" class="headerlink" title="1) 支持类型"></a>1) 支持类型</h4><ul>
+<li><a href="https://kubernetes.io/docs/concepts/storage/volumes/#hostpath" target="_blank" rel="noopener">hostPath</a>: mounts a file or directory from the host node’s filesystem into a pod.</li>
+<li><a href="https://kubernetes.io/docs/concepts/storage/volumes/#emptydir" target="_blank" rel="noopener">emptyDir</a>: an initially empty volume created when a pod is assigned to a node.</li>
+<li><a href="https://kubernetes.io/docs/concepts/storage/volumes/#nfs" target="_blank" rel="noopener">nfs</a>: mounts an existing NFS(Network File System) into a pod.</li>
+<li><a href="https://kubernetes.io/docs/concepts/storage/volumes/#persistentvolumeclaim" target="_blank" rel="noopener">persistentVolumeClaim</a>: mounts a <code>PersistentVolume</code> into a pod.</li>
+</ul>
+<p>注意：安全详见<a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#security" target="_blank" rel="noopener">Security</a>。</p>
+<h4 id="2-使用方式"><a href="#2-使用方式" class="headerlink" title="2) 使用方式"></a>2) 使用方式</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 配置规则</span></span><br><span class="line">--conf spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.path=&lt;mount path&gt;</span><br><span class="line">--conf spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.readOnly=&lt;true|false&gt;</span><br><span class="line">--conf spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.subPath=&lt;mount subPath&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 特定类型配置</span></span><br><span class="line">spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].options.[OptionName]=&lt;value&gt;</span><br></pre></td></tr></table></figure>
+<p>特定类型配置详见<a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#spark-properties" target="_blank" rel="noopener">Spark Properties</a>。</p>
+<p>动态分配示例：</p>
+<p>挂载一个名为OnDemand，配置了storageClass和sizeLimit选项的，为每个执行器动态创建persistent volume claim。用于<a href="https://spark.apache.org/docs/latest/configuration.html#dynamic-allocation" target="_blank" rel="noopener">Dynamic Allocation</a>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.data.options.claimName=OnDemand</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.data.options.storageClass=gp</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.data.options.sizeLimit=500Gi</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.data.mount.path=/data</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.data.mount.readOnly=false</span><br></pre></td></tr></table></figure>
+<h3 id="8-本地存储"><a href="#8-本地存储" class="headerlink" title="(8) 本地存储"></a>(8) 本地存储</h3><p>Spark支持使用本地存储保存溢出的数据。名称需要以<code>spark-local-dir-</code>开头。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 示例</span></span><br><span class="line">--conf spark.kubernetes.driver.volumes.[VolumeType].spark-local-dir-[VolumeName].mount.path=&lt;mount path&gt;</span><br><span class="line">--conf spark.kubernetes.driver.volumes.[VolumeType].spark-local-dir-[VolumeName].mount.readOnly=false</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用persistent volume claims作为执行器溢出</span></span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.spark-local-dir-1.options.claimName=OnDemand</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.spark-local-dir-1.options.storageClass=gp</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.spark-local-dir-1.options.sizeLimit=500Gi</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.spark-local-dir-1.mount.path=/data</span><br><span class="line">spark.kubernetes.executor.volumes.persistentVolumeClaim.spark-local-dir-1.mount.readOnly=false</span><br></pre></td></tr></table></figure>
+<p>如果没有设置本地存储，Spark将使用scratch space溢出数据。</p>
+<p>使用k8s时，会为<code>spark.local.dir</code>或<code>SPARK_LOCAL_DIRS</code>创建emptyDir。缺省使用默认目录。</p>
+<p>emptyDir使用k8s的临时存储特性，生命周期在Pod生命周期内。</p>
+<h4 id="1-RAM缓存"><a href="#1-RAM缓存" class="headerlink" title="1) RAM缓存"></a>1) RAM缓存</h4><p>本地空间较少时，可以使用内存缓存。</p>
+<p><code>spark.kubernetes.local.dirs.tmpfs=true</code>将emptyDir定义为RAM存储的tmpfs。同时需要调整内存申请量<code>spark.kubernetes.memoryOverheadFactor</code></p>
+<h3 id="9-监控与调试"><a href="#9-监控与调试" class="headerlink" title="(9) 监控与调试"></a>(9) 监控与调试</h3><h4 id="1-日志访问"><a href="#1-日志访问" class="headerlink" title="1) 日志访问"></a>1) 日志访问</h4><p>可以使用k8s API和kubectl。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl -n=&lt;namespace&gt; logs -f &lt;driver-pod-name&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="2-驱动UI"><a href="#2-驱动UI" class="headerlink" title="2) 驱动UI"></a>2) 驱动UI</h4><p>使用<a href="https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/#forward-a-local-port-to-a-port-on-the-pod" target="_blank" rel="noopener"><code>kubectl port-forward</code></a>映射到宿主机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl port-forward &lt;driver-pod-name&gt; 4040:4040</span><br></pre></td></tr></table></figure>
+<h4 id="3-调试"><a href="#3-调试" class="headerlink" title="3) 调试"></a>3) 调试</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 调度及驱动信息</span></span><br><span class="line">kubectl describe pod &lt;spark-driver-pod&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行时异常探查</span></span><br><span class="line">kubectl logs &lt;spark-driver-pod&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="10-k8s特性"><a href="#10-k8s特性" class="headerlink" title="(10) k8s特性"></a>(10) k8s特性</h3><h4 id="1-配置文件"><a href="#1-配置文件" class="headerlink" title="1) 配置文件"></a>1) 配置文件</h4><p>用于最初自动配置k8s客户端，保存在<code>.kube/config</code>或<code>KUBECONFIG</code></p>
+<h4 id="2-上下文"><a href="#2-上下文" class="headerlink" title="2) 上下文"></a>2) 上下文</h4><p>配置文件中可能包含多重配置，用于切换集群和用户。</p>
+<p>使用<code>kubectl config current-context</code>查看当前配置</p>
+<p>使用<code>spark.kubernetes.context=minikube</code>指定配置</p>
+<h4 id="3-命名空间"><a href="#3-命名空间" class="headerlink" title="3) 命名空间"></a>3) 命名空间</h4><p>命名空间用于在多个用户间区分集群资源，使用<code>spark.kubernetes.namespace</code>指定。</p>
+<p>使用<a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/" target="_blank" rel="noopener">ResourceQuota</a>限制资源使用量</p>
+<h4 id="4-RBAC"><a href="#4-RBAC" class="headerlink" title="4) RBAC"></a>4) RBAC</h4><p>开启<a href="https://kubernetes.io/docs/admin/authorization/rbac/" target="_blank" rel="noopener">RBAC</a>后，用户可以配置Spark访问API Server的角色和服务账户。</p>
+<p>最保守情况下，Spark驱动被授予<a href="https://kubernetes.io/docs/admin/authorization/rbac/#role-and-clusterrole" target="_blank" rel="noopener"><code>Role</code> or <code>ClusterRole</code></a> 来创建Pod和服务。默认分配名为default的服务账户。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建服务账户spark</span></span><br><span class="line">kubectl create serviceaccount spark</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 绑定权限</span></span><br><span class="line">kubectl create clusterrolebinding spark-role --clusterrole=edit --serviceaccount=default:spark --namespace=default</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定服务账户为spark</span></span><br><span class="line">--conf spark.kubernetes.authenticate.driver.serviceAccountName=spark</span><br></pre></td></tr></table></figure>
+<p>注意：Role只能授予命名空间内的权限，而ClusterRole可以授予集群范围内的权限。</p>
+<p>详见：<a href="https://kubernetes.io/docs/admin/authorization/rbac/" target="_blank" rel="noopener">Using RBAC Authorization</a>和<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/" target="_blank" rel="noopener">Configure Service Accounts for Pods</a>.</p>
+<h3 id="11-Spark应用管理"><a href="#11-Spark应用管理" class="headerlink" title="(11) Spark应用管理"></a>(11) Spark应用管理</h3><p>可以使用<code>namespace:driver-pod-name</code>，缺省使用当前命名空间</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 杀掉作业</span></span><br><span class="line">spark-submit --kill spark:spark-pi-1547948636094-driver --master k8s://https://192.168.2.8:8443</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看状态</span></span><br><span class="line">spark-submit --status spark:spark-pi-1547948636094-driver --master  k8s://https://192.168.2.8:8443</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 模式匹配</span></span><br><span class="line">spark-submit --kill spark:spark-pi* --master  k8s://https://192.168.2.8:8443</span><br></pre></td></tr></table></figure>
+<p>注意：可以使用<code>spark.kubernetes.appKillPodDeletionGracePeriod</code>设置杀死延迟，默认30s。</p>
+<h3 id="12-未来展望"><a href="#12-未来展望" class="headerlink" title="(12) 未来展望"></a>(12) 未来展望</h3><ul>
+<li>Dynamic Resource Allocation and External Shuffle Service</li>
+<li>Job Queues and Resource Management</li>
+</ul>
+<h2 id="7-配置"><a href="#7-配置" class="headerlink" title="7 配置"></a>7 配置</h2><h3 id="1-Spark属性"><a href="#1-Spark属性" class="headerlink" title="(1) Spark属性"></a>(1) Spark属性</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">Property Name</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Meaning</th>
+<th style="text-align:left">Since Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.context</code></td>
+<td style="text-align:left"><code>(none)</code></td>
+<td style="text-align:left">The context from the user Kubernetes configuration file used for the initial auto-configuration of the Kubernetes client library. When not specified then the users current context is used. <strong>NB:</strong> Many of the auto-configured settings can be overridden by the use of other Spark configuration properties e.g. <code>spark.kubernetes.namespace</code>.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.master</code></td>
+<td style="text-align:left"><code>https://kubernetes.default.svc</code></td>
+<td style="text-align:left">The internal Kubernetes master (API server) address to be used for driver to request executors.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.namespace</code></td>
+<td style="text-align:left"><code>default</code></td>
+<td style="text-align:left">The namespace that will be used for running the driver and executor pods.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.container.image</code></td>
+<td style="text-align:left"><code>(none)</code></td>
+<td style="text-align:left">Container image to use for the Spark application. This is usually of the form <code>example.com/repo/spark:v1.0.0</code>. This configuration is required and must be provided by the user, unless explicit images are provided for each different container type.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.container.image</code></td>
+<td style="text-align:left"><code>(value of spark.kubernetes.container.image)</code></td>
+<td style="text-align:left">Custom container image to use for the driver.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.container.image</code></td>
+<td style="text-align:left"><code>(value of spark.kubernetes.container.image)</code></td>
+<td style="text-align:left">Custom container image to use for executors.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.container.image.pullPolicy</code></td>
+<td style="text-align:left"><code>IfNotPresent</code></td>
+<td style="text-align:left">Container image pull policy used when pulling images within Kubernetes.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.container.image.pullSecrets</code></td>
+<td style="text-align:left">``</td>
+<td style="text-align:left">Comma separated list of Kubernetes secrets used to pull images from private image registries.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.allocation.batch.size</code></td>
+<td style="text-align:left"><code>5</code></td>
+<td style="text-align:left">Number of pods to launch at once in each round of executor pod allocation.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.allocation.batch.delay</code></td>
+<td style="text-align:left"><code>1s</code></td>
+<td style="text-align:left">Time to wait between each round of executor pod allocation. Specifying values less than 1 second may lead to excessive CPU usage on the spark driver.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.submission.caCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the CA cert file for connecting to the Kubernetes API server over TLS when starting the driver. This file must be located on the submitting machine’s disk. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.caCertFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.submission.clientKeyFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the client key file for authenticating against the Kubernetes API server when starting the driver. This file must be located on the submitting machine’s disk. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.submission.clientCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the client cert file for authenticating against the Kubernetes API server when starting the driver. This file must be located on the submitting machine’s disk. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientCertFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.submission.oauthToken</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">OAuth token to use when authenticating against the Kubernetes API server when starting the driver. Note that unlike the other authentication options, this is expected to be the exact string value of the token to use for the authentication. In client mode, use <code>spark.kubernetes.authenticate.oauthToken</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.submission.oauthTokenFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the OAuth token file containing the token to use when authenticating against the Kubernetes API server when starting the driver. This file must be located on the submitting machine’s disk. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.caCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the CA cert file for connecting to the Kubernetes API server over TLS from the driver pod when requesting executors. This file must be located on the submitting machine’s disk, and will be uploaded to the driver pod. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.caCertFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.clientKeyFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the client key file for authenticating against the Kubernetes API server from the driver pod when requesting executors. This file must be located on the submitting machine’s disk, and will be uploaded to the driver pod as a Kubernetes secret. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.clientCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the client cert file for authenticating against the Kubernetes API server from the driver pod when requesting executors. This file must be located on the submitting machine’s disk, and will be uploaded to the driver pod as a Kubernetes secret. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientCertFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.oauthToken</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">OAuth token to use when authenticating against the Kubernetes API server from the driver pod when requesting executors. Note that unlike the other authentication options, this must be the exact string value of the token to use for the authentication. This token value is uploaded to the driver pod as a Kubernetes secret. In client mode, use <code>spark.kubernetes.authenticate.oauthToken</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.oauthTokenFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the OAuth token file containing the token to use when authenticating against the Kubernetes API server from the driver pod when requesting executors. Note that unlike the other authentication options, this file must contain the exact string value of the token to use for the authentication. This token value is uploaded to the driver pod as a secret. In client mode, use <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.mounted.caCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the CA cert file for connecting to the Kubernetes API server over TLS from the driver pod when requesting executors. This path must be accessible from the driver pod. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.caCertFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.mounted.clientKeyFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the client key file for authenticating against the Kubernetes API server from the driver pod when requesting executors. This path must be accessible from the driver pod. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.mounted.clientCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the client cert file for authenticating against the Kubernetes API server from the driver pod when requesting executors. This path must be accessible from the driver pod. Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientCertFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.mounted.oauthTokenFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to the file containing the OAuth token to use when authenticating against the Kubernetes API server from the driver pod when requesting executors. This path must be accessible from the driver pod. Note that unlike the other authentication options, this file must contain the exact string value of the token to use for the authentication. In client mode, use <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.driver.serviceAccountName</code></td>
+<td style="text-align:left"><code>default</code></td>
+<td style="text-align:left">Service account that is used when running the driver pod. The driver pod uses this service account when requesting executor pods from the API server. Note that this cannot be specified alongside a CA cert file, client key file, client cert file, and/or OAuth token. In client mode, use <code>spark.kubernetes.authenticate.serviceAccountName</code> instead.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.caCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">In client mode, path to the CA cert file for connecting to the Kubernetes API server over TLS when requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.clientKeyFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">In client mode, path to the client key file for authenticating against the Kubernetes API server when requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.clientCertFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">In client mode, path to the client cert file for authenticating against the Kubernetes API server when requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.oauthToken</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">In client mode, the OAuth token to use when authenticating against the Kubernetes API server when requesting executors. Note that unlike the other authentication options, this must be the exact string value of the token to use for the authentication.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.authenticate.oauthTokenFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">In client mode, path to the file containing the OAuth token to use when authenticating against the Kubernetes API server when requesting executors.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.label.[LabelName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the label specified by <code>LabelName</code> to the driver pod. For example, <code>spark.kubernetes.driver.label.something=true</code>. Note that Spark also adds its own labels to the driver pod for bookkeeping purposes.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.annotation.[AnnotationName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the Kubernetes <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/" target="_blank" rel="noopener">annotation</a> specified by <code>AnnotationName</code> to the driver pod. For example, <code>spark.kubernetes.driver.annotation.something=true</code>.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.service.annotation.[AnnotationName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the Kubernetes <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/" target="_blank" rel="noopener">annotation</a> specified by <code>AnnotationName</code> to the driver service. For example, <code>spark.kubernetes.driver.service.annotation.something=true</code>.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.label.[LabelName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the label specified by <code>LabelName</code> to the executor pods. For example, <code>spark.kubernetes.executor.label.something=true</code>. Note that Spark also adds its own labels to the executor pod for bookkeeping purposes.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.annotation.[AnnotationName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the Kubernetes <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/" target="_blank" rel="noopener">annotation</a> specified by <code>AnnotationName</code> to the executor pods. For example, <code>spark.kubernetes.executor.annotation.something=true</code>.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.pod.name</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Name of the driver pod. In cluster mode, if this is not set, the driver pod name is set to “spark.app.name” suffixed by the current timestamp to avoid name conflicts. In client mode, if your application is running inside a pod, it is highly recommended to set this to the name of the pod your driver is running in. Setting this value in client mode allows the driver to become the owner of its executor pods, which in turn allows the executor pods to be garbage collected by the cluster.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.podNamePrefix</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Prefix to use in front of the executor pod names.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.lostCheck.maxAttempts</code></td>
+<td style="text-align:left"><code>10</code></td>
+<td style="text-align:left">Number of times that the driver will try to ascertain the loss reason for a specific executor. The loss reason is used to ascertain whether the executor failure is due to a framework or an application error which in turn decides whether the executor is removed and replaced, or placed into a failed state for debugging.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.submission.waitAppCompletion</code></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">In cluster mode, whether to wait for the application to finish before exiting the launcher process. When changed to false, the launcher has a “fire-and-forget” behavior when launching the Spark job.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.report.interval</code></td>
+<td style="text-align:left"><code>1s</code></td>
+<td style="text-align:left">Interval between reports of the current Spark job status in cluster mode.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.request.cores</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify the cpu request for the driver pod. Values conform to the Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu" target="_blank" rel="noopener">convention</a>. Example values include 0.1, 500m, 1.5, 5, etc., with the definition of cpu units documented in <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#cpu-units" target="_blank" rel="noopener">CPU units</a>. This takes precedence over <code>spark.driver.cores</code> for specifying the driver pod cpu request if set.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.limit.cores</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify a hard cpu <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container" target="_blank" rel="noopener">limit</a> for the driver pod.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.request.cores</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify the cpu request for each executor pod. Values conform to the Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu" target="_blank" rel="noopener">convention</a>. Example values include 0.1, 500m, 1.5, 5, etc., with the definition of cpu units documented in <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#cpu-units" target="_blank" rel="noopener">CPU units</a>. This is distinct from <code>spark.executor.cores</code>: it is only used and takes precedence over <code>spark.executor.cores</code> for specifying the executor pod cpu request if set. Task parallelism, e.g., number of tasks an executor can run concurrently is not affected by this.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.limit.cores</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify a hard cpu <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container" target="_blank" rel="noopener">limit</a> for each executor pod launched for the Spark Application.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.node.selector.[labelKey]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Adds to the node selector of the driver pod and executor pods, with key <code>labelKey</code> and the value as the configuration’s value. For example, setting <code>spark.kubernetes.node.selector.identifier</code> to <code>myIdentifier</code> will result in the driver pod and executors having a node selector with key <code>identifier</code> and value <code>myIdentifier</code>. Multiple node selector keys can be added by setting multiple configurations with this prefix.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driverEnv.[EnvironmentVariableName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the environment variable specified by <code>EnvironmentVariableName</code> to the Driver process. The user can specify multiple of these to set multiple environment variables.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.secrets.[SecretName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the <a href="https://kubernetes.io/docs/concepts/configuration/secret/" target="_blank" rel="noopener">Kubernetes Secret</a> named <code>SecretName</code> to the driver pod on the path specified in the value. For example, <code>spark.kubernetes.driver.secrets.spark-secret=/etc/secrets</code>.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.secrets.[SecretName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the <a href="https://kubernetes.io/docs/concepts/configuration/secret/" target="_blank" rel="noopener">Kubernetes Secret</a> named <code>SecretName</code> to the executor pod on the path specified in the value. For example, <code>spark.kubernetes.executor.secrets.spark-secret=/etc/secrets</code>.</td>
+<td style="text-align:left">2.3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.secretKeyRef.[EnvName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add as an environment variable to the driver container with name EnvName (case sensitive), the value referenced by key <code>key</code>in the data of the referenced <a href="https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables" target="_blank" rel="noopener">Kubernetes Secret</a>. For example, <code>spark.kubernetes.driver.secretKeyRef.ENV_VAR=spark-secret:key</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.secretKeyRef.[EnvName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add as an environment variable to the executor container with name EnvName (case sensitive), the value referenced by key <code>key</code>in the data of the referenced <a href="https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables" target="_blank" rel="noopener">Kubernetes Secret</a>. For example, <code>spark.kubernetes.executor.secrets.ENV_VAR=spark-secret:key</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.path</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the <a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank" rel="noopener">Kubernetes Volume</a> named <code>VolumeName</code> of the <code>VolumeType</code> type to the driver pod on the path specified in the value. For example, <code>spark.kubernetes.driver.volumes.persistentVolumeClaim.checkpointpvc.mount.path=/checkpoint</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.subPath</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specifies a <a href="https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath" target="_blank" rel="noopener">subpath</a> to be mounted from the volume into the driver pod. <code>spark.kubernetes.driver.volumes.persistentVolumeClaim.checkpointpvc.mount.subPath=checkpoint</code>.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.readOnly</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify if the mounted volume is read only or not. For example, <code>spark.kubernetes.driver.volumes.persistentVolumeClaim.checkpointpvc.mount.readOnly=false</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].options.[OptionName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Configure <a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank" rel="noopener">Kubernetes Volume</a> options passed to the Kubernetes with <code>OptionName</code> as key having specified value, must conform with Kubernetes option format. For example, <code>spark.kubernetes.driver.volumes.persistentVolumeClaim.checkpointpvc.options.claimName=spark-pvc-claim</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.volumes.[VolumeType].[VolumeName].mount.path</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Add the <a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank" rel="noopener">Kubernetes Volume</a> named <code>VolumeName</code> of the <code>VolumeType</code> type to the executor pod on the path specified in the value. For example, <code>spark.kubernetes.executor.volumes.persistentVolumeClaim.checkpointpvc.mount.path=/checkpoint</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.volumes.[VolumeType].[VolumeName].mount.subPath</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specifies a <a href="https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath" target="_blank" rel="noopener">subpath</a> to be mounted from the volume into the executor pod. <code>spark.kubernetes.executor.volumes.persistentVolumeClaim.checkpointpvc.mount.subPath=checkpoint</code>.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.volumes.[VolumeType].[VolumeName].mount.readOnly</code></td>
+<td style="text-align:left">false</td>
+<td style="text-align:left">Specify if the mounted volume is read only or not. For example, <code>spark.kubernetes.executor.volumes.persistentVolumeClaim.checkpointpvc.mount.readOnly=false</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.volumes.[VolumeType].[VolumeName].options.[OptionName]</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Configure <a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank" rel="noopener">Kubernetes Volume</a> options passed to the Kubernetes with <code>OptionName</code> as key having specified value. For example, <code>spark.kubernetes.executor.volumes.persistentVolumeClaim.checkpointpvc.options.claimName=spark-pvc-claim</code>.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.local.dirs.tmpfs</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">Configure the <code>emptyDir</code> volumes used to back <code>SPARK_LOCAL_DIRS</code> within the Spark driver and executor pods to use <code>tmpfs</code> backing i.e. RAM. See <a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#local-storage" target="_blank" rel="noopener">Local Storage</a> earlier on this page for more discussion of this.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.memoryOverheadFactor</code></td>
+<td style="text-align:left"><code>0.1</code></td>
+<td style="text-align:left">This sets the Memory Overhead Factor that will allocate memory to non-JVM memory, which includes off-heap memory allocations, non-JVM tasks, and various systems processes. For JVM-based jobs this value will default to 0.10 and 0.40 for non-JVM jobs. This is done as non-JVM tasks need more non-JVM heap space and such tasks commonly fail with “Memory Overhead Exceeded” errors. This preempts this error with a higher default.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.pyspark.pythonVersion</code></td>
+<td style="text-align:left"><code>&quot;3&quot;</code></td>
+<td style="text-align:left">This sets the major Python version of the docker image used to run the driver and executor containers. It can be only “3”. This configuration was deprecated from Spark 3.1.0, and is effectively no-op. Users should set ‘spark.pyspark.python’ and ‘spark.pyspark.driver.python’ configurations or ‘PYSPARK_PYTHON’ and ‘PYSPARK_DRIVER_PYTHON’ environment variables.</td>
+<td style="text-align:left">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.kerberos.krb5.path</code></td>
+<td style="text-align:left"><code>(none)</code></td>
+<td style="text-align:left">Specify the local location of the krb5.conf file to be mounted on the driver and executors for Kerberos interaction. It is important to note that the KDC defined needs to be visible from inside the containers.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.kerberos.krb5.configMapName</code></td>
+<td style="text-align:left"><code>(none)</code></td>
+<td style="text-align:left">Specify the name of the ConfigMap, containing the krb5.conf file, to be mounted on the driver and executors for Kerberos interaction. The KDC defined needs to be visible from inside the containers. The ConfigMap must also be in the same namespace of the driver and executor pods.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.hadoop.configMapName</code></td>
+<td style="text-align:left"><code>(none)</code></td>
+<td style="text-align:left">Specify the name of the ConfigMap, containing the HADOOP_CONF_DIR files, to be mounted on the driver and executors for custom Hadoop configuration.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.kerberos.tokenSecret.name</code></td>
+<td style="text-align:left"><code>(none)</code></td>
+<td style="text-align:left">Specify the name of the secret where your existing delegation tokens are stored. This removes the need for the job user to provide any kerberos credentials for launching a job.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.kerberos.tokenSecret.itemKey</code></td>
+<td style="text-align:left"><code>(none)</code></td>
+<td style="text-align:left">Specify the item key of the data where your existing delegation tokens are stored. This removes the need for the job user to provide any kerberos credentials for launching a job.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.podTemplateFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify the local file that contains the driver <a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#pod-template" target="_blank" rel="noopener">pod template</a>. For example <code>spark.kubernetes.driver.podTemplateFile=/path/to/driver-pod-template.yaml</code></td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.podTemplateContainerName</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify the container name to be used as a basis for the driver in the given <a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#pod-template" target="_blank" rel="noopener">pod template</a>. For example <code>spark.kubernetes.driver.podTemplateContainerName=spark-driver</code></td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.podTemplateFile</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify the local file that contains the executor <a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#pod-template" target="_blank" rel="noopener">pod template</a>. For example <code>spark.kubernetes.executor.podTemplateFile=/path/to/executor-pod-template.yaml</code></td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.podTemplateContainerName</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify the container name to be used as a basis for the executor in the given <a href="https://spark.apache.org/docs/latest/running-on-kubernetes.html#pod-template" target="_blank" rel="noopener">pod template</a>. For example <code>spark.kubernetes.executor.podTemplateContainerName=spark-executor</code></td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.deleteOnTermination</code></td>
+<td style="text-align:left">true</td>
+<td style="text-align:left">Specify whether executor pods should be deleted in case of failure or normal termination.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.executor.checkAllContainers</code></td>
+<td style="text-align:left">false</td>
+<td style="text-align:left">Specify whether executor pods should be check all containers (including sidecars) or only the executor container when determining the pod status.</td>
+<td style="text-align:left">3.1.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.submission.connectionTimeout</code></td>
+<td style="text-align:left">10000</td>
+<td style="text-align:left">Connection timeout in milliseconds for the kubernetes client to use for starting the driver.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.submission.requestTimeout</code></td>
+<td style="text-align:left">10000</td>
+<td style="text-align:left">Request timeout in milliseconds for the kubernetes client to use for starting the driver.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.connectionTimeout</code></td>
+<td style="text-align:left">10000</td>
+<td style="text-align:left">Connection timeout in milliseconds for the kubernetes client in driver to use when requesting executors.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.driver.requestTimeout</code></td>
+<td style="text-align:left">10000</td>
+<td style="text-align:left">Request timeout in milliseconds for the kubernetes client in driver to use when requesting executors.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.appKillPodDeletionGracePeriod</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Specify the grace period in seconds when deleting a Spark application using spark-submit.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spark.kubernetes.file.upload.path</code></td>
+<td style="text-align:left">(none)</td>
+<td style="text-align:left">Path to store files at the spark submit side in cluster mode. For example: <code>spark.kubernetes.file.upload.path=s3a://&lt;s3-bucket&gt;/path</code> File should specified as <code>file://path/to/file</code>or absolute path.</td>
+<td style="text-align:left">3.0.0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-Pod元数据"><a href="#3-Pod元数据" class="headerlink" title="(3) Pod元数据"></a>(3) Pod元数据</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">Pod metadata key</th>
+<th style="text-align:left">Modified value</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">name</td>
+<td style="text-align:left">Value of <code>spark.kubernetes.driver.pod.name</code></td>
+<td style="text-align:left">The driver pod name will be overwritten with either the configured or default value of <code>spark.kubernetes.driver.pod.name</code>. The executor pod names will be unaffected.</td>
+</tr>
+<tr>
+<td style="text-align:left">namespace</td>
+<td style="text-align:left">Value of <code>spark.kubernetes.namespace</code></td>
+<td style="text-align:left">Spark makes strong assumptions about the driver and executor namespaces. Both driver and executor namespaces will be replaced by either the configured or default spark conf value.</td>
+</tr>
+<tr>
+<td style="text-align:left">labels</td>
+<td style="text-align:left">Adds the labels from <code>spark.kubernetes.{driver,executor}.label.*</code></td>
+<td style="text-align:left">Spark will add additional labels specified by the spark configuration.</td>
+</tr>
+<tr>
+<td style="text-align:left">annotations</td>
+<td style="text-align:left">Adds the annotations from <code>spark.kubernetes.{driver,executor}.annotation.*</code></td>
+<td style="text-align:left">Spark will add additional annotations specified by the spark configuration.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-Pod规范"><a href="#4-Pod规范" class="headerlink" title="(4) Pod规范"></a>(4) Pod规范</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">Pod spec key</th>
+<th style="text-align:left">Modified value</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">imagePullSecrets</td>
+<td style="text-align:left">Adds image pull secrets from <code>spark.kubernetes.container.image.pullSecrets</code></td>
+<td style="text-align:left">Additional pull secrets will be added from the spark configuration to both executor pods.</td>
+</tr>
+<tr>
+<td style="text-align:left">nodeSelector</td>
+<td style="text-align:left">Adds node selectors from <code>spark.kubernetes.node.selector.*</code></td>
+<td style="text-align:left">Additional node selectors will be added from the spark configuration to both executor pods.</td>
+</tr>
+<tr>
+<td style="text-align:left">restartPolicy</td>
+<td style="text-align:left"><code>&quot;never&quot;</code></td>
+<td style="text-align:left">Spark assumes that both drivers and executors never restart.</td>
+</tr>
+<tr>
+<td style="text-align:left">serviceAccount</td>
+<td style="text-align:left">Value of <code>spark.kubernetes.authenticate.driver.serviceAccountName</code></td>
+<td style="text-align:left">Spark will override <code>serviceAccount</code> with the value of the spark configuration for only driver pods, and only if the spark configuration is specified. Executor pods will remain unaffected.</td>
+</tr>
+<tr>
+<td style="text-align:left">serviceAccountName</td>
+<td style="text-align:left">Value of <code>spark.kubernetes.authenticate.driver.serviceAccountName</code></td>
+<td style="text-align:left">Spark will override <code>serviceAccountName</code> with the value of the spark configuration for only driver pods, and only if the spark configuration is specified. Executor pods will remain unaffected.</td>
+</tr>
+<tr>
+<td style="text-align:left">volumes</td>
+<td style="text-align:left">Adds volumes from <code>spark.kubernetes.{driver,executor}.volumes.[VolumeType].[VolumeName].mount.path</code></td>
+<td style="text-align:left">Spark will add volumes as specified by the spark conf, as well as additional volumes necessary for passing spark conf and pod template files.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-容器规范"><a href="#5-容器规范" class="headerlink" title="(5) 容器规范"></a>(5) 容器规范</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">Container spec key</th>
+<th style="text-align:left">Modified value</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">env</td>
+<td style="text-align:left">Adds env variables from <code>spark.kubernetes.driverEnv.[EnvironmentVariableName]</code></td>
+<td style="text-align:left">Spark will add driver env variables from <code>spark.kubernetes.driverEnv.[EnvironmentVariableName]</code>, and executor env variables from <code>spark.executorEnv.[EnvironmentVariableName]</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left">image</td>
+<td style="text-align:left">Value of <code>spark.kubernetes.{driver,executor}.container.image</code></td>
+<td style="text-align:left">The image will be defined by the spark configurations.</td>
+</tr>
+<tr>
+<td style="text-align:left">imagePullPolicy</td>
+<td style="text-align:left">Value of <code>spark.kubernetes.container.image.pullPolicy</code></td>
+<td style="text-align:left">Spark will override the pull policy for both driver and executors.</td>
+</tr>
+<tr>
+<td style="text-align:left">name</td>
+<td style="text-align:left">See description</td>
+<td style="text-align:left">The container name will be assigned by spark (“spark-kubernetes-driver” for the driver container, and “spark-kubernetes-executor” for each executor container) if not defined by the pod template. If the container is defined by the template, the template’s name will be used.</td>
+</tr>
+<tr>
+<td style="text-align:left">resources</td>
+<td style="text-align:left">See description</td>
+<td style="text-align:left">The cpu limits are set by <code>spark.kubernetes.{driver,executor}.limit.cores</code>. The cpu is set by <code>spark.{driver,executor}.cores</code>. The memory request and limit are set by summing the values of <code>spark.{driver,executor}.memory</code> and <code>spark.{driver,executor}.memoryOverhead</code>. Other resource limits are set by <code>spark.{driver,executor}.resources.{resourceName}.*</code> configs.</td>
+</tr>
+<tr>
+<td style="text-align:left">volumeMounts</td>
+<td style="text-align:left">Add volumes from <code>spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.{path,readOnly}</code></td>
+<td style="text-align:left">Spark will add volumes as specified by the spark conf, as well as additional volumes necessary for passing spark conf and pod template files.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-资源分配"><a href="#6-资源分配" class="headerlink" title="(6) 资源分配"></a>(6) 资源分配</h3><p>自定义资源调度和配置详见 <a href="https://spark.apache.org/docs/latest/configuration.html" target="_blank" rel="noopener">configuration page</a>。</p>
+<p>资源配置应保证容器间资源隔离，或者使用资源发现脚本保证，详见<a href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/" target="_blank" rel="noopener">custom resources</a>。</p>
+<p>Spark支持自动转换spark.{driver/executor}.resource.{resourceType}到k8s配置，前提是使用spark.{driver/executor}.resource.{resourceType}.vendor设置和按照k8s 设备插件格式命名vendor-domain/resourcetype。Spark只支持设置资源的上限。</p>
+<p>k8s不会告知Spark分配给每个容器的资源地址，需要定义发现脚本。示例详见<code>examples/src/main/scripts/getGpusResources.sh</code>。需要保证具有执行权限，并避免被恶意修改。</p>
+<h3 id="7-阶段级别调度"><a href="#7-阶段级别调度" class="headerlink" title="(7) 阶段级别调度"></a>(7) 阶段级别调度</h3><p>当开启动态资源分配事，k8s支持阶段级别调度。因为k8s当前不支持外部shuffle服务，需要开启<code>spark.dynamicAllocation.shuffleTracking.enabled</code>。k8s不保证获取在不同容器配置文件中获取的顺序。</p>
+<p>注意：由于k8s动态分配需要shuffle跟踪特性，之前阶段使用的、具有不同资源配置的且存有shuffle数据的执行器可能不会因为空闲而超时。可能最终导致因没有可用资源而挂起。可以使用<code>spark.dynamicAllocation.shuffleTracking.timeout</code>配置超时，但是可能导致需要的shuffle数据被再次计算。</p>
+<p>注意：Pod模版的基本默认配置和自定义配置的处理方式不同。Pod模版中配置的资源只会在基本默认配置中使用，自定义配置需要保证包含了其中必要的配置。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/05/03/210503Hadoop on Docker/" rel="next" title="Hadoop on Docker">
+                <i class="fa fa-chevron-left"></i> Hadoop on Docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/05/04/210505Docker Swarm/" rel="prev" title="Docker Swarm">
+                Docker Swarm <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Hopeful Nick" />
+            
+              <p class="site-author-name" itemprop="name">Hopeful Nick</p>
+              <p class="site-description motion-element" itemprop="description">To Explore</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hopefulnick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lh848764@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-安全"><span class="nav-number">1.</span> <span class="nav-text">1 安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-用户识别"><span class="nav-number">2.</span> <span class="nav-text">2 用户识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Volume挂载"><span class="nav-number">3.</span> <span class="nav-text">3 Volume挂载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-前提"><span class="nav-number">4.</span> <span class="nav-text">4 前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-原理"><span class="nav-number">5.</span> <span class="nav-text">5 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-应用提交"><span class="nav-number">6.</span> <span class="nav-text">6 应用提交</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Docker镜像"><span class="nav-number">6.1.</span> <span class="nav-text">(1) Docker镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-集群模式"><span class="nav-number">6.2.</span> <span class="nav-text">(2) 集群模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-客户端模式"><span class="nav-number">6.3.</span> <span class="nav-text">(3) 客户端模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-网络"><span class="nav-number">6.3.1.</span> <span class="nav-text">1) 网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-执行器垃圾回收"><span class="nav-number">6.3.2.</span> <span class="nav-text">2) 执行器垃圾回收</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-认证参数"><span class="nav-number">6.3.3.</span> <span class="nav-text">3) 认证参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-依赖管理"><span class="nav-number">6.4.</span> <span class="nav-text">(4) 依赖管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-安全管理"><span class="nav-number">6.5.</span> <span class="nav-text">(5) 安全管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Pod模版"><span class="nav-number">6.6.</span> <span class="nav-text">(6) Pod模版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Volumes"><span class="nav-number">6.7.</span> <span class="nav-text">(7) Volumes</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-支持类型"><span class="nav-number">6.7.1.</span> <span class="nav-text">1) 支持类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-使用方式"><span class="nav-number">6.7.2.</span> <span class="nav-text">2) 使用方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-本地存储"><span class="nav-number">6.8.</span> <span class="nav-text">(8) 本地存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-RAM缓存"><span class="nav-number">6.8.1.</span> <span class="nav-text">1) RAM缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-监控与调试"><span class="nav-number">6.9.</span> <span class="nav-text">(9) 监控与调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-日志访问"><span class="nav-number">6.9.1.</span> <span class="nav-text">1) 日志访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-驱动UI"><span class="nav-number">6.9.2.</span> <span class="nav-text">2) 驱动UI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-调试"><span class="nav-number">6.9.3.</span> <span class="nav-text">3) 调试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-k8s特性"><span class="nav-number">6.10.</span> <span class="nav-text">(10) k8s特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-配置文件"><span class="nav-number">6.10.1.</span> <span class="nav-text">1) 配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-上下文"><span class="nav-number">6.10.2.</span> <span class="nav-text">2) 上下文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-命名空间"><span class="nav-number">6.10.3.</span> <span class="nav-text">3) 命名空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-RBAC"><span class="nav-number">6.10.4.</span> <span class="nav-text">4) RBAC</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-Spark应用管理"><span class="nav-number">6.11.</span> <span class="nav-text">(11) Spark应用管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-未来展望"><span class="nav-number">6.12.</span> <span class="nav-text">(12) 未来展望</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-配置"><span class="nav-number">7.</span> <span class="nav-text">7 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Spark属性"><span class="nav-number">7.1.</span> <span class="nav-text">(1) Spark属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Pod元数据"><span class="nav-number">7.2.</span> <span class="nav-text">(3) Pod元数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Pod规范"><span class="nav-number">7.3.</span> <span class="nav-text">(4) Pod规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-容器规范"><span class="nav-number">7.4.</span> <span class="nav-text">(5) 容器规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-资源分配"><span class="nav-number">7.5.</span> <span class="nav-text">(6) 资源分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-阶段级别调度"><span class="nav-number">7.6.</span> <span class="nav-text">(7) 阶段级别调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hopeful Nick</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://hopefulnick.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://hopefulnick.github.io/2021/05/04/210504Spark on Kubernetes/';
+          this.page.identifier = '2021/05/04/210504Spark on Kubernetes/';
+          this.page.title = 'Spark on k8s';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://hopefulnick.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
